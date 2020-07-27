@@ -18,7 +18,6 @@ class CreateMediaTable extends Migration
             $table->string('name');
             $table->enum('type', ['image', 'video']);
             $table->foreignId('post_id')->constrained()->onDelete('cascade')->onUpdate('no action');
-
             $table->softDeletes();
             $table->timestamps();
         });
