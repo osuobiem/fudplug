@@ -1,0 +1,150 @@
+[
+  {
+    "id": 1,
+    "name": "Jigawa"
+  },
+  {
+    "id": 2,
+    "name": "Osun"
+  },
+  {
+    "id": 3,
+    "name": "Ondo"
+  },
+  {
+    "id": 4,
+    "name": "Edo"
+  },
+  {
+    "id": 5,
+    "name": "Rivers"
+  },
+  {
+    "id": 6,
+    "name": "Lagos"
+  },
+  {
+    "id": 7,
+    "name": "Kwara"
+  },
+  {
+    "id": 8,
+    "name": "Niger"
+  },
+  {
+    "id": 9,
+    "name": "Abia"
+  },
+  {
+    "id": 10,
+    "name": "Akwa Ibom"
+  },
+  {
+    "id": 11,
+    "name": "Kaduna"
+  },
+  {
+    "id": 12,
+    "name": "Cross River"
+  },
+  {
+    "id": 13,
+    "name": "Anambra"
+  },
+  {
+    "id": 14,
+    "name": "Imo"
+  },
+  {
+    "id": 15,
+    "name": "Oyo"
+  },
+  {
+    "id": 16,
+    "name": "Plateau"
+  },
+  {
+    "id": 17,
+    "name": "Abuja (FCT)"
+  },
+  {
+    "id": 18,
+    "name": "Katsina"
+  },
+  {
+    "id": 19,
+    "name": "Gombe"
+  },
+  {
+    "id": 20,
+    "name": "Adamawa"
+  },
+  {
+    "id": 21,
+    "name": "Zamfara"
+  },
+  {
+    "id": 22,
+    "name": "Bauchi"
+  },
+  {
+    "id": 23,
+    "name": "Ogun"
+  },
+  {
+    "id": 24,
+    "name": "Nasarawa"
+  },
+  {
+    "id": 25,
+    "name": "Sokoto"
+  },
+  {
+    "id": 26,
+    "name": "Delta"
+  },
+  {
+    "id": 27,
+    "name": "Taraba"
+  },
+  {
+    "id": 28,
+    "name": "Benue"
+  },
+  {
+    "id": 29,
+    "name": "Kogi"
+  },
+  {
+    "id": 30,
+    "name": "Yobe"
+  },
+  {
+    "id": 31,
+    "name": "Kebbi"
+  },
+  {
+    "id": 32,
+    "name": "Kano"
+  },
+  {
+    "id": 33,
+    "name": "Enugu"
+  },
+  {
+    "id": 34,
+    "name": "Bayelsa"
+  },
+  {
+    "id": 35,
+    "name": "Ekiti"
+  },
+  {
+    "id": 36,
+    "name": "Ebonyi"
+  },
+  {
+    "id": 37,
+    "name": "Borno"
+  }
+]
