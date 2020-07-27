@@ -1,4 +1,4 @@
-INSERT INTO areas VALUES
+INSERT INTO areas (id, name, state_id) VALUES
 (1,'Auyo',1),
 (2,'Babura',1),
 (3,'Buji',1),

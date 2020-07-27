@@ -1,6 +1,4 @@
-INSERT INTO states VALUES
-(1,'Jigawa'),
-(2,'Osun'),
+INSERT INTO states (id, name) VALUES (1,'Jigawa'), (2,'Osun'),
 (3,'Ondo'),
 (4,'Edo'),
 (5,'Rivers'),
