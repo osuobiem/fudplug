@@ -17,6 +17,8 @@ class CreateAreasTable extends Migration
             $table->id();
             $table->string('name');
             $table->foreignId('state_id')->constrained()->onDelete('cascade')->onUpdate('no action');
+
+            $table->softDeletes();
             $table->timestamps();
         });
     }

@@ -16,8 +16,10 @@ class CreateNotificationsTable extends Migration
         Schema::create('notifications', function (Blueprint $table) {
             $table->id();
             $table->enum('notice_type', ['like', 'comment']);
-            $table->string('notices');
+            $table->text('notices');
             $table->integer('status');
+
+            $table->softDeletes();
             $table->timestamps();
         });
     }

@@ -19,8 +19,9 @@ class CreateItemsTable extends Migration
             $table->string('price');
             $table->integer('quantity');
             $table->string('image');
-            $table->integer('menu_id')->unsigned();
-            $table->foreign('menu_id')->references('id')->on('menus')->onDelete('cascade');
+            $table->foreignId('menu_id')->constrained()->onDelete('cascade')->onUpdate('no action');
+
+            $table->softDeletes();
             $table->timestamps();
         });
     }

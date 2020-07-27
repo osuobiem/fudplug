@@ -15,8 +15,9 @@ class CreateMenusTable extends Migration
     {
         Schema::create('menus', function (Blueprint $table) {
             $table->id();
-            $table->integer('vendor_id')->unsigned();
-            $table->foreign('vendor_id')->references('id')->on('vendors')->onDelete('cascade');
+            $table->foreignId('vendor_id')->constrained()->onDelete('cascade')->onUpdate('no action');
+
+            $table->softDeletes();
             $table->timestamps();
         });
     }

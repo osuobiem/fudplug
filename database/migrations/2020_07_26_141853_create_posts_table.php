@@ -18,8 +18,9 @@ class CreatePostsTable extends Migration
             $table->text('content');
             $table->integer('likes');
             $table->integer('comments');
-            $table->integer('vendor_id')->unsigned();
-            $table->foreign('vendor_id')->references('id')->on('vendors')->onDelete('cascade');
+            $table->foreignId('vendor_id')->constrained()->onDelete('cascade')->onUpdate('no action');
+
+            $table->softDeletes();
             $table->timestamps();
         });
     }

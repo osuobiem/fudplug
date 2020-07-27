@@ -17,8 +17,9 @@ class CreateMediaTable extends Migration
             $table->id();
             $table->string('name');
             $table->enum('type', ['image', 'video']);
-            $table->integer('post_id')->unsigned();
-            $table->foreign('post_id')->references('id')->on('posts')->onDelete('cascade');
+            $table->foreignId('post_id')->constrained()->onDelete('cascade')->onUpdate('no action');
+
+            $table->softDeletes();
             $table->timestamps();
         });
     }

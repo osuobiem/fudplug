@@ -16,16 +16,17 @@ class CreateVendorsTable extends Migration
         Schema::create('vendors', function (Blueprint $table) {
             $table->id();
             $table->string('business_name');
-            $table->string('username');
+            $table->string('username')->unique();
             $table->string('email')->unique();
             $table->string('phone_number');
             $table->string('address');
-            $table->json('social_handle');
+            $table->json('social_handles');
             $table->text('about_business');
-            $table->integer('area_id')->unsigned();
-            $table->foreign('area_id')->references('id')->on('areas')->onDelete('cascade');
+            $table->foreignId('area_id')->constrained()->onDelete('cascade')->onUpdate('no action');
             $table->string('profile_image');
             $table->string('password');
+
+            $table->softDeletes();
             $table->timestamps();
         });
     }

@@ -15,11 +15,11 @@ class CreateOrdersTable extends Migration
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
-            $table->integer('user_id')->unsigned();
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-            $table->integer('vendor_id')->unsigned();
-            $table->foreign('vendor_id')->references('id')->on('vendors')->onDelete('cascade');
-            $table->string('items');
+            $table->foreignId('user_id')->constrained()->onDelete('cascade')->onUpdate('no action');
+            $table->foreignId('vendor_id')->constrained()->onDelete('cascade')->onUpdate('no action');
+            $table->text('items');
+
+            $table->softDeletes();
             $table->timestamps();
         });
     }

@@ -15,10 +15,11 @@ class CreateLikesTable extends Migration
     {
         Schema::create('likes', function (Blueprint $table) {
             $table->id();
-            $table->integer('post_id')->unsigned();
-            $table->foreign('post_id')->references('id')->on('posts')->onDelete('cascade');
+            $table->foreignId('post_id')->constrained()->onDelete('cascade')->onUpdate('no action');
             $table->integer('liker_id');
             $table->enum('liker_type', ['user', 'vendor']);
+
+            $table->softDeletes();
             $table->timestamps();
         });
     }
