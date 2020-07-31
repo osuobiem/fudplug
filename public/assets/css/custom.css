@@ -2,3 +2,11 @@
     float: initial !important;
     margin-right: 30px;
 }
+
+.h-pos-btn {
+    margin-top: 12px;
+}
+
+.topbar {
+    z-index: 1000 !important;
+}
