@@ -30,7 +30,7 @@
         </div>
 
         <div class="col-md-12 mt-2 text-center">
-          <p>Don't have an account?<br><a href="#sign-up-modal" class="fud-link">Join Now</a></p>
+          <p>Don't have an account?<br><a id="join-lk" href="#" class="fud-link">Join Now</a></p>
         </div>
 
       </form>

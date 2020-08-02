@@ -39,6 +39,9 @@
         {{-- Login Modal --}}
         @include('components.login')
 
+        {{-- Sign Up Modal --}}
+        @include('components.signup')
+
     </div>
 
     {{-- Scripts --}}
