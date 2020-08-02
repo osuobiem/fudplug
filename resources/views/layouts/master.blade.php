@@ -36,6 +36,9 @@
         {{-- Modals --}}
         @include('components.modals')
 
+        {{-- Login Modal --}}
+        @include('components.login')
+
     </div>
 
     {{-- Scripts --}}
@@ -46,6 +49,7 @@
     <script type="text/javascript" src="{{ url('assets/lib/slick/slick.min.js') }}"></script>
     <script type="text/javascript" src="{{ url('assets/js/scrollbar.js') }}"></script>
     <script type="text/javascript" src="{{ url('assets/js/script.js') }}"></script>
+    <script type="text/javascript" src="{{ url('assets/js/custom.js') }}"></script>
 </body>
 
 </html>

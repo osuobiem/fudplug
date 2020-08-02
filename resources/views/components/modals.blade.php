@@ -245,5 +245,4 @@
 				</div><!--conversation-box end->
 			</div>
 		</div><!--chatbox-list end->
-
 	</div--><!--theme-layout end-->

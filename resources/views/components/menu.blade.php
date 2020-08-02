@@ -1,5 +1,5 @@
 <header>
-	<div class="container">
+	<div class="container-fluid">
 		<!-- Mobile Header -->
 		<div class="header-data d-block d-sm-none">
 			<div class="logo m-0 my-2">
@@ -8,7 +8,7 @@
 		</div>
 
 		<!-- Desktop Header -->
-		<div class="header-data d-none d-sm-flex">
+		<div class="header-data d-none d-sm-flex d-lg-block">
 			<div class="logo">
 				<a href="index.html" title=""><img src="{{ url('assets/images/logo.png') }}" alt="" /></a>
 			</div>
@@ -24,6 +24,7 @@
 
 			<nav>
 				<ul>
+					@if(!Auth::guest())
 					<li>
 						<a href="#" title="" class="not-box-open">
 							<span><i class="la la-bell la-lg"></i></span>
@@ -69,11 +70,16 @@
 							<!--nott-list end-->
 						</div>
 					</li>
+					@endif
 				</ul>
 			</nav>
 			<!--nav end-->
 
+
 			<div class="user-account">
+				@if(Auth::guest())
+				<button class="btn btn-light my-2" style="float: right;" id="login-btn">Login</button>
+				@else
 				<div class="user-info">
 					<img src="{{ url('assets/images/resources/user.png') }}" alt="" />
 					<a href="#" class="d-none d-lg-block">John</a>
@@ -90,9 +96,9 @@
 					</ul>
 					<h3 class="tc"><a href="#" title="">Logout</a></h3>
 				</div>
-				<!-- <button class="btn btn-light mt-2">Login</button> -->
 				<!--user-account-settings end-->
 			</div>
+			@endif
 		</div>
 
 	</div>

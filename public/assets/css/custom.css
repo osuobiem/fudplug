@@ -1,3 +1,8 @@
+:root {
+    --i-primary: #e44d3a;
+    --i-primary-d: #d84430;
+}
+
 .mobile-bottom {
     bottom: 0;
     position: fixed;
@@ -5,9 +10,42 @@
 }
 
 .mbm-active {
-    background: #e44d3a;
+    background: var(--primary);
     color: #fff;
     border-bottom-right-radius: 20px;
     border-bottom-left-radius: 20px;
     box-shadow: 0 10px 5px 0px #0000005e;
+}
+
+.post-project {
+    border-radius: 15px;
+}
+
+.curve-top {
+    border-top-left-radius: inherit;
+    border-top-right-radius: inherit;
+}
+
+.curve-bottom {
+    border-bottom-left-radius: inherit;
+    border-bottom-right-radius: inherit;
+}
+
+.form-btn {
+    background: var(--i-primary);
+    color: #fff;
+    width: inherit;
+}
+
+.form-btn:hover {
+    background: var(--i-primary-d);
+    color: #fff;
+}
+
+.fud-link {
+    color: var(--i-primary);
+}
+
+.fud-link:hover {
+    color: var(--i-primary-d);
 }
