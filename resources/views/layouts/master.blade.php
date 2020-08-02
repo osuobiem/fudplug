@@ -18,14 +18,15 @@
   <link rel="stylesheet" type="text/css" href="{{ url('assets/lib/slick/slick-theme.css') }}">
   <link rel="stylesheet" type="text/css" href="{{ url('assets/css/style.css') }}">
   <link rel="stylesheet" type="text/css" href="{{ url('assets/css/responsive.css') }}">
+  <link rel="stylesheet" type="text/css" href="{{ url('assets/css/custom.css') }}">
 </head>
 
 <body oncontextmenu="return false;">
 
   <div class="wrapper">
 
-    {{-- Header Component --}}
-    @include('components.header')
+    {{-- Menu Component --}}
+    @include('components.menu')
 
   </div>
 
