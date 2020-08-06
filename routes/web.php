@@ -19,3 +19,18 @@ use Illuminate\Support\Facades\Route;
 Route::get('', 'ViewController@feed');
 
 // --------------
+
+// **************
+
+// VENDOR ROUTES
+Route::group(['prefix' => 'vendor'], function () {
+
+  // No Auth
+
+  // Vendor Sign Up
+  Route::post('sign-up', 'VendorController@sign_up');
+
+  // -----------
+
+});
+// -------------

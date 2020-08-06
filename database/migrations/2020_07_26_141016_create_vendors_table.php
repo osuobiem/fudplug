@@ -19,12 +19,13 @@ class CreateVendorsTable extends Migration
             $table->string('username')->unique();
             $table->string('email')->unique();
             $table->string('phone_number');
-            $table->string('address');
-            $table->json('social_handles');
-            $table->text('about_business');
-            $table->foreignId('area_id')->constrained()->onDelete('cascade')->onUpdate('no action');
-            $table->string('profile_image');
+            $table->string('address')->nullable();
+            $table->json('social_handles')->nullable();
+            $table->text('about_business')->nullable();
+            $table->foreignId('area_id')->nullable()->constrained()->onDelete('cascade')->onUpdate('no action');
+            $table->string('profile_image')->default('placeholder.png');
             $table->string('password');
+            $table->rememberToken();
 
             $table->softDeletes();
             $table->timestamps();
