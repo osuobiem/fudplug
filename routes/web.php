@@ -20,7 +20,7 @@ Route::get('', 'ViewController@feed');
 
 // --------------
 
-// **************
+// **********************************************************
 
 // VENDOR ROUTES
 Route::group(['prefix' => 'vendor'], function () {
@@ -29,6 +29,21 @@ Route::group(['prefix' => 'vendor'], function () {
 
   // Vendor Sign Up
   Route::post('sign-up', 'VendorController@sign_up');
+
+  // -----------
+
+});
+// -------------
+
+// **********************************************************
+
+// USER ROUTES
+Route::group(['prefix' => 'user'], function () {
+
+  // No Auth
+
+  // User Sign Up
+  Route::post('sign-up', 'UserController@sign_up');
 
   // -----------
 

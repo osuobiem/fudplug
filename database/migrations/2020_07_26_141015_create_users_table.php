@@ -18,9 +18,9 @@ class CreateUsersTable extends Migration
             $table->string('name');
             $table->string('phone_number');
             $table->string('email')->unique();
-            $table->string('profile_image');
-            $table->enum('gender', ['Male', 'Female', 'Other']);
-            $table->foreignId('area_id')->constrained()->onDelete('cascade')->onUpdate('no action');
+            $table->string('profile_image')->default('placeholder.png');
+            $table->enum('gender', ['Male', 'Female', 'Other'])->nullable();
+            $table->foreignId('area_id')->nullable()->constrained()->onDelete('cascade')->onUpdate('no action');
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();

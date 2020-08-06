@@ -2,18 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use App\Vendor;
+use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 
-class VendorController extends Controller
+class UserController extends Controller
 {
-    // VENDOR SIGN UP
+    // USER SIGN UP
     /**
-     * Vendor sign up
+     * User sign up
      * @return json
      */
     public function sign_up(Request $request)
@@ -29,19 +29,7 @@ class VendorController extends Controller
             ], 400);
         }
 
-        // Check for dashes and other chars
-        if (!preg_match('/^[a-z_0-9A-Z]+$/', $request['username'])) {
-            return response()->json([
-                "success" => false,
-                "message" => [
-                    'username' => [
-                        'Username must contain only letters, numbers and underscores'
-                    ]
-                ]
-            ], 400);
-        }
-
-        // Store vendor data
+        // Store user data
         $store = $this->cstore($request);
         $status = $store['status'];
         unset($store['status']);
@@ -49,22 +37,21 @@ class VendorController extends Controller
     }
 
     /**
-     * Process vendor creation
+     * Process user creation
      * @return array
      */
     public function cstore(Request $request)
     {
-        // New vendor object
-        $user = new Vendor();
+        // New user object
+        $user = new User();
 
-        // Assign vendor object properties
-        $user->business_name = $request['business_name'];
-        $user->username = $request['username'];
+        // Assign user object properties
+        $user->name = $request['name'];
         $user->email = strtolower($request['email']);
         $user->phone_number = $request['phone'];
         $user->password = Hash::make(strtolower($request['password']));
 
-        // Try vendor save or catch error if any
+        // Try user save or catch error if any
         try {
             $user->save();
 
@@ -79,25 +66,24 @@ class VendorController extends Controller
     }
 
     /**
-     * Vendor Creation Validation Rules
+     * User Creation Validation Rules
      * @return object The validator object
      */
     private function create_rules(Request $request)
     {
         // Make and return validation rules
         return Validator::make($request->all(), [
-            'business_name' => 'required|max:50',
-            'username' => 'required|max:15|unique:vendors',
-            'email' => 'required|email|unique:vendors',
-            'phone' => 'required|numeric|digits_between:5,11|unique:vendors,phone_number',
+            'name' => 'required|max:50',
+            'email' => 'required|email|unique:users',
+            'phone' => 'required|numeric|digits_between:5,11',
             'password' => 'required|alpha_dash|min:6|max:30'
         ]);
     }
     // -------------
 
-    // VENDOR LOGIN/LOGOUT
+    // USER LOGIN/LOGOUT
     /**
-     * Vendor login without validation
+     * User login without validation
      */
     public function fast_login(Request $request)
     {
@@ -105,16 +91,16 @@ class VendorController extends Controller
         $credentials = $request->only(['email', 'password']);
 
         // Attempt Login and return status
-        Auth::attempt($credentials, true);
+        Auth::guard('user')->attempt($credentials, true);
     }
 
     /**
-     * Logout Vendor
+     * Logout User
      * @return object
      */
     public function logout()
     {
-        Auth::logout();
+        Auth::guard('user')->logout();
 
         return redirect('');
     }
