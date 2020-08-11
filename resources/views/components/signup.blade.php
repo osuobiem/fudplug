@@ -1,64 +1,3 @@
-<!--div class="post-popup col-lg-6 col-md-8" id="sign-up-modal">
-    <div class="post-project" id="sign-up-inner">
-        <h3 class="curve-top">Sign Up</h3>
-        <div class="post-project-fields curve-bottom">
-
-
-            <div class="form-group col-md-12">
-                <label for="who">Sign up as</label>
-                <select id="who" class="form-control mt-2">
-                    <option selected disabled>Please Select</option>
-                    <option value="vendor">Food Vendor</option>
-                    <option value="user">User</option>
-                </select>
-            </div>
-
-            <hr>
-
-            <form id="vendor-signup-form" class="row">
-                <div class="form-group col-md-12">
-                    <label for="business_name">Business Name</label>
-                    <input type="text" class="form-control mt-2" id="business_name" placeholder="Business Name">
-                </div>
-
-                <div class="form-group col-md-12">
-                    <label for="username">Username</label>
-                    <input type="text" class="form-control mt-2" id="username" placeholder="Username">
-                </div>
-
-                <div class="form-group col-md-12">
-                    <label for="e<div class="form-group col-md-12">
-                <label for="who">Sign up as</label>
-                <select id="who" class="form-control mt-2">
-                    <option selected disabled>Please Select</option>
-                    <option value="vendor">Food Vendor</option>
-                    <option value="user">User</option>
-                </select>
-            </div>ext" class="form-control mt-2" id="phone" placeholder="Phone Number">
-                </div>
-
-                <div class="form-group col-md-12">
-                    <label for="password">Password</label>
-                    <input type="password" class="form-control mt-2" id="password" placeholder="Password">
-                </div>
-            </form>
-
-
-            <div class="form-group col-md-6 mx-auto mt-3">
-                <button class="btn form-btn">Sign Up</button>
-            </div>
-        </div>
-
-        <div class="col-md-12 mt-2 text-center">
-            <p>Already have an account?<br><a href="#" id="login-lk" class="fud-link">Login</a></p>
-        </div>
-
-    </div>
-
-    <a href="#" title=""><i class="la la-times-circle-o"></i></a>
-</div>
-</div-->
-
 <div class="post-popup col-lg-6 col-md-8" id="sign-up-modal">
     <div class="post-project" id="sign-up-inner">
         <h3 class="curve-top">Sign Up</h3>
@@ -83,78 +22,80 @@
                     </div><!-- tab-signup end-->
                 </div>
                 <!--user-tab-sec end-->
-                <div class="product-feed-tab current pt-3" id="feed-dd" style="height: 300px; overflow-y: scroll;">
-                    <form id="vendor-signup-form" class="row my-0">
-                        <div class="form-group col-md-12">
+                <div class="product-feed-tab current" id="feed-dd" style="height: 300px; overflow-y: scroll;">
+                    <form id="vendor-signup-form" class="row my-0" method="POST">
+                        <div class="form-group col-md-12 mt-2">
                             <label for="business_name">Business Name</label>
-                            <input type="text" class="form-control mt-2" id="business_name" placeholder="Business Name">
+                            <input type="text" name="business_name" class="form-control mb-0 mt-2" id="business_name"
+                                placeholder="Business Name">
+                            <span class="text-danger error-message" id="business_name"></span>
                         </div>
 
-                        <div class="form-group col-md-12">
+                        <div class="form-group col-md-12 mt-2">
                             <label for="username">Username</label>
-                            <input type="text" class="form-control mt-2" id="username" placeholder="Username">
+                            <input type="text" name="username" class="form-control mb-0 mt-2" id="username"
+                                placeholder="Username">
+                            <span class="text-danger error-message" id="username"></span>
                         </div>
 
-                        <div class="form-group col-md-12">
+                        <div class="form-group col-md-12 mt-2">
                             <label for="email">Email</label>
-                            <input type="email" class="form-control mt-2" id="email" placeholder="Email">
+                            <input type="email" name="email" class="form-control mb-0 mt-2" id="email"
+                                placeholder="Email">
+                            <span class="text-danger error-message" id="email"></span>
                         </div>
 
-                        <!--div class="form-group col-md-12">
+                        <div class="form-group col-md-12 mt-2">
                             <label for="phone">Phone</label>
-                            <input type="text" class="form-control mt-2" id="phone" placeholder="Phone Number">
-                        </div-->
-
-                        <div class="form-group col-md-12">
-                            <label for="password">Password</label>
-                            <input type="password" class="form-control mt-2" id="password" placeholder="Password">
+                            <input type="text" name="phone" class="form-control mb-0 mt-2" id="phone"
+                                placeholder="Phone Number">
+                            <span class="text-danger error-message" id="phone"></span>
                         </div>
-
-                        <div class="form-group col-md-12">
-                            <label for="password">Confirm Password</label>
-                            <input type="password" class="form-control mt-2" id="password" placeholder="Password">
+                        <div class="form-group col-md-12 mt-2">
+                            <label for="password">Password</label>
+                            <input type="password" name="password" class="form-control mb-0 mt-2" id="password"
+                                placeholder="Password">
+                            <span class="text-danger error-message" id="password"></span>
                         </div>
                     </form>
                     <div class="form-group col-md-6 mx-auto">
-                        <button class="btn form-btn mt-0">Sign Up</button>
+                        <button class="btn form-btn mt-0">
+                            <span id="vendor-txt">Sign Up</span>
+                            <div class="spinner-border spinner-border-sm btn-pr" id="vendor-spinner" role="status"
+                                style="display: none;">
+                                <span class="sr-only">Loading...</span>
+                            </div>
+                        </button>
                     </div>
                 </div>
                 <!--vendor-form-end-->
                 <div class="product-feed-tab pt-3" id="info-dd" style="height: 300px; overflow-y: scroll;">
-                    <form id="user-signup-form" class="row my-0">
+                    <form id="user-signup-form" class="row my-0" method="POST">
                         <div class="form-group col-md-12">
-                            <label for="full_name">Name</label>
-                            <input type="text" class="form-control mt-2" id="full_name" placeholder="Full Name">
-                        </div>
-
-                        <div class="form-group col-md-12">
-                            <label for="gender">Gender</label>
-                            <select id="gender" class="form-control mt-2">
-                                <option selected disabled>Gender</option>
-                                <option value="M">Male</option>
-                                <option value="F">Female</option>
-                            </select>
+                            <label for="name">Name</label>
+                            <input type="text" class="form-control mt-2" id="name" placeholder="Name" name="name">
+                            <span class="text-danger error-message" id="home_address"></span>
                         </div>
 
                         <div class="form-group col-md-12">
                             <label for="user_email">Email</label>
-                            <input type="email" class="form-control mt-2" id="user_email" placeholder="Email">
+                            <input type="email" name="email" class="form-control mt-2" id="user_email"
+                                placeholder="Email">
+                            <span class="text-danger error-message" id="home_address"></span>
                         </div>
 
-                        <!--div class="form-group col-md-12">
+                        <div class="form-group col-md-12">
                             <label for="user_phone">Phone</label>
-                            <input type="text" class="form-control mt-2" id="user_phone" placeholder="Phone Number">
-                        </div-->
+                            <input type="text" name="phone" class="form-control mt-2" id="user_phone"
+                                placeholder="Phone Number">
+                            <span class="text-danger error-message" id="home_address"></span>
+                        </div>
 
                         <div class="form-group col-md-12">
                             <label for="user_password">Password</label>
-                            <input type="password" class="form-control mt-2" id="user_password" placeholder="Password">
-                        </div>
-
-                        <div class="form-group col-md-12">
-                            <label for="conf_user_password">Confirm Password</label>
-                            <input type="password" class="form-control mt-2" id="conf_user_password"
-                                placeholder="Confirm Password">
+                            <input type="password" name="password" class="form-control mt-2" id="user_password"
+                                placeholder="Password">
+                            <span class="text-danger error-message" id="home_address"></span>
                         </div>
                     </form>
                     <div class="form-group col-md-6 mx-auto">
@@ -172,3 +113,34 @@
         <a href="" title=""><i class="la la-times-circle-o"></i></a>
     </div>
 </div>
+
+<script>
+
+    $(document).ready(function () {
+        $('#vendor-signup-form').submit(el => {
+            vendorSignup(el)
+        })
+    });
+
+    // Vendor Signup
+    function vendorSignup(el) {
+        el.preventDefault()
+
+        spin('vendor')
+        offError()
+
+        let url = `{{ url('vendor/sign-up') }}`;
+        let data = new FormData(el.target)
+
+        goPost(url, data)
+            .then(res => {
+                spin('vendor')
+                showAlert(true, res.message)
+            })
+            .catch(err => {
+                spin('vendor')
+                handleFormError(err);
+            })
+    }
+
+</script>
