@@ -270,3 +270,7 @@ a:hover {
 a:visited {
     color: var(--i-d-primary);
 }
+
+.modal {
+    overflow-y: auto;
+}

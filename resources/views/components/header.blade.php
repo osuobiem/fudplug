@@ -30,7 +30,7 @@
 
 					<!-- Nav Item - User Information -->
 					@if(Auth::guest())
-					<li class="nav-item nav-link ml-1 pr-0">
+					<li class="nav-item nav-link ml-1 p-0">
 						<a class="btn btn-primary text-light hover-lift" href="#loginModal" data-toggle="modal">
 							<strong>
 								<i class="la la-sign-in d-none d-sm-inline"></i> Login

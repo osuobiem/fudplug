@@ -14,14 +14,14 @@
           <div class="form-group">
             <label class="mb-1">Email or Phone</label>
             <div class="position-relative icon-form-control">
-              <i class="feather-user position-absolute"></i>
+              <i class="la la-at position-absolute"></i>
               <input type="email" class="form-control" placeholder="Email or Phone Number">
             </div>
           </div>
           <div class="form-group">
             <label class="mb-1">Password</label>
             <div class="position-relative icon-form-control">
-              <i class="feather-unlock position-absolute"></i>
+              <i class="la la-key position-absolute"></i>
               <input type="password" class="form-control" placeholder="Password">
             </div>
           </div>
