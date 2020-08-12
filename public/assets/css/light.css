@@ -199,20 +199,7 @@ p {
 
 .osahan-line-tab .nav-link.active:after {
     content: "";
-    background: -moz-linear-gradient(194deg, #00c9e4 0%, var(--i-primary) 100%);
-    /* ff3.6+ */
-    background: -webkit-gradient(linear, left top, right top, color-stop(0%, var(--i-primary)), color-stop(100%, #00c9e4));
-    /* safari4+,chrome */
-    background: -webkit-linear-gradient(194deg, #00c9e4 0%, var(--i-primary) 100%);
-    /* safari5.1+,chrome10+ */
-    background: -o-linear-gradient(194deg, #00c9e4 0%, var(--i-primary) 100%);
-    /* opera 11.10+ */
-    background: -ms-linear-gradient(194deg, #00c9e4 0%, var(--i-primary) 100%);
-    /* ie10+ */
-    background: linear-gradient(256deg, #00c9e4 0%, var(--i-primary) 100%);
-    /* w3c */
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='var(--i-primary)', endColorstr='#00c9e4', GradientType=1);
-    /* ie6-9 */
+    background: var(--i-primary);
     height: 3px;
     position: absolute;
     bottom: -2px;

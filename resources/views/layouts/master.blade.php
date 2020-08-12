@@ -12,7 +12,8 @@
 
     <link rel="stylesheet" type="text/css" href="{{ url('assets/css/animate.min.css') }}" />
     <!-- Feather Icon-->
-    <link href="{{ url('assets/vendor/icons/feather.css') }}" rel="stylesheet" type="text/css">
+    <link href="{{ url('assets/vendor/line-awesome-1.3.0/1.3.0/css/line-awesome.min.css') }}" rel="stylesheet"
+        type="text/css">
     <!-- Bootstrap core CSS -->
     <link href="{{ url('assets/vendor/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
 
@@ -29,6 +30,7 @@
 
     @include('components.header')
     @include('components.login')
+    @include('components.signup')
 
     <div class="container-fluid">
         <div class="row">
@@ -46,19 +48,19 @@
     @endif --}}
     <!-- Mobile Bottom Menu -->
     <div class="mobile-bottom d-lg-none">
-        <nav class="navbar-bottom navbar-expand navbar-light bg-light osahan-nav-top p-1 h-80" id="b-m">
+        <nav class="navbar-bottom navbar-expand navbar-light bg-light osahan-nav-top h-80" id="b-m">
             <div class="container row m-0 text-center px-0">
                 <div class="col-3">
-                    <i class="feather-home feather-24 p-2 mbm-active"></i>
+                    <i class="la la-utensils la-2x p-2 mbm-active"></i>
                 </div>
                 <div class="col-3">
-                    <i class="feather-bell feather-24 p-2"></i>
+                    <i class="la la-bell la-2x feather-24 p-2"></i>
                 </div>
                 <div class="col-3">
-                    <i class="feather-list feather-24 p-2"></i>
+                    <i class="la la-list la-2x p-2"></i>
                 </div>
                 <div class="col-3">
-                    <i class="feather-user feather-24 p-2"></i>
+                    <i class="la la-user la-2x p-2"></i>
                 </div>
             </div>
         </nav>

@@ -16,7 +16,7 @@
 						aria-describedby="basic-addon2">
 					<div class="input-group-append">
 						<button class="btn btn-primary hover-lift" type="button">
-							<i class="feather-search"></i>
+							<i class="la la-search la-lg"></i>
 						</button>
 					</div>
 				</div>
@@ -33,7 +33,7 @@
 					<li class="nav-item nav-link ml-1 pr-0">
 						<a class="btn btn-primary text-light hover-lift" href="#loginModal" data-toggle="modal">
 							<strong>
-								<i class="feather-log-in d-none d-sm-inline"></i> Login
+								<i class="la la-sign-in d-none d-sm-inline"></i> Login
 							</strong>
 						</a>
 					</li>

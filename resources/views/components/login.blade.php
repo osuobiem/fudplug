@@ -4,7 +4,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="exampleModalLabel">Login</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <button type="button" class="close" id="close-login" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
@@ -36,9 +36,18 @@
 
         <div class="py-3 d-flex align-item-center">
           <a href="forgot-password.html">Forgot password?</a>
-          <span class="ml-auto"> New to FudPlug? <a class="font-weight-bold" href="sign-up.html">Join now</a></span>
+          <span class="ml-auto"> New to FudPlug? <a class="font-weight-bold" href="#" onclick="signModal()">Join
+              now</a></span>
         </div>
       </div>
     </div>
   </div>
 </div>
+<span class="d-none" data-toggle="modal" href="#signupModal" id="sign-pop"></span>
+
+<script>
+  function signModal() {
+    $('#close-login').click()
+    $('#sign-pop').click()
+  }
+</script>
