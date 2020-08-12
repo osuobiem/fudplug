@@ -1,42 +1,44 @@
-<div class="post-popup col-lg-6 col-md-8" id="login-modal">
-  <div class="post-project" id="login-inner">
-    <h3 class="curve-top">Login</h3>
-    <div class="post-project-fields curve-bottom">
+<div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog mt-5" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Login</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
 
-      <form id="login-form" class="row">
-
-        <div class="form-group col-md-12">
-          <label for="email">Email</label>
-          <input type="email" class="form-control mt-2" id="email" placeholder="Email">
-        </div>
-
-        <div class="form-group col-md-12">
-          <label for="password">Password</label>
-          <input type="password" class="form-control mt-2" id="password" placeholder="Password">
-        </div>
-
-        <div class="form-group col-md-12">
-          <div class="fgt-sec">
-            <input type="checkbox" checked name="remember me" id="c1">
-            <label for="c1">
-              <span></span>
-            </label>
-            <small>Remember me</small>
+        <form>
+          <div class="form-group">
+            <label class="mb-1">Email or Phone</label>
+            <div class="position-relative icon-form-control">
+              <i class="feather-user position-absolute"></i>
+              <input type="email" class="form-control" placeholder="Email or Phone Number">
+            </div>
           </div>
+          <div class="form-group">
+            <label class="mb-1">Password</label>
+            <div class="position-relative icon-form-control">
+              <i class="feather-unlock position-absolute"></i>
+              <input type="password" class="form-control" placeholder="Password">
+            </div>
+          </div>
+          <div class="custom-control custom-checkbox mb-3">
+            <input type="checkbox" class="custom-control-input" checked id="customCheck1">
+            <label class="custom-control-label" for="customCheck1">Remember password</label>
+          </div>
+          <div class="form-group text-center">
+            <button class="btn btn-primary px-5" type="submit"> Login </button>
+          </div>
+        </form>
+
+        <div class="py-3 d-flex align-item-center">
+          <a href="forgot-password.html">Forgot password?</a>
+          <span class="ml-auto"> New to FudPlug? <a class="font-weight-bold" href="sign-up.html">Join now</a></span>
         </div>
-
-        <div class="form-group col-md-6 mx-auto mt-3">
-          <button class="btn form-btn">Login</button>
-        </div>
-
-        <div class="col-md-12 mt-2 text-center">
-          <p>Don't have an account?<br><a id="join-lk" href="#" class="fud-link">Join Now</a></p>
-        </div>
-
-      </form>
-
+      </div>
     </div>
-
-    <a href="#" title=""><i class="la la-times-circle-o"></i></a>
   </div>
 </div>

@@ -242,3 +242,31 @@ a.text-light:hover {
     border-bottom-left-radius: 20px;
     box-shadow: 0 10px 5px 0px #0000005e;
 }
+
+.modal-content {
+    border-radius: 15px !important;
+}
+
+.modal-header {
+    background: #e44d3a;
+    color: #fff;
+    padding: 10px 15px;
+}
+
+.custom-control-input:checked~.custom-control-label::before {
+    color: #fff;
+    border-color: var(--i-primary);
+    background-color: var(--i-primary);
+}
+
+a {
+    color: var(--i-primary);
+}
+
+a:hover {
+    color: var(--i-d-primary);
+}
+
+a:visited {
+    color: var(--i-d-primary);
+}

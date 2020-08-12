@@ -729,13 +729,30 @@ a {
 }
 
 .btn-primary {
-    background: var(--i-primary);
+    background-color: var(--i-primary);
     border-color: var(--i-d-primary);
 }
 
 .btn-primary:hover {
-    background: var(--ih-primary);
+    background-color: var(--ih-primary);
     border-color: var(--ih-d-primary);
+}
+
+.btn-primary:active {
+    background-color: var(--ih-primary) !important;
+    border-color: var(--ih-d-primary) !important;
+    box-shadow: unset !important;
+}
+
+.btn-primary:focus {
+    background-color: var(--ih-primary) !important;
+    border-color: var(--ih-d-primary) !important;
+    box-shadow: unset !important;
+}
+
+a.text-light:focus,
+a.text-light:hover {
+    color: #fff !important;
 }
 
 .text-gold {

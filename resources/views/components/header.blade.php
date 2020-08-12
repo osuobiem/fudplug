@@ -31,7 +31,7 @@
 					<!-- Nav Item - User Information -->
 					@if(Auth::guest())
 					<li class="nav-item nav-link ml-1 pr-0">
-						<a class="btn btn-primary text-light hover-lift" href="#">
+						<a class="btn btn-primary text-light hover-lift" href="#loginModal" data-toggle="modal">
 							<strong>
 								<i class="feather-log-in d-none d-sm-inline"></i> Login
 							</strong>

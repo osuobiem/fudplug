@@ -28,6 +28,7 @@
 
 
     @include('components.header')
+    @include('components.login')
 
     <div class="container-fluid">
         <div class="row">
