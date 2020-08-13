@@ -85,9 +85,7 @@
       .then(res => {
         spin('login')
 
-        setTimeout(() => {
-          location.reload()
-        }, 1500)
+        location.reload()
       })
       .catch(err => {
         spin('login')

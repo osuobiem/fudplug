@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\User;
 use App\Vendor;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -89,9 +90,9 @@ class VendorController extends Controller
         // Make and return validation rules
         return Validator::make($request->all(), [
             'business_name' => 'required|max:50',
-            'username' => 'max:15|unique:vendors',
-            'email' => 'required|email|unique:vendors', // email:rfc,dns should be used in production
-            'phone' => 'required|numeric|digits_between:5,11|unique:vendors,phone_number',
+            'username' => 'max:15|unique:vendors|unique:users',
+            'email' => 'required|email|unique:vendors|unique:users', // email:rfc,dns should be used in production
+            'phone' => 'required|numeric|digits_between:5,11|unique:vendors,phone_number|unique:users,phone_number',
             'password' => 'required|alpha_dash|min:6|max:30'
         ]);
     }
@@ -150,9 +151,10 @@ class VendorController extends Controller
         }
 
         // Check for existence
-        $count = Vendor::where('username', $username)->count();
+        $count_v = Vendor::where('username', $username)->count();
+        $count_u = User::where('username', $username)->count();
 
-        if ($count > 0) {
+        if ($count_v > 0 || $count_u > 0) {
             // Recurse to generate new username
             $this->generate_username($name);
         } else {

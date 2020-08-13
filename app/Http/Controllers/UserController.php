@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\User;
+use App\Vendor;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -75,8 +76,8 @@ class UserController extends Controller
         // Make and return validation rules
         return Validator::make($request->all(), [
             'name' => 'required|max:50',
-            'email' => 'required|email|unique:users', // email:rfc,dns should be used in production
-            'phone' => 'required|numeric|digits_between:5,11|unique:users,phone_number',
+            'email' => 'required|email|unique:users|unique:vendors', // email:rfc,dns should be used in production
+            'phone' => 'required|numeric|digits_between:5,11|unique:users,phone_number|unique:vendors,phone_number',
             'password' => 'required|alpha_dash|min:6|max:30'
         ]);
     }
@@ -134,9 +135,10 @@ class UserController extends Controller
         }
 
         // Check for existence
-        $count = User::where('username', $username)->count();
+        $count_v = Vendor::where('username', $username)->count();
+        $count_u = User::where('username', $username)->count();
 
-        if ($count > 0) {
+        if ($count_v > 0 || $count_u > 0) {
             // Recurse to generate new username
             $this->generate_username($name);
         } else {

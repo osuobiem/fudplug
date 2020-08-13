@@ -44,7 +44,7 @@
                 <label class="mb-1">Username</label>
                 <div class="position-relative icon-form-control">
                   <i class="la la-at position-absolute"></i>
-                  <input type="text" class="form-control" placeholder="Username">
+                  <input type="text" class="form-control" placeholder="Username" name="username">
                 </div>
                 <small class="text-danger error-message" id="username"></small>
               </div>
@@ -162,7 +162,7 @@
     $('#vendor-signup').submit(el => {
       vendorSignUp(el)
     })
-    
+
     // Attach user form event listener
     $('#user-signup').submit(el => {
       userSignUp(el)
@@ -183,9 +183,7 @@
       .then(res => {
         spin('vendor')
 
-        setTimeout(() => {
-          location.reload()
-        }, 1500)
+        location.reload()
       })
       .catch(err => {
         spin('vendor')
@@ -207,9 +205,7 @@
       .then(res => {
         spin('user')
 
-        setTimeout(() => {
-          location.reload()
-        }, 1500)
+        location.reload()
       })
       .catch(err => {
         spin('user')
