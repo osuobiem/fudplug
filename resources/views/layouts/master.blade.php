@@ -27,10 +27,18 @@
 
 <body>
 
-
-    @include('components.header')
-    @include('components.login')
-    @include('components.signup')
+    {{-- Check for session availablity --}}
+    @if(!Auth::guest()) 
+        @include('vendor.components.header')
+    
+    @elseif(!Auth::guard('user')->guest()) 
+        @include('user.components.header')
+    
+    @else 
+        @include('components.header')
+        @include('components.login')
+        @include('components.signup')
+    @endif
 
     <div class="container-fluid">
         <div class="row">
@@ -44,35 +52,13 @@
         </div>
     </div>
 
-    {{-- @if(!Auth::guest())
-    @endif --}}
-    <!-- Mobile Bottom Menu -->
-    <div class="mobile-bottom d-lg-none">
-        <nav class="navbar-bottom navbar-expand navbar-light bg-light osahan-nav-top h-80" id="b-m">
-            <div class="container row m-0 text-center px-0">
-                <div class="col-3">
-                    <i class="la la-utensils la-2x p-2 mbm-active"></i>
-                </div>
-                <div class="col-3">
-                    <i class="la la-bell la-2x feather-24 p-2"></i>
-                </div>
-                <div class="col-3">
-                    <i class="la la-list la-2x p-2"></i>
-                </div>
-                <div class="col-3">
-                    <i class="la la-user la-2x p-2"></i>
-                </div>
-            </div>
-        </nav>
-    </div>
-
-
     <!-- Bootstrap core JavaScript -->
     <script src="{{ url('assets/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
     <!-- slick Slider JS-->
     <script type="text/javascript" src="{{ url('assets/vendor/slick/slick.min.js') }}"></script>
     <!-- Custom scripts for all pages-->
     <script src="{{ url('assets/js/osahan.js') }}"></script>
+    <script src="{{ url('assets/js/custom.js') }}"></script>
 </body>
 
 </html

@@ -29,15 +29,7 @@
 				<ul class="navbar-nav ml-auto d-flex align-items-center">
 
 					<!-- Nav Item - User Information -->
-					@if(Auth::guest())
-					<li class="nav-item nav-link ml-1 p-0">
-						<a class="btn btn-primary text-light hover-lift" href="#loginModal" data-toggle="modal">
-							<strong>
-								<i class="la la-sign-in d-none d-sm-inline"></i> Login
-							</strong>
-						</a>
-					</li>
-					@else
+
 					<li class="nav-item dropdown no-arrow ml-1 osahan-profile-dropdown pr-3 d-none d-lg-flex">
 						<a class="nav-link dropdown-toggle pr-0 h-link" href="#" role="button" data-toggle="dropdown"
 							aria-haspopup="true" aria-expanded="false">
@@ -59,22 +51,19 @@
 						<a class="nav-link dropdown-toggle pr-0 u-link" href="#" role="button" data-toggle="dropdown"
 							aria-haspopup="true" aria-expanded="false">
 							<p class="m-auto d-none d-md-block bright-ic" style="font-size: medium;">
-								John Doe
+								{{ Auth::user()->business_name }}
 							</p>
 							&nbsp; &nbsp;
-							<img class="img-profile rounded-circle" src="#">
+							<img class="img-profile rounded-circle" src="{{ Storage::url('vendors/'.Auth::user()->profile_image) }}">
 							<i class="feather-chevron-down"></i>
 						</a>
 						<!-- Dropdown - User Information -->
 						<div class="dropdown-menu dropdown-menu-right shadow">
-							<a class="dropdown-item" href="#"><i class="feather-user mr-1"></i> Profile</a>
-							<a class="dropdown-item" href="#"><i class="feather-settings mr-1"></i> Settings</a>
-							<a class="dropdown-item" href="#"><i class="feather-log-out mr-1"></i>
+							<a class="dropdown-item" href="#"><i class="la la-store-alt la-lg mr-1"></i> Profile</a>
+							<a class="dropdown-item" href="{{ url('vendor/logout') }}"><i class="la la-sign-out la-lg mr-1"></i>
 								Logout</a>
-							<div class="dropdown-divider"></div>
 						</div>
 					</li>
-					@endif
 				</ul>
 			</div>
 		</nav>
