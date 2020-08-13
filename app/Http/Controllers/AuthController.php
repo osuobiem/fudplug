@@ -26,16 +26,26 @@ class AuthController extends Controller
         }
 
         // Attempt Vendor Login
-        $this->login_vendor($request);
+        if ($this->vendor_login($request)) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Login Successful'
+            ]);
+        }
 
         // Attempt User Login
-        $this->login_user($request);
-
-        // Return failed login response
-        return response()->json([
-            'success' => false,
-            'message' => 'Invalid Credentials!'
-        ], 400);
+        elseif ($this->user_login($request)) {
+            return response()->json([
+                'success' => true,
+                'message' => 'Login Successful'
+            ]);
+        } else {
+            // Return failed login response
+            return response()->json([
+                'success' => false,
+                'message' => 'Invalid Credentials!'
+            ], 400);
+        }
     }
 
     /**
@@ -58,6 +68,7 @@ class AuthController extends Controller
 
     /**
      * Attempt to Login Vendor
+     * @return bool
      */
     public function vendor_login(Request $request)
     {
@@ -69,35 +80,29 @@ class AuthController extends Controller
         $attempt = Auth::attempt(['email' => $login, 'password' => $password], $request['remember_me']);
 
         if ($attempt) {
-            return response()->json([
-                'success' => true,
-                'message' => 'Login Successful'
-            ]);
+            return true;
         }
 
         // Attempt login with username
         $attempt = Auth::attempt(['username' => $login, 'password' => $password], $request['remember_me']);
 
         if ($attempt) {
-            return response()->json([
-                'success' => true,
-                'message' => 'Login Successful'
-            ]);
+            return true;
         }
 
         // Attempt login with phone
         $attempt = Auth::attempt(['phone_number' => $login, 'password' => $password], $request['remember_me']);
 
         if ($attempt) {
-            return response()->json([
-                'success' => true,
-                'message' => 'Login Successful'
-            ]);
+            return true;
         }
+
+        return false;
     }
 
     /**
      * Attempt to Login User
+     * @return bool
      */
     public function user_login(Request $request)
     {
@@ -109,30 +114,23 @@ class AuthController extends Controller
         $attempt = Auth::guard('user')->attempt(['email' => $login, 'password' => $password], $request['remember_me']);
 
         if ($attempt) {
-            return response()->json([
-                'success' => true,
-                'message' => 'Login Successful'
-            ]);
+            return true;
         }
 
         // Attempt login with username
         $attempt = Auth::guard('user')->attempt(['username' => $login, 'password' => $password], $request['remember_me']);
 
         if ($attempt) {
-            return response()->json([
-                'success' => true,
-                'message' => 'Login Successful'
-            ]);
+            return true;
         }
 
         // Attempt login with phone
         $attempt = Auth::guard('user')->attempt(['phone_number' => $login, 'password' => $password], $request['remember_me']);
 
         if ($attempt) {
-            return response()->json([
-                'success' => true,
-                'message' => 'Login Successful'
-            ]);
+            return true;
         }
+
+        return false;
     }
 }

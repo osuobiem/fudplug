@@ -10,27 +10,45 @@
       </div>
       <div class="modal-body">
 
-        <form>
+        <!-- Form Error -->
+        <div class="alert alert-danger d-none text-center animate__animated animate__headShake" id="login-error"
+          role="alert">
+        </div>
+
+        <form id="login-form" method="POST">
+
           <div class="form-group">
-            <label class="mb-1">Email or Phone</label>
+            <label class="mb-1">Username, Email or Phone <small class="text-danger">*</small></label>
             <div class="position-relative icon-form-control">
               <i class="la la-at position-absolute"></i>
-              <input type="email" class="form-control" placeholder="Email or Phone Number">
+              <input type="text" class="form-control" placeholder="Username, Email or Phone Number" required
+                name="login">
             </div>
+            <small class="text-danger error-message" id="l-login"></small>
           </div>
+
           <div class="form-group">
-            <label class="mb-1">Password</label>
+            <label class="mb-1">Password <small class="text-danger">*</small></label>
             <div class="position-relative icon-form-control">
               <i class="la la-key position-absolute"></i>
-              <input type="password" class="form-control" placeholder="Password">
+              <input type="password" class="form-control" placeholder="Password" name="password" required>
             </div>
+            <small class="text-danger error-message" id="l-password"></small>
           </div>
+
           <div class="custom-control custom-checkbox mb-3">
-            <input type="checkbox" class="custom-control-input" checked id="customCheck1">
-            <label class="custom-control-label" for="customCheck1">Remember password</label>
+            <input type="checkbox" class="custom-control-input" checked id="customCheck1" name="remember_me">
+            <label class="custom-control-label" for="customCheck1">Remember Me</label>
           </div>
-          <div class="form-group text-center">
-            <button class="btn btn-primary px-5" type="submit"> Login </button>
+
+          <div class="form-group text-center col-sm-12">
+            <button class="btn btn-primary px-5" type="submit">
+              <span id="login-txt">Login</span>
+              <div class="spinner-border spinner-border-sm btn-pr" id="login-spinner" style="display: none;"
+                role="status">
+                <span class="sr-only">Loading...</span>
+              </div>
+            </button>
           </div>
         </form>
 
@@ -46,6 +64,37 @@
 <span class="d-none" data-toggle="modal" href="#signupModal" id="sign-pop"></span>
 
 <script>
+  $(document).ready(function () {
+    // Attach login form event listener
+    $('#login-form').submit(el => {
+      login(el)
+    })
+  });
+
+  // Process Login
+  function login(el) {
+    el.preventDefault()
+
+    spin('login')
+    offError('login-error')
+
+    let url = `{{ url('login') }}`;
+    let data = new FormData(el.target)
+
+    goPost(url, data)
+      .then(res => {
+        spin('login')
+
+        setTimeout(() => {
+          location.reload()
+        }, 1500)
+      })
+      .catch(err => {
+        spin('login')
+        handleFormError(err, 'login-error', 'l');
+      })
+  }
+
   function signModal() {
     $('#close-login').click()
     $('#sign-pop').click()

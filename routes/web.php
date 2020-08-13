@@ -18,6 +18,11 @@ use Illuminate\Support\Facades\Route;
 // UI
 Route::get('', 'ViewController@feed');
 
+// LOGIC
+
+// Vendor/User Login
+Route::post('login', 'AuthController@login');
+
 // --------------
 
 // **********************************************************
