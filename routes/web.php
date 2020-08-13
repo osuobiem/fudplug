@@ -43,12 +43,15 @@ Route::group(['prefix' => 'vendor'], function () {
 // USER ROUTES
 Route::group(['prefix' => 'user'], function () {
 
-  // No Auth
+  // *** Open ***
 
   // User Sign Up
   Route::post('sign-up', 'UserController@sign_up');
 
-  // -----------
-
+  // *** Protected ***
+  Route::group(['middleware' => ['auth:user']], function () {
+    // User Logout
+    Route::get('logout', 'UserController@logout');
+  });
 });
 // -------------

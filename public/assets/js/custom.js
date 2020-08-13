@@ -85,13 +85,15 @@ function goPost(url, data) {
 }
 
 // Handle form error
-function handleFormError(err, form = false) {
+function handleFormError(err, form = false, prefix = false) {
     if (err.status === 400) {
         errors = err.responseJSON.message;
 
         if (typeof errors === "object") {
             for (const [key, value] of Object.entries(errors)) {
-                e = document.getElementById(key);
+                e = prefix
+                    ? document.getElementById(prefix + "-" + key)
+                    : document.getElementById(key);
                 e.innerHTML = "";
                 [...value].forEach((m) => {
                     e.innerHTML += `<p>${m}</p>`;

@@ -90,7 +90,7 @@ class VendorController extends Controller
         return Validator::make($request->all(), [
             'business_name' => 'required|max:50',
             'username' => 'max:15|unique:vendors',
-            'email' => 'required|email|unique:vendors',
+            'email' => 'required|email|unique:vendors', // email:rfc,dns should be used in production
             'phone' => 'required|numeric|digits_between:5,11|unique:vendors,phone_number',
             'password' => 'required|alpha_dash|min:6|max:30'
         ]);

@@ -75,7 +75,7 @@ class UserController extends Controller
         // Make and return validation rules
         return Validator::make($request->all(), [
             'name' => 'required|max:50',
-            'email' => 'required|email|unique:users',
+            'email' => 'required|email|unique:users', // email:rfc,dns should be used in production
             'phone' => 'required|numeric|digits_between:5,11|unique:users,phone_number',
             'password' => 'required|alpha_dash|min:6|max:30'
         ]);

@@ -1,5 +1,6 @@
 :root {
     --i-primary: #e44d3a;
+    --i-primary-h: #e44e3a6b;
 }
 
 /* The switch - the box around the slider */
@@ -282,4 +283,16 @@ a:visited {
 .dropdown-item:hover {
     color: #fff !important;
     background: var(--i-primary);
+}
+
+.h-link:focus .icon-hover {
+    background: var(--i-primary-h);
+    padding: 8px;
+    border-radius: 30px;
+}
+
+.icon-hover:hover {
+    background: var(--i-primary-h);
+    border-radius: 30px;
+    cursor: pointer;
 }

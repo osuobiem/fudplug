@@ -90,41 +90,55 @@
 
           <!-- User Form -->
           <div class="tab-pane fade" id="user" role="tabpanel" aria-labelledby="user-tab">
-            <form class="row">
+            <!-- Form Error -->
+            <div class="alert alert-danger d-none text-center animate__animated animate__headShake" id="u-sign-error"
+              role="alert">
+            </div>
+            <form class="row" id="user-signup" method="POST">
               <div class="form-group col-sm-12">
-                <label class="mb-1">Name</label>
+                <label class="mb-1">Name <small class="text-danger">*</small></label>
                 <div class="position-relative icon-form-control">
                   <i class="la la-user position-absolute"></i>
-                  <input type="text" class="form-control" placeholder="Name">
+                  <input type="text" class="form-control" placeholder="Name" required name="name">
                 </div>
+                <small class="text-danger error-message" id="u-name"></small>
               </div>
 
               <div class="form-group col-sm-6">
-                <label class="mb-1">Email</label>
+                <label class="mb-1">Email <small class="text-danger">*</small></label>
                 <div class="position-relative icon-form-control">
                   <i class="la la-envelope position-absolute"></i>
-                  <input type="email" class="form-control" placeholder="Email Address">
+                  <input type="email" class="form-control" placeholder="Email Address" name="email" required>
                 </div>
+                <small class="text-danger error-message" id="u-email"></small>
               </div>
 
               <div class="form-group col-sm-6">
-                <label class="mb-1">Phone</label>
+                <label class="mb-1">Phone <small class="text-danger">*</small></label>
                 <div class="position-relative icon-form-control">
                   <i class="la la-phone position-absolute"></i>
-                  <input type="text" class="form-control" placeholder="Phone Number">
+                  <input type="text" class="form-control" placeholder="Phone Number" name="phone" required>
                 </div>
+                <small class="text-danger error-message" id="u-phone"></small>
               </div>
 
               <div class="form-group col-sm-12">
-                <label class="mb-1">Password</label>
+                <label class="mb-1">Password <small class="text-danger">*</small></label>
                 <div class="position-relative icon-form-control">
                   <i class="la la-key position-absolute"></i>
-                  <input type="password" class="form-control" placeholder="Password">
+                  <input type="password" class="form-control" placeholder="Password" name="password" required>
                 </div>
+                <small class="text-danger error-message" id="u-password"></small>
               </div>
 
               <div class="form-group text-center col-sm-12">
-                <button class="btn btn-primary px-5" type="submit"> Sign Up </button>
+                <button class="btn btn-primary px-5" type="submit">
+                  <span id="user-txt">Sign Up</span>
+                  <div class="spinner-border spinner-border-sm btn-pr" id="user-spinner" style="display: none;"
+                    role="status">
+                    <span class="sr-only">Loading...</span>
+                  </div>
+                </button>
               </div>
             </form>
           </div>
@@ -144,8 +158,14 @@
 
 <script>
   $(document).ready(function () {
+    // Attach vendor form event listener
     $('#vendor-signup').submit(el => {
       vendorSignUp(el)
+    })
+    
+    // Attach user form event listener
+    $('#user-signup').submit(el => {
+      userSignUp(el)
     })
   });
 
@@ -170,6 +190,30 @@
       .catch(err => {
         spin('vendor')
         handleFormError(err, 'v-sign-error');
+      })
+  }
+
+  // User Sign up
+  function userSignUp(el) {
+    el.preventDefault()
+
+    spin('user')
+    offError('u-sign-error')
+
+    let url = `{{ url('user/sign-up') }}`;
+    let data = new FormData(el.target)
+
+    goPost(url, data)
+      .then(res => {
+        spin('user')
+
+        setTimeout(() => {
+          location.reload()
+        }, 1500)
+      })
+      .catch(err => {
+        spin('user')
+        handleFormError(err, 'u-sign-error', 'u');
       })
   }
 
