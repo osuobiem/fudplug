@@ -88,17 +88,6 @@ input:checked+.slider:before {
     color: #fff;
 }
 
-.form-err,
-.form-err>p {
-    color: rgb(224, 8, 8);
-    font-size: 12px;
-}
-
-#btn-spinner {
-    width: 14px;
-    height: 14px;
-}
-
 .foot {
     padding: 25px 0 15px 0;
     text-align: center;
@@ -273,4 +262,24 @@ a:visited {
 
 .modal {
     overflow-y: auto;
+}
+
+.fud-alert {
+    z-index: 10000;
+    position: fixed;
+    top: 35px;
+    right: 25px;
+}
+
+.error-message p {
+    color: #de4437 !important
+}
+
+.dropdown-item {
+    color: #000 !important;
+}
+
+.dropdown-item:hover {
+    color: #fff !important;
+    background: var(--i-primary);
 }
