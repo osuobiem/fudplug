@@ -50,6 +50,7 @@ class UserController extends Controller
         $user->email = strtolower($request['email']);
         $user->phone_number = $request['phone'];
         $user->password = Hash::make(strtolower($request['password']));
+        $user->username = $this->generate_username($user->name);
 
         // Try user save or catch error if any
         try {
@@ -75,7 +76,7 @@ class UserController extends Controller
         return Validator::make($request->all(), [
             'name' => 'required|max:50',
             'email' => 'required|email|unique:users',
-            'phone' => 'required|numeric|digits_between:5,11',
+            'phone' => 'required|numeric|digits_between:5,11|unique:users,phone_number',
             'password' => 'required|alpha_dash|min:6|max:30'
         ]);
     }
@@ -105,4 +106,45 @@ class UserController extends Controller
         return redirect('');
     }
     // -------------
+
+    // GENERIC
+
+    /**
+     * Generate Username
+     * @param int $name Name of User
+     * @return string Generated username
+     */
+    public function generate_username($name)
+    {
+        // Get Business name first segment
+        $segment = explode(' ', $name)[0];
+        $segment = strtolower($segment);
+
+        // Generate random int
+        $ext = random_int(10, 9999);
+
+        // Bind name and random int
+        $username = $segment . '_' . $ext;
+
+        // Check if username violates fudplug username policy
+        if (!preg_match('/^[a-z_0-9A-Z]+$/', $username)) {
+            // Randomize new username again
+            $post = random_int(10, 9999);
+            $username = 'fud_user_' . $ext . '_' . $post;
+        }
+
+        // Check for existence
+        $count = User::where('username', $username)->count();
+
+        if ($count > 0) {
+            // Recurse to generate new username
+            $this->generate_username($name);
+        } else {
+
+            // return unique username
+            return $username;
+        }
+    }
+
+    // ------------------
 }
