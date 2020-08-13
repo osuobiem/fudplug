@@ -96,3 +96,5 @@
 <div class="alert alert-success text-center fud-alert animate__animated animate__fadeIn d-none" role="alert"
 	id="alert-success">
 </div>
+
+@include('user.components.mobile-bottom-menu')

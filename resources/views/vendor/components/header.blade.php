@@ -30,11 +30,11 @@
 
 					<!-- Nav Item - User Information -->
 
-					<li class="nav-item dropdown no-arrow ml-1 osahan-profile-dropdown pr-3 d-none d-lg-flex">
+					<li class="nav-item dropdown no-arrow ml-1 osahan-profile-dropdown pr-3 d-none d-lg-flex" title="Notifications">
 						<a class="nav-link dropdown-toggle pr-0 h-link" href="#" role="button" data-toggle="dropdown"
 							aria-haspopup="true" aria-expanded="false">
 							<span class="noti-pin d-none"></span>
-							<i class="feather-bell feather-18 icon-hover bright-ic"></i>
+							<i class="la la-bell la-2x icon-hover bright-ic"></i>
 						</a>
 						<div class="dropdown-menu dropdown-menu-right shadow noti-drop">
 							<h6 class="dropdown-header text-center">
@@ -79,3 +79,5 @@
 <div class="alert alert-success text-center fud-alert animate__animated animate__fadeIn d-none" role="alert"
 	id="alert-success">
 </div>
+
+@include('vendor.components.mobile-bottom-menu')
