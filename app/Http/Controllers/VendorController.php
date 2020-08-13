@@ -29,16 +29,18 @@ class VendorController extends Controller
             ], 400);
         }
 
-        // Check for dashes and other chars
-        if (!preg_match('/^[a-z_0-9A-Z]+$/', $request['username'])) {
-            return response()->json([
-                "success" => false,
-                "message" => [
-                    'username' => [
-                        'Username must contain only letters, numbers and underscores'
+        if ($request['username']) {
+            // Check for dashes and other chars
+            if (!preg_match('/^[a-z_0-9A-Z]+$/', $request['username'])) {
+                return response()->json([
+                    "success" => false,
+                    "message" => [
+                        'username' => [
+                            'Username must contain only letters, numbers and underscores'
+                        ]
                     ]
-                ]
-            ], 400);
+                ], 400);
+            }
         }
 
         // Store vendor data
@@ -59,7 +61,7 @@ class VendorController extends Controller
 
         // Assign vendor object properties
         $user->business_name = $request['business_name'];
-        $user->username = $request['username'];
+        $user->username = $request['username'] ? $request['username'] : $this->generate_username($request['business_name']);
         $user->email = strtolower($request['email']);
         $user->phone_number = $request['phone'];
         $user->password = Hash::make(strtolower($request['password']));
@@ -87,7 +89,7 @@ class VendorController extends Controller
         // Make and return validation rules
         return Validator::make($request->all(), [
             'business_name' => 'required|max:50',
-            'username' => 'required|max:15|unique:vendors',
+            'username' => 'max:15|unique:vendors',
             'email' => 'required|email|unique:vendors',
             'phone' => 'required|numeric|digits_between:5,11|unique:vendors,phone_number',
             'password' => 'required|alpha_dash|min:6|max:30'
@@ -119,4 +121,46 @@ class VendorController extends Controller
         return redirect('');
     }
     // -------------
+
+
+    // GENERIC
+
+    /**
+     * Generate Username
+     * @param int $name Business Name of Vendor
+     * @return string Generated username
+     */
+    public function generate_username($name)
+    {
+        // Get Business name first segment
+        $segment = explode(' ', $name)[0];
+        $segment = strtolower($segment);
+
+        // Generate random int
+        $ext = random_int(10, 9999);
+
+        // Bind name and random int
+        $username = $segment . '_' . $ext;
+
+        // Check if username violates fudplug username policy
+        if (!preg_match('/^[a-z_0-9A-Z]+$/', $username)) {
+            // Randomize new username again
+            $pre = random_int(10, 999);
+            $username = $pre . '_fud_vendor_' . $ext;
+        }
+
+        // Check for existence
+        $count = Vendor::where('username', $username)->count();
+
+        if ($count > 0) {
+            // Recurse to generate new username
+            $this->generate_username($name);
+        } else {
+
+            // return unique username
+            return $username;
+        }
+    }
+
+    // ------------------
 }

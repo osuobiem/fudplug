@@ -25,13 +25,16 @@ Route::get('', 'ViewController@feed');
 // VENDOR ROUTES
 Route::group(['prefix' => 'vendor'], function () {
 
-  // No Auth
+  // *** Open ***
 
   // Vendor Sign Up
   Route::post('sign-up', 'VendorController@sign_up');
 
-  // -----------
-
+  // *** Protected ***
+  Route::group(['middleware' => ['auth']], function () {
+    // Vendor Logout
+    Route::get('logout', 'VendorController@logout');
+  });
 });
 // -------------
 

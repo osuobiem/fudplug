@@ -25,50 +25,65 @@
         <div class="tab-content mt-3" id="myTabContent">
           <!-- Vendor Form -->
           <div class="tab-pane fade show active" id="vendor" role="tabpanel" aria-labelledby="vendor-tab">
-            <form class="row">
+            <!-- Form Error -->
+            <div class="alert alert-danger d-none text-center animate__animated animate__headShake" id="v-sign-error"
+              role="alert">
+            </div>
+            <form class="row" id="vendor-signup" method="POST">
 
               <div class="form-group col-sm-12">
-                <label class="mb-1">Business Name</label>
+                <label class="mb-1">Business Name <small class="text-danger">*</small></label>
                 <div class="position-relative icon-form-control">
                   <i class="la la-store-alt position-absolute"></i>
-                  <input type="text" class="form-control" placeholder="Business Name">
+                  <input type="text" class="form-control" placeholder="Business Name" name="business_name" required>
                 </div>
+                <small class="text-danger error-message" id="business_name"></small>
               </div>
 
               <div class="form-group col-sm-6">
                 <label class="mb-1">Username</label>
                 <div class="position-relative icon-form-control">
                   <i class="la la-at position-absolute"></i>
-                  <input type="email" class="form-control" placeholder="Username">
+                  <input type="text" class="form-control" placeholder="Username">
                 </div>
+                <small class="text-danger error-message" id="username"></small>
               </div>
 
               <div class="form-group col-sm-6">
-                <label class="mb-1">Email</label>
+                <label class="mb-1">Email <small class="text-danger">*</small></label>
                 <div class="position-relative icon-form-control">
                   <i class="la la-envelope position-absolute"></i>
-                  <input type="email" class="form-control" placeholder="Email Address">
+                  <input type="email" class="form-control" placeholder="Email Address" name="email" required>
                 </div>
+                <small class="text-danger error-message" id="email"></small>
               </div>
 
               <div class="form-group col-sm-6">
-                <label class="mb-1">Phone</label>
+                <label class="mb-1">Phone <small class="text-danger">*</small></label>
                 <div class="position-relative icon-form-control">
                   <i class="la la-phone position-absolute"></i>
-                  <input type="text" class="form-control" placeholder="Phone Number">
+                  <input type="text" class="form-control" placeholder="Phone Number" name="phone" required>
                 </div>
+                <small class="text-danger error-message" id="phone"></small>
               </div>
 
               <div class="form-group col-sm-6">
-                <label class="mb-1">Password</label>
+                <label class="mb-1">Password <small class="text-danger">*</small></label>
                 <div class="position-relative icon-form-control">
                   <i class="la la-key position-absolute"></i>
-                  <input type="password" class="form-control" placeholder="Password">
+                  <input type="password" class="form-control" placeholder="Password" required name="password">
                 </div>
+                <small class="text-danger error-message" id="password"></small>
               </div>
 
               <div class="form-group text-center col-sm-12">
-                <button class="btn btn-primary px-5" type="submit"> Sign Up </button>
+                <button class="btn btn-primary px-5" type="submit">
+                  <span id="vendor-txt">Sign Up</span>
+                  <div class="spinner-border spinner-border-sm btn-pr" id="vendor-spinner" style="display: none;"
+                    role="status">
+                    <span class="sr-only">Loading...</span>
+                  </div>
+                </button>
               </div>
             </form>
           </div>
@@ -128,6 +143,36 @@
 <span class="d-none" data-toggle="modal" href="#loginModal" id="login-pop"></span>
 
 <script>
+  $(document).ready(function () {
+    $('#vendor-signup').submit(el => {
+      vendorSignUp(el)
+    })
+  });
+
+  // Vendor Sign up
+  function vendorSignUp(el) {
+    el.preventDefault()
+
+    spin('vendor')
+    offError('v-sign-error')
+
+    let url = `{{ url('vendor/sign-up') }}`;
+    let data = new FormData(el.target)
+
+    goPost(url, data)
+      .then(res => {
+        spin('vendor')
+
+        setTimeout(() => {
+          location.reload()
+        }, 1500)
+      })
+      .catch(err => {
+        spin('vendor')
+        handleFormError(err, 'v-sign-error');
+      })
+  }
+
   function loginModal() {
     $('#close-sign').click()
     $('#login-pop').click()
