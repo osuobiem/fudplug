@@ -82,11 +82,17 @@
     </aside>
     <main class="col col-xl-6 order-xl-2 col-lg-12 order-lg-2 col-md-12 col-sm-12 col-12">
         <div class="box mb-3 shadow-sm border rounded bg-white profile-box text-center">
-            <div class="py-4 px-3 border-bottom">
-                <img src="{{ Storage::url('vendor/'.Auth::user()->profile_image) }}"
-                    class="img-fluid mt-2 rounded-circle col-md-3" alt="Responsive image">
-                <h5 class="font-weight-bold text-dark mb-1 mt-4">{{ Auth::user()->business_name }}</h5>
-                <p class="mb-0 text-muted">{{ Auth::user()->username }}</p>
+            <div class="cover">
+                <a href="#profile-edit-modal" data-toggle="modal" target="_blank" title="edit profile"
+                    rel="noopener noreferrer">
+                    <i class="la la-pen la-2x icon-hover text-white" style="margin-left: 90%;"></i>
+                </a>
+                <div class="py-4 px-3 border-bottom">
+                    <img src="{{ Storage::url('vendor/'.Auth::user()->profile_image) }}"
+                        class="img-fluid mt-2 rounded-circle col-md-3" alt="Responsive image">
+                    <h5 class="font-weight-bold text-dark mb-1 mt-4">{{ Auth::user()->business_name }}</h5>
+                    <p class="mb-0 text-dark"><b>{{ Auth::user()->username }}</b></p>
+                </div>
             </div>
             <div class="">
                 <div class="row">
@@ -271,6 +277,7 @@
     </aside>
 </div>
 @endsection
+
 
 @section('scripts')
 @endsection

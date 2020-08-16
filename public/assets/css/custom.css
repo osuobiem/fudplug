@@ -296,3 +296,9 @@ a:visited {
     border-radius: 30px;
     cursor: pointer;
 }
+
+.cover {
+    background-image: url("../img/fud-cover.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+}
