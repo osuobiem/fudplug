@@ -8,12 +8,12 @@ class Order extends Model
 {
     public function vendor()
     {
-        $this->belongsTo('App\Vendor');
+        return $this->belongsTo('App\Vendor');
     }
 
     public function user()
     {
-        $this->belongsTo('App\User');
+        return $this->belongsTo('App\User');
     }
     //
 }

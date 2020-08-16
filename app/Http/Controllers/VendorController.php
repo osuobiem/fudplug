@@ -26,7 +26,7 @@ class VendorController extends Controller
         if ($validate->fails()) {
             return response()->json([
                 "success" => false,
-                "message" => $validate->errors()
+                "message" => $validate->errors(),
             ], 400);
         }
 
@@ -37,9 +37,9 @@ class VendorController extends Controller
                     "success" => false,
                     "message" => [
                         'username' => [
-                            'Username must contain only letters, numbers and underscores'
-                        ]
-                    ]
+                            'Username must contain only letters, numbers and underscores',
+                        ],
+                    ],
                 ], 400);
             }
         }
@@ -93,7 +93,7 @@ class VendorController extends Controller
             'username' => 'max:15|unique:vendors|unique:users',
             'email' => 'required|email|unique:vendors|unique:users', // email:rfc,dns should be used in production
             'phone' => 'required|numeric|digits_between:5,11|unique:vendors,phone_number|unique:users,phone_number',
-            'password' => 'required|alpha_dash|min:6|max:30'
+            'password' => 'required|alpha_dash|min:6|max:30',
         ]);
     }
     // -------------
@@ -122,7 +122,6 @@ class VendorController extends Controller
         return redirect('');
     }
     // -------------
-
 
     // GENERIC
 
@@ -165,4 +164,12 @@ class VendorController extends Controller
     }
 
     // ------------------
+
+    /**
+     * Profile Page
+     */
+    public function profile()
+    {
+        return view('vendor.profile');
+    }
 }

@@ -8,27 +8,27 @@ class Notification extends Model
 {
     public function vendor()
     {
-        $this->belongsTo('App\Vendor');
+        return $this->belongsTo('App\Vendor');
     }
 
     public function post()
     {
-        $this->belongsTo('App\Post');
+        return $this->belongsTo('App\Post');
     }
 
     public function user()
     {
-        $this->belongsTo('App\User');
+        return $this->belongsTo('App\User');
     }
 
     public function comment()
     {
-        $this->belongsTo('App\Comment');
+        return $this->belongsTo('App\Comment');
     }
 
     public function like()
     {
-        $this->belongsTo('App\Like');
+        return $this->belongsTo('App\Like');
     }
     //
 }

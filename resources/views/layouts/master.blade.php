@@ -28,28 +28,20 @@
 <body>
 
     {{-- Check for session availablity --}}
-    @if(!Auth::guest()) 
+    @if(!Auth::guest())
         @include('vendor.components.header')
-    
-    @elseif(!Auth::guard('user')->guest()) 
+
+    @elseif(!Auth::guard('user')->guest())
         @include('user.components.header')
-    
-    @else 
+
+    @else
         @include('components.header')
         @include('components.login')
         @include('components.signup')
     @endif
 
     <div class="container-fluid">
-        <div class="row">
-
-            {{-- Left Section --}}
-            <div class="col-lg-3 side-section px-1">
-                @section('left-section')
-                @show
-            </div>
-
-        </div>
+        @yield('content')
     </div>
 
     <!-- Bootstrap core JavaScript -->
@@ -59,6 +51,9 @@
     <!-- Custom scripts for all pages-->
     <script src="{{ url('assets/js/osahan.js') }}"></script>
     <script src="{{ url('assets/js/custom.js') }}"></script>
+
+    {{-- Additional Scripts--}}
+    @yield('scripts')
 </body>
 
 </html

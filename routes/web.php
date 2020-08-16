@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Route;
 | routes are loaded by the RouteServiceProvider within a group which
 | contains the "web" middleware group. Now create something great!
 |
-*/
+ */
 
 // GENERIC ROUTES
 
@@ -30,16 +30,18 @@ Route::post('login', 'AuthController@login');
 // VENDOR ROUTES
 Route::group(['prefix' => 'vendor'], function () {
 
-  // *** Open ***
+    // *** Open ***
 
-  // Vendor Sign Up
-  Route::post('sign-up', 'VendorController@sign_up');
+    // Vendor Sign Up
+    Route::post('sign-up', 'VendorController@sign_up');
 
-  // *** Protected ***
-  Route::group(['middleware' => ['auth']], function () {
-    // Vendor Logout
-    Route::get('logout', 'VendorController@logout');
-  });
+    // *** Protected ***
+    Route::group(['middleware' => ['auth']], function () {
+        // Vendor Logout
+        Route::get('logout', 'VendorController@logout');
+        // Vendor Profile
+        Route::get('profile', 'VendorController@profile');
+    });
 });
 // -------------
 
@@ -48,15 +50,15 @@ Route::group(['prefix' => 'vendor'], function () {
 // USER ROUTES
 Route::group(['prefix' => 'user'], function () {
 
-  // *** Open ***
+    // *** Open ***
 
-  // User Sign Up
-  Route::post('sign-up', 'UserController@sign_up');
+    // User Sign Up
+    Route::post('sign-up', 'UserController@sign_up');
 
-  // *** Protected ***
-  Route::group(['middleware' => ['auth:user']], function () {
-    // User Logout
-    Route::get('logout', 'UserController@logout');
-  });
+    // *** Protected ***
+    Route::group(['middleware' => ['auth:user']], function () {
+        // User Logout
+        Route::get('logout', 'UserController@logout');
+    });
 });
 // -------------

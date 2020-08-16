@@ -8,12 +8,12 @@ class Menu extends Model
 {
     public function vendor()
     {
-        $this->belongsTo('App\Vendor');
+        return $this->belongsTo('App\Vendor');
     }
 
     public function item()
     {
-        $this->hasMany('App\Item');
+        return $this->hasMany('App\Item');
     }
     //
 }

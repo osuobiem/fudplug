@@ -18,37 +18,37 @@ class Vendor extends Authenticatable
 
     public function area()
     {
-        $this->belongsTo('App\Area');
+        return $this->belongsTo('App\Area');
     }
 
     public function notification()
     {
-        $this->hasMany('App\Notification');
+        return $this->hasMany('App\Notification');
     }
 
     public function post()
     {
-        $this->hasMany('App\Post');
+        return $this->hasMany('App\Post');
     }
 
     public function comment()
     {
-        $this->hasMany('App\Comment');
+        return $this->hasMany('App\Comment');
     }
 
     public function like()
     {
-        $this->hasMany('App\Like');
+        return $this->hasMany('App\Like');
     }
 
     public function menu()
     {
-        $this->hasOne('App\Menu');
+        return $this->hasOne('App\Menu');
     }
 
     public function order()
     {
-        $this->hasMany('App\Order');
+        return $this->hasMany('App\Order');
     }
     //
 }

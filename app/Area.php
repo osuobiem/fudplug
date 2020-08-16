@@ -8,17 +8,17 @@ class Area extends Model
 {
     public function state()
     {
-        $this->belongsTo('App\State');
+        return $this->belongsTo('App\State');
     }
 
     public function vendor()
     {
-        $this->hasMany('App\Vendor');
+        return $this->hasMany('App\Vendor');
     }
 
     public function user()
     {
-        $this->hasMany('App\User');
+        return $this->hasMany('App\User');
     }
     //
 }

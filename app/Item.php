@@ -8,7 +8,7 @@ class Item extends Model
 {
     public function menu()
     {
-        $this->belongsTo('App\Menu');
+        return $this->belongsTo('App\Menu');
     }
     //
 }

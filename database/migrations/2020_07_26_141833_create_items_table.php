@@ -20,7 +20,7 @@ class CreateItemsTable extends Migration
             $table->integer('quantity');
             $table->string('image');
             $table->foreignId('menu_id')->constrained()->onDelete('cascade')->onUpdate('no action');
-
+            $table->enum('status', ['active', 'inactive']);
             $table->softDeletes();
             $table->timestamps();
         });

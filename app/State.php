@@ -8,7 +8,7 @@ class State extends Model
 {
     public function area()
     {
-        $this->hasMany('App\Area');
+        return $this->hasMany('App\Area');
     }
     //
 }

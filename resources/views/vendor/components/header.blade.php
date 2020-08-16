@@ -54,12 +54,12 @@
 								{{ Auth::user()->business_name }}
 							</p>
 							&nbsp; &nbsp;
-							<img class="img-profile rounded-circle" src="{{ Storage::url('vendors/'.Auth::user()->profile_image) }}">
+							<img class="img-profile rounded-circle" src="{{ Storage::url('vendor/'.Auth::user()->profile_image) }}">
 							<i class="feather-chevron-down"></i>
 						</a>
 						<!-- Dropdown - User Information -->
 						<div class="dropdown-menu dropdown-menu-right shadow">
-							<a class="dropdown-item" href="#"><i class="la la-store-alt la-lg mr-1"></i> Profile</a>
+							<a class="dropdown-item" href="{{ url('vendor/profile') }}"><i class="la la-store-alt la-lg mr-1"></i> Profile</a>
 							<a class="dropdown-item" href="{{ url('vendor/logout') }}"><i class="la la-sign-out la-lg mr-1"></i>
 								Logout</a>
 						</div>

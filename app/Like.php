@@ -8,22 +8,22 @@ class Like extends Model
 {
     public function post()
     {
-        $this->belongsTo('App\Post');
+        return $this->belongsTo('App\Post');
     }
 
     public function vendor()
     {
-        $this->belongsTo('App\Vendor');
+        return $this->belongsTo('App\Vendor');
     }
 
     public function user()
     {
-        $this->belongsTo('App\User');
+        return $this->belongsTo('App\User');
     }
 
     public function notification()
     {
-        $this->belongsTo('App\Notification');
+        return $this->belongsTo('App\Notification');
     }
     //
 }

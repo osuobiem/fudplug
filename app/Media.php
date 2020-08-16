@@ -8,7 +8,7 @@ class Media extends Model
 {
     public function post()
     {
-        $this->belongsTo('App\Post');
+        return $this->belongsTo('App\Post');
     }
     //
 }

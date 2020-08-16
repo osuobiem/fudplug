@@ -8,27 +8,27 @@ class Post extends Model
 {
     public function vendor()
     {
-        $this->belongsTo('App\Vendor');
+        return $this->belongsTo('App\Vendor');
     }
 
     public function notification()
     {
-        $this->hasMany('App\Notifications');
+        return $this->hasMany('App\Notifications');
     }
 
     public function media()
     {
-        $this->hasMany('App\Media');
+        return $this->hasMany('App\Media');
     }
 
     public function comment()
     {
-        $this->hasMany('App\Comment');
+        return $this->hasMany('App\Comment');
     }
 
     public function like()
     {
-        $this->hasMany('App\Like');
+        return $this->hasMany('App\Like');
     }
     //
 }
