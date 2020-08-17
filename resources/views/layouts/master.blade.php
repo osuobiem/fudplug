@@ -44,6 +44,31 @@
         @yield('content')
     </div>
 
+    {{-- Location onboading --}}
+    <button class="d-none" id="launchOnboarding" data-toggle="modal" data-target = "#boardModal"></button>
+    @if(!Auth::guest())
+    {{-- Check if vendor area is set --}}
+        @if(!Auth::user()->area)
+        @include('components.onboarding')
+        <script>
+            $(document).ready(function () {
+                $("#launchOnboarding").click();
+            });
+        </script>
+        @endif
+
+    @elseif(!Auth::guard('user')->guest())
+    {{-- Check if user area is set --}}
+        @if(!Auth::guard('user')->user()->area)
+        @include('components.onboarding')
+        <script>
+            $(document).ready(function () {
+                $("#launchOnboarding").click();
+            });
+        </script>
+        @endif
+    @endif
+
     <!-- Bootstrap core JavaScript -->
     <script src="{{ url('assets/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
     <!-- slick Slider JS-->

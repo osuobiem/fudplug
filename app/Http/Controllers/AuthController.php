@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 
 class AuthController extends Controller
@@ -132,5 +133,50 @@ class AuthController extends Controller
         }
 
         return false;
+    }
+
+    /**
+     * Update location of user/vendor from onboarding
+     * @param int $area_id Area ID
+     */
+    public function update_location($area_id)
+    {
+        // Check who is sending the request
+
+        // Vendor ?
+        if (Auth::check()) {
+            $vendor = Auth::user();
+            $vendor->area_id = $area_id;
+
+            // Try vendor save or catch error if any
+            try {
+                $vendor->save();
+                return ['success' => true, 'status' => 200, 'message' => 'Location Saved'];
+            } catch (\Throwable $th) {
+                Log::error($th);
+                return ['success' => false, 'status' => 500, 'message' => 'Oops! Something went wrong. Try Again!'];
+            }
+        }
+        // User ?
+        elseif (Auth::guard('user')->check()) {
+            $user = Auth::guard('user')->user();
+            $user->area_id = $area_id;
+
+            // Try user save or catch error if any
+            try {
+                $user->save();
+                return ['success' => true, 'status' => 200, 'message' => 'Location Saved'];
+            } catch (\Throwable $th) {
+                Log::error($th);
+                return ['success' => false, 'status' => 500, 'message' => 'Oops! Something went wrong. Try Again!'];
+            }
+        }
+        // Return Error
+        else {
+            return response()->json([
+                'success' => false,
+                'message' => 'Something\'s not right'
+            ], 400);
+        }
     }
 }
