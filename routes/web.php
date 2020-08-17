@@ -23,6 +23,12 @@ Route::get('', 'ViewController@feed');
 // Vendor/User Login
 Route::post('login', 'AuthController@login');
 
+// Get Areas
+Route::get('areas/{state_id}', 'AreaController@get');
+
+// Update Location form onboarding
+Route::get('location/{area_id}', 'AuthController@update_location');
+
 // --------------
 
 // **********************************************************

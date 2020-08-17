@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\State;
+
 class ViewController extends Controller
 {
     /**
@@ -9,6 +11,7 @@ class ViewController extends Controller
      */
     public function feed()
     {
-        return view('feed');
+        $states = State::orderBy('name')->get();
+        return view('feed', ['states' => $states]);
     }
 }
