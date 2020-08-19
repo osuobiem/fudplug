@@ -304,3 +304,9 @@ a:visited {
 .modal-header {
     border: unset;
 }
+
+.cover {
+    background-image: url("../img/fud-cover.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+}
