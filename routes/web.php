@@ -16,7 +16,11 @@ use Illuminate\Support\Facades\Route;
 // GENERIC ROUTES
 
 // UI
-Route::get('', 'ViewController@feed');
+// Home Page
+Route::get('', 'ViewController@home');
+
+// Feed Component
+Route::get('feed', 'ViewController@feed');
 
 // LOGIC
 
@@ -45,6 +49,7 @@ Route::group(['prefix' => 'vendor'], function () {
     Route::group(['middleware' => ['auth']], function () {
         // Vendor Logout
         Route::get('logout', 'VendorController@logout');
+
         // Vendor Profile
         Route::get('profile', 'VendorController@profile');
     });

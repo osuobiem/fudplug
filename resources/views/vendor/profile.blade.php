@@ -1,7 +1,4 @@
-@extends('layouts.master')
 
-@section('content')
-<main class="col col-lg-6">
     <div class="box mb-3 shadow-sm border rounded bg-white profile-box text-center">
         <div class="cover">
             <a href="#profile-edit-modal" data-toggle="modal" target="_blank" title="edit profile"
@@ -9,7 +6,7 @@
                 <i class="la la-pen la-2x icon-hover text-white" style="margin-left: 90%;"></i>
             </a>
             <div class="py-4 px-3 border-bottom">
-                <img src="{{ Storage::url('vendor/'.Auth::user()->profile_image) }}"
+                <img src="{{ Storage::url('vendors/'.Auth::user()->profile_image) }}"
                     class="img-fluid mt-2 rounded-circle col-md-3" alt="Responsive image">
                 <h5 class="font-weight-bold text-dark mb-1 mt-4">{{ Auth::user()->business_name }}</h5>
                 <p class="mb-0 text-dark"><b>{{ Auth::user()->username }}</b></p>
@@ -89,9 +86,3 @@
         </div>
 
     </div>
-</main>
-@endsection
-
-
-@section('scripts')
-@endsection

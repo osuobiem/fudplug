@@ -123,7 +123,7 @@
           $('#proceed-btn').removeClass('d-none')
         })
         .catch(err => {
-          showAlert(false, "Oops! Something's not right. Try Again")
+          showAlert(false, "Oops! Something's not right. Please Reload Page")
         })
     }
 
@@ -145,7 +145,7 @@
         })
         .catch(err => {
           spin('board')
-          showAlert(false, "Oops! Something's not right. Try Again")
+          showAlert(false, "Oops! Something's not right. Please Reload Page")
         })
     }
   </script>
