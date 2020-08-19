@@ -296,3 +296,11 @@ a:visited {
     border-radius: 30px;
     cursor: pointer;
 }
+
+.modal-content {
+    border: unset;
+}
+
+.modal-header {
+    border: unset;
+}
