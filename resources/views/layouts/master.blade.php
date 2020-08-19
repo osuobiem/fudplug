@@ -42,7 +42,7 @@
     @endif
 
     <div class="container-fluid">
-        <div class="row">
+        <div class="row main-section">
 
             <!-- Left Sidebar -->
             @if(!Auth::guest())

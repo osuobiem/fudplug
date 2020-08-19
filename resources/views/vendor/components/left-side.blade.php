@@ -1,4 +1,4 @@
-<aside class="col col-xl-3 order-xl-1 col-lg-12 order-lg-1 col-12">
+<aside class="col col-lg-3 d-none d-lg-block side-section side-section-l">
         <div class="box shadow-sm border rounded bg-white mb-3">
             <div class="box-title border-bottom p-3">
                 <h6 class="m-0">Orders</h6>

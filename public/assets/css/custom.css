@@ -206,18 +206,6 @@ a.text-light:hover {
     text-align: end;
 }
 
-@media(min-width: 1024px) {
-    .side-section {
-        position: fixed;
-        height: 100%;
-        overflow-y: auto;
-    }
-
-    .side-section-l {
-        margin-bottom: 22%;
-    }
-}
-
 .mobile-bottom {
     position: fixed;
     bottom: 0;
@@ -309,4 +297,32 @@ a:visited {
     background-image: url("../img/fud-cover.jpg");
     background-repeat: no-repeat;
     background-size: cover;
+}
+
+@media(min-width: 1024px) {
+    .side-section {
+        position: fixed;
+        height: 100%;
+        overflow-y: auto;
+    }
+
+    .side-section-l {
+        left: 0;
+    }
+
+    .side-section-r {
+        right: 0;
+    }
+
+    .head-section {
+        position: fixed;
+        z-index: 1000;
+        width: 100%;
+        top: 0;
+    }
+
+    .main-section {
+        margin-top: 60px;
+        justify-content: center;
+    }
 }
