@@ -29,7 +29,7 @@
       </div>
 
       <div class="modal-content">
-        <div id="board-mod" class="animate__animated animate__flipInX d-none">
+        <div id="board-mod" class="animate__animated animate__flipInX">
           <div class="modal-header">
             <h5 class="modal-title" id="exampleModalLabel">Tell us your location</h5>
             <button type="button" class="close d-none" data-dismiss="modal" aria-label="Close" id="close-board">
@@ -83,6 +83,16 @@
 
   <script>
     $(document).ready(function () {
+      seenInit = localStorage.getItem('seenInit')
+
+      if (seenInit) {
+        $('#init-mod').addClass('d-none')
+      }
+      else {
+        $('#board-mod').addClass('d-none')
+        localStorage.setItem('seenInit', true)
+      }
+
       // Attach board form event listener
       $('#board-form').submit(el => {
         submitLoc(el)
