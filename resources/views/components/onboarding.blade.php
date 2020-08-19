@@ -142,6 +142,7 @@
         .then(res => {
           spin('board')
           $('#close-board').click()
+          loadFeed();
         })
         .catch(err => {
           spin('board')

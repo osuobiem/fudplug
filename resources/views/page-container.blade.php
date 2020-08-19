@@ -11,8 +11,12 @@
 </main>
 
 <script>
-  $(document).ready(function () {
+  function loadPage(url, page = false) {
+    url = `{{ url('') }}/${url}`
+    loadViewPage(url, page)
+  }
 
+  function loadFeed() {
     url = `{{ url('feed') }}`
 
     goGet(url)
@@ -22,7 +26,7 @@
       .catch(err => {
         showAlert(false, "Oops! Something's not right. Please Reload Page")
       })
-  });
+  }
 </script>
 
 @endsection

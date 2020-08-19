@@ -23,13 +23,6 @@
 
     <script src="{{ url('assets/vendor/jquery/jquery.min.js') }}"></script>
     <script src="{{ url('assets/vendor/jquery-cookie/jquery-cookie.js') }}"></script>
-
-    <script>
-    function loadPage(url, page = false) {
-            url = `{{ url('') }}/${url}`
-            loadViewPage(url, page)
-        }
-        </script>
 </head>
 
 <body>
@@ -93,6 +86,7 @@
     <script>
         $(document).ready(function () {
             $("#launchOnboarding").click();
+            loadFeed()
         });
     </script>
     @endif
