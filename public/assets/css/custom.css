@@ -206,23 +206,12 @@ a.text-light:hover {
     text-align: end;
 }
 
-@media(min-width: 1024px) {
-    .side-section {
-        position: fixed;
-        height: 100%;
-        overflow-y: auto;
-    }
-
-    .side-section-l {
-        margin-bottom: 22%;
-    }
-}
-
 .mobile-bottom {
     position: fixed;
     bottom: 0;
     width: 100%;
     box-shadow: 0px -2px 5px 0 #282a2c3d;
+    z-index: 2000;
 }
 
 .mbm-active {
@@ -297,8 +286,145 @@ a:visited {
     cursor: pointer;
 }
 
+.modal-content {
+    border: unset;
+}
+
+.modal-header {
+    border: unset;
+}
+
 .cover {
     background-image: url("../img/fud-cover.jpg");
     background-repeat: no-repeat;
     background-size: cover;
+}
+
+@media(min-width: 1024px) {
+    .side-section {
+        position: fixed;
+        height: 100%;
+        overflow-y: auto;
+    }
+
+    .side-section-l {
+        left: 0;
+    }
+
+    .side-section-r {
+        right: 0;
+    }
+
+    .head-section {
+        position: fixed;
+        z-index: 1000;
+        width: 100%;
+        top: 0;
+    }
+
+    .main-section {
+        margin-top: 60px;
+        justify-content: center;
+    }
+
+    .ms-margin {
+        margin-top: 72px;
+    }
+
+    .loader-cont {
+        border-bottom: solid .5px #ced4da;
+    }
+}
+
+@media(max-width: 1023px) {
+    main {
+        margin-bottom: 40px;
+    }
+
+    .ms-margin {
+        margin-bottom: 22px;
+    }
+
+    .loader-cont {
+        border-top: solid .5px #ced4da;
+    }
+}
+
+.post-profile:hover {
+    cursor: pointer;
+    color: var(--i-primary);
+}
+
+.f-post {
+    color: #3a3a3a;
+    font-size: 15px;
+}
+
+.loader-cont {
+    background: #fff;
+    width: 100%;
+    padding: 5px 0;
+    margin-top: -20px;
+}
+
+.loader {
+    width: 100%;
+    margin: 0 auto;
+    border-radius: 10px;
+    border: 4px solid transparent;
+    position: relative;
+    padding: 1px;
+}
+
+.loader:before {
+    content: '';
+    border: 1px solid #fff;
+    border-radius: 10px;
+    position: absolute;
+    top: -4px;
+    right: -4px;
+    bottom: -4px;
+    left: -4px;
+}
+
+.loader .loaderBar {
+    position: absolute;
+    border-radius: 10px;
+    top: 0;
+    right: 100%;
+    bottom: 0;
+    left: 0;
+    background: var(--i-primary);
+    width: 0;
+    animation: borealisBar 2s linear infinite;
+}
+
+@keyframes borealisBar {
+    0% {
+        left: 0%;
+        right: 100%;
+        width: 0%;
+    }
+
+    10% {
+        left: 0%;
+        right: 75%;
+        width: 25%;
+    }
+
+    90% {
+        right: 0%;
+        left: 75%;
+        width: 25%;
+    }
+
+    100% {
+        left: 100%;
+        right: 0%;
+        width: 0%;
+    }
+}
+
+.page-loader {
+    width: 100%;
 }
