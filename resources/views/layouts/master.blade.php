@@ -29,45 +29,66 @@
 
     {{-- Check for session availablity --}}
     @if(!Auth::guest())
-        @include('vendor.components.header')
-        @include('vendor.components.profile-edit')
+    @include('vendor.components.header')
+    @include('vendor.components.profile-edit')
 
     @elseif(!Auth::guard('user')->guest())
-        @include('user.components.header')
+    @include('user.components.header')
 
     @else
-        @include('components.header')
-        @include('components.login')
-        @include('components.signup')
+    @include('components.header')
+    @include('components.login')
+    @include('components.signup')
     @endif
 
     <div class="container-fluid">
-        @yield('content')
+        <div class="row">
+
+            <!-- Left Sidebar -->
+            @if(!Auth::guest())
+            @include('vendor.components.left-side')
+
+            @elseif(!Auth::guard('user')->guest())
+            @else
+            @endif
+
+            <!-- Main Content -->
+            @yield('content')
+
+            <!-- Right Sidebar -->
+            @if(!Auth::guest())
+            @include('vendor.components.right-side')
+
+            @elseif(!Auth::guard('user')->guest())
+            @else
+            @endif
+
+        </div>
     </div>
 
     {{-- Location onboading --}}
-    <button class="d-none" id="launchOnboarding" data-toggle="modal" data-target = "#boardModal"></button>
+    <button class="d-none" id="launchOnboarding" data-toggle="modal" data-target="#boardModal"></button>
     @if(!Auth::guest())
     {{-- Check if vendor area is set --}}
-        @if(!Auth::user()->area)
-        @include('components.onboarding')
-        <script>
-            $(document).ready(function () {
-                $("#launchOnboarding").click();
-            });
-        </script>
-        @endif
+    @if(!Auth::user()->area)
+    @include('components.onboarding')
+    <script>
+        $(document).ready(function () {
+            $("#launchOnboarding").click();
+        });
+    </script>
+    @endif
 
     @elseif(!Auth::guard('user')->guest())
     {{-- Check if user area is set --}}
-        @if(!Auth::guard('user')->user()->area)
-        @include('components.onboarding')
-        <script>
-            $(document).ready(function () {
-                $("#launchOnboarding").click();
-            });
-        </script>
-        @endif
+    @if(!Auth::guard('user')->user()->area)
+    @include('components.onboarding')
+    <script>
+        $(document).ready(function () {
+            $("#launchOnboarding").click();
+        });
+    </script>
+    @endif
     @endif
 
     <!-- Bootstrap core JavaScript -->
