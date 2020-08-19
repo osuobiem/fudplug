@@ -1,5 +1,5 @@
 <!-- Header -->
-<div class="row m-0">
+<div class="row m-0 head-section">
 	<div class="col-3 col-md-4 col-lg-3 p-0">
 		<nav class="navbar navbar-expand navbar-light bg-light osahan-nav-top p-1 h-80" id="lt-h">
 			<div class="container">
