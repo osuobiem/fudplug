@@ -53,7 +53,9 @@
             @endif
 
             <!-- Main Content -->
-            @yield('content')
+            <main class="col col-lg-6" id="main-content">
+                @yield('content')
+            </main>
 
             <!-- Right Sidebar -->
             @if(!Auth::guest())
@@ -86,7 +88,6 @@
     <script>
         $(document).ready(function () {
             $("#launchOnboarding").click();
-            loadFeed()
         });
     </script>
     @endif

@@ -128,27 +128,3 @@ function offError(form = false) {
     $(".error-message").html("");
     form ? $("#" + form).addClass("d-none") : null;
 }
-
-// Load Page
-function loadViewPage(url, page = false) {
-    $(".page-loader").toggle();
-    $(".main-section").addClass("ms-margin");
-
-    goGet(url)
-        .then((res) => {
-            $(".page-loader").toggle();
-            $(".main-section").removeClass("ms-margin");
-
-            $(".mbm-item").removeClass("mbm-active");
-            page
-                ? $("#" + page + "-i").addClass("mbm-active")
-                : $("#" + url + "-i").addClass("mbm-active");
-
-            $("#main-content").html(res);
-        })
-        .catch((err) => {
-            $(".page-loader").toggle();
-            $(".main-section").removeClass("ms-margin");
-            showAlert(false, "Oops! Something's not right. Try Again");
-        });
-}
