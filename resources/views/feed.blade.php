@@ -1,3 +1,7 @@
+@extends('layouts.master')
+
+@section('content')
+
 <!-- Post -->
 <div class="box shadow-sm border rounded bg-white mb-3 osahan-post">
   <div class="p-3 d-flex align-items-center border-bottom osahan-post-header">
@@ -87,3 +91,5 @@
       Save Post</a>
   </div>
 </div>
+
+@endsection
