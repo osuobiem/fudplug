@@ -30,7 +30,8 @@
 
 					<!-- Nav Item - User Information -->
 
-					<li class="nav-item dropdown no-arrow ml-1 osahan-profile-dropdown pr-3 d-none d-lg-flex" title="Notifications">
+					<li class="nav-item dropdown no-arrow ml-1 osahan-profile-dropdown pr-3 d-none d-lg-flex"
+						title="Notifications">
 						<a class="nav-link dropdown-toggle pr-0 h-link" href="#" role="button" data-toggle="dropdown"
 							aria-haspopup="true" aria-expanded="false">
 							<span class="noti-pin d-none"></span>
@@ -59,7 +60,8 @@
 						</a>
 						<!-- Dropdown - User Information -->
 						<div class="dropdown-menu dropdown-menu-right shadow">
-							<a class="dropdown-item" href="{{ url('vendor/profile') }}"><i class="la la-store-alt la-lg mr-1"></i> Profile</a>
+							<a class="dropdown-item" href="{{ url('vendor/profile') }}"><i class="la la-store-alt la-lg mr-1"></i>
+								Profile</a>
 							<a class="dropdown-item" href="{{ url('vendor/logout') }}"><i class="la la-sign-out la-lg mr-1"></i>
 								Logout</a>
 						</div>
@@ -67,6 +69,14 @@
 				</ul>
 			</div>
 		</nav>
+	</div>
+
+	<div class="page-loader d-none">
+		<div class="col-12 loader-cont d-none d-lg-block">
+			<div class="loader">
+				<div class="loaderBar"></div>
+			</div>
+		</div>
 	</div>
 </div>
 
