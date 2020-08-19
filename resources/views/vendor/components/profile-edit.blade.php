@@ -121,6 +121,82 @@
                         <!-- End Input -->
                     </div>
                     <div class="row">
+                        <div class="p-3 border-bottom">
+                            <div class="position-relative icon-form-control mb-2">
+                                <i class="feather-instagram position-absolute text-warning"></i>
+                                <input placeholder="Add Instagram link" type="text" class="form-control">
+                            </div>
+                            <div class="position-relative icon-form-control mb-2">
+                                <i class="feather-facebook position-absolute text-primary"></i>
+                                <input placeholder="Add Facebook link" type="text" class="form-control">
+                            </div>
+                            <div class="position-relative icon-form-control mb-2">
+                                <i class="feather-twitter position-absolute text-info"></i>
+                                <input placeholder="Add Twitter link" type="text" class="form-control">
+                            </div>
+                            <div class="position-relative icon-form-control mb-2">
+                                <i class="feather-youtube position-absolute text-danger"></i>
+                                <input placeholder="Add Youtube link" type="text" class="form-control">
+                            </div>
+                            <div class="position-relative icon-form-control mb-0">
+                                <i class="feather-github position-absolute text-dark"></i>
+                                <input placeholder="Add Github link" type="text" class="form-control">
+                            </div>
+                        </div>
+                        <!-- Input -->
+                        <div class="col-sm-4 mb-2">
+                            <div class="js-form-message">
+                                <label id="organizationLabel" class="form-label">
+                                    Instagram
+                                    <span class="text-danger">*</span>
+                                </label>
+                                <div class="form-group">
+                                    <input type="text" class="form-control" name="organization" value="Askbootsrap Ltd."
+                                        placeholder="Enter your organization name"
+                                        aria-label="Enter your organization name" required=""
+                                        aria-describedby="organizationLabel"
+                                        data-msg="Please enter your organization name" data-error-class="u-has-error"
+                                        data-success-class="u-has-success">
+                                </div>
+                            </div>
+                        </div>
+                        <!-- End Input -->
+                        <!-- Input -->
+                        <div class="col-sm-4 mb-2">
+                            <div class="js-form-message">
+                                <label id="phoneNumberLabel" class="form-label">
+                                    Twitter
+                                    <span class="text-danger">*</span>
+                                </label>
+                                <div class="form-group">
+                                    <input class="form-control" type="tel" name="phoneNumber" value="+91 85680 79956"
+                                        placeholder="Enter your phone number" aria-label="Enter your phone number"
+                                        required="" aria-describedby="phoneNumberLabel"
+                                        data-msg="Please enter a valid phone number" data-error-class="u-has-error"
+                                        data-success-class="u-has-success">
+                                </div>
+                            </div>
+                        </div>
+                        <!-- End Input -->
+                        <!-- Input -->
+                        <div class="col-sm-4 mb-2">
+                            <div class="js-form-message">
+                                <label id="phoneNumberLabel" class="form-label">
+                                    Facebook
+                                    <span class="text-danger">*</span>
+                                </label>
+                                <div class="form-group">
+                                    <input class="form-control" type="tel" name="phoneNumber" value="+91 85680 79956"
+                                        placeholder="Enter your phone number" aria-label="Enter your phone number"
+                                        required="" aria-describedby="phoneNumberLabel"
+                                        data-msg="Please enter a valid phone number" data-error-class="u-has-error"
+                                        data-success-class="u-has-success">
+                                </div>
+                            </div>
+                        </div>
+                        <!-- End Input -->
+                    </div>
+                    <div class="row">
                         <div class="form-group mb-4 col-md-12">
                             <label class="mb-1">About Business</label>
                             <div class="position-relative">
