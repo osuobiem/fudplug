@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\State;
 use App\User;
 use App\Vendor;
 use Illuminate\Http\Request;
@@ -170,6 +171,12 @@ class VendorController extends Controller
      */
     public function profile()
     {
-        return view('vendor.profile');
+        // Fetch Vendor Location Data
+        $area_id = Auth::user()->area_id;
+        $vendor_area = State::join('areas', 'areas.state_id', '=', 'states.id')
+            ->select('areas.name AS area', 'states.name AS state')
+            ->where('areas.id', $area_id)->first();
+
+        return view('vendor.profile', compact('vendor_area'));
     }
 }

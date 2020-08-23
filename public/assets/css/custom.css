@@ -298,6 +298,11 @@ a:visited {
     background-image: url("../img/fud-cover.jpg");
     background-repeat: no-repeat;
     background-size: cover;
+    box-shadow: inset 0 0 510px black;
+}
+
+.profile-dropdown {
+    text-align: right;
 }
 
 @media(min-width: 1024px) {

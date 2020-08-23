@@ -2,20 +2,32 @@
 
 @section('content')
 
-<div class="box mb-3 shadow-sm border rounded bg-white profile-box text-center">
+<div class="box mb-3 shadow-sm border rounded bg-white profile-box">
+
     <div class="cover">
-        <a href="#profile-edit-modal" data-toggle="modal" target="_blank" title="edit profile"
+        <!-- <a href="#profile-edit-modal" data-toggle="modal" target="_blank" title="edit profile"
             rel="noopener noreferrer">
-            <i class="la la-pen la-2x icon-hover text-white" style="margin-left: 90%;"></i>
-        </a>
-        <div class="py-4 px-3 border-bottom">
-            <img src="{{ Storage::url('vendors/'.Auth::user()->profile_image) }}"
-                class="img-fluid mt-2 rounded-circle col-md-3" alt="Responsive image">
-            <h5 class="font-weight-bold text-dark mb-1 mt-4">{{ Auth::user()->business_name }}</h5>
-            <p class="mb-0 text-dark"><b>{{ Auth::user()->username }}</b></p>
+            <i class="la la-ellipsis-v la-2x icon-hover text-white" style="margin-left: 90%;"></i>
+        </a> -->
+        <div class="profile-dropdown">
+            <a class="" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="la la-ellipsis-v la-2x icon-hover text-white"></i>
+            </a>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenu2" style="">
+                <button class="dropdown-item" data-target="#profile-edit-modal" data-toggle="modal" type="button">Edit
+                    Profile</button>
+                <button class="dropdown-item" type="button">Change Profile Image</button>
+            </div>
+        </div>
+
+        <div class="py-4 px-3 border-bottom text-center">
+            <img src="{{ Storage::url('vendor/'.Auth::user()->profile_image) }}"
+                class="mt-2 img-responsive rounded-circle col-md-3 col-xs-1" alt="Responsive image">
+            <h5 class="font-weight-bold text-white mb-1 mt-4">{{ Auth::user()->business_name }}</h5>
+            <p class="mb-0 text-white">@<b>{{ Auth::user()->username }}</b></p>
         </div>
     </div>
-    <div class="">
+    <div class="text-center">
         <div class="row">
             <div class="col-6 border-right p-4">
                 <h6 class="font-weight-bold text-dark mb-1">Joined</h6>
@@ -24,7 +36,8 @@
             </div>
             <div class="col-6 p-3">
                 <h6 class="font-weight-bold text-dark mb-1">Location</h6>
-                <p class="mb-0 text-black-50 small"><i class="las la-map-marker-alt"></i>Calabar</p>
+                <p class="mb-0 text-black-50 small"><i class="las la-map-marker-alt"></i>{{$vendor_area->area}},
+                    {{$vendor_area->state}}</p>
             </div>
         </div>
         <div class="overflow-hidden border-top">
@@ -89,4 +102,15 @@
 
 </div>
 
+@endsection
+
+@section('scripts')
+<script>
+    // let height = document.querySelector('.cover').clientHeight;
+    // let width = document.querySelector('.cover').clientWidth;
+    // console.log(height);
+    // document.querySelector('.blur').style.height = height + 'px';
+    // document.querySelector('.blur').style.width = width + 'px';
+
+</script>
 @endsection
