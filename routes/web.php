@@ -47,6 +47,8 @@ Route::group(['prefix' => 'vendor'], function () {
         Route::get('logout', 'VendorController@logout');
         // Vendor Profile
         Route::get('profile', 'VendorController@profile');
+        // Update Vendor Profile
+        Route::post('profile_update', 'VendorController@update');
     });
 });
 // -------------

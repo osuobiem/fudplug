@@ -305,6 +305,14 @@ a:visited {
     text-align: right;
 }
 
+.icon-form-control .form-control {
+    padding-left: 26px;
+}
+
+.icon-form-control i {
+    width: 29px;
+}
+
 @media(min-width: 1024px) {
     .side-section {
         position: fixed;

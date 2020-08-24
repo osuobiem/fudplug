@@ -30,7 +30,6 @@
     {{-- Check for session availablity --}}
     @if(!Auth::guest())
     @include('vendor.components.header')
-    @include('vendor.components.profile-edit')
 
     @elseif(!Auth::guard('user')->guest())
     @include('user.components.header')
