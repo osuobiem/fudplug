@@ -36,8 +36,8 @@
             </div>
             <div class="col-6 p-3">
                 <h6 class="font-weight-bold text-dark mb-1">Location</h6>
-                <p class="mb-0 text-black-50 small"><i class="las la-map-marker-alt"></i>{{$vendor_area->area}},
-                    {{$vendor_area->state}}</p>
+                <p class="mb-0 text-black-50 small"><i class="las la-map-marker-alt"></i>{{$vendor_location->area}},
+                    {{$vendor_location->state}}</p>
             </div>
         </div>
         <div class="overflow-hidden border-top">
@@ -81,7 +81,39 @@
                             </tr>
                             <tr class="border-bottom">
                                 <th class="p-3">Media Handles</th>
-                                <td class="p-3">...</td>
+                                <td class="p-3">
+                                    <ul class="list-inline">
+                                        @if(!empty($social_handles->instagram))
+                                        <li class="list-inline-item">
+                                            <a href="{{ $social_handles->instagram }}" target="_blank"
+                                                rel="noopener noreferrer">
+                                                <i class="la la-instagram text-warning m-0"
+                                                    style="font-size:25px; font-weight: bold;"></i>
+                                            </a>
+                                        </li>
+                                        @endif
+
+                                        @if(!empty($social_handles->facebook))
+                                        <li class="list-inline-item">
+                                            <a href="{{ $social_handles->facebook }}" target="_blank"
+                                                rel="noopener noreferrer">
+                                                <i class="la la-facebook text-primary"
+                                                    style="font-size:25px; font-weight: bold;"></i>
+                                            </a>
+                                        </li>
+                                        @endif
+
+                                        @if(!empty($social_handles->twitter))
+                                        <li class="list-inline-item">
+                                            <a href="{{ $social_handles->twitter }}" target="_blank"
+                                                rel="noopener noreferrer">
+                                                <i class="la la-twitter text-info"
+                                                    style="font-size:25px; font-weight: bold;"></i>
+                                            </a>
+                                        </li>
+                                        @endif
+                                    </ul>
+                                </td>
                             </tr>
                         </tbody>
                     </table>
@@ -102,15 +134,7 @@
 
 </div>
 
-@endsection
+{{-- Profile Edit Modal--}}
+@include('vendor.components.profile-edit')
 
-@section('scripts')
-<script>
-    // let height = document.querySelector('.cover').clientHeight;
-    // let width = document.querySelector('.cover').clientWidth;
-    // console.log(height);
-    // document.querySelector('.blur').style.height = height + 'px';
-    // document.querySelector('.blur').style.width = width + 'px';
-
-</script>
 @endsection

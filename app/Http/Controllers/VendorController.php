@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Area;
 use App\State;
 use App\User;
 use App\Vendor;
@@ -10,6 +11,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 
 class VendorController extends Controller
 {
@@ -171,12 +173,118 @@ class VendorController extends Controller
      */
     public function profile()
     {
+        // Get States Data
+        $states = State::get();
+
         // Fetch Vendor Location Data
         $area_id = Auth::user()->area_id;
-        $vendor_area = State::join('areas', 'areas.state_id', '=', 'states.id')
-            ->select('areas.name AS area', 'states.name AS state')
+        $vendor_location = State::join('areas', 'areas.state_id', '=', 'states.id')
+            ->select(['areas.name AS area', 'areas.id AS area_id', 'states.name AS state', 'states.id AS state_id'])
             ->where('areas.id', $area_id)->first();
 
-        return view('vendor.profile', compact('vendor_area'));
+        // Get Areas In User State
+        $areas = Area::where('state_id', $vendor_location->state_id)->get();
+
+        // Social Media Links
+        $social_handles = json_decode(Auth::user()->social_handles);
+
+        return view('vendor.profile', compact('vendor_location', 'states', 'areas', 'social_handles'));
     }
+
+    /**
+     * Update Vendor Profile
+     */
+    public function update(Request $request)
+    {
+        // Get validation rules
+        $validate = $this->profile_update_rules($request);
+
+        // Run validation
+        if ($validate->fails()) {
+            return response()->json([
+                "success" => false,
+                "message" => $validate->errors(),
+            ], 400);
+        }
+
+        if ($request['username']) {
+            // Check for dashes and other chars
+            if (!preg_match('/^[a-z_0-9A-Z]+$/', $request['username'])) {
+                return response()->json([
+                    "success" => false,
+                    "message" => [
+                        'username' => [
+                            'Username must contain only letters, numbers and underscores',
+                        ],
+                    ],
+                ], 400);
+            }
+        }
+
+        // Update Vendor Info
+        return response()->json($this->update_store($request));
+    }
+
+    /**
+     * Vendor Profile Update Validation Rules
+     * @return object The validator object
+     */
+    private function profile_update_rules(Request $request)
+    {
+        // Make and return validation rules
+        return Validator::make($request->all(), [
+            'business_name' => 'required|max:50',
+            'username' => ['required', 'max:15', Rule::unique('vendors')->ignore(Auth::user()->id), 'unique:users'],
+            'email' => ['required', 'email', Rule::unique('vendors')->ignore(Auth::user()->id), 'unique:users'], // email:rfc,dns should be used in production
+            'phone_number' => ['required', 'numeric', 'digits_between:5,11', Rule::unique('vendors')->ignore(Auth::user()->id), 'unique:users,phone_number'],
+            'address' => 'required',
+            'about' => 'required|max:1000',
+            'instagram' => 'nullable|url',
+            'facebook' => 'nullable|url',
+            'twitter' => 'nullable|url',
+        ]);
+    }
+
+    /**
+     * Structure Social Media Links Object
+     * @return String Json String of social media links
+     */
+    private function fix_media(Request $request)
+    {
+        $instagram = $request->instagram;
+        $facebook = $request->facebook;
+        $twitter = $request->twitter;
+
+        return json_encode(compact('instagram', 'facebook', 'twitter'));
+    }
+
+    /**
+     * Process vendor update
+     * @return array
+     */
+    private function update_store(Request $request)
+    {
+        // New vendor object
+        $vendor = Vendor::find(Auth::user()->id);
+
+        // Assign vendor object properties
+        $vendor->business_name = $request->business_name;
+        $vendor->username = $request->username;
+        $vendor->email = $request->email;
+        $vendor->phone_number = $request->phone_number;
+        $vendor->area_id = $request->area;
+        $vendor->address = $request->address;
+        $vendor->about_business = $request->about;
+        $vendor->social_handles = $this->fix_media($request);
+
+        // Try vendor save or catch error if any
+        try {
+            $vendor->save();
+            return ['success' => true, 'status' => 200, 'message' => 'Update Successful'];
+        } catch (\Throwable $th) {
+            Log::error($th);
+            return ['success' => false, 'status' => 500, 'message' => 'Oops! Something went wrong. Try Again!'];
+        }
+    }
+
 }
