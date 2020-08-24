@@ -53,7 +53,7 @@
             @endif
 
             <!-- Main Content -->
-            <main class="col col-lg-6" id="main-content">
+            <main class="col col-md-10 col-lg-6" id="main-content">
                 @yield('content')
             </main>
 
