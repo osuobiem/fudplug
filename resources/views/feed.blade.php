@@ -55,7 +55,7 @@
 
     <div class="post-media-container">
       <div class="pm pm-2" style="background-image: url('{{ url('assets/img/test/1.jpg') }}')"></div>
-      <div class="pm pm-2" style="background-image: url('{{ url('assets/img/test/5.jpg') }}')"></div>
+      <div class="pm pm-2" style="background-image: url('{{ url('assets/img/test/2.jpg') }}')"></div>
     </div>
   </div>
   <div class="p-3 border-bottom osahan-post-footer">
@@ -94,8 +94,8 @@
 
     <div class="post-media-container">
       <div class="pm pm-3" style="background-image: url('{{ url('assets/img/test/1.jpg') }}')"></div>
-      <div class="pm pm-3" style="background-image: url('{{ url('assets/img/test/5.jpg') }}')"></div>
-      <div class="pm pm-3" style="background-image: url('{{ url('assets/img/test/4.jpg') }}')"></div>
+      <div class="pm pm-3" style="background-image: url('{{ url('assets/img/test/2.jpg') }}')"></div>
+      <div class="pm pm-3" style="background-image: url('{{ url('assets/img/test/3.jpg') }}')"></div>
     </div>
   </div>
   <div class="p-3 border-bottom osahan-post-footer">
@@ -128,9 +128,9 @@
     
     <div class="post-media-container">
       <div class="pm pm-4" style="background-image: url('{{ url('assets/img/test/1.jpg') }}')"></div>
-      <div class="pm pm-4" style="background-image: url('{{ url('assets/img/test/5.jpg') }}')"></div>
+      <div class="pm pm-4" style="background-image: url('{{ url('assets/img/test/2.jpg') }}')"></div>
+      <div class="pm pm-4" style="background-image: url('{{ url('assets/img/test/3.jpg') }}')"></div>
       <div class="pm pm-4" style="background-image: url('{{ url('assets/img/test/4.jpg') }}')"></div>
-      <div class="pm pm-4" style="background-image: url('{{ url('assets/img/test/6.jpg') }}')"></div>
     </div>
   </div>
   <div class="p-3 border-bottom osahan-post-footer">
