@@ -64,7 +64,7 @@
         $('.floating-post-btn').addClass('animate__fadeOutDown')
       }
 
-      if (window.scrollY >= 188) {
+      if (window.scrollY >= 130) {
         $('.floating-post-btn-sm').removeClass('d-none animate__fadeOutRight')
         $('.floating-post-btn-sm').addClass('animate__fadeInRight')
       }

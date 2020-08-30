@@ -365,7 +365,18 @@ a:visited {
         position: relative;
         width: 100%;
         margin: auto;
-        margin-top: 63.5px;
+        margin-top: 60px;
+    }
+
+    .head-section {
+        position: fixed;
+        top: 0;
+        width: 100%;
+        z-index: 1000;
+    }
+
+    #main-content {
+        margin-top: 60px;
     }
 }
 
@@ -479,7 +490,18 @@ a:visited {
         position: relative;
         width: 100%;
         margin: auto;
-        margin-top: 63.5px;
+        margin-top: 60px;
+    }
+
+    .head-section {
+        position: fixed;
+        top: 0;
+        width: 100%;
+        z-index: 1000;
+    }
+
+    #main-content {
+        margin-top: 60px;
     }
 }
 
