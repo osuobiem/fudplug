@@ -144,6 +144,7 @@ $("#close-post").click(() => {
 
 function popPostModal() {
     $(".post-modal").removeClass("d-none");
+    $("#post-textarea").focus();
 }
 
 function closePostModal() {

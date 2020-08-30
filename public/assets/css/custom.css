@@ -517,3 +517,15 @@ a:visited {
     color: red !important;
     cursor: pointer;
 }
+
+.floating-post-btn {
+    position: fixed;
+    bottom: 35px;
+    right: 21%;
+    z-index: 1040;
+    border-radius: 20px;
+    font-weight: 600;
+    border-bottom-left-radius: 0;
+    box-shadow: 0 0 10px 0px #3c3b3bb8;
+    padding: 10px 15px;
+}

@@ -36,8 +36,8 @@
       <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
         <div class="p-4 d-flex align-items-center w-100" href="#">
           <div class="w-100">
-            <textarea placeholder="Post something delicious..." autofocus="true"
-              class="form-control border-0 p-0 shadow-none post-input" rows="5"></textarea>
+            <textarea placeholder="Post something delicious..." class="form-control border-0 p-0 shadow-none post-input"
+              rows="5" id="post-textarea"></textarea>
           </div>
         </div>
       </div>
@@ -51,3 +51,18 @@
     </div>
   </div>
 </div>
+
+<script>
+  $(document).ready(function () {
+    $(this).scroll(() => {
+      if (window.scrollY >= 141) {
+        $('.floating-post-btn').removeClass('animate__fadeOutDown')
+        $('.floating-post-btn').addClass('d-lg-block animate__fadeInUp')
+      }
+      else {
+        $('.floating-post-btn').removeClass('animate__fadeInUp')
+        $('.floating-post-btn').addClass('animate__fadeOutDown')
+      }
+    })
+  });
+</script>
