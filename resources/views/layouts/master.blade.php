@@ -71,10 +71,14 @@
     <button class="d-none" id="launchOnboarding" data-toggle="modal" data-target="#boardModal"></button>
     @if(!Auth::guest())
 
-    {{-- Floating Post Button --}}
+    {{-- Floating Post Buttons --}}
     <button class="btn btn-primary floating-post-btn d-none post-modal-init animate__animated">
         <i class="la la-utensil-spoon la-lg"></i>
         Post
+    </button>
+
+    <button class="btn btn-primary floating-post-btn-sm d-none d-lg-none post-modal-init animate__animated">
+        <i class="la la-utensil-spoon la-2x"></i>
     </button>
 
     {{-- Check if vendor area is set --}}

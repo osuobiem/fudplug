@@ -529,3 +529,14 @@ a:visited {
     box-shadow: 0 0 10px 0px #3c3b3bb8;
     padding: 10px 15px;
 }
+
+.floating-post-btn-sm {
+    position: fixed;
+    bottom: 75px;
+    right: 5%;
+    z-index: 1040;
+    border-radius: 50px;
+    font-weight: 600;
+    box-shadow: 0 0 10px 0px #3c3b3bb8;
+    padding: 9px 10px;
+}

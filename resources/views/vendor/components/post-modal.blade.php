@@ -63,6 +63,15 @@
         $('.floating-post-btn').removeClass('animate__fadeInUp')
         $('.floating-post-btn').addClass('animate__fadeOutDown')
       }
+
+      if (window.scrollY >= 188) {
+        $('.floating-post-btn-sm').removeClass('d-none animate__fadeOutRight')
+        $('.floating-post-btn-sm').addClass('animate__fadeInRight')
+      }
+      else {
+        $('.floating-post-btn-sm').removeClass('animate__fadeInRight')
+        $('.floating-post-btn-sm').addClass('animate__fadeOutRight')
+      }
     })
   });
 </script>
