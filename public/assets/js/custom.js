@@ -128,3 +128,24 @@ function offError(form = false) {
     $(".error-message").html("");
     form ? $("#" + form).addClass("d-none") : null;
 }
+
+// Pop Post Modal
+let modalActive = false;
+
+$("#post-modal-init").click(() => {
+    modalActive ? null : popPostModal();
+    modalActive = true;
+});
+
+$("#close-post").click(() => {
+    !modalActive ? null : closePostModal();
+    modalActive = false;
+});
+
+function popPostModal() {
+    $(".post-modal").removeClass("d-none");
+}
+
+function closePostModal() {
+    $(".post-modal").addClass("d-none");
+}
