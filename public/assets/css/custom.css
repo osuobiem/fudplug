@@ -484,13 +484,7 @@ a:visited {
 }
 
 .post-ico {
-    color: dimgray !important;
-}
-
-.post-ico:hover>i {
-    border-radius: 20px;
-    color: var(--i-primary);
-    box-shadow: 0 0 8px 0px var(--i-primary);
+    color: rgb(36, 36, 36) !important;
 }
 
 .post-btn {

@@ -71,7 +71,7 @@
 								{{ Auth::guard('user')->user()->name }}
 							</p>
 							&nbsp; &nbsp;
-							<img class="img-profile rounded-circle" src="{{ Storage::url('users/'.Auth::guard('user')->user()->profile_image) }}">
+							<img class="img-profile rounded-circle" src="{{ Storage::url('user/'.Auth::guard('user')->user()->profile_image) }}">
 							<i class="feather-chevron-down"></i>
 						</a>
 						<!-- Dropdown - User Information -->

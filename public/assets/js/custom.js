@@ -132,7 +132,7 @@ function offError(form = false) {
 // Pop Post Modal
 let modalActive = false;
 
-$("#post-modal-init").click(() => {
+$(".post-modal-init").click(() => {
     modalActive ? null : popPostModal();
     modalActive = true;
 });
