@@ -529,6 +529,7 @@ a:visited {
     top: 0;
     left: 0;
     padding: 0 15px;
+    overflow: auto;
 }
 
 #close-post {
@@ -561,4 +562,33 @@ a:visited {
     font-weight: 600;
     box-shadow: 0 0 10px 0px #3c3b3bb8;
     padding: 9px 10px;
+}
+
+.post-modal-media-container {
+    padding: 0 15px;
+}
+
+.pmmc-i::before {
+    content: "X";
+    color: #fff;
+    background: #f91c03da;
+    border-radius: 20px;
+    padding: 1px 6px;
+    float: right;
+    margin: 3px;
+    font-weight: 500;
+    box-shadow: 0 0 6px 0px #000000ba;
+    cursor: pointer;
+}
+
+.post-textarea-cont {
+    border: solid 1px #ccd0d4;
+    border-radius: 5px;
+    padding: 2px 5px;
+}
+
+.post-textarea-cont-2 {
+    border: solid 1px #fff;
+    border-radius: 5px;
+    padding: 2px 5px;
 }
