@@ -751,6 +751,15 @@ a {
     border-color: var(--ih-d-primary);
 }
 
+.btn-primary:disabled {
+    background-color: var(--ih-primary);
+    border-color: var(--ih-d-primary);
+}
+
+.btn-primary:disabled:hover {
+    cursor: progress;
+}
+
 .btn-primary:active {
     background-color: var(--ih-primary) !important;
     border-color: var(--ih-d-primary) !important;

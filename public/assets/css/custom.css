@@ -396,8 +396,8 @@ a:visited {
 }
 
 .pm {
-    background-position: center;
-    background-size: cover;
+    background-position: center !important;
+    background-size: cover !important;
     height: 320px;
     border: solid #dee2e6 .5px;
 }
@@ -508,12 +508,12 @@ a:visited {
     color: rgb(36, 36, 36) !important;
 }
 
-.post-btn {
+#post-btn {
     border: solid .5px #e44d3a66;
     box-shadow: 0 0 8px 2px rgb(194, 191, 191);
 }
 
-.post-btn:hover {
+#post-btn:hover {
     background-color: unset;
     box-shadow: 0 0 8px 2px #e44e3a8a;
     color: var(--i-primary);
@@ -567,12 +567,11 @@ a:visited {
     padding: 0 15px;
 }
 
-.pmmc-i::before {
-    content: "X";
+.pmmc-ix {
     color: #fff;
     background: #f91c03da;
     border-radius: 20px;
-    padding: 1px 6px;
+    padding: 2px;
     float: right;
     margin: 3px;
     font-weight: 500;
