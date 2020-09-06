@@ -568,12 +568,11 @@ a:visited {
     padding: 0 15px;
 }
 
-.pmmc-i::before {
-    content: "X";
+.pmmc-ix {
     color: #fff;
     background: #f91c03da;
     border-radius: 20px;
-    padding: 1px 6px;
+    padding: 2px;
     float: right;
     margin: 3px;
     font-weight: 500;

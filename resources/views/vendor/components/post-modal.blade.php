@@ -96,23 +96,22 @@
     imageCounter = 1;
 
     $('#pick-image').click(() => {
-      if (imageCounter == 5) {
+      if (imageCounter >= 5) {
         showAlert(false, "You can't upload more than 4 images")
       }
       else {
         $('#image-' + imageCounter).click()
-        imageCounter++
       }
     })
   });
 
   // Fill Picked Image in Div
   function fill(input) {
-    if (input.files) {
-      imageCounter = input.files.length + 1;
+    sendErr = false;
 
+    if (input.files) {
       [...input.files].forEach((file, ind) => {
-        if (ind < 4) {
+        if (imageCounter < 5) {
           if (file.size > 26214400) {
             showAlert(false, "Image size must not be more than 25MB");
             imageCounter -= 1
@@ -134,11 +133,18 @@
 
             reader.readAsDataURL(file);
 
+            pid = `pmmc-i-${Math.floor(Math.random() * 10) + ind}`
             img.setAttribute('class', 'pm pmmc-i')
+            img.setAttribute('id', pid)
+            img.innerHTML = `<span class="pmmc-ix" onclick="removePostImg('${pid}')"><i class="la la-times la-lg"></i></span>`;
           }
         }
+        else {
+          sendErr = true;
+        }
+        imageCounter++
       })
-
+      sendErr ? showAlert(false, "You can't upload more than 4 images") : null
       arrangeImages()
     }
   }
@@ -162,5 +168,12 @@
         $('.pmmc-i').attr('class', 'pm pm-4 pmmc-i')
         break;
     }
+  }
+
+  // Remove Post Image
+  function removePostImg(id) {
+    $('#' + id).remove()
+    imageCounter = $('.pmmc-i').length + 1
+    arrangeImages()
   }
 </script>
