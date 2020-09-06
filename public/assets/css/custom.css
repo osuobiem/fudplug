@@ -397,8 +397,8 @@ a:visited {
 }
 
 .pm {
-    background-position: center;
-    background-size: cover;
+    background-position: center !important;
+    background-size: cover !important;
     height: 320px;
     border: solid #dee2e6 .5px;
 }

@@ -33,30 +33,37 @@
       </li>
     </ul>
 
-    <!-- Post Text -->
-    <div class="tab-content" id="myTabContent">
-      <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
-        <div class="px-3 pt-2 d-flex align-items-center w-100" href="#">
-          <div class="post-textarea-cont w-100">
-            <textarea placeholder="Post something delicious..." class="form-control border-0 p-0 shadow-none post-input"
-              rows="5" id="post-textarea"></textarea>
+    <!-- Post Form -->
+    <form>
+
+      <!-- Post Text -->
+      <div class="tab-content" id="myTabContent">
+        <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+          <div class="px-3 pt-2 d-flex align-items-center w-100" href="#">
+            <div class="post-textarea-cont w-100">
+              <textarea placeholder="Post something delicious..."
+                class="form-control border-0 p-0 shadow-none post-input" rows="5" id="post-textarea"></textarea>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+
+      <input type="file" accept="image/*" name="images[]" multiple id="image-1" class="d-none" onchange="fill(this)">
+      <input type="file" accept="image/*" name="images[]" multiple id="image-2" class="d-none" onchange="fill(this)">
+      <input type="file" accept="image/*" name="images[]" multiple id="image-3" class="d-none" onchange="fill(this)">
+      <input type="file" accept="image/*" name="images[]" multiple id="image-4" class="d-none" onchange="fill(this)">
+
+    </form>
+    <!--/ Post Form -->
 
     <!-- Media Container -->
-    <div class="post-modal-media-container post-media-container">
-      <div class="pm pm-4 pmmc-i" style="background-image: url('{{ url('assets/img/test/1.jpg') }}')"></div>
-      <div class="pm pm-4 pmmc-i" style="background-image: url('{{ url('assets/img/test/2.jpg') }}')"></div>
-      <div class="pm pm-4 pmmc-i" style="background-image: url('{{ url('assets/img/test/3.jpg') }}')"></div>
-      <div class="pm pm-4 pmmc-i" style="background-image: url('{{ url('assets/img/test/4.jpg') }}')"></div>
+    <div class="post-modal-media-container post-media-container" id="post-media-container">
     </div>
 
     <!-- Post Modal Foot -->
     <div class="border-top p-3 d-flex align-items-center">
       <div class="mr-auto">
-        <a href="#" class="post-ico"><i class="la la-camera-retro la-2x p-1 icon-hover"></i></a>
+        <a href="#" id="pick-image" class="post-ico"><i class="la la-camera-retro la-2x p-1 icon-hover"></i></a>
         <a href="#" class="ml-2 post-ico"><i class="la la-video la-2x p-1 icon-hover"></i></a>
       </div>
       <button type="button" class="btn btn-outline-danger px-5 btn-lg post-btn">Post</button>
@@ -85,5 +92,75 @@
         $('.floating-post-btn-sm').addClass('animate__fadeOutRight')
       }
     })
+
+    imageCounter = 1;
+
+    $('#pick-image').click(() => {
+      if (imageCounter == 5) {
+        showAlert(false, "You can't upload more than 4 images")
+      }
+      else {
+        $('#image-' + imageCounter).click()
+        imageCounter++
+      }
+    })
   });
+
+  // Fill Picked Image in Div
+  function fill(input) {
+    if (input.files) {
+      imageCounter = input.files.length + 1;
+
+      [...input.files].forEach((file, ind) => {
+        if (ind < 4) {
+          if (file.size > 26214400) {
+            showAlert(false, "Image size must not be more than 25MB");
+            imageCounter -= 1
+          } else if (file.type.split("/")[0] != "image") {
+            showAlert(false, "The file is not an image");
+            imageCounter -= 1
+          } else {
+            var img = document.createElement('div')
+            var reader = new FileReader();
+
+            reader.onload = (e) => {
+              img.setAttribute(
+                "style",
+                'background: url("' + e.target.result + '")'
+              );
+            };
+
+            document.getElementById('post-media-container').prepend(img)
+
+            reader.readAsDataURL(file);
+
+            img.setAttribute('class', 'pm pmmc-i')
+          }
+        }
+      })
+
+      arrangeImages()
+    }
+  }
+
+  // Arrange Post media images
+  function arrangeImages() {
+    switch (imageCounter) {
+      case 2:
+        $('.pmmc-i').attr('class', 'pm pm-1 pmmc-i')
+        break;
+
+      case 3:
+        $('.pmmc-i').attr('class', 'pm pm-2 pmmc-i')
+        break;
+
+      case 4:
+        $('.pmmc-i').attr('class', 'pm pm-3 pmmc-i')
+        break;
+
+      default:
+        $('.pmmc-i').attr('class', 'pm pm-4 pmmc-i')
+        break;
+    }
+  }
 </script>
