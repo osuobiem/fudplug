@@ -49,6 +49,8 @@ Route::group(['prefix' => 'vendor'], function () {
         Route::get('profile', 'VendorController@profile');
         // Update Vendor Profile
         Route::post('profile_update', 'VendorController@update');
+        // Change Profile Image
+        Route::post('profile_image_update', 'VendorController@profile_image_update');
     });
 });
 // -------------

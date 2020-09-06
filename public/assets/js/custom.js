@@ -11,11 +11,8 @@ function fillImage(input, fillId) {
         } else {
             var reader = new FileReader();
 
-            reader.onload = (e) => {
-                img.setAttribute(
-                    "style",
-                    'background: url("' + e.target.result + '")'
-                );
+            reader.onload = e => {
+                img.setAttribute("style", 'background: url("' + e.target.result + '")');
             };
 
             reader.readAsDataURL(input.files[0]);
@@ -54,14 +51,12 @@ function goGet(url) {
     return new Promise((resolve, reject) => {
         $.ajax({
             type: "GET",
-            url,
-        })
-            .then((res) => {
-                resolve(res);
-            })
-            .catch((err) => {
-                reject(err);
-            });
+            url
+        }).then(res => {
+            resolve(res);
+        }).catch(err => {
+            reject(err);
+        });
     });
 }
 
@@ -73,14 +68,12 @@ function goPost(url, data) {
             url,
             data,
             processData: false,
-            contentType: false,
-        })
-            .then((res) => {
-                resolve(res);
-            })
-            .catch((err) => {
-                reject(err);
-            });
+            contentType: false
+        }).then(res => {
+            resolve(res);
+        }).catch(err => {
+            reject(err);
+        });
     });
 }
 
@@ -91,11 +84,11 @@ function handleFormError(err, form = false, prefix = false) {
 
         if (typeof errors === "object") {
             for (const [key, value] of Object.entries(errors)) {
-                e = prefix
-                    ? document.getElementById(prefix + "-" + key)
-                    : document.getElementById(key);
+                e = prefix ?
+                    document.getElementById(prefix + "-" + key) :
+                    document.getElementById(key);
                 e.innerHTML = "";
-                [...value].forEach((m) => {
+                [...value].forEach(m => {
                     e.innerHTML += `<p>${m}</p>`;
                 });
             }
@@ -126,19 +119,28 @@ function spin(id) {
 // Turn off Form Errors
 function offError(form = false) {
     $(".error-message").html("");
-    form ? $("#" + form).addClass("d-none") : null;
+    form
+        ?
+        $("#" + form).addClass("d-none") :
+        null;
 }
 
 // Pop Post Modal
 let modalActive = false;
 
 $(".post-modal-init").click(() => {
-    modalActive ? null : popPostModal();
+    modalActive
+        ?
+        null :
+        popPostModal();
     modalActive = true;
 });
 
 $("#close-post").click(() => {
-    !modalActive ? null : closePostModal();
+    !modalActive
+        ?
+        null :
+        closePostModal();
     modalActive = false;
 });
 
@@ -149,4 +151,159 @@ function popPostModal() {
 
 function closePostModal() {
     $(".post-modal").addClass("d-none");
+}
+
+
+// Cropper.JS
+window.addEventListener('DOMContentLoaded', function () {
+    var avatar = document.getElementById('avatar');
+    var image = document.getElementById('image');
+    var input = document.getElementById('input');
+    var $progress = $('.progress');
+    var $progressBar = $('.progress-bar');
+    var $alert = $('.alert');
+    var $modal = $('#modal');
+    var cropper;
+
+    $('[data-toggle="tooltip"]').tooltip();
+
+    input.addEventListener('change', function (e) {
+
+        var files = e.target.files;
+        var done = function (url) {
+            input.value = '';
+            image.src = url;
+            $alert.hide();
+            // Show crop modal when modal not visible
+            if (!$modal.is(':visible')) {
+                $modal.modal('show');
+            } else {
+                $('#change').addClass('d-none');
+                $('#crop').removeClass('d-none');
+                // Reinitialize ccropper when file change button is clicked
+                cropper = new Cropper(image, {
+                    aspectRatio: 1,
+                    viewMode: 3,
+                });
+            }
+        };
+        var reader;
+        var file;
+        var url;
+
+        if (files && files.length > 0) {
+            file = files[0];
+
+            if (URL) {
+                done(URL.createObjectURL(file));
+            } else if (FileReader) {
+                reader = new FileReader();
+                reader.onload = function (e) {
+                    done(reader.result);
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+    });
+
+    // Initialize cropper on modal popup
+    $modal.on('shown.bs.modal', function () {
+        cropper = new Cropper(image, {
+            aspectRatio: 1,
+            viewMode: 3,
+        });
+    }).on('hidden.bs.modal', function () { // destroy cropper on modal close
+        cropper.destroy();
+        cropper = null;
+    });
+
+    document.getElementById('crop').addEventListener('click', function () {
+        var initialAvatarURL;
+        var canvas;
+
+        if (cropper) {
+            canvas = cropper.getCroppedCanvas({
+                width: 1000,
+                height: 2000
+            });
+            initialAvatarURL = avatar.src;
+            avatar.src = canvas.toDataURL();
+
+            $alert.removeClass('alert-success alert-warning');
+            canvas.toBlob(function (blob) {
+                var formData = new FormData();
+                var FileSize = blob.size / 1024 / 1024; // Size of uploaded file
+                if (FileSize <= 10) { // Show progress bar if file has required size
+                    $progress.show();
+                }
+
+
+                formData.append('image', blobToFile(blob, 'avatar.jpg'), 'avatar.jpg');
+                $.ajax('profile_image_update', {
+                    method: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+
+                    xhr: function () {
+                        var xhr = new XMLHttpRequest();
+
+                        xhr.upload.onprogress = function (e) {
+                            var percent = '0';
+                            var percentage = '0%';
+
+                            if (e.lengthComputable) {
+                                percent = Math.round((e.loaded / e.total) *
+                                    100);
+                                percentage = percent + '%';
+                                $progressBar.width(percentage).attr(
+                                    'aria-valuenow', percent).text(
+                                    percentage);
+                            }
+                        };
+
+                        return xhr;
+                    },
+
+                    success: function (res) {
+                        if (res.success == false) {
+                            let message = res.message.image[0];
+                            $alert.show().addClass('alert-danger').text(message);
+                            $('#crop').addClass('d-none');
+                            $('#change').removeClass('d-none');
+                            // Reset cropper on error
+                            cropper.destroy();
+                            cropper = null;
+                            // Reset cropper on error
+                        } else {
+                            //$progress.hide();
+                            setTimeout(function () {
+                                $modal.modal('hide');
+                            }, 2000);
+                        }
+
+                    },
+
+                    error: function (res) {
+                        avatar.src = initialAvatarURL;
+                        console.log(res.responseJSON);
+                    },
+
+                    // complete: function () {
+                    //     $progress.hide();
+                    //     setTimeout(function () {
+                    //         $modal.modal('hide');
+                    //     }, 2000);
+                    // },
+                });
+            });
+        }
+    });
+});
+
+function blobToFile(theBlob, fileName) {
+    //A Blob() is almost a File() - it's just missing the two properties below which we will add
+    theBlob.lastModifiedDate = new Date();
+    theBlob.name = fileName;
+    return theBlob;
 }

@@ -287,4 +287,43 @@ class VendorController extends Controller
         }
     }
 
+    /**
+     * Process vendor profile image update
+     * @return array
+     */
+    public function profile_image_update(Request $request)
+    {
+        // Custom message
+        $message = [
+            'max' => 'The :attribute may not be greater than 10mb.',
+        ];
+        // Validate uploaded image
+        $validate = Validator::make($request->all(), [
+            'image' => 'required|max:10000',
+        ], $message);
+        if ($validate->fails()) {
+            return response()->json(['success' => false, 'message' => $validate->errors('image')->messages()], 200);
+        } else {
+            try {
+                $vendor = Vendor::find(Auth::user()->id);
+                $filenameWithExt = $request->file('image')->getClientOriginalName();
+                //Get just filename
+                $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME);
+                // Get just ext
+                $extension = $request->file('image')->getClientOriginalExtension();
+                // Filename to store
+                $image = "ven_" . Auth::user()->id . '.' . $extension;
+                // Upload Image
+                $request->file('image')->storeAs('public/vendor', $image);
+                $vendor->profile_image = $image;
+                $vendor->save();
+                return response()->json(['success' => true, 'data' => $image], 200);
+                // }
+            } catch (\Throwable $th) {
+                Log::error($th);
+                return response()->json(['success' => false, 'message' => 'Oops! Something went wrong. Try Again!'], 500);
+            }
+        }
+    }
+
 }

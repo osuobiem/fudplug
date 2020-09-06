@@ -2,9 +2,19 @@
 
 @section('content')
 
+<style>
+    .cover {
+        background-image: url("{{ Storage::url('vendor/cover/'.Auth::user()->cover_image) }}");
+    }
+
+</style>
+
 <div class="box mb-3 shadow-sm border rounded bg-white profile-box">
 
     <div class="cover">
+        <!-- Cover photo file input -->
+        <input type="file" class="sr-only" id="cover" name="cover_image" accept="image/*">
+
         <!-- <a href="#profile-edit-modal" data-toggle="modal" target="_blank" title="edit profile"
             rel="noopener noreferrer">
             <i class="la la-ellipsis-v la-2x icon-hover text-white" style="margin-left: 90%;"></i>
@@ -16,13 +26,17 @@
             <div class="dropdown-menu" aria-labelledby="dropdownMenu2" style="">
                 <button class="dropdown-item" data-target="#profile-edit-modal" data-toggle="modal" type="button">Edit
                     Profile</button>
-                <button class="dropdown-item" type="button">Change Profile Image</button>
+                <label class="dropdown-item" for="input">Change Profile Image</label>
+                <label class="dropdown-item" for="cover">Change Cover Photo</label>
             </div>
         </div>
 
         <div class="py-4 px-3 border-bottom text-center">
-            <img src="{{ Storage::url('vendor/'.Auth::user()->profile_image) }}"
-                class="mt-2 img-responsive rounded-circle col-md-3 col-xs-1" alt="Responsive image">
+            <img id="avatar" src="{{ Storage::url('vendor/profile/'.Auth::user()->profile_image) }}"
+                class="mt-2 img-fluid rounded-circle col-md-3" alt="Responsive image">
+            <input type="file" class="sr-only" id="input" name="image" accept="image/*">
+            <br />
+
             <h5 class="font-weight-bold text-white mb-1 mt-4">{{ Auth::user()->business_name }}</h5>
             <p class="mb-0 text-white">@<b>{{ Auth::user()->username }}</b></p>
         </div>
@@ -136,5 +150,12 @@
 
 {{-- Profile Edit Modal--}}
 @include('vendor.components.profile-edit')
+
+{{--Profile Image Edit Modal--}}
+@include('vendor.components.profile-image-edit')
+
+@endsection
+
+@section('scripts')
 
 @endsection

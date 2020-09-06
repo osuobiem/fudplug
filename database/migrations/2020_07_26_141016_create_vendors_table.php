@@ -24,6 +24,7 @@ class CreateVendorsTable extends Migration
             $table->text('about_business')->nullable();
             $table->foreignId('area_id')->nullable()->constrained()->onDelete('cascade')->onUpdate('no action');
             $table->string('profile_image')->default('placeholder.png');
+            $table->string('cover_image')->default('cover_placeholder.jpg');
             $table->string('password');
             $table->rememberToken();
 
