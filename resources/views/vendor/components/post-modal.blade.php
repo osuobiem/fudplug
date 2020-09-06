@@ -166,7 +166,7 @@
 
             reader.readAsDataURL(file);
 
-            pid = `pmmc-i-${Math.floor(Math.random() * 10) + ind}`
+            pid = `pmmc-i-${Math.floor(Math.random() * 10)}-${ind}`
             img.setAttribute('class', 'pm pmmc-i')
             img.setAttribute('id', pid)
             img.innerHTML = `<span class="pmmc-ix" onclick="removePostImg('${pid}')"><i class="la la-times la-lg"></i></span>`;
