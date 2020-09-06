@@ -118,9 +118,15 @@ function handleFormError(err, form = false, prefix = false) {
 }
 
 // Toggle Spinner
+let btnDis = false;
 function spin(id) {
+    btnDis = btnDis ? false : true;
     $(`#${id}-txt`).toggle();
     $(`#${id}-spinner`).toggle();
+
+    btnDis
+        ? $(`#${id}-btn`).attr("disabled", true)
+        : $(`#${id}-btn`).removeAttr("disabled");
 }
 
 // Turn off Form Errors

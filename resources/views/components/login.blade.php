@@ -42,7 +42,7 @@
           </div>
 
           <div class="form-group text-center col-sm-12">
-            <button class="btn btn-primary px-5" type="submit">
+            <button class="btn btn-primary px-5" type="submit" id="login-btn">
               <span id="login-txt">Login</span>
               <div class="spinner-border spinner-border-sm btn-pr" id="login-spinner" style="display: none;"
                 role="status">

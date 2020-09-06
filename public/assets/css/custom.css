@@ -509,12 +509,12 @@ a:visited {
     color: rgb(36, 36, 36) !important;
 }
 
-.post-btn {
+#post-btn {
     border: solid .5px #e44d3a66;
     box-shadow: 0 0 8px 2px rgb(194, 191, 191);
 }
 
-.post-btn:hover {
+#post-btn:hover {
     background-color: unset;
     box-shadow: 0 0 8px 2px #e44e3a8a;
     color: var(--i-primary);

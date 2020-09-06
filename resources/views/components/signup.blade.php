@@ -77,7 +77,7 @@
               </div>
 
               <div class="form-group text-center col-sm-12">
-                <button class="btn btn-primary px-5" type="submit">
+                <button class="btn btn-primary px-5" type="submit" id="vendor-btn">
                   <span id="vendor-txt">Sign Up</span>
                   <div class="spinner-border spinner-border-sm btn-pr" id="vendor-spinner" style="display: none;"
                     role="status">
