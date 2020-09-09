@@ -3,7 +3,7 @@
 @section('content')
 
 <style>
-    .cover {
+    #cover-holder {
         background-image: url("{{ Storage::url('vendor/cover/'.Auth::user()->cover_image) }}");
     }
 
@@ -11,9 +11,11 @@
 
 <div class="box mb-3 shadow-sm border rounded bg-white profile-box">
 
-    <div class="cover">
-        <!-- Cover photo file input -->
-        <input type="file" class="sr-only" id="cover" name="cover_image" accept="image/*">
+    <div id="cover-holder">
+        <!-- Cover image holder -->
+        <img id="cover" src="{{ Storage::url('vendor/cover/'.Auth::user()->cover_image) }}" class="d-none">
+        <!-- Cover image file input -->
+        <input type="file" class="sr-only" id="cover-input" name="cover-image" accept="image/*">
 
         <!-- <a href="#profile-edit-modal" data-toggle="modal" target="_blank" title="edit profile"
             rel="noopener noreferrer">
@@ -27,7 +29,7 @@
                 <button class="dropdown-item" data-target="#profile-edit-modal" data-toggle="modal" type="button">Edit
                     Profile</button>
                 <label class="dropdown-item" for="input">Change Profile Image</label>
-                <label class="dropdown-item" for="cover">Change Cover Photo</label>
+                <label class="dropdown-item" for="cover-input">Change Cover Photo</label>
             </div>
         </div>
 
@@ -50,8 +52,8 @@
             </div>
             <div class="col-6 p-3">
                 <h6 class="font-weight-bold text-dark mb-1">Location</h6>
-                <p class="mb-0 text-black-50 small"><i class="las la-map-marker-alt"></i>{{$vendor_location->area}},
-                    {{$vendor_location->state}}</p>
+                <p class="mb-0 text-black-50 small"><i class="las la-map-marker-alt"></i>{{ $vendor_location->area }},
+                    {{ $vendor_location->state }}</p>
             </div>
         </div>
         <div class="overflow-hidden border-top">
@@ -154,8 +156,7 @@
 {{--Profile Image Edit Modal--}}
 @include('vendor.components.profile-image-edit')
 
-@endsection
-
-@section('scripts')
+{{--Profile Image Edit Modal--}}
+@include('vendor.components.cover-image-edit')
 
 @endsection

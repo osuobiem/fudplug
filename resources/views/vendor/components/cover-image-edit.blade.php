@@ -1,4 +1,4 @@
-<div class="modal fade" id="modal" tabindex="-1" data-backdrop="static" role="dialog" aria-labelledby="modalLabel"
+<div class="modal fade" id="cover-modal" tabindex="-1" data-backdrop="static" role="dialog" aria-labelledby="modalLabel"
     aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -10,8 +10,8 @@
             </div>
             <div class="modal-body">
                 <div class="img-container">
-                    <img id="image" class="img-edit"
-                        src="{{ Storage::url('vendor/profile/'.Auth::user()->profile_image) }}">
+                    <img id="cover-image" class="img-edit"
+                        src="{{ Storage::url('vendor/cover/'.Auth::user()->cover_image) }}">
                 </div>
                 <div class="progress" style="display: none;">
                     <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar"
@@ -21,8 +21,8 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-primary" id="crop">Crop & Save</button>
-                <label type="button" class="btn btn-primary d-none" for="input" id="change">Change</label>
+                <button type="button" class="btn btn-primary" id="cover-crop">Crop & Save</button>
+                <label type="button" class="btn btn-primary d-none" for="cover-input" id="cover-change">Change</label>
             </div>
         </div>
     </div>
