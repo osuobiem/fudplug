@@ -184,7 +184,7 @@
       .then(res => {
         spin('vendor')
 
-        handleFormRes(res, 'v-sign-error', 'u') ? location.reload() : null
+        handleFormRes(res, 'v-sign-error') ? location.reload() : null
       })
       .catch(err => {
         spin('vendor')
