@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 
@@ -289,17 +290,17 @@ class VendorController extends Controller
 
     /**
      * Process vendor profile image update
-     * @return array
+     * @return string
      */
     public function profile_image_update(Request $request)
     {
         // Custom message
         $message = [
-            'max' => 'The :attribute may not be greater than 10mb.',
+            'max' => 'The :attribute may not be greater than 25mb.',
         ];
         // Validate uploaded image
         $validate = Validator::make($request->all(), [
-            'image' => 'required|max:10000',
+            'image' => 'required|max:25000000',
         ], $message);
         if ($validate->fails()) {
             return response()->json(['success' => false, 'message' => $validate->errors('image')->messages()], 200);
@@ -312,9 +313,11 @@ class VendorController extends Controller
                 // Get just ext
                 $extension = $request->file('image')->getClientOriginalExtension();
                 // Filename to store
-                $image = "ven_" . Auth::user()->id . '.' . $extension;
+                $image = "ven_" . Auth::user()->id . '_' . time() . '.' . $extension;
+                // Delete prev image
+                Storage::delete('/public/vendor/profile/' . Auth::user()->profile_image);
                 // Upload Image
-                $request->file('image')->storeAs('public/vendor', $image);
+                $request->file('image')->storeAs('public/vendor/profile', $image);
                 $vendor->profile_image = $image;
                 $vendor->save();
                 return response()->json(['success' => true, 'data' => $image], 200);
@@ -322,6 +325,46 @@ class VendorController extends Controller
             } catch (\Throwable $th) {
                 Log::error($th);
                 return response()->json(['success' => false, 'message' => 'Oops! Something went wrong. Try Again!'], 500);
+            }
+        }
+    }
+
+    /**
+     * Process vendor cover image update
+     * @return string
+     */
+    public function cover_image_update(Request $request)
+    {
+        // Custom message
+        $message = [
+            'max' => 'The :attribute may not be greater than 25mb.',
+        ];
+        // Validate uploaded image
+        $validate = Validator::make($request->all(), [
+            'image' => 'required|max:25000000',
+        ], $message);
+        if ($validate->fails()) {
+            return response()->json(['success' => false, 'message' => $validate->errors('image')->messages()], 200);
+        } else {
+            try {
+                $vendor = Vendor::find(Auth::user()->id);
+                $filenameWithExt = $request->file('image')->getClientOriginalName();
+                //Get just filename
+                $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME);
+                // Get just ext
+                $extension = $request->file('image')->getClientOriginalExtension();
+                // Filename to store
+                $image = "cover_" . Auth::user()->id . '_' . time() . '.' . $extension;
+                // Delete prev image
+                Storage::delete('/public/vendor/cover/' . Auth::user()->cover_image);
+                // Upload new Image
+                $request->file('image')->storeAs('public/vendor/cover', $image);
+                $vendor->cover_image = $image;
+                $vendor->save();
+                return response()->json(['success' => true, 'data' => $image], 200);
+            } catch (\Throwable $th) {
+                Log::error($th);
+                return response()->json(['success' => false, 'message' => $th->getMessage()], 500);
             }
         }
     }
