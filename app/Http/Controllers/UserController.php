@@ -27,7 +27,7 @@ class UserController extends Controller
             return response()->json([
                 "success" => false,
                 "message" => $validate->errors()
-            ], 400);
+            ]);
         }
 
         // Store user data

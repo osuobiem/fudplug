@@ -30,7 +30,7 @@
               role="alert">
             </div>
             <form class="row" id="vendor-signup" method="POST">
-
+              @csrf
               <div class="form-group col-sm-12">
                 <label class="mb-1">Business Name <small class="text-danger">*</small></label>
                 <div class="position-relative icon-form-control">
@@ -95,6 +95,7 @@
               role="alert">
             </div>
             <form class="row" id="user-signup" method="POST">
+              @csrf
               <div class="form-group col-sm-12">
                 <label class="mb-1">Name <small class="text-danger">*</small></label>
                 <div class="position-relative icon-form-control">
@@ -183,11 +184,11 @@
       .then(res => {
         spin('vendor')
 
-        location.reload()
+        handleFormRes(res, 'v-sign-error', 'u') ? location.reload() : null
       })
       .catch(err => {
         spin('vendor')
-        handleFormError(err, 'v-sign-error');
+        handleFormRes(err, 'v-sign-error');
       })
   }
 
@@ -205,11 +206,11 @@
       .then(res => {
         spin('user')
 
-        location.reload()
+        handleFormRes(res, 'u-sign-error', 'u') ? location.reload() : null
       })
       .catch(err => {
         spin('user')
-        handleFormError(err, 'u-sign-error', 'u');
+        handleFormRes(err, 'u-sign-error');
       })
   }
 

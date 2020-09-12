@@ -23,7 +23,7 @@ class AuthController extends Controller
             return response()->json([
                 "success" => false,
                 "message" => $validate->errors()
-            ], 400);
+            ]);
         }
 
         // Attempt Vendor Login
@@ -45,7 +45,7 @@ class AuthController extends Controller
             return response()->json([
                 'success' => false,
                 'message' => 'Invalid Credentials!'
-            ], 400);
+            ]);
         }
     }
 
@@ -151,10 +151,10 @@ class AuthController extends Controller
             // Try vendor save or catch error if any
             try {
                 $vendor->save();
-                return ['success' => true, 'status' => 200, 'message' => 'Location Saved'];
+                return response()->json(['success' => true, 'message' => 'Location Saved']);
             } catch (\Throwable $th) {
                 Log::error($th);
-                return ['success' => false, 'status' => 500, 'message' => 'Oops! Something went wrong. Try Again!'];
+                return response()->json(['success' => false, 'message' => 'Oops! Something went wrong. Try Again!'], 500);
             }
         }
         // User ?
@@ -176,7 +176,7 @@ class AuthController extends Controller
             return response()->json([
                 'success' => false,
                 'message' => 'Something\'s not right'
-            ], 400);
+            ]);
         }
     }
 }
