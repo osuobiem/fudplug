@@ -84,6 +84,10 @@
       sendPost(el)
     })
 
+    $("#post-textarea").emojioneArea({
+      pickerPosition: "bottom"
+    });
+
     $(this).scroll(() => {
       if (window.scrollY >= 141) {
         $('.floating-post-btn').removeClass('animate__fadeOutDown')

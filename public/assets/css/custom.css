@@ -591,6 +591,10 @@ a:visited {
     padding: 2px 5px;
 }
 
+.post-textarea-cont-2>textarea {
+    font-size: 14px !important;
+}
+
 
 
 /************ Cropper.js custom CSS ***********************/
@@ -939,4 +943,12 @@ a:visited {
     label.badge {
         font-size: 25px;
     }
+}
+
+.emojionearea-editor {
+    padding: 0 !important;
+}
+
+.emojionearea-editor::before {
+    color: #404040 !important;
 }
