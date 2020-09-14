@@ -74,3 +74,13 @@ Route::group(['prefix' => 'user'], function () {
     });
 });
 // -------------
+
+// POST ROUTES
+Route::group(['prefix' => 'post'], function () {
+    // *** Protected ***
+    Route::group(['middleware' => ['auth']], function () {
+        // User Logout
+        Route::post('create', 'PostController@post');
+    });
+});
+// -------------

@@ -43,16 +43,18 @@
             <div class="post-textarea-cont w-100">
               <textarea placeholder="Post something delicious..."
                 class="form-control border-0 p-0 shadow-none post-input" required name="content" rows="5"
-                id="post-textarea"></textarea>
+                id="post-textarea" name="content"></textarea>
+              <small class="text-danger error-message" id="content"></small>
             </div>
           </div>
         </div>
       </div>
 
-      <input type="file" accept="image/*" name="images[]" multiple id="image-1" class="d-none" onchange="fill(this)">
-      <input type="file" accept="image/*" name="images[]" multiple id="image-2" class="d-none" onchange="fill(this)">
-      <input type="file" accept="image/*" name="images[]" multiple id="image-3" class="d-none" onchange="fill(this)">
-      <input type="file" accept="image/*" name="images[]" multiple id="image-4" class="d-none" onchange="fill(this)">
+      <input type="file" accept="image/*" multiple id="image-1" class="d-none" onchange="fill(this)">
+      <input type="file" accept="image/*" multiple id="image-2" class="d-none" onchange="fill(this)">
+      <input type="file" accept="image/*" multiple id="image-3" class="d-none" onchange="fill(this)">
+      <input type="file" accept="image/*" multiple id="image-4" class="d-none" onchange="fill(this)">
+      <input type="file" accept="video/*" multiple id="video-file" class="d-none" onchange="fillVideo(this)">
 
       <!-- Media Container -->
       <div class="post-modal-media-container post-media-container" id="post-media-container">
@@ -62,7 +64,7 @@
       <div class="border-top p-3 d-flex align-items-center">
         <div class="mr-auto">
           <a href="#" id="pick-image" class="post-ico"><i class="la la-camera-retro la-2x p-1 icon-hover"></i></a>
-          <a href="#" class="ml-2 post-ico"><i class="la la-video la-2x p-1 icon-hover"></i></a>
+          <a href="#" id="pick-video" class="ml-2 post-ico"><i class="la la-video la-2x p-1 icon-hover"></i></a>
         </div>
         <button type="button" class="btn btn-outline-danger px-5 btn-lg" onclick="submitPost()" type="submit"
           id="post-btn">
@@ -79,6 +81,9 @@
 </div>
 
 <script>
+  let images = {};
+  let video = {};
+
   $(document).ready(function () {
     $('#post-form').submit(el => {
       sendPost(el)
@@ -118,6 +123,15 @@
         $('#image-' + imageCounter).click()
       }
     })
+
+    $('#pick-video').click(() => {
+      if (Object.keys(video).length > 0) {
+        showAlert(false, "You can't upload more than 1 video")
+      }
+      else {
+        $('#video-file').click()
+      }
+    })
   });
 
   // Send Post
@@ -125,21 +139,27 @@
     el.preventDefault()
 
     spin('post')
-    // offError('login-error')
 
-    // let url = `{{ url('login') }}`;
-    // let data = new FormData(el.target)
+    let url = `{{ url('post/create') }}`;
+    let data = new FormData(el.target)
 
-    // goPost(url, data)
-    //   .then(res => {
-    //     spin('login')
+    // Attach images to form data
+    if (Object.keys(images).length > 0) {
+      for (image in images) {
+        data.append('images[]', images[image])
+      }
+    }
 
-    //     location.reload()
-    //   })
-    //   .catch(err => {
-    //     spin('login')
-    //     handleFormError(err, 'login-error', 'l');
-    //   })
+    goPost(url, data)
+      .then(res => {
+        spin('post')
+
+        handleFormRes(res);
+      })
+      .catch(err => {
+        spin('post')
+        handleFormRes(err);
+      })
   }
 
   // Fill Picked Image in Div
@@ -168,12 +188,16 @@
 
             document.getElementById('post-media-container').prepend(img)
 
+            inputId = $(input).attr('id')
+
             reader.readAsDataURL(file);
 
             pid = `pmmc-i-${Math.floor(Math.random() * 10)}-${ind}`
             img.setAttribute('class', 'pm pmmc-i')
             img.setAttribute('id', pid)
             img.innerHTML = `<span class="pmmc-ix" onclick="removePostImg('${pid}')"><i class="la la-times la-lg"></i></span>`;
+
+            images[pid] = file
           }
         }
         else {
@@ -183,6 +207,36 @@
       })
       sendErr ? showAlert(false, "You can't upload more than 4 images") : null
       arrangeImages()
+    }
+  }
+
+  // Fill Picked Video in Div
+  function fillVideo(input) {
+    if (input.files) {
+      [...input.files].forEach((file, ind) => {
+        if (file.size > 536870912) {
+          showAlert(false, "Video size must not be more than 512MB");
+        } else if (file.type.split("/")[0] != "video") {
+          showAlert(false, "The file is not a video");
+        } else {
+          var vid = document.createElement('div')
+          var reader = new FileReader();
+
+          reader.onload = (e) => {
+            vid.setAttribute(
+              "style",
+              'background: url("' + e.target.result + '")'
+            );
+          };
+
+          document.getElementById('post-media-container').prepend(vid)
+          reader.readAsDataURL(file);
+
+          vid.innerHTML = `<span class="pmmc-ix" onclick="removePostVid('${ind}')"><i class="la la-times la-lg"></i></span>`;
+
+          video = file
+        }
+      })
     }
   }
 
@@ -210,6 +264,7 @@
   // Remove Post Image
   function removePostImg(id) {
     $('#' + id).remove()
+    delete images[id]
     imageCounter = $('.pmmc-i').length + 1
     arrangeImages()
   }
