@@ -579,6 +579,22 @@ a:visited {
     cursor: pointer;
 }
 
+.pmmc-ixv {
+    color: #fff;
+    background: #f91c03da;
+    border-radius: 20px;
+    padding: 2px;
+    float: right;
+    margin: 3px;
+    font-weight: 500;
+    box-shadow: 0 0 6px 0px #000000ba;
+    cursor: pointer;
+    position: absolute;
+    right: 17px;
+    margin-top: 5px;
+    z-index: 1000;
+}
+
 .post-textarea-cont {
     border: solid 1px #ccd0d4;
     border-radius: 5px;
@@ -589,6 +605,10 @@ a:visited {
     border: solid 1px #fff;
     border-radius: 5px;
     padding: 2px 5px;
+}
+
+.post-textarea-cont-2>textarea {
+    font-size: 14px !important;
 }
 
 
@@ -949,4 +969,17 @@ a:visited {
     label.badge {
         font-size: 25px;
     }
+}
+
+.emojionearea-editor {
+    padding: 0 !important;
+}
+
+.emojionearea-editor::before {
+    color: #404040 !important;
+}
+
+#post-video-container {
+    width: 100%;
+    margin-top: 0 !important;
 }

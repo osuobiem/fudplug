@@ -16,7 +16,7 @@
         </div>
 
         <form id="login-form" method="POST">
-
+          @csrf
           <div class="form-group">
             <label class="mb-1">Username, Email or Phone <small class="text-danger">*</small></label>
             <div class="position-relative icon-form-control">
@@ -82,14 +82,14 @@
     let data = new FormData(el.target)
 
     goPost(url, data)
-      .then(res => {
+      .then((res) => {
         spin('login')
 
-        location.reload()
+        handleFormRes(res, 'login-error', 'l') ? location.reload() : null
       })
       .catch(err => {
         spin('login')
-        handleFormError(err, 'login-error', 'l');
+        handleFormRes(err, 'login-error');
       })
   }
 

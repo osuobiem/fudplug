@@ -300,15 +300,16 @@ body::-webkit-scrollbar-thumb {
     border-radius: 6px;
 }
 
-.post-input::-webkit-scrollbar {
+
+.emojionearea-editor::-webkit-scrollbar {
     width: 5px;
 }
 
-.post-input::-webkit-scrollbar-track {
+.emojionearea-editor::-webkit-scrollbar-track {
     background: transparent;
 }
 
-.post-input::-webkit-scrollbar-thumb {
+.emojionearea-editor::-webkit-scrollbar-thumb {
     background-color: rgba(0, 0, 0, 0.219);
     border-radius: 6px;
 }

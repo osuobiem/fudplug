@@ -27,6 +27,10 @@
 
     <script src="{{ url('assets/vendor/jquery-cookie/jquery-cookie.js') }}"></script>
 
+    <!-- Emoji -->
+    <link href="{{url('assets/vendor/emojionearea/emojionearea.min.css')}}" rel="stylesheet">
+    <script src="{{ url('assets/vendor/emojionearea/emojionearea.min.js') }}"></script>
+
 </head>
 
 <body>

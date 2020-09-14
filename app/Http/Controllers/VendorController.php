@@ -31,7 +31,7 @@ class VendorController extends Controller
             return response()->json([
                 "success" => false,
                 "message" => $validate->errors(),
-            ], 400);
+            ]);
         }
 
         if ($request['username']) {
@@ -44,7 +44,7 @@ class VendorController extends Controller
                             'Username must contain only letters, numbers and underscores',
                         ],
                     ],
-                ], 400);
+                ]);
             }
         }
 
@@ -205,7 +205,7 @@ class VendorController extends Controller
             return response()->json([
                 "success" => false,
                 "message" => $validate->errors(),
-            ], 400);
+            ]);
         }
 
         if ($request['username']) {
@@ -218,7 +218,7 @@ class VendorController extends Controller
                             'Username must contain only letters, numbers and underscores',
                         ],
                     ],
-                ], 400);
+                ]);
             }
         }
 
