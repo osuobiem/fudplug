@@ -54,10 +54,20 @@
       <input type="file" accept="image/*" multiple id="image-2" class="d-none" onchange="fill(this)">
       <input type="file" accept="image/*" multiple id="image-3" class="d-none" onchange="fill(this)">
       <input type="file" accept="image/*" multiple id="image-4" class="d-none" onchange="fill(this)">
-      <input type="file" accept="video/*" multiple id="video-file" class="d-none" onchange="fillVideo(this)">
+      <div id="vid-in">
+        <input type="file" accept="video/*" multiple id="video-file" class="d-none" onchange="fillVideo(this)">
+      </div>
 
       <!-- Media Container -->
       <div class="post-modal-media-container post-media-container" id="post-media-container">
+      </div>
+      <div class="post-modal-media-container post-media-container" id="post-video-container">
+      </div>
+      <div id="video-spinner" class="justify-content-center text-center w-100 pb-2 d-none">
+        <p><strong>Loading Video...</strong></p>
+        <div class="spinner-border spinner-border-sm btn-pr p-2" role="status">
+          <span class="sr-only">Loading...</span>
+        </div>
       </div>
 
       <!-- Post Modal Foot -->
@@ -116,20 +126,30 @@
     imageCounter = 1;
 
     $('#pick-image').click(() => {
-      if (imageCounter >= 5) {
-        showAlert(false, "You can't upload more than 4 images")
+      if (Object.keys(video).length > 0) {
+        showAlert(false, "Remove video first")
       }
       else {
-        $('#image-' + imageCounter).click()
+        if (imageCounter >= 5) {
+          showAlert(false, "You can't upload more than 4 images")
+        }
+        else {
+          $('#image-' + imageCounter).click()
+        }
       }
     })
 
     $('#pick-video').click(() => {
-      if (Object.keys(video).length > 0) {
-        showAlert(false, "You can't upload more than 1 video")
+      if (imageCounter > 1) {
+        showAlert(false, "Remove photo(s) first")
       }
       else {
-        $('#video-file').click()
+        if (Object.keys(video).length > 0) {
+          showAlert(false, "You can't upload more than 1 video")
+        }
+        else {
+          $('#video-file').click()
+        }
       }
     })
   });
@@ -212,29 +232,54 @@
 
   // Fill Picked Video in Div
   function fillVideo(input) {
+    $('#video-spinner').removeClass('d-none')
     if (input.files) {
       [...input.files].forEach((file, ind) => {
         if (file.size > 536870912) {
+          $('#video-spinner').addClass('d-none')
           showAlert(false, "Video size must not be more than 512MB");
         } else if (file.type.split("/")[0] != "video") {
+          $('#video-spinner').addClass('d-none')
           showAlert(false, "The file is not a video");
         } else {
-          var vid = document.createElement('div')
+          var vid = document.createElement('video')
           var reader = new FileReader();
 
           reader.onload = (e) => {
             vid.setAttribute(
-              "style",
-              'background: url("' + e.target.result + '")'
+              "src",
+              e.target.result
             );
           };
 
-          document.getElementById('post-media-container').prepend(vid)
+          vid.setAttribute(
+            "style",
+            "width: 100%; border-radius: 12px; border: solid #dee2e6 1px;"
+          );
+
+          vid.setAttribute('controls', true)
+          vid.setAttribute('id', 'video-file')
           reader.readAsDataURL(file);
 
-          vid.innerHTML = `<span class="pmmc-ix" onclick="removePostVid('${ind}')"><i class="la la-times la-lg"></i></span>`;
 
-          video = file
+          // Check video duration
+          var timer = setInterval(function () {
+            if (vid.readyState === 4) {
+              if (vid.duration.toFixed(2) > 180) {
+                $('#video-spinner').addClass('d-none')
+                showAlert(false, "The video duration must not be more than 3 minutes");
+              }
+              else {
+                $('#video-spinner').addClass('d-none')
+                video = { 'file': file }
+                cont = document.getElementById('post-video-container');
+                cont.innerHTML = `<span class="pmmc-ixv" onclick="removePostVid()"><i class="la la-times la-lg"></i></span>`;
+                cont.prepend(vid)
+              }
+
+              clearInterval(timer);
+            }
+          }, 500)
         }
       })
     }
@@ -267,6 +312,15 @@
     delete images[id]
     imageCounter = $('.pmmc-i').length + 1
     arrangeImages()
+  }
+
+  // Remove Post Video
+  function removePostVid() {
+    $('#post-video-container').html('')
+    video = {}
+    $('#vid-in').html(
+      `<input type="file" accept="video/*" multiple id="video-file" class="d-none" onchange="fillVideo(this)">`
+    );
   }
 
   // Submit Post

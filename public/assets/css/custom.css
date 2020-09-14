@@ -579,6 +579,22 @@ a:visited {
     cursor: pointer;
 }
 
+.pmmc-ixv {
+    color: #fff;
+    background: #f91c03da;
+    border-radius: 20px;
+    padding: 2px;
+    float: right;
+    margin: 3px;
+    font-weight: 500;
+    box-shadow: 0 0 6px 0px #000000ba;
+    cursor: pointer;
+    position: absolute;
+    right: 17px;
+    margin-top: 5px;
+    z-index: 1000;
+}
+
 .post-textarea-cont {
     border: solid 1px #ccd0d4;
     border-radius: 5px;
@@ -951,4 +967,9 @@ a:visited {
 
 .emojionearea-editor::before {
     color: #404040 !important;
+}
+
+#post-video-container {
+    width: 100%;
+    margin-top: 0 !important;
 }
