@@ -927,6 +927,16 @@ a:visited {
     max-height: 500px;
 }
 
+.rounded-left-0 {
+    border-top-left-radius: 0px;
+    border-bottom-left-radius: 0px;
+}
+
+.rounded-right-0 {
+    border-top-right-radius: 0px;
+    border-bottom-right-radius: 0px;
+}
+
 /* If the screen size is 601px wide or more, set the font-size of <div> to 80px */
 @media screen and (min-width: 601px) {
     label.badge {

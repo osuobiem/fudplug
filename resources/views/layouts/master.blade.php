@@ -58,6 +58,9 @@
             <!-- Main Content -->
             <main class="col col-md-10 col-lg-6" id="main-content">
                 @yield('content')
+
+                {{-- Dish Addition Modal--}}
+                @include('vendor.components.dish-add')
             </main>
 
             <!-- Right Sidebar -->
@@ -92,6 +95,7 @@
         $(document).ready(function () {
             $("#launchOnboarding").click();
         });
+
     </script>
     @endif
 
@@ -103,6 +107,7 @@
         $(document).ready(function () {
             $("#launchOnboarding").click();
         });
+
     </script>
     @endif
     @endif

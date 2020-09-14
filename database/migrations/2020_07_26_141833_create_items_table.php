@@ -17,9 +17,9 @@ class CreateItemsTable extends Migration
             $table->id();
             $table->string('title');
             $table->string('price');
-            $table->integer('quantity');
+            $table->json('quantity');
             $table->string('image');
-            $table->foreignId('menu_id')->constrained()->onDelete('cascade')->onUpdate('no action');
+            $table->foreignId('vendor_id')->constrained()->onDelete('cascade')->onUpdate('no action');
             $table->enum('status', ['active', 'inactive']);
             $table->softDeletes();
             $table->timestamps();

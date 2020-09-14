@@ -68,6 +68,14 @@
                         <a class="nav-link" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home"
                             aria-selected="false">About</a>
                     </li>
+                    <li class="nav-item d-lg-none">
+                        <a class="nav-link" id="home-tab" data-toggle="tab" href="#order" role="tab"
+                            aria-controls="home" aria-selected="false">Orders</a>
+                    </li>
+                    <li class="nav-item d-lg-none">
+                        <a class="nav-link" id="home-tab" data-toggle="tab" href="#menu" role="tab" aria-controls="home"
+                            aria-selected="false">Menu</a>
+                    </li>
                 </ul>
             </div>
         </div>
@@ -146,6 +154,198 @@
                 </div>
             </div>
         </div>
+        <div class="tab-pane fade d-lg-none" id="order" role="tabpanel" aria-labelledby="order-tab">
+            <aside class="col col-lg-3 side-section side-section-l">
+                <div class="box shadow-sm border rounded bg-white mb-3">
+                    <div class="box-title border-bottom p-3">
+                        <h6 class="m-0">Orders</h6>
+                    </div>
+                    <div class="box-body p-3 h-100 overflow-auto">
+                        <div class="d-flex align-items-center osahan-post-header mb-3 people-list">
+                            <div class="dropdown-list-image mr-3">
+                                <img class="rounded-circle" src="{{ url('assets/img/p4.png') }}" alt="">
+                                <div class="status-indicator bg-success"></div>
+                            </div>
+                            <div class="font-weight-bold mr-2">
+                                <div class="text-truncate">Sophia Lee</div>
+                                <div class="small text-gray-500">@Harvard
+                                </div>
+                            </div>
+                            <span class="ml-auto"><button type="button"
+                                    class="btn btn-outline-danger btn-sm">View</button>
+                            </span>
+                        </div>
+                        <div class="d-flex align-items-center osahan-post-header mb-3 people-list">
+                            <div class="dropdown-list-image mr-3">
+                                <img class="rounded-circle" src="{{ url('assets/img/p9.png') }}" alt="">
+                                <div class="status-indicator bg-success"></div>
+                            </div>
+                            <div class="font-weight-bold mr-2">
+                                <div class="text-truncate">John Doe</div>
+                                <div class="small text-gray-500">Traveler
+                                </div>
+                            </div>
+                            <span class="ml-auto"><button type="button"
+                                    class="btn btn-outline-danger btn-sm">View</button>
+                            </span>
+                        </div>
+                        <div class="d-flex align-items-center osahan-post-header mb-3 people-list">
+                            <div class="dropdown-list-image mr-3">
+                                <img class="rounded-circle" src="{{ url('assets/img/p10.png') }}" alt="">
+                                <div class="status-indicator bg-success"></div>
+                            </div>
+                            <div class="font-weight-bold mr-2">
+                                <div class="text-truncate">Julia Cox</div>
+                                <div class="small text-gray-500">Art Designer
+                                </div>
+                            </div>
+                            <span class="ml-auto"><button type="button"
+                                    class="btn btn-outline-danger btn-sm">View</button>
+                            </span>
+                        </div>
+                        <div class="d-flex align-items-center osahan-post-header mb-3 people-list">
+                            <div class="dropdown-list-image mr-3">
+                                <img class="rounded-circle" src="{{ url('assets/img/p11.png') }}" alt="">
+                                <div class="status-indicator bg-success"></div>
+                            </div>
+                            <div class="font-weight-bold mr-2">
+                                <div class="text-truncate">Robert Cook</div>
+                                <div class="small text-gray-500">@Photography
+                                </div>
+                            </div>
+                            <span class="ml-auto"><button type="button"
+                                    class="btn btn-outline-danger btn-sm">View</button>
+                            </span>
+                        </div>
+                        <div class="d-flex align-items-center osahan-post-header people-list">
+                            <div class="dropdown-list-image mr-3">
+                                <img class="rounded-circle" src="{{ url('assets/img/p12.png') }}" alt="">
+                                <div class="status-indicator bg-success"></div>
+                            </div>
+                            <div class="font-weight-bold mr-2">
+                                <div class="text-truncate">Richard Bell</div>
+                                <div class="small text-gray-500">@Envato
+                                </div>
+                            </div>
+                            <span class="ml-auto"><button type="button"
+                                    class="btn btn-outline-danger btn-sm">View</button>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="box-footer p-2 border-top">
+                        <button type="button" class="btn btn-primary btn-block"> View all </button>
+                    </div>
+                </div>
+            </aside>
+        </div>
+        <div class="tab-pane fade d-lg-none" id="menu" role="tabpanel" aria-labelledby="menu-tab">
+            <aside class="col col-lg-3 d-lg-block side-section side-section-r">
+                <div class="box shadow-sm border rounded bg-white mb-3">
+                    <div class="box-title border-bottom p-3">
+                        <h6 class="m-0">Menu</h6>
+                    </div>
+                    <div class="box-body p-3 h-100 overflow-auto">
+                        <div class="d-flex align-items-center osahan-post-header mb-3 people-list">
+                            <div class="dropdown-list-image mr-3">
+                                <img class="rounded-circle" src="{{Storage::url('vendor/fud1.jpeg')}}" alt="">
+
+                            </div>
+                            <div class="font-weight-bold mr-2">
+                                <div class="text-truncate"><a href="http://">
+                                        Eba & Soup
+                                    </a></div>
+                                <div class="small text-gray-500"><b>Qty:</b> 10
+                                </div>
+                            </div>
+                            <span title="add to today's menu" class="ml-auto">
+                                <div class="custom-control custom-switch pull-left">
+                                    <input type="checkbox" class="custom-control-input" id="customSwitch1">
+                                    <label class="custom-control-label" for="customSwitch1"></label>
+                                </div>
+                            </span>
+                        </div>
+                        <div class="d-flex align-items-center osahan-post-header mb-3 people-list">
+                            <div class="dropdown-list-image mr-3">
+                                <img class="rounded-circle" src="{{Storage::url('vendor/fud2.jpeg')}}" alt="">
+
+                            </div>
+                            <div class="font-weight-bold mr-2">
+                                <div class="text-truncate"><a href="http://">
+                                        Fried Rice
+                                    </a></div>
+                                <div class="small text-gray-500"><b>Qty:</b> 10
+                                </div>
+                            </div>
+                            <span class="ml-auto">
+                                <div class="custom-control custom-switch pull-left">
+                                    <input type="checkbox" class="custom-control-input" id="customSwitch2">
+                                    <label class="custom-control-label" for="customSwitch2"></label>
+                                </div>
+                            </span>
+                        </div>
+                        <div class="d-flex align-items-center osahan-post-header mb-3 people-list">
+                            <div class="dropdown-list-image mr-3">
+                                <img class="rounded-circle" src="{{Storage::url('vendor/fud3.jpeg')}}" alt="">
+
+                            </div>
+                            <div class="font-weight-bold mr-2">
+                                <div class="text-truncate"><a href="http://">
+                                        Banga Soup
+                                    </a></div>
+                                <div class="small text-gray-500"><b>Qty:</b> 10
+                                </div>
+                            </div>
+                            <span class="ml-auto">
+                                <div class="custom-control custom-switch pull-left">
+                                    <input type="checkbox" class="custom-control-input" id="customSwitch3">
+                                    <label class="custom-control-label" for="customSwitch3"></label>
+                                </div>
+                            </span>
+                        </div>
+                        <div class="d-flex align-items-center osahan-post-header mb-3 people-list">
+                            <div class="dropdown-list-image mr-3">
+                                <img class="rounded-circle" src="{{Storage::url('vendor/fud4.jpeg')}}" alt="">
+
+                            </div>
+                            <div class="font-weight-bold mr-2">
+                                <div class="text-truncate"><a href="http://">
+                                        Jollof Rice
+                                    </a></div>
+                                <div class="small text-gray-500"><b>Qty:</b> 10
+                                </div>
+                            </div>
+                            <span class="ml-auto">
+                                <div class="custom-control custom-switch pull-left">
+                                    <input type="checkbox" class="custom-control-input" id="customSwitch4">
+                                    <label class="custom-control-label" for="customSwitch4"></label>
+                                </div>
+                            </span>
+                        </div>
+                        <div class="d-flex align-items-center osahan-post-header people-list">
+                            <div class="dropdown-list-image mr-3">
+                                <img class="rounded-circle" src="{{Storage::url('vendor/fud5.jpeg')}}" alt="">
+                            </div>
+                            <div class="font-weight-bold mr-2">
+                                <div class="text-truncate"><a href="http://">
+                                        White Soup
+                                    </a></div>
+                                <div class="small text-gray-500"><b>Qty:</b> 10
+                                </div>
+                            </div>
+                            <span class="ml-auto">
+                                <div class="custom-control custom-switch pull-left">
+                                    <input type="checkbox" class="custom-control-input" id="customSwitch5">
+                                    <label class="custom-control-label" for="customSwitch5"></label>
+                                </div>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="box-footer p-2 border-top">
+                        <button type="button" class="btn btn-primary btn-block"> Add Item </button>
+                    </div>
+                </div>
+            </aside>
+        </div>
     </div>
 
 </div>
@@ -159,4 +359,187 @@
 {{--Profile Image Edit Modal--}}
 @include('vendor.components.cover-image-edit')
 
+@endsection
+
+@section('scripts')
+<script>
+    // Cropper.JS Initialize any crop by calling the crop function
+    window.addEventListener("DOMContentLoaded", function () {
+        // Initialize crop for profile image
+        crop("avatar", "image", "input", "progress", "progress-bar", "alert", "modal", "change", "crop",
+            "profile_image_update");
+
+        // Initialize crop for cover image
+        crop("cover", "cover-image", "cover-input", "progress", "progress-bar", "alert", "cover-modal",
+            "cover-change", "cover-crop", "cover_image_update");
+    });
+
+    function crop(...params) {
+        var avatar = document.getElementById(params[0]);
+        var image = document.getElementById(params[1]);
+        var input = document.getElementById(params[2]);
+        var $progress = $("." + params[3]);
+        var $progressBar = $("." + params[4]);
+        var $alert = $("." + params[5]);
+        var $modal = $("#" + params[6]);
+        var $change = $("#" + params[7]);
+        var $crop = $("#" + params[8]);
+        var upload_url = params[9];
+        var cropper;
+
+        $('[data-toggle="tooltip"]').tooltip();
+
+        input.addEventListener("change", function (e) {
+            var files = e.target.files;
+            var done = function (url) {
+                input.value = "";
+                image.src = url;
+                $alert.hide();
+                // Show crop modal when modal not visible
+                if (!$modal.is(":visible")) {
+                    $change.addClass("d-none");
+                    $crop.removeClass("d-none");
+                    $modal.modal("show");
+                } else {
+                    $change.addClass("d-none");
+                    $crop.removeClass("d-none");
+                    // Reinitialize ccropper when file change button is clicked
+                    cropper = new Cropper(image, {
+                        aspectRatio: 1,
+                        viewMode: 3,
+                        setDragMode: 'none',
+                        aspectRatio: NaN
+                    });
+                }
+            };
+            var reader;
+            var file;
+            var url;
+
+            if (files && files.length > 0) {
+                file = files[0];
+
+                if (URL) {
+                    done(URL.createObjectURL(file));
+                } else if (FileReader) {
+                    reader = new FileReader();
+                    reader.onload = function (e) {
+                        done(reader.result);
+                    };
+                    reader.readAsDataURL(file);
+                }
+            }
+        });
+
+        // Initialize cropper on modal popup
+        $modal.on("shown.bs.modal", function () {
+            cropper = new Cropper(image, {
+                aspectRatio: 1,
+                viewMode: 3,
+                setDragMode: 'none',
+                aspectRatio: NaN
+            });
+        }).on("hidden.bs.modal", function () {
+            // destroy cropper on modal close
+            if (cropper != null) {
+                cropper.destroy();
+                cropper = null;
+            }
+        });
+
+        document.getElementById(params[8]).addEventListener("click", function () {
+            var initialAvatarURL;
+            var canvas;
+
+            if (cropper) {
+                canvas = cropper.getCroppedCanvas({
+                    width: 1000,
+                    height: 2000
+                });
+                initialAvatarURL = avatar.src;
+                console.log(params[0]);
+                if (params[0] == "avatar") {
+                    avatar.src = canvas.toDataURL();
+                } else {
+                    document.getElementById("cover-holder").style.backgroundImage = "url(" + canvas
+                        .toDataURL() + ")";
+                }
+
+                $alert.removeClass("alert-success alert-warning");
+                canvas.toBlob(function (blob) {
+                    var formData = new FormData();
+                    var FileSize = blob.size / 1024 / 1024; // Size of uploaded file
+                    if (FileSize <= 1) {
+                        // Show progress bar if file has required size
+                        $progress.show();
+                    }
+
+                    formData.append("image", blobToFile(blob, params[0] + ".jpg"), params[0] + ".jpg");
+                    $.ajax(upload_url, {
+                        method: "POST",
+                        data: formData,
+                        processData: false,
+                        contentType: false,
+
+                        xhr: function () {
+                            var xhr = new XMLHttpRequest();
+
+                            xhr.upload.onprogress = function (e) {
+                                var percent = "0";
+                                var percentage = "0%";
+
+                                if (e.lengthComputable) {
+                                    percent = Math.round((e.loaded / e.total) * 100);
+                                    percentage = percent + "%";
+                                    $progressBar.width(percentage).attr("aria-valuenow",
+                                        percent).text(percentage);
+                                }
+                            };
+
+                            return xhr;
+                        },
+
+                        success: function (res) {
+                            if (res.success == false) {
+                                let message = res.message.image[0];
+                                $alert.show().addClass("alert-danger").text(message);
+                                $crop.addClass("d-none");
+                                $change.removeClass("d-none");
+                                // Reset cropper on error
+                                cropper.destroy();
+                                cropper = null;
+                                // Reset cropper on error
+                            } else {
+                                setTimeout(function () {
+                                    $progress.hide();
+                                    $modal.modal("hide");
+                                }, 2000);
+                            }
+                        },
+
+                        error: function (res) {
+                            avatar.src = initialAvatarURL;
+                            console.log(res.responseJSON);
+                        }
+
+                        // complete: function () {
+                        //     $progress.hide();
+                        //     setTimeout(function () {
+                        //         $modal.modal('hide');
+                        //     }, 2000);
+                        // },
+                    });
+                });
+            }
+        });
+    }
+
+    function blobToFile(theBlob, fileName) {
+        //A Blob() is almost a File() - it's just missing the two properties below which we will add
+        theBlob.lastModifiedDate = new Date();
+        theBlob.name = fileName;
+        return theBlob;
+    }
+
+</script>
 @endsection

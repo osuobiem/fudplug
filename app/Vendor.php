@@ -50,5 +50,10 @@ class Vendor extends Authenticatable
     {
         return $this->hasMany('App\Order');
     }
+
+    public function item()
+    {
+        return $this->hasMany('App\Item');
+    }
     //
 }

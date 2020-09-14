@@ -10,10 +10,5 @@ class Menu extends Model
     {
         return $this->belongsTo('App\Vendor');
     }
-
-    public function item()
-    {
-        return $this->hasMany('App\Item');
-    }
     //
 }
