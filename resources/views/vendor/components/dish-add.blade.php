@@ -9,41 +9,48 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form class="js-validate" method="POST" id="" novalidate="false">
-                    <!-- Form Success -->
-                    <div class="alert alert-success d-none text-center animate__animated animate__headShake"
-                        id="v-update-error" role="alert">
+                <form id="add-dish" enctype="multipart/form-data">
+                    @csrf
+                    <!-- Info alert box -->
+                    <div class="alert alert-info">
+                        <h4 class="alert-heading"><i class="las la-info"></i> Notice!</h4>
+                        <p>Please note that title fields require alphabets & hyphens only, image fields require images
+                            of type jpg & jpeg with max size of 25mb. Price and quantity fields require numeric values
+                            only. Click on the green buttons to add another item or click on the red to remove items.
+                            You can add five items at a time.</p>
+                        <hr>
+                        <p class="mb-0">Once you have filled all the details, click on the 'Add' button to continue.
+                        </p>
                     </div>
 
-                    <!-- Form Error -->
-                    <div class="alert alert-danger d-none text-center animate__animated animate__headShake"
-                        id="v-update-error" role="alert">
-                    </div>
+                    @include('vendor.components.error-modal')
 
                     <div id="myRepeatingFields">
-                        <div class="input-group row border rounded pt-2 mt-2">
+                        <div class="input-group border rounded pt-2 mt-2 shadow-sm mb-2 bg-white">
                             <div class="col-sm-6 mb-2">
-                                <input class="form-control" name="item[]" type="text" placeholder="Name of dish" />
+                                <input class="form-control" name="title[]" type="text" placeholder="Name of dish" />
                             </div>
                             <div class="col-sm-6 mb-2">
                                 <div class="custom-file">
-                                    <input type="file" class="custom-file-input" id="customFile">
+                                    <input type="file" class="custom-file-input" name="image[]">
                                     <label class="custom-file-label" for="customFile">Choose file</label>
                                 </div>
+                                <small class="text-danger error-message" id="image.0"></small>
                             </div>
 
                             <div class="col-sm-6 border text-center">
                                 <label class="text-center"> Regular Quantity </label>
-                                <div id="repeatingQuantityFields-1" class="">
-                                    <div class="qty-entry-1 mb-2 form-inline">
-                                        <input class="form-control rounded-right-0 col-sm-4" name="fields[]" type="text"
-                                            placeholder="Title" />
-                                        <input class="form-control col-sm-3 rounded-0" name="fields[]" type="number"
-                                            placeholder="Price" />
-                                        <input class="form-control rounded-left-0 col-sm-3" name="fields[]"
-                                            type="number" placeholder="Quantity Available" />
+                                <div>
+                                    <div class="mb-2 form-inline">
+                                        <input class="form-control rounded-right-0 col-sm-4" name="regular_title_one[]"
+                                            type="text" placeholder="Title" />
+                                        <input class="form-control col-sm-3 rounded-0" name="regular_price_one[]"
+                                            type="number" placeholder="Price" />
+                                        <input class="form-control rounded-left-0 col-sm-3"
+                                            name="regular_quantity_one[]" type="number"
+                                            placeholder="Quantity Available" />
                                         <div class="col-sm-2">
-                                            <button type="button" onclick="toggleRegularFields('1', this)"
+                                            <button type="button" onclick="toggleRegularFields(this)"
                                                 class="btn btn-success btn-sm qty-btn-add-1">
                                                 <span class="las la-plus" aria-hidden="true"></span>
                                             </button>
@@ -53,14 +60,14 @@
                             </div>
                             <div class="col-sm-6 border text-center">
                                 <label class="text-center"> Bulk Quantity </label>
-                                <div id="repeatingBulkFields-1">
+                                <div>
                                     <div class="bulk-entry-1 mb-2 form-inline">
-                                        <input class="form-control col-sm-5 rounded-right-0" name="fields[]" type="text"
-                                            placeholder="Title" />
-                                        <input class="form-control col-sm-5 rounded-left-0" name="fields[]" type="text"
-                                            placeholder="Price" />
+                                        <input class="form-control col-sm-5 rounded-right-0" name="bulk_title_one[]"
+                                            type="text" placeholder="Title" />
+                                        <input class="form-control col-sm-5 rounded-left-0" name="bulk_price_one[]"
+                                            type="number" placeholder="Price" />
                                         <div class="col-sm-2">
-                                            <button type="button" onclick="toggleBulkFields('1', this)"
+                                            <button type="button" onclick="toggleBulkFields(this)"
                                                 class="btn btn-success btn-sm bulk-btn-add-1">
                                                 <span class="las la-plus" aria-hidden="true"></span>
                                             </button>
@@ -78,46 +85,34 @@
                                 </button>
                             </div>
                         </div>
-                    </div>
 
-                    <div class="form-group text-center col-sm-12 mt-3">
-                        <button class="btn btn-primary px-5" type="submit">
-                            <span id="vendor-txt">Add</span>
-                            <div class="spinner-border spinner-border-sm btn-pr" id="vendor-spinner"
-                                style="display: none;" role="status">
-                                <span class="sr-only">Loading...</span>
-                            </div>
-                        </button>
-                    </div>
-                </form>
-
-                <!-- Original entry to be fetched from -->
-                <div class="d-none">
-                    <div id="original-entry">
-                        <div class="input-group og-{j} row border rounded pt-2 mt-2">
+                        <div class="input-group border rounded d-none pt-2 mt-2 shadow-sm mb-2 bg-white">
                             <div class="col-sm-6 mb-2">
-                                <input class="form-control" name="item[]" type="text" placeholder="Name of dish" />
+                                <input class="form-control" name="title[]" type="text" placeholder="Name of dish"
+                                    disabled />
                             </div>
                             <div class="col-sm-6 mb-2">
                                 <div class="custom-file">
-                                    <input type="file" class="custom-file-input" id="customFile">
+                                    <input type="file" class="custom-file-input" name="image[]" accept="image/*"
+                                        disabled>
                                     <label class="custom-file-label" for="customFile">Choose file</label>
                                 </div>
                             </div>
 
                             <div class="col-sm-6 border text-center">
                                 <label class="text-center"> Regular Quantity </label>
-                                <div id="repeatingQuantityFields-{j}" class="">
-                                    <div class="qty-entry-{j} mb-2 form-inline">
-                                        <input class="form-control rounded-right-0 col-sm-4" name="fields[]" type="text"
-                                            placeholder="Title" />
-                                        <input class="form-control col-sm-3 rounded-0" name="fields[]" type="number"
-                                            placeholder="Price" />
-                                        <input class="form-control rounded-left-0 col-sm-3" name="fields[]"
-                                            type="number" placeholder="Quantity Available" />
+                                <div>
+                                    <div class="mb-2 form-inline">
+                                        <input class="form-control rounded-right-0 col-sm-4" name="regular_title_two[]"
+                                            type="text" placeholder="Title" disabled />
+                                        <input class="form-control col-sm-3 rounded-0" name="regular_price_two[]"
+                                            type="number" placeholder="Price" disabled />
+                                        <input class="form-control rounded-left-0 col-sm-3"
+                                            name="regular_quantity_two[]" disabled type="number"
+                                            placeholder="Quantity Available" />
                                         <div class="col-sm-2">
-                                            <button type="button" onclick="toggleRegularFields('{j}', this)"
-                                                class="btn btn-success btn-sm qty-btn-add-{j}">
+                                            <button type="button" onclick="toggleRegularFields(this)"
+                                                class="btn btn-success btn-sm qty-btn-add-1">
                                                 <span class="las la-plus" aria-hidden="true"></span>
                                             </button>
                                         </div>
@@ -126,15 +121,15 @@
                             </div>
                             <div class="col-sm-6 border text-center">
                                 <label class="text-center"> Bulk Quantity </label>
-                                <div id="repeatingBulkFields-{j}">
-                                    <div class="bulk-entry-{j} mb-2 form-inline">
-                                        <input class="form-control col-sm-5 rounded-right-0" name="fields[]" type="text"
-                                            placeholder="Title" />
-                                        <input class="form-control col-sm-5 rounded-left-0" name="fields[]" type="text"
-                                            placeholder="Price" />
+                                <div>
+                                    <div class="bulk-entry-1 mb-2 form-inline">
+                                        <input class="form-control col-sm-5 rounded-right-0" name="bulk_title_two[]"
+                                            type="text" placeholder="Title" disabled />
+                                        <input class="form-control col-sm-5 rounded-left-0" name="bulk_price_two[]"
+                                            type="number" placeholder="Price" disabled />
                                         <div class="col-sm-2">
-                                            <button type="button" onclick="toggleBulkFields('{j}', this)"
-                                                class="btn btn-success btn-sm bulk-btn-add-{j}">
+                                            <button type="button" onclick="toggleBulkFields(this)"
+                                                class="btn btn-success btn-sm bulk-btn-add-1">
                                                 <span class="las la-plus" aria-hidden="true"></span>
                                             </button>
                                         </div>
@@ -145,14 +140,218 @@
                             </div>
 
                             <div class="input-group-btn col-sm-12 my-2">
-                                <button type="button" onclick="toggleMain(this)" class="btn btn-success btn-lg btn-add">
+                                <button type="button" onclick="toggleMain(this)"
+                                    class="btn btn-success btn-lg btn-add first">
                                     <span class="las la-plus" aria-hidden="true"></span>
+                                </button>
+                                <button type="button" onclick='toggleMain(this, false)'
+                                    class="btn btn-danger btn-lg btn-remove first">
+                                    <span class="las la-minus" aria-hidden="true"></span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="input-group border rounded d-none pt-2 mt-2 shadow-sm mb-2 bg-white">
+                            <div class="col-sm-6 mb-2">
+                                <input class="form-control" name="title[]" type="text" placeholder="Name of dish"
+                                    disabled />
+                            </div>
+                            <div class="col-sm-6 mb-2">
+                                <div class="custom-file">
+                                    <input type="file" class="custom-file-input" name="image[]" accept="image/*"
+                                        disabled>
+                                    <label class="custom-file-label" for="customFile">Choose file</label>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-6 border text-center">
+                                <label class="text-center"> Regular Quantity </label>
+                                <div>
+                                    <div class="mb-2 form-inline">
+                                        <input class="form-control rounded-right-0 col-sm-4"
+                                            name="regular_title_three[]" type="text" placeholder="Title" disabled />
+                                        <input class="form-control col-sm-3 rounded-0" name="regular_price_three[]"
+                                            type="number" placeholder="Price" disabled />
+                                        <input class="form-control rounded-left-0 col-sm-3"
+                                            name="regular_quantity_three[]" type="number"
+                                            placeholder="Quantity Available" disabled />
+                                        <div class="col-sm-2">
+                                            <button type="button" onclick="toggleRegularFields(this)"
+                                                class="btn btn-success btn-sm qty-btn-add-1">
+                                                <span class="las la-plus" aria-hidden="true"></span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6 border text-center">
+                                <label class="text-center"> Bulk Quantity </label>
+                                <div>
+                                    <div class="bulk-entry-1 mb-2 form-inline">
+                                        <input class="form-control col-sm-5 rounded-right-0" name="bulk_title_three[]"
+                                            type="text" placeholder="Title" disabled />
+                                        <input class="form-control col-sm-5 rounded-left-0" name="bulk_price_three[]"
+                                            type="number" placeholder="Price" disabled />
+                                        <div class="col-sm-2">
+                                            <button type="button" onclick="toggleBulkFields(this)"
+                                                class="btn btn-success btn-sm bulk-btn-add-1">
+                                                <span class="las la-plus" aria-hidden="true"></span>
+                                            </button>
+                                        </div>
+                                        <!-- <input class="form-control col-sm-4" name="fields[]" type="text"
+                                        placeholder="Quantity Available" /> -->
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="input-group-btn col-sm-12 my-2">
+                                <button type="button" onclick="toggleMain(this)"
+                                    class="btn btn-success btn-lg btn-add first">
+                                    <span class="las la-plus" aria-hidden="true"></span>
+                                </button>
+                                <button type="button" onclick='toggleMain(this, false)'
+                                    class="btn btn-danger btn-lg btn-remove first">
+                                    <span class="las la-minus" aria-hidden="true"></span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="input-group border rounded d-none pt-2 mt-2 shadow-sm mb-2 bg-white">
+                            <div class="col-sm-6 mb-2">
+                                <input class="form-control" name="title[]" type="text" placeholder="Name of dish"
+                                    disabled />
+                            </div>
+                            <div class="col-sm-6 mb-2">
+                                <div class="custom-file">
+                                    <input type="file" class="custom-file-input" name="image[]" accept="image/*"
+                                        disabled>
+                                    <label class="custom-file-label" for="customFile">Choose file</label>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-6 border text-center">
+                                <label class="text-center"> Regular Quantity </label>
+                                <div>
+                                    <div class="mb-2 form-inline">
+                                        <input class="form-control rounded-right-0 col-sm-4" name="regular_title_four[]"
+                                            type="text" placeholder="Title" disabled />
+                                        <input class="form-control col-sm-3 rounded-0" name="regular_price_four[]"
+                                            type="number" placeholder="Price" disabled />
+                                        <input class="form-control rounded-left-0 col-sm-3"
+                                            name="regular_quantity_four[]" type="number"
+                                            placeholder="Quantity Available" disabled />
+                                        <div class="col-sm-2">
+                                            <button type="button" onclick="toggleRegularFields(this)"
+                                                class="btn btn-success btn-sm qty-btn-add-1">
+                                                <span class="las la-plus" aria-hidden="true"></span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6 border text-center">
+                                <label class="text-center"> Bulk Quantity </label>
+                                <div>
+                                    <div class="bulk-entry-1 mb-2 form-inline">
+                                        <input class="form-control col-sm-5 rounded-right-0" name="bulk_title_four[]"
+                                            type="text" placeholder="Title" disabled />
+                                        <input class="form-control col-sm-5 rounded-left-0" name="bulk_price_four[]"
+                                            type="number" placeholder="Price" disabled />
+                                        <div class="col-sm-2">
+                                            <button type="button" onclick="toggleBulkFields(this)"
+                                                class="btn btn-success btn-sm bulk-btn-add-1">
+                                                <span class="las la-plus" aria-hidden="true"></span>
+                                            </button>
+                                        </div>
+                                        <!-- <input class="form-control col-sm-4" name="fields[]" type="text"
+                                        placeholder="Quantity Available" /> -->
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="input-group-btn col-sm-12 my-2">
+                                <button type="button" onclick="toggleMain(this)"
+                                    class="btn btn-success btn-lg btn-add first">
+                                    <span class="las la-plus" aria-hidden="true"></span>
+                                </button>
+                                <button type="button" onclick='toggleMain(this, false)'
+                                    class="btn btn-danger btn-lg btn-remove first">
+                                    <span class="las la-minus" aria-hidden="true"></span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="input-group border rounded d-none pt-2 mt-2 shadow-sm mb-2 bg-white">
+                            <div class="col-sm-6 mb-2">
+                                <input class="form-control" name="title[]" type="text" placeholder="Name of dish"
+                                    disabled />
+                            </div>
+                            <div class="col-sm-6 mb-2">
+                                <div class="custom-file">
+                                    <input type="file" class="custom-file-input" name="image[]" accept="image/*"
+                                        disabled>
+                                    <label class="custom-file-label" for="customFile">Choose file</label>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-6 border text-center">
+                                <label class="text-center"> Regular Quantity </label>
+                                <div>
+                                    <div class="mb-2 form-inline">
+                                        <input class="form-control rounded-right-0 col-sm-4" name="regular_title_five[]"
+                                            type="text" placeholder="Title" disabled />
+                                        <input class="form-control col-sm-3 rounded-0" name="regular_price_five[]"
+                                            type="number" placeholder="Price" disabled />
+                                        <input class="form-control rounded-left-0 col-sm-3"
+                                            name="regular_quantity_five[]" type="number"
+                                            placeholder="Quantity Available" disabled />
+                                        <div class="col-sm-2">
+                                            <button type="button" onclick="toggleRegularFields(this)"
+                                                class="btn btn-success btn-sm qty-btn-add-1">
+                                                <span class="las la-plus" aria-hidden="true"></span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6 border text-center">
+                                <label class="text-center"> Bulk Quantity </label>
+                                <div>
+                                    <div class="bulk-entry-1 mb-2 form-inline">
+                                        <input class="form-control col-sm-5 rounded-right-0" name="bulk_title_five[]"
+                                            type="text" placeholder="Title" disabled />
+                                        <input class="form-control col-sm-5 rounded-left-0" name="bulk_price_five[]"
+                                            type="number" placeholder="Price" disabled />
+                                        <div class="col-sm-2">
+                                            <button type="button" onclick="toggleBulkFields(this)"
+                                                class="btn btn-success btn-sm bulk-btn-add-1">
+                                                <span class="las la-plus" aria-hidden="true"></span>
+                                            </button>
+                                        </div>
+                                        <!-- <input class="form-control col-sm-4" name="fields[]" type="text"
+                                        placeholder="Quantity Available" /> -->
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="input-group-btn col-sm-12 my-2">
+                                <button type="button" onclick='toggleMain(this, false)'
+                                    class="btn btn-danger btn-lg btn-remove first">
+                                    <span class="las la-minus" aria-hidden="true"></span>
                                 </button>
                             </div>
                         </div>
                     </div>
+                </form>
+                <div class="form-group text-center col-sm-12 mt-3">
+                    <button id="submit-btn" class="btn btn-primary px-5">
+                        <span id="vendor-txt">Add</span>
+                        <div class="spinner-border spinner-border-sm btn-pr" id="vendor-spinner" style="display: none;"
+                            role="status">
+                            <span class="sr-only">Loading...</span>
+                        </div>
+                    </button>
                 </div>
-                <!-- Original entry to be fetched from -->
             </div>
         </div>
     </div>
@@ -163,78 +362,132 @@
 <script>
     // Block to handle main form repeaters
     let index = 1;
+    let originalCopy = $("#original-entry").clone(true);
+    let originalContainer = $("#original-container");
 
-    function toggleMain(element) {
-        if ($(element).hasClass('btn-add')) {
-            //e.preventDefault();
-            index++;
+    function toggleMain(element, newf = true) {
+        if (newf) {
+            //let parentDiv = $(element).parent().parent().parent()
+            // let origCop = $('#orig-cop').clone(true)
+            // origCop.attr('id', '')
 
-            var controlForm = $('#myRepeatingFields:first'),
-                currentEntry = $("#original-entry"),
-                newEntry = currentEntry.clone().html().replace(/{j}/g, index);
-            newEntry = controlForm.append(newEntry);
-            console.log(newEntry);
+            // $($($(origCop.children()[2]).children()[1]).children()[0]).attr('id', '') // Clean Regular Fields
+            // $($($(origCop.children()[3]).children()[1]).children()[0]).attr('id', '') // Clean Bulk Fields
 
-            $(".og-" + index).find('input').val('');
-            $(".og-" + index).addClass('entry');
-            $(element).removeClass('btn-add').addClass('btn-remove').removeClass(
-                'btn-success').addClass('btn-danger').html(`<i class="las la-minus"></i>`);
-            //$('.btn-remove').html(`<i class="las la-minus"></i>`);
+            // parentDiv.append(origCop)
 
+            $(element).parent().parent().next().find('input').removeAttr('disabled');
+            $(element).parent().parent().next().removeClass('d-none');
+            $(element).parent().addClass('d-none');
+
+            //$(element).attr('onclick', `toggleMain(this, false)`)
+            // $(element).removeClass('btn-add').addClass('btn-remove').removeClass(
+            //     'btn-success').addClass('btn-danger').html(`<i class="las la-minus"></i>`);
         } else {
-            //e.preventDefault();
-            if ($(element).hasClass('first')) {
-                $(element).parents('.input-group:first').next('div').remove();
-                $(element).removeClass('btn-remove').addClass('btn-add').removeClass(
-                    'btn-danger').addClass('btn-success').html(`<i class="las la-plus"></i>`);
-            } else {
-                $(element).parents('.entry').remove();
-                return false;
-            }
+            // let parentDiv = $(element).parent().parent()
+            // parentDiv.remove()
+            $(element).parent().parent().addClass('d-none');
+            $(element).parent().parent().find('input').attr('disabled', '');
+            $(element).parent().parent().prev().find('.input-group-btn').removeClass('d-none');
+
+            // if ($(element).parent().parent().next().hasClass('d-block')) {
+            //     $(element).attr('onclick', `toggleMain(this, true)`)
+            //     $(element).removeClass('btn-remove').addClass('btn-add').removeClass('btn-danger').addClass(
+            //         'btn-success').html(`<i class="las la-plus"></i>`);
+            // }
         }
     }
     // Block to handle main form repeaters
 
 
     // Functions to handle Regular Quantity form repeaters
-    function toggleRegularFields(id, element) {
-        if ($(element).hasClass('qty-btn-add-' + id)) {
-            var controlForm = $(`#repeatingQuantityFields-${id}:first`),
-                currentEntry = $(`.qty-btn-add-${id}`).parents(`.qty-entry-${id}:first`),
-                newEntry = $(currentEntry.clone()).appendTo(controlForm);
-            newEntry.find('input').val('');
-            controlForm.find(`.qty-entry-${id}:not(:last) .qty-btn-add-${id}`)
-                .removeClass(`qty-btn-add-${id}`).addClass(`qty-btn-remove-${id}`)
-                .removeClass('btn-success').addClass('btn-danger')
-                .html('');
-            $(`.qty-btn-remove-${id}`).html(`<i class="las la-minus"></i>`);
+    function toggleRegularFields(element, newf = true) {
+        if (newf) {
+            let parentDiv = $(element).parent().parent().parent()
+            let origCop = $(element).parent().parent().clone(true)
+            origCop.find('input').val("")
+            //origCop.attr('id', '')
+            parentDiv.append(origCop)
+
+            $(element).attr('onclick', `toggleRegularFields(this, false)`)
+            $(element).removeClass('btn-add').addClass('btn-remove').removeClass(
+                'btn-success').addClass('btn-danger').html(`<i class="las la-minus"></i>`);
         } else {
-            $(element).parents(`.qty-entry-${id}:first`).remove();
-            return false;
+            let parentDiv = $(element).parent().parent()
+            parentDiv.remove()
         }
     }
     // Functions to handle Regular Quantity form repeaters
 
 
     // Function to handle Bulk Quantity form repeaters
-    function toggleBulkFields(id, element) {
-        if ($(element).hasClass('bulk-btn-add-' + id)) {
-            //e.preventDefault();
-            var controlForm = $(`#repeatingBulkFields-${id}:first`),
-                currentEntry = $(element).parents(`.bulk-entry-${id}:first`),
-                newEntry = $(currentEntry.clone()).appendTo(controlForm);
-            newEntry.find('input').val('');
-            controlForm.find(`.bulk-entry-${id}:not(:last) .bulk-btn-add-${id}`)
-                .removeClass(`bulk-btn-add-${id}`).addClass(`bulk-btn-remove-${id}`)
-                .removeClass('btn-success').addClass('btn-danger')
-                .html('');
-            $(`.bulk-btn-remove-${id}`).html(`<i class="las la-minus"></i>`);
+    function toggleBulkFields(element, newf = true) {
+        if (newf) {
+            let parentDiv = $(element).parent().parent().parent()
+            let origCop = $(element).parent().parent().clone(true)
+            origCop.find('input').val("")
+            //origCop.attr('id', '')
+            parentDiv.append(origCop)
+
+            $(element).attr('onclick', `toggleBulkFields(this, false)`)
+            $(element).removeClass('btn-add').addClass('btn-remove').removeClass(
+                'btn-success').addClass('btn-danger').html(`<i class="las la-minus"></i>`);
         } else {
-            //e.preventDefault();
-            $(element).parents(`.bulk-entry-${id}:first`).remove();
-            return false;
+            let parentDiv = $(element).parent().parent()
+            parentDiv.remove()
         }
     }
     // Function to handle Bulk Quantity form repeaters
+
+
+    $(document).ready(function () {
+        // Set required fields
+        $("[name='title[]']").attr('required', 'true');
+        $("[name='image[]']").attr('required', 'true');
+        $("[name^='regular']").attr('required', 'true');
+
+        // Check form validity and fire submit event
+        let form = document.getElementById('add-dish');
+        document.getElementById('submit-btn').onclick = function () {
+            if (form.reportValidity()) {
+                $('#add-dish').trigger('submit')
+            }
+        }
+
+        // Attach dish form event listener
+        $('#add-dish').submit(el => {
+            el.preventDefault()
+            addDish(el)
+        });
+    });
+
+    // Add dish
+    function addDish(el) {
+        el.preventDefault()
+
+        spin('vendor')
+        offError('v-dish-error')
+
+        let url = `{{ url('vendor/add-dish') }}`;
+        let data = new FormData(el.target)
+
+        goPost(url, data)
+            .then(res => {
+                console.log(res);
+
+                spin('vendor')
+
+                if (handleFormRes(res, false, false, 'modal-body')) {
+                    showAlert(true, res.message);
+                    setTimeout(() => {
+                        el.trigger('reset');
+                    }, 2000)
+                }
+            })
+            .catch(err => {
+                spin('vendor')
+                handleFormRes(err, 'v-dish-error');
+            })
+    }
 
 </script>

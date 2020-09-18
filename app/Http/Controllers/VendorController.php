@@ -300,7 +300,7 @@ class VendorController extends Controller
         ];
         // Validate uploaded image
         $validate = Validator::make($request->all(), [
-            'image' => 'required|max:25000000',
+            'image' => 'required|max:25000',
         ], $message);
         if ($validate->fails()) {
             return response()->json(['success' => false, 'message' => $validate->errors('image')->messages()], 200);
@@ -341,7 +341,7 @@ class VendorController extends Controller
         ];
         // Validate uploaded image
         $validate = Validator::make($request->all(), [
-            'image' => 'required|max:25000000',
+            'image' => 'required|max:25000',
         ], $message);
         if ($validate->fails()) {
             return response()->json(['success' => false, 'message' => $validate->errors('image')->messages()], 200);
@@ -367,5 +367,102 @@ class VendorController extends Controller
                 return response()->json(['success' => false, 'message' => $th->getMessage()], 500);
             }
         }
+    }
+
+    /**
+     * Process vendor dish upload
+     * @return string
+     */
+    public function add_dish(Request $request)
+    {
+        try {
+            //Validate Input
+            $validator = $this->dish_add_rules($request);
+
+            if ($validator->fails()) {
+                return response()->json(['success' => false, 'message' => $validator->errors('image')->messages()], 200);
+            } else {
+
+                return response()->json(['success' => true, 'message' => $request->all()], 200);
+            }
+        } catch (\Throwable $th) {
+            //throw $th;
+            Log::error($th);
+            return response()->json(['success' => false, 'message' => $th->getMessage()], 500);
+        }
+    }
+
+    /**
+     * Vendor Regular Dish Quantity Json Generator
+     * @return string JSON string
+     */
+    private function regular_qty_json(Request $request)
+    {
+        $titles = $request->title;
+        $regular_arr = [];
+        foreach ($titles as $key => $value) {
+            switch ($variable) {
+                case 0:
+                    # code...
+
+                    break;
+
+                default:
+                    # code...
+                    break;
+            }
+        }
+    }
+
+    /**
+     * Vendor Dish Add Validation Rules
+     * @return object The validator object
+     */
+    private function dish_add_rules(Request $request)
+    {
+        // Custom message
+        $message = [
+            'required' => 'All except bulk fields are required.',
+            'alpha_dash' => 'Title fields only allow alphabets, hyphens and underscores.',
+            'mimes' => 'Images must be of type jpg or jpeg.',
+            'numeric' => 'Quantity and price fields must be numeric characters.',
+            'max' => 'The :attribute may not be greater than 25mb.',
+
+        ];
+        // Make and return validation rules
+        return Validator::make($request->all(), [
+            'title.*' => 'required',
+            'image.*' => 'required|image|mimes:jpeg,jpg|max:25000',
+            'regular_title_one.*' => 'required',
+            'regular_price_one.*' => 'required|numeric',
+            'regular_quantity_one.*' => 'required|numeric',
+            'bulk_title_one.*' => 'nullable',
+            'bulk_price_one.*' => 'nullable|numeric',
+
+            'regular_title_two.*' => 'required',
+            'regular_price_two.*' => 'required|numeric',
+            'regular_quantity_two.*' => 'required|numeric',
+            'bulk_title_two.*' => 'nullable',
+            'bulk_price_two.*' => 'nullable|numeric',
+
+            'regular_title_three.*' => 'required',
+            'regular_price_three.*' => 'required|numeric',
+            'regular_quantity_three.*' => 'required|numeric',
+            'bulk_title_three.*' => 'nullable',
+            'bulk_price_three.*' => 'nullable|numeric',
+
+            'regular_title_four.*' => 'required',
+            'regular_price_four.*' => 'required|numeric',
+            'regular_quantity_four.*' => 'required|numeric',
+            'bulk_title_four.*' => 'nullable',
+            'bulk_price_four.*' => 'nullable|numeric',
+
+            'regular_title_five.*' => 'required',
+            'regular_price_five.*' => 'required|numeric',
+            'regular_quantity_five.*' => 'required|numeric',
+            'bulk_title_five.*' => 'nullable',
+            'bulk_price_five.*' => 'nullable|numeric',
+
+        ], $message);
     }
 }

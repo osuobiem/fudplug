@@ -10,6 +10,7 @@
             </div>
             <div class="modal-body">
                 <form class="js-validate" method="POST" id="vendor-update" novalidate="false">
+                    @csrf
                     <!-- Form Success -->
                     <div class="alert alert-success d-none text-center animate__animated animate__headShake"
                         id="v-update-error" role="alert">
@@ -275,14 +276,17 @@
         goPost(url, data)
             .then(res => {
                 spin('vendor')
-                showAlert(true, res.message);
-                setTimeout(() => {
-                    location.reload()
-                }, 5000);
+
+                if (handleFormRes(res)) {
+                    showAlert(true, res.message);
+                    setTimeout(() => {
+                        location.reload()
+                    }, 2000)
+                }
             })
             .catch(err => {
                 spin('vendor')
-                handleFormError(err, 'v-sign-error');
+                handleFormRes(err, 'v-sign-error');
             })
     }
 

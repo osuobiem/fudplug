@@ -8,6 +8,7 @@
     <meta name="author" content="">
 
     <link rel="icon" type="image/png" href="{{ url('assets/img/fav.png') }}">
+    <meta name="csrf-token" id="csrf-token" content="@csrf">
     <title>@yield('title')fudplug</title>
 
     <!-- Bootstrap core CSS -->

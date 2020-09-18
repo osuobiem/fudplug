@@ -53,6 +53,8 @@ Route::group(['prefix' => 'vendor'], function () {
         Route::post('profile_image_update', 'VendorController@profile_image_update');
         // Change Cover Image
         Route::post('cover_image_update', 'VendorController@cover_image_update');
+        // Add Dishes
+        Route::post('add-dish', 'VendorController@add_dish');
     });
 });
 // -------------

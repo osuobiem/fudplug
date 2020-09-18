@@ -983,3 +983,7 @@ a:visited {
     width: 100%;
     margin-top: 0 !important;
 }
+
+.custom-file-label {
+    overflow: hidden;
+}
