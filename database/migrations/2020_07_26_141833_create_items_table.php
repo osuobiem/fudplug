@@ -16,7 +16,7 @@ class CreateItemsTable extends Migration
         Schema::create('items', function (Blueprint $table) {
             $table->id();
             $table->string('title');
-            $table->string('price');
+            $table->string('price')->nullable();
             $table->json('quantity');
             $table->string('image');
             $table->foreignId('vendor_id')->constrained()->onDelete('cascade')->onUpdate('no action');

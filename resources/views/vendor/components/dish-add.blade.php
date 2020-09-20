@@ -12,7 +12,7 @@
                 <form id="add-dish" enctype="multipart/form-data">
                     @csrf
                     <!-- Info alert box -->
-                    <div class="alert alert-info">
+                    <div class="alert alert-info alert-dismissible fade show" role="alert">
                         <h4 class="alert-heading"><i class="las la-info"></i> Notice!</h4>
                         <p>Please note that title fields require alphabets & hyphens only, image fields require images
                             of type jpg & jpeg with max size of 25mb. Price and quantity fields require numeric values
@@ -21,24 +21,34 @@
                         <hr>
                         <p class="mb-0">Once you have filled all the details, click on the 'Add' button to continue.
                         </p>
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
                     </div>
 
                     @include('vendor.components.error-modal')
 
                     <div id="myRepeatingFields">
-                        <div class="input-group border rounded pt-2 mt-2 shadow-sm mb-2 bg-white">
-                            <div class="col-sm-6 mb-2">
+                        <div class="row border rounded pt-2 mt-2 shadow-sm mb-2 bg-white">
+                            <div class="col text-center mb-2 d-block d-sm-none">
+                                <div class="btn btn-secondary btn-md" style="border-top-left-radius: 2.25rem;
+                                border-top-right-radius: 2.25rem;
+                                border-bottom-right-radius: 2.25rem;
+                                border-bottom-left-radius: 2.25rem;">1</div>
+                            </div>
+
+                            <div class="col-sm-6 col-xs-6 mb-2">
                                 <input class="form-control" name="title[]" type="text" placeholder="Name of dish" />
                             </div>
-                            <div class="col-sm-6 mb-2">
+                            <div class="col-sm-6 col-xs-6 mb-2">
                                 <div class="custom-file">
                                     <input type="file" class="custom-file-input" name="image[]">
-                                    <label class="custom-file-label" for="customFile">Choose file</label>
+                                    <label class="custom-file-label" for="customFile">choose image</label>
                                 </div>
                                 <small class="text-danger error-message" id="image.0"></small>
                             </div>
 
-                            <div class="col-sm-6 border text-center">
+                            <div class="col-sm-6 border text-center pt-3 pb-3">
                                 <label class="text-center"> Regular Quantity </label>
                                 <div>
                                     <div class="mb-2 form-inline">
@@ -51,14 +61,14 @@
                                             placeholder="Quantity Available" />
                                         <div class="col-sm-2">
                                             <button type="button" onclick="toggleRegularFields(this)"
-                                                class="btn btn-success btn-sm qty-btn-add-1">
+                                                class="btn btn-success btn-sm qty-btn-add-1" style="float: right;">
                                                 <span class="las la-plus" aria-hidden="true"></span>
                                             </button>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-sm-6 border text-center">
+                            <div class="col-sm-6 border text-center pt-3 pb-3">
                                 <label class="text-center"> Bulk Quantity </label>
                                 <div>
                                     <div class="bulk-entry-1 mb-2 form-inline">
@@ -68,7 +78,7 @@
                                             type="number" placeholder="Price" />
                                         <div class="col-sm-2">
                                             <button type="button" onclick="toggleBulkFields(this)"
-                                                class="btn btn-success btn-sm bulk-btn-add-1">
+                                                class="btn btn-success btn-sm bulk-btn-add-1" style="float: right;">
                                                 <span class="las la-plus" aria-hidden="true"></span>
                                             </button>
                                         </div>
@@ -86,7 +96,13 @@
                             </div>
                         </div>
 
-                        <div class="input-group border rounded d-none pt-2 mt-2 shadow-sm mb-2 bg-white">
+                        <div class="row border rounded pt-2 mt-2 shadow-sm mb-2 bg-white d-none">
+                            <div class="col text-center mb-2 d-block d-sm-none">
+                                <div class="btn btn-secondary btn-md" style="border-top-left-radius: 2.25rem;
+                                border-top-right-radius: 2.25rem;
+                                border-bottom-right-radius: 2.25rem;
+                                border-bottom-left-radius: 2.25rem;">2</div>
+                            </div>
                             <div class="col-sm-6 mb-2">
                                 <input class="form-control" name="title[]" type="text" placeholder="Name of dish"
                                     disabled />
@@ -95,7 +111,7 @@
                                 <div class="custom-file">
                                     <input type="file" class="custom-file-input" name="image[]" accept="image/*"
                                         disabled>
-                                    <label class="custom-file-label" for="customFile">Choose file</label>
+                                    <label class="custom-file-label" for="customFile">choose image</label>
                                 </div>
                             </div>
 
@@ -112,7 +128,7 @@
                                             placeholder="Quantity Available" />
                                         <div class="col-sm-2">
                                             <button type="button" onclick="toggleRegularFields(this)"
-                                                class="btn btn-success btn-sm qty-btn-add-1">
+                                                class="btn btn-success btn-sm qty-btn-add-1" style="float: right;">
                                                 <span class="las la-plus" aria-hidden="true"></span>
                                             </button>
                                         </div>
@@ -129,7 +145,7 @@
                                             type="number" placeholder="Price" disabled />
                                         <div class="col-sm-2">
                                             <button type="button" onclick="toggleBulkFields(this)"
-                                                class="btn btn-success btn-sm bulk-btn-add-1">
+                                                class="btn btn-success btn-sm bulk-btn-add-1" style="float: right;">
                                                 <span class="las la-plus" aria-hidden="true"></span>
                                             </button>
                                         </div>
@@ -151,7 +167,13 @@
                             </div>
                         </div>
 
-                        <div class="input-group border rounded d-none pt-2 mt-2 shadow-sm mb-2 bg-white">
+                        <div class="row border rounded pt-2 mt-2 shadow-sm mb-2 bg-white d-none">
+                            <div class="col text-center mb-2 d-block d-sm-none">
+                                <div class="btn btn-secondary btn-md" style="border-top-left-radius: 2.25rem;
+                                border-top-right-radius: 2.25rem;
+                                border-bottom-right-radius: 2.25rem;
+                                border-bottom-left-radius: 2.25rem;">3</div>
+                            </div>
                             <div class="col-sm-6 mb-2">
                                 <input class="form-control" name="title[]" type="text" placeholder="Name of dish"
                                     disabled />
@@ -160,7 +182,7 @@
                                 <div class="custom-file">
                                     <input type="file" class="custom-file-input" name="image[]" accept="image/*"
                                         disabled>
-                                    <label class="custom-file-label" for="customFile">Choose file</label>
+                                    <label class="custom-file-label" for="customFile">choose image</label>
                                 </div>
                             </div>
 
@@ -177,7 +199,7 @@
                                             placeholder="Quantity Available" disabled />
                                         <div class="col-sm-2">
                                             <button type="button" onclick="toggleRegularFields(this)"
-                                                class="btn btn-success btn-sm qty-btn-add-1">
+                                                class="btn btn-success btn-sm qty-btn-add-1" style="float: right;">
                                                 <span class="las la-plus" aria-hidden="true"></span>
                                             </button>
                                         </div>
@@ -194,7 +216,7 @@
                                             type="number" placeholder="Price" disabled />
                                         <div class="col-sm-2">
                                             <button type="button" onclick="toggleBulkFields(this)"
-                                                class="btn btn-success btn-sm bulk-btn-add-1">
+                                                class="btn btn-success btn-sm bulk-btn-add-1" style="float: right;">
                                                 <span class="las la-plus" aria-hidden="true"></span>
                                             </button>
                                         </div>
@@ -216,7 +238,13 @@
                             </div>
                         </div>
 
-                        <div class="input-group border rounded d-none pt-2 mt-2 shadow-sm mb-2 bg-white">
+                        <div class="row border rounded pt-2 mt-2 shadow-sm mb-2 bg-white d-none">
+                            <div class="col text-center mb-2 d-block d-sm-none">
+                                <div class="btn btn-secondary btn-md" style="border-top-left-radius: 2.25rem;
+                                border-top-right-radius: 2.25rem;
+                                border-bottom-right-radius: 2.25rem;
+                                border-bottom-left-radius: 2.25rem;">4</div>
+                            </div>
                             <div class="col-sm-6 mb-2">
                                 <input class="form-control" name="title[]" type="text" placeholder="Name of dish"
                                     disabled />
@@ -225,7 +253,7 @@
                                 <div class="custom-file">
                                     <input type="file" class="custom-file-input" name="image[]" accept="image/*"
                                         disabled>
-                                    <label class="custom-file-label" for="customFile">Choose file</label>
+                                    <label class="custom-file-label" for="customFile">choose image</label>
                                 </div>
                             </div>
 
@@ -242,7 +270,7 @@
                                             placeholder="Quantity Available" disabled />
                                         <div class="col-sm-2">
                                             <button type="button" onclick="toggleRegularFields(this)"
-                                                class="btn btn-success btn-sm qty-btn-add-1">
+                                                class="btn btn-success btn-sm qty-btn-add-1" style="float: right;">
                                                 <span class="las la-plus" aria-hidden="true"></span>
                                             </button>
                                         </div>
@@ -259,7 +287,7 @@
                                             type="number" placeholder="Price" disabled />
                                         <div class="col-sm-2">
                                             <button type="button" onclick="toggleBulkFields(this)"
-                                                class="btn btn-success btn-sm bulk-btn-add-1">
+                                                class="btn btn-success btn-sm bulk-btn-add-1" style="float: right;">
                                                 <span class="las la-plus" aria-hidden="true"></span>
                                             </button>
                                         </div>
@@ -281,7 +309,13 @@
                             </div>
                         </div>
 
-                        <div class="input-group border rounded d-none pt-2 mt-2 shadow-sm mb-2 bg-white">
+                        <div class="row border rounded pt-2 mt-2 shadow-sm mb-2 bg-white d-none">
+                            <div class="col text-center mb-2 d-block d-sm-none">
+                                <div class="btn btn-secondary btn-md" style="border-top-left-radius: 2.25rem;
+                                border-top-right-radius: 2.25rem;
+                                border-bottom-right-radius: 2.25rem;
+                                border-bottom-left-radius: 2.25rem;">5</div>
+                            </div>
                             <div class="col-sm-6 mb-2">
                                 <input class="form-control" name="title[]" type="text" placeholder="Name of dish"
                                     disabled />
@@ -290,7 +324,7 @@
                                 <div class="custom-file">
                                     <input type="file" class="custom-file-input" name="image[]" accept="image/*"
                                         disabled>
-                                    <label class="custom-file-label" for="customFile">Choose file</label>
+                                    <label class="custom-file-label" for="customFile">choose image</label>
                                 </div>
                             </div>
 
@@ -307,7 +341,7 @@
                                             placeholder="Quantity Available" disabled />
                                         <div class="col-sm-2">
                                             <button type="button" onclick="toggleRegularFields(this)"
-                                                class="btn btn-success btn-sm qty-btn-add-1">
+                                                class="btn btn-success btn-sm qty-btn-add-1" style="float: right;">
                                                 <span class="las la-plus" aria-hidden="true"></span>
                                             </button>
                                         </div>
@@ -324,7 +358,7 @@
                                             type="number" placeholder="Price" disabled />
                                         <div class="col-sm-2">
                                             <button type="button" onclick="toggleBulkFields(this)"
-                                                class="btn btn-success btn-sm bulk-btn-add-1">
+                                                class="btn btn-success btn-sm bulk-btn-add-1" style="float: right;">
                                                 <span class="las la-plus" aria-hidden="true"></span>
                                             </button>
                                         </div>
@@ -473,14 +507,12 @@
 
         goPost(url, data)
             .then(res => {
-                console.log(res);
-
                 spin('vendor')
 
                 if (handleFormRes(res, false, false, 'modal-body')) {
                     showAlert(true, res.message);
                     setTimeout(() => {
-                        el.trigger('reset');
+                        $('#add-dish').trigger('reset');
                     }, 2000)
                 }
             })

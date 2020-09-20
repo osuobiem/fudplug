@@ -8,7 +8,6 @@
     <meta name="author" content="">
 
     <link rel="icon" type="image/png" href="{{ url('assets/img/fav.png') }}">
-    <meta name="csrf-token" id="csrf-token" content="@csrf">
     <title>@yield('title')fudplug</title>
 
     <!-- Bootstrap core CSS -->
@@ -29,7 +28,7 @@
     <script src="{{ url('assets/vendor/jquery-cookie/jquery-cookie.js') }}"></script>
 
     <!-- Emoji -->
-    <link href="{{url('assets/vendor/emojionearea/emojionearea.min.css')}}" rel="stylesheet">
+    <link href="{{ url('assets/vendor/emojionearea/emojionearea.min.css') }}" rel="stylesheet">
     <script src="{{ url('assets/vendor/emojionearea/emojionearea.min.js') }}"></script>
 
 </head>
@@ -126,6 +125,9 @@
     <!-- Custom scripts for all pages-->
     <script src="{{ url('assets/js/osahan.js') }}"></script>
     <script src="{{ url('assets/js/custom.js') }}"></script>
+
+    <!-- jQuery Steps Plugin -->
+    <script src="{{ url('assets/js/jquery-steps-master/build/jquery.steps.js') }}"></script>
 
     {{-- Additional Scripts--}}
     @yield('scripts')

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Area;
+use App\Item;
 use App\State;
 use App\User;
 use App\Vendor;
@@ -382,8 +383,18 @@ class VendorController extends Controller
             if ($validator->fails()) {
                 return response()->json(['success' => false, 'message' => $validator->errors('image')->messages()], 200);
             } else {
-
-                return response()->json(['success' => true, 'message' => $request->all()], 200);
+                foreach ($request->title as $key => $value) {
+                    $data = [
+                        'title' => $value,
+                        'quantity' => json_encode(['bulk' => $this->bulk_qty_json($request, $key), 'regular' => $this->regular_qty_json($request, $key)]),
+                        'image' => $this->dish_img_upload($request, $key) ? $this->dish_img_upload($request, $key) : null,
+                        'status' => "active",
+                    ];
+                    $item = new Item($data);
+                    $vendor = Vendor::find(Auth::user()->id);
+                    $vendor->item()->save($item);
+                }
+                return response()->json(['success' => true, 'message' => "Your dish was successfully uploaded."], 200);
             }
         } catch (\Throwable $th) {
             //throw $th;
@@ -393,25 +404,136 @@ class VendorController extends Controller
     }
 
     /**
+     * Vendor Dish Image Uploader
+     * @return boolean Boolean value on success or failure
+     */
+    public function dish_img_upload(Request $request, $key)
+    {
+        try {
+            $file = $request->file('image')[$key];
+            $filenameWithExt = $file->getClientOriginalName();
+            //Get just filename
+            $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME);
+            // Get just ext
+            $extension = $file->getClientOriginalExtension();
+            // Filename to store
+            $image = $request->title[$key] . Auth::user()->id . '_' . time() . '.' . $extension;
+            // Upload new Image
+            if ($file->storeAs('public/vendor/dish', $image)) {
+                return $image;
+            } else {
+                return false;
+            }
+        } catch (\Throwable $th) {
+            Log::error($th);
+            return false;
+        }
+    }
+
+    /**
      * Vendor Regular Dish Quantity Json Generator
      * @return string JSON string
      */
-    private function regular_qty_json(Request $request)
+    private function regular_qty_json(Request $request, $key)
     {
-        $titles = $request->title;
         $regular_arr = [];
-        foreach ($titles as $key => $value) {
-            switch ($variable) {
-                case 0:
-                    # code...
+        //foreach ($titles as $key => $value) {
+        switch ($key) {
+            case 0:
+                # Array for first group of quantities
+                foreach ($request->regular_title_one as $key_one => $value_one) {
+                    $regular_arr[$key_one] = ['title' => $value_one, 'price' => $request->regular_price_one[$key_one], 'quantity' => $request->regular_quantity_one[$key_one]];
+                }
+                break;
 
-                    break;
+            case 1:
+                # Array for second group of quantities
+                foreach ($request->regular_title_two as $key_two => $value_two) {
+                    $regular_arr[$key_two] = ['title' => $value_two, 'price' => $request->regular_price_two[$key_two], 'quantity' => $request->regular_quantity_two[$key_two]];
+                }
+                break;
 
-                default:
-                    # code...
-                    break;
-            }
+            case 2:
+                # Array for third group of quantities
+                foreach ($request->regular_title_three as $key_three => $value_three) {
+                    $regular_arr[$key_three] = ['title' => $value_three, 'price' => $request->regular_price_three[$key_three], 'quantity' => $request->regular_quantity_three[$key_three]];
+                }
+                break;
+
+            case 3:
+                # Array for fourth group of quantities
+                foreach ($request->regular_title_four as $key_four => $value_four) {
+                    $regular_arr[$key_four] = ['title' => $value_four, 'price' => $request->regular_price_four[$key_four], 'quantity' => $request->regular_quantity_four[$key_four]];
+                }
+                break;
+
+            case 4:
+                # Array for fifth group of quantities
+                foreach ($request->regular_title_five as $key_five => $value_five) {
+                    $regular_arr[$key_five] = ['title' => $value_five, 'price' => $request->regular_price_five[$key_five], 'quantity' => $request->regular_quantity_five[$key_five]];
+                }
+                break;
+
+            default:
+                # code...
+                break;
         }
+
+        return json_encode($regular_arr);
+        //}
+    }
+
+    /**
+     * Vendor Bulk Dish Quantity Json Generator
+     * @return string JSON string
+     */
+    private function bulk_qty_json(Request $request, $key)
+    {
+        $bulk_arr = [];
+        //foreach ($titles as $key => $value) {
+        switch ($key) {
+            case 0:
+                # Array for first group of quantities
+                foreach ($request->bulk_title_one as $key_one => $value_one) {
+                    $bulk_arr[$key_one] = ['title' => $value_one, 'price' => $request->bulk_price_one[$key_one]];
+                }
+                break;
+
+            case 1:
+                # Array for second group of quantities
+                foreach ($request->bulk_title_two as $key_two => $value_two) {
+                    $bulk_arr[$key_two] = ['title' => $value_two, 'price' => $request->bulk_price_two[$key_two]];
+                }
+                break;
+
+            case 2:
+                # Array for third group of quantities
+                foreach ($request->bulk_title_three as $key_three => $value_three) {
+                    $bulk_arr[$key_three] = ['title' => $value_three, 'price' => $request->bulk_price_three[$key_three]];
+                }
+                break;
+
+            case 3:
+                # Array for fourth group of quantities
+                foreach ($request->bulk_title_four as $key_four => $value_four) {
+                    $bulk_arr[$key_four] = ['title' => $value_four, 'price' => $request->bulk_price_four[$key_four]];
+                }
+                break;
+
+            case 4:
+                # Array for fifth group of quantities
+                foreach ($request->bulk_title_five as $key_five => $value_five) {
+                    $bulk_arr[$key_five] = ['title' => $value_five, 'price' => $request->bulk_price_five[$key_five]];
+                }
+                break;
+
+            default:
+                # code...
+                break;
+        }
+
+        return json_encode($bulk_arr);
+        //}
     }
 
     /**
