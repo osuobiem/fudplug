@@ -152,22 +152,37 @@
     spin('post')
     let url = `{{ url('post/create') }}`;
     let data = new FormData(el.target)
+
     // Attach images to form data
     if (Object.keys(images).length > 0) {
       for (image in images) {
         data.append('images[]', images[image])
       }
     }
+    // Attach video to form data
+    else if (video.length > 0) {
+      data.append('video', video.file);
+    }
+
     goPost(url, data)
       .then(res => {
         spin('post')
-        handleFormRes(res);
+        if (handleFormRes(res)) {
+          showAlert('Post Sent Successfully!');
+          refreshPostForm();
+        }
       })
       .catch(err => {
         spin('post')
         handleFormRes(err);
       })
   }
+
+  // Reload Post Form
+  function refreshPostForm() {
+    $('#close-post').click();
+  }
+
   // Fill Picked Image in Div
   function fill(input) {
     sendErr = false;
@@ -214,6 +229,7 @@
       hideMediaInputs(false);
     }
   }
+
   // Fill Picked Video in Div
   function fillVideo(input) {
     $('#video-spinner').removeClass('d-none')

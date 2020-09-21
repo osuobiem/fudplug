@@ -81,8 +81,11 @@ Route::group(['prefix' => 'user'], function () {
 Route::group(['prefix' => 'post'], function () {
     // *** Protected ***
     Route::group(['middleware' => ['auth']], function () {
-        // User Logout
+        // Create Post
         Route::post('create', 'PostController@post');
+
+        // Load Post Form
+        Route::post('load-form', 'PostController@form');
     });
 });
 // -------------
