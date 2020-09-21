@@ -83,9 +83,6 @@ Route::group(['prefix' => 'post'], function () {
     Route::group(['middleware' => ['auth']], function () {
         // Create Post
         Route::post('create', 'PostController@post');
-
-        // Load Post Form
-        Route::post('load-form', 'PostController@form');
     });
 });
 // -------------

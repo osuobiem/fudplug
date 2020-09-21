@@ -168,7 +168,7 @@
       .then(res => {
         spin('post')
         if (handleFormRes(res)) {
-          showAlert('Post Sent Successfully!');
+          showAlert(true, 'Post Sent Successfully!');
           refreshPostForm();
         }
       })
@@ -181,6 +181,12 @@
   // Reload Post Form
   function refreshPostForm() {
     $('#close-post').click();
+
+    removePostImg(false, true)
+    removePostVid()
+    $('.emojionearea-editor').text('')
+    $('.emojionearea-editor').attr('value', '')
+    document.getElementsByName('content').forEach(v => { v.value = '' })
   }
 
   // Fill Picked Image in Div
@@ -300,11 +306,18 @@
     }
   }
   // Remove Post Image
-  function removePostImg(id) {
+  function removePostImg(id = false, all = false) {
     $('#' + id).remove()
     delete images[id]
     imageCounter = $('.pmmc-i').length + 1
     arrangeImages()
+
+    // Remove all images
+    if (all) {
+      images = {};
+      imageCounter = 1;
+      $('#post-media-container').html('')
+    }
   }
   // Remove Post Video
   function removePostVid() {
