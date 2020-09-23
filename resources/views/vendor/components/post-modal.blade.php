@@ -160,7 +160,7 @@
       }
     }
     // Attach video to form data
-    else if (video.length > 0) {
+    if (video.file) {
       data.append('video', video.file);
     }
 

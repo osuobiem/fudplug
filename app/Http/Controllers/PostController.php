@@ -36,6 +36,7 @@ class PostController extends Controller
         $post->vendor_id = $request->user()->id;
 
         $photos = [];
+        $video = false;
 
         // Check if there's any image in the request
         if ($request['images']) {
@@ -47,6 +48,18 @@ class PostController extends Controller
             }
 
             $photos = $upload['photos'];
+        } else {
+            // Check if there's video
+            if ($request['video']) {
+                $upload = $this->upload_video($request);
+
+                // Check upload status
+                if (!$upload) {
+                    return response()->json(['success' => false, 'message' => 'Internal Server Error'], 500);
+                }
+
+                $video = $upload;
+            }
         }
 
         // Try Post Save
@@ -65,6 +78,16 @@ class PostController extends Controller
                     ]);
                 }
                 Media::insert($data);
+            } else {
+                // Save video
+                if ($request['video'] && $video) {
+                    $media = new Media();
+                    $media->name = $video;
+                    $media->post_id = $post->id;
+                    $media->type = 'video';
+
+                    $media->save();
+                }
             }
 
             return response()->json([
@@ -75,8 +98,13 @@ class PostController extends Controller
             // Delete uploaded photos
             if ($request['images'] && $photos) {
                 foreach ($photos as $photo) {
-                    Storage::delete('/public/posts/' . $photo);
+                    Storage::delete('/public/posts/photos' . $photo);
                 }
+            }
+
+            // Delete Video
+            if ($request['video'] && $video) {
+                Storage::delete('/public/posts/videos' . $video);
             }
 
             // Delete Post
@@ -100,7 +128,7 @@ class PostController extends Controller
 
         // Upload photos
         foreach ($request['images'] as $photo) {
-            $stored = Storage::put('/public/posts', $photo);
+            $stored = Storage::put('/public/posts/photos/', $photo);
 
             if ($stored) {
                 array_push($resp['photos'], basename($stored));
@@ -117,12 +145,30 @@ class PostController extends Controller
             // Delete uploaded photos
             if (count($resp['photos'])) {
                 foreach ($resp['photos'] as $photo) {
-                    Storage::delete('/public/posts/' . $photo);
+                    Storage::delete('/public/posts/photos/' . $photo);
                 }
             }
 
             return $resp;
         }
+    }
+
+    /**
+     * Upload post video
+     * @return array
+     */
+    public function upload_video(Request $request)
+    {
+        $resp = false;
+
+        // Upload video
+        $stored = Storage::put('/public/posts/videos/', $request['video']);
+
+        if ($stored) {
+            $resp = basename($stored);
+        }
+
+        return $resp;
     }
 
     /**
