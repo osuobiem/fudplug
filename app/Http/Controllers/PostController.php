@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Media;
 use App\Post;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
@@ -15,7 +17,7 @@ class PostController extends Controller
      * Create Post
      * @return json
      */
-    public function post(Request $request)
+    public function create(Request $request)
     {
         // Get validation rules
         $validate = $this->post_rules($request);
@@ -183,5 +185,26 @@ class PostController extends Controller
             'images.*' => 'image|max:26214400',
             'video' => 'mimes:mp4,ogx,oga,ogv,ogg,webm',
         ]);
+    }
+
+    /**
+     * Get Posts
+     * @return view
+     */
+    public function get(Request $request)
+    {
+        // Vendor / User?
+        if (Auth::guest() && Auth::guard('user')->guest()) {
+            $posts = Post::orderBy('created_at', 'desc')->take(10)->get();
+
+            return view('components.posts', ['posts' => $posts]);
+        } else {
+            // Get Posts according to area
+            $posts = Post::whereHas('vendor', function (Builder $query) use ($request) {
+                $query->where('area_id', $request->user()->area_id);
+            })->take(10)->get();
+
+            return view('components.posts', ['posts' => $posts]);
+        }
     }
 }
