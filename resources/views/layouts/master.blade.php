@@ -65,11 +65,23 @@
 
                 {{-- Dish Addition Modal--}}
                 @include('vendor.components.dish-add')
+
+                <!-- Dish View Modal Holder -->
+                <div id="dish-modal-holder">
+
+                </div>
+                <!-- Dish View Modal Holder -->
             </main>
 
             <!-- Right Sidebar -->
             @if(!Auth::guest())
-            @include('vendor.components.right-side')
+            <aside class="col col-lg-3 d-none d-lg-block side-section side-section-r right-side-large text-center">
+                <div class="spinner-border spinner-border-sm p-3 mt-5" id="right-side-spinner" style="display: none;"
+                    role="status">
+                    <span class="sr-only">Loading...</span>
+                </div>
+
+            </aside>
 
             @elseif(!Auth::guard('user')->guest())
             @else
@@ -126,11 +138,35 @@
     <script src="{{ url('assets/js/osahan.js') }}"></script>
     <script src="{{ url('assets/js/custom.js') }}"></script>
 
+    {{-- Additional Scripts--}}
+    @stack('scripts')
+
     <!-- jQuery Steps Plugin -->
     <script src="{{ url('assets/js/jquery-steps-master/build/jquery.steps.js') }}"></script>
 
-    {{-- Additional Scripts--}}
-    @yield('scripts')
+    <script>
+        $(document).ready(function () {
+            spin('right-side')
+            // Populate dishes tab on page load
+            let getUrl = "{{url('vendor/dish')}}";
+            goGet(getUrl).then((res) => {
+                spin('right-side')
+                if (window.matchMedia("(max-width: 767px)").matches) {
+                    // The viewport is less than 768 pixels wide (mobile device)
+                    $(".right-side-large").empty();
+                    $(".right-side-small").append(res);
+                } else {
+                    // The viewport is at least 768 pixels wide (Desktop or tablet)
+                    $(".right-side-small").empty();
+                    $(".right-side-large").append(res);
+                }
+            }).catch((err) => {
+                spin('right-side')
+                console.error(err);
+            });
+        });
+
+    </script>
 </body>
 
 </html

@@ -587,4 +587,27 @@ class VendorController extends Controller
 
         ], $message);
     }
+
+    /**
+     * Get Vendor Dishes
+     * @return object Laravel View Instance
+     */
+    public function get_dish(Request $request, $dish_id = null)
+    {
+        try {
+            if (isset($dish_id)) {
+                $dish = Item::where(['vendor_id' => Auth::user()->id, 'id' => $dish_id])->first();
+                $qty = $dish->quantity = json_decode($dish->quantity);
+                $regular_qty = json_decode($qty->regular);
+                $bulk_qty = json_decode($qty->bulk);
+                return view('vendor.components.dish-view', compact('dish', 'regular_qty', 'bulk_qty'));
+            } else {
+                $dishes = Item::where('vendor_id', Auth::user()->id)->get();
+                return view('vendor.components.right-side', ['dishes' => $dishes]);
+            }
+        } catch (\Throwable $th) {
+            Log::error($th);
+            return response()->json(['success' => false, 'message' => $th->getMessage()], 500);
+        }
+    }
 }

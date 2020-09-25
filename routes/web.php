@@ -55,6 +55,8 @@ Route::group(['prefix' => 'vendor'], function () {
         Route::post('cover_image_update', 'VendorController@cover_image_update');
         // Add Dishes
         Route::post('add-dish', 'VendorController@add_dish');
+        // Get Vendor Dishes
+        Route::get('dish/{id?}', 'VendorController@get_dish');
     });
 });
 // -------------

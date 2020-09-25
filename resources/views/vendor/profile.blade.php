@@ -73,8 +73,8 @@
                             aria-controls="home" aria-selected="false">Orders</a>
                     </li>
                     <li class="nav-item d-lg-none">
-                        <a class="nav-link" id="home-tab" data-toggle="tab" href="#menu" role="tab" aria-controls="home"
-                            aria-selected="false">Menu</a>
+                        <a class="nav-link" id="home-tab" data-toggle="tab" href="#menu-dish" role="tab"
+                            aria-controls="home" aria-selected="false">Menu</a>
                     </li>
                 </ul>
             </div>
@@ -144,6 +144,7 @@
                 </div>
             </div>
         </div>
+
         <div class="tab-pane fade" id="home" role="tabpanel" aria-labelledby="home-tab">
             <div class="box shadow-sm border rounded bg-white mb-3">
                 <div class="box-title border-bottom p-3">
@@ -154,197 +155,92 @@
                 </div>
             </div>
         </div>
+
+
         <div class="tab-pane fade d-lg-none" id="order" role="tabpanel" aria-labelledby="order-tab">
-            <aside class="col col-lg-3 side-section side-section-l">
-                <div class="box shadow-sm border rounded bg-white mb-3">
-                    <div class="box-title border-bottom p-3">
-                        <h6 class="m-0">Orders</h6>
+
+            <div class="box shadow-sm border rounded bg-white mb-3">
+                <div class="box-title border-bottom p-3">
+                    <h6 class="m-0">Orders</h6>
+                </div>
+                <div class="box-body p-3 h-100 overflow-auto">
+                    <div class="d-flex align-items-center osahan-post-header mb-3 people-list">
+                        <div class="dropdown-list-image mr-3">
+                            <img class="rounded-circle" src="{{ url('assets/img/p4.png') }}" alt="">
+                            <div class="status-indicator bg-success"></div>
+                        </div>
+                        <div class="font-weight-bold mr-2">
+                            <div class="text-truncate">Sophia Lee</div>
+                            <div class="small text-gray-500">@Harvard
+                            </div>
+                        </div>
+                        <span class="ml-auto"><button type="button" class="btn btn-outline-danger btn-sm">View</button>
+                        </span>
                     </div>
-                    <div class="box-body p-3 h-100 overflow-auto">
-                        <div class="d-flex align-items-center osahan-post-header mb-3 people-list">
-                            <div class="dropdown-list-image mr-3">
-                                <img class="rounded-circle" src="{{ url('assets/img/p4.png') }}" alt="">
-                                <div class="status-indicator bg-success"></div>
-                            </div>
-                            <div class="font-weight-bold mr-2">
-                                <div class="text-truncate">Sophia Lee</div>
-                                <div class="small text-gray-500">@Harvard
-                                </div>
-                            </div>
-                            <span class="ml-auto"><button type="button"
-                                    class="btn btn-outline-danger btn-sm">View</button>
-                            </span>
+                    <div class="d-flex align-items-center osahan-post-header mb-3 people-list">
+                        <div class="dropdown-list-image mr-3">
+                            <img class="rounded-circle" src="{{ url('assets/img/p9.png') }}" alt="">
+                            <div class="status-indicator bg-success"></div>
                         </div>
-                        <div class="d-flex align-items-center osahan-post-header mb-3 people-list">
-                            <div class="dropdown-list-image mr-3">
-                                <img class="rounded-circle" src="{{ url('assets/img/p9.png') }}" alt="">
-                                <div class="status-indicator bg-success"></div>
+                        <div class="font-weight-bold mr-2">
+                            <div class="text-truncate">John Doe</div>
+                            <div class="small text-gray-500">Traveler
                             </div>
-                            <div class="font-weight-bold mr-2">
-                                <div class="text-truncate">John Doe</div>
-                                <div class="small text-gray-500">Traveler
-                                </div>
-                            </div>
-                            <span class="ml-auto"><button type="button"
-                                    class="btn btn-outline-danger btn-sm">View</button>
-                            </span>
                         </div>
-                        <div class="d-flex align-items-center osahan-post-header mb-3 people-list">
-                            <div class="dropdown-list-image mr-3">
-                                <img class="rounded-circle" src="{{ url('assets/img/p10.png') }}" alt="">
-                                <div class="status-indicator bg-success"></div>
-                            </div>
-                            <div class="font-weight-bold mr-2">
-                                <div class="text-truncate">Julia Cox</div>
-                                <div class="small text-gray-500">Art Designer
-                                </div>
-                            </div>
-                            <span class="ml-auto"><button type="button"
-                                    class="btn btn-outline-danger btn-sm">View</button>
-                            </span>
-                        </div>
-                        <div class="d-flex align-items-center osahan-post-header mb-3 people-list">
-                            <div class="dropdown-list-image mr-3">
-                                <img class="rounded-circle" src="{{ url('assets/img/p11.png') }}" alt="">
-                                <div class="status-indicator bg-success"></div>
-                            </div>
-                            <div class="font-weight-bold mr-2">
-                                <div class="text-truncate">Robert Cook</div>
-                                <div class="small text-gray-500">@Photography
-                                </div>
-                            </div>
-                            <span class="ml-auto"><button type="button"
-                                    class="btn btn-outline-danger btn-sm">View</button>
-                            </span>
-                        </div>
-                        <div class="d-flex align-items-center osahan-post-header people-list">
-                            <div class="dropdown-list-image mr-3">
-                                <img class="rounded-circle" src="{{ url('assets/img/p12.png') }}" alt="">
-                                <div class="status-indicator bg-success"></div>
-                            </div>
-                            <div class="font-weight-bold mr-2">
-                                <div class="text-truncate">Richard Bell</div>
-                                <div class="small text-gray-500">@Envato
-                                </div>
-                            </div>
-                            <span class="ml-auto"><button type="button"
-                                    class="btn btn-outline-danger btn-sm">View</button>
-                            </span>
-                        </div>
+                        <span class="ml-auto"><button type="button" class="btn btn-outline-danger btn-sm">View</button>
+                        </span>
                     </div>
-                    <div class="box-footer p-2 border-top">
-                        <button type="button" class="btn btn-primary btn-block"> View all </button>
+                    <div class="d-flex align-items-center osahan-post-header mb-3 people-list">
+                        <div class="dropdown-list-image mr-3">
+                            <img class="rounded-circle" src="{{ url('assets/img/p10.png') }}" alt="">
+                            <div class="status-indicator bg-success"></div>
+                        </div>
+                        <div class="font-weight-bold mr-2">
+                            <div class="text-truncate">Julia Cox</div>
+                            <div class="small text-gray-500">Art Designer
+                            </div>
+                        </div>
+                        <span class="ml-auto"><button type="button" class="btn btn-outline-danger btn-sm">View</button>
+                        </span>
+                    </div>
+                    <div class="d-flex align-items-center osahan-post-header mb-3 people-list">
+                        <div class="dropdown-list-image mr-3">
+                            <img class="rounded-circle" src="{{ url('assets/img/p11.png') }}" alt="">
+                            <div class="status-indicator bg-success"></div>
+                        </div>
+                        <div class="font-weight-bold mr-2">
+                            <div class="text-truncate">Robert Cook</div>
+                            <div class="small text-gray-500">@Photography
+                            </div>
+                        </div>
+                        <span class="ml-auto"><button type="button" class="btn btn-outline-danger btn-sm">View</button>
+                        </span>
+                    </div>
+                    <div class="d-flex align-items-center osahan-post-header people-list">
+                        <div class="dropdown-list-image mr-3">
+                            <img class="rounded-circle" src="{{ url('assets/img/p12.png') }}" alt="">
+                            <div class="status-indicator bg-success"></div>
+                        </div>
+                        <div class="font-weight-bold mr-2">
+                            <div class="text-truncate">Richard Bell</div>
+                            <div class="small text-gray-500">@Envato
+                            </div>
+                        </div>
+                        <span class="ml-auto"><button type="button" class="btn btn-outline-danger btn-sm">View</button>
+                        </span>
                     </div>
                 </div>
-            </aside>
+                <div class="box-footer p-2 border-top">
+                    <button type="button" class="btn btn-primary btn-block"> View all </button>
+                </div>
+            </div>
+
         </div>
-        <div class="tab-pane fade d-lg-none" id="menu" role="tabpanel" aria-labelledby="menu-tab">
-            <aside class="col col-lg-3 d-lg-block side-section side-section-r">
-                <div class="box shadow-sm border rounded bg-white mb-3">
-                    <div class="box-title border-bottom p-3">
-                        <h6 class="m-0">Menu</h6>
-                    </div>
-                    <div class="box-body p-3 h-100 overflow-auto">
-                        <div class="d-flex align-items-center osahan-post-header mb-3 people-list">
-                            <div class="dropdown-list-image mr-3">
-                                <img class="rounded-circle" src="{{Storage::url('vendor/fud1.jpeg')}}" alt="">
 
-                            </div>
-                            <div class="font-weight-bold mr-2">
-                                <div class="text-truncate"><a href="http://">
-                                        Eba & Soup
-                                    </a></div>
-                                <div class="small text-gray-500"><b>Qty:</b> 10
-                                </div>
-                            </div>
-                            <span title="add to today's menu" class="ml-auto">
-                                <div class="custom-control custom-switch pull-left">
-                                    <input type="checkbox" class="custom-control-input" id="customSwitch1">
-                                    <label class="custom-control-label" for="customSwitch1"></label>
-                                </div>
-                            </span>
-                        </div>
-                        <div class="d-flex align-items-center osahan-post-header mb-3 people-list">
-                            <div class="dropdown-list-image mr-3">
-                                <img class="rounded-circle" src="{{Storage::url('vendor/fud2.jpeg')}}" alt="">
 
-                            </div>
-                            <div class="font-weight-bold mr-2">
-                                <div class="text-truncate"><a href="http://">
-                                        Fried Rice
-                                    </a></div>
-                                <div class="small text-gray-500"><b>Qty:</b> 10
-                                </div>
-                            </div>
-                            <span class="ml-auto">
-                                <div class="custom-control custom-switch pull-left">
-                                    <input type="checkbox" class="custom-control-input" id="customSwitch2">
-                                    <label class="custom-control-label" for="customSwitch2"></label>
-                                </div>
-                            </span>
-                        </div>
-                        <div class="d-flex align-items-center osahan-post-header mb-3 people-list">
-                            <div class="dropdown-list-image mr-3">
-                                <img class="rounded-circle" src="{{Storage::url('vendor/fud3.jpeg')}}" alt="">
+        <div class="tab-pane fade d-lg-none right-side-small" id="menu-dish" role="tabpanel"
+            aria-labelledby="menu-dish-tab">
 
-                            </div>
-                            <div class="font-weight-bold mr-2">
-                                <div class="text-truncate"><a href="http://">
-                                        Banga Soup
-                                    </a></div>
-                                <div class="small text-gray-500"><b>Qty:</b> 10
-                                </div>
-                            </div>
-                            <span class="ml-auto">
-                                <div class="custom-control custom-switch pull-left">
-                                    <input type="checkbox" class="custom-control-input" id="customSwitch3">
-                                    <label class="custom-control-label" for="customSwitch3"></label>
-                                </div>
-                            </span>
-                        </div>
-                        <div class="d-flex align-items-center osahan-post-header mb-3 people-list">
-                            <div class="dropdown-list-image mr-3">
-                                <img class="rounded-circle" src="{{Storage::url('vendor/fud4.jpeg')}}" alt="">
-
-                            </div>
-                            <div class="font-weight-bold mr-2">
-                                <div class="text-truncate"><a href="http://">
-                                        Jollof Rice
-                                    </a></div>
-                                <div class="small text-gray-500"><b>Qty:</b> 10
-                                </div>
-                            </div>
-                            <span class="ml-auto">
-                                <div class="custom-control custom-switch pull-left">
-                                    <input type="checkbox" class="custom-control-input" id="customSwitch4">
-                                    <label class="custom-control-label" for="customSwitch4"></label>
-                                </div>
-                            </span>
-                        </div>
-                        <div class="d-flex align-items-center osahan-post-header people-list">
-                            <div class="dropdown-list-image mr-3">
-                                <img class="rounded-circle" src="{{Storage::url('vendor/fud5.jpeg')}}" alt="">
-                            </div>
-                            <div class="font-weight-bold mr-2">
-                                <div class="text-truncate"><a href="http://">
-                                        White Soup
-                                    </a></div>
-                                <div class="small text-gray-500"><b>Qty:</b> 10
-                                </div>
-                            </div>
-                            <span class="ml-auto">
-                                <div class="custom-control custom-switch pull-left">
-                                    <input type="checkbox" class="custom-control-input" id="customSwitch5">
-                                    <label class="custom-control-label" for="customSwitch5"></label>
-                                </div>
-                            </span>
-                        </div>
-                    </div>
-                    <div class="box-footer p-2 border-top">
-                        <button type="button" class="btn btn-primary btn-block"> Add Item </button>
-                    </div>
-                </div>
-            </aside>
         </div>
     </div>
 
@@ -361,7 +257,7 @@
 
 @endsection
 
-@section('scripts')
+@push('scripts')
 <script>
     // Cropper.JS Initialize any crop by calling the crop function
     window.addEventListener("DOMContentLoaded", function () {
@@ -474,7 +370,8 @@
                         $progress.show();
                     }
 
-                    formData.append("image", blobToFile(blob, params[0] + ".jpg"), params[0] + ".jpg");
+                    formData.append("image", blobToFile(blob, params[0] + ".jpg"), params[0] +
+                        ".jpg");
                     $.ajax(upload_url, {
                         method: "POST",
                         data: formData,
@@ -489,9 +386,11 @@
                                 var percentage = "0%";
 
                                 if (e.lengthComputable) {
-                                    percent = Math.round((e.loaded / e.total) * 100);
+                                    percent = Math.round((e.loaded / e.total) *
+                                        100);
                                     percentage = percent + "%";
-                                    $progressBar.width(percentage).attr("aria-valuenow",
+                                    $progressBar.width(percentage).attr(
+                                        "aria-valuenow",
                                         percent).text(percentage);
                                 }
                             };
@@ -542,4 +441,4 @@
     }
 
 </script>
-@endsection
+@endpush
