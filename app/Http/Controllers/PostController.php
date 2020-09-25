@@ -195,14 +195,17 @@ class PostController extends Controller
     {
         // Vendor / User?
         if (Auth::guest() && Auth::guard('user')->guest()) {
-            $posts = Post::orderBy('created_at', 'desc')->take(10)->get();
+            $posts = Post::orderBy('created_at', 'desc')->take(15)->get();
 
             return view('components.posts', ['posts' => $posts]);
         } else {
+            // Get logged in vendor or user
+            $logged_in = $request->user() ?? $request->user('user');
+
             // Get Posts according to area
-            $posts = Post::whereHas('vendor', function (Builder $query) use ($request) {
-                $query->where('area_id', $request->user()->area_id);
-            })->take(10)->get();
+            $posts = Post::whereHas('vendor', function (Builder $query) use ($logged_in) {
+                $query->where('area_id', $logged_in->area_id);
+            })->orderBy('created_at', 'desc')->take(15)->get();
 
             return view('components.posts', ['posts' => $posts]);
         }
