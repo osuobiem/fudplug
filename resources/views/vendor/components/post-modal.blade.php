@@ -152,7 +152,10 @@
   // Send Post
   function sendPost(el) {
     el.preventDefault()
+
     spin('post')
+    liner();
+
     let url = `{{ url('post/create') }}`;
     let data = new FormData(el.target)
 
@@ -171,6 +174,8 @@
     goPost(url, data)
       .then(res => {
         spin('post')
+        liner(false)
+
         if (handleFormRes(res)) {
           showAlert(true, 'Post Sent Successfully!');
           refreshPostForm();
@@ -178,6 +183,8 @@
       })
       .catch(err => {
         spin('post')
+        liner(false)
+
         handleFormRes(err);
       })
   }
@@ -353,5 +360,15 @@
     canvas.getContext('2d').drawImage(video, 0, 0, video.clientWidth, video.clientHeight);
 
     videoThumb = canvas.toDataURL();
+  }
+
+  // Toggle Post Sending Line
+  function liner(show = true) {
+    if (screen.width > 768) {
+      show ? $('#send-post-liner-lg').removeClass('d-none') : $('#send-post-liner-lg').addClass('d-none')
+    }
+    else {
+      show ? $('#send-post-liner-sm').removeClass('d-none') : $('#send-post-liner-sm').addClass('d-none')
+    }
   }
 </script>

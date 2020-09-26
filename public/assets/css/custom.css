@@ -1011,3 +1011,39 @@ a:visited {
         margin-top: 18.5%;
     }
 }
+
+
+@keyframes ploader-animation {
+    0% {
+        width: 0%;
+    }
+
+    49% {
+        width: 100%;
+        left: 0%
+    }
+
+    50% {
+        left: 100%;
+    }
+
+    100% {
+        left: 0%;
+        width: 100%
+    }
+}
+
+.ploader {
+    height: 2px;
+    width: 100%;
+}
+
+.ploader .bar {
+    height: 2px;
+    background-color: var(--i-primary);
+    animation-name: ploader-animation;
+    animation-duration: 1s;
+    animation-iteration-count: infinite;
+    animation-timing-function: ease-in-out;
+    border-radius: 5px;
+}

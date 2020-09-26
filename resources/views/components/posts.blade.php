@@ -1,3 +1,4 @@
+@if(count($posts))
 @foreach ($posts as $post)
     <!-- Post -->
 <div class="box shadow-sm border rounded bg-white mb-3 osahan-post">
@@ -41,3 +42,10 @@
   </div>
 </div>
 @endforeach
+@else
+<div class="box shadow-sm border rounded bg-white mb-3 osahan-post">
+  <div class="p-3 d-flex align-items-center border-bottom osahan-post-header justify-content-center">
+    <p class="m-0"><strong>No Posts Yet!</strong></p>
+  </div>
+</div>
+@endif

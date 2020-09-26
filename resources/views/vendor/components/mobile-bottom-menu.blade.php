@@ -1,5 +1,13 @@
 <!-- Mobile Bottom Menu -->
 <div class="mobile-bottom d-lg-none">
+
+    <div class="bg-white text-center pt-1 d-none" id="send-post-liner-sm" style="border-top: solid .5px #ced4da">
+        <div class="ploader border rounded">
+            <div class="bar"></div>
+        </div>
+        <strong style="font-size: 10px;">Sending your post ...</strong>
+    </div>
+
     <nav class="navbar-bottom navbar-expand navbar-light bg-light osahan-nav-top h-80" id="b-m">
         <div class="container row m-0 text-center px-0">
             <div class="col-3">

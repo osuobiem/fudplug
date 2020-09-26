@@ -22,6 +22,14 @@
 				</div>
 			</form>
 		</nav>
+
+		<div class="bg-white text-center d-none" id="send-post-liner-lg" style="margin: 0 11.3px;">
+			<strong style="font-size: 10px;">Sending your post ...</strong>
+			<div class="ploader border rounded">
+				<div class="bar"></div>
+			</div>
+		</div>
+
 	</div>
 	<div class="col-3 col-md-4 col-lg-3 p-0">
 		<nav class="navbar navbar-expand navbar-light bg-light osahan-nav-top h-80 p-1" id="rt-h">
@@ -55,7 +63,8 @@
 								{{ Auth::user()->business_name }}
 							</p>
 							&nbsp; &nbsp;
-							<img class="img-profile rounded-circle" src="{{ Storage::url('vendor/profile/'.Auth::user()->profile_image) }}">
+							<img class="img-profile rounded-circle"
+								src="{{ Storage::url('vendor/profile/'.Auth::user()->profile_image) }}">
 							<i class="feather-chevron-down"></i>
 						</a>
 						<!-- Dropdown - User Information -->
