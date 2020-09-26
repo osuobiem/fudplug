@@ -935,7 +935,7 @@ a:visited {
     margin-bottom: -13px;
     margin-top: 3px;
     padding-top: 6px;
-    padding-bottom: 6px@;
+    padding-bottom: 6px;
 }
 
 .img-edit {
@@ -986,4 +986,28 @@ a:visited {
 
 .custom-file-label {
     overflow: hidden;
+}
+
+.play-btn {
+    position: absolute;
+    color: var(--i-primary);
+    margin-top: 12.5%;
+}
+
+@media (min-width: 768px) {
+    .play-btn {
+        margin-top: 16.5%;
+    }
+}
+
+@media (min-width: 992px) {
+    .play-btn {
+        margin-top: 15.5%;
+    }
+}
+
+@media (min-width: 1200px) {
+    .play-btn {
+        margin-top: 18.5%;
+    }
 }
