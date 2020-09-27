@@ -1011,6 +1011,18 @@ a:visited {
     position: absolute;
     color: var(--i-primary);
     margin-top: 12.5%;
+    cursor: pointer;
+    border-radius: 50px;
+    box-shadow: 0 0 15px 5px #000;
+    background: #0000008a;
+}
+
+.play-btn:hover {
+    box-shadow: 0 0 20px 10px #000;
+}
+
+.vid-bod {
+    border: solid #dee2e6 1px;
 }
 
 @media (min-width: 768px) {

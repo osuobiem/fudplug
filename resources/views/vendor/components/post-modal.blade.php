@@ -79,6 +79,7 @@
         <button type="button" class="btn btn-outline-danger px-5 btn-lg ml-auto" onclick="submitPost()" type="submit"
           id="post-btn">
           <span id="post-txt">Post</span>
+
           <div class="spinner-border spinner-border-sm btn-pr" id="post-spinner" style="display: none;" role="status">
             <span class="sr-only">Loading...</span>
           </div>
