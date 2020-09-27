@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Media;
 use App\Post;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
@@ -15,7 +17,7 @@ class PostController extends Controller
      * Create Post
      * @return json
      */
-    public function post(Request $request)
+    public function create(Request $request)
     {
         // Get validation rules
         $validate = $this->post_rules($request);
@@ -36,6 +38,7 @@ class PostController extends Controller
         $post->vendor_id = $request->user()->id;
 
         $photos = [];
+        $video = false;
 
         // Check if there's any image in the request
         if ($request['images']) {
@@ -47,6 +50,18 @@ class PostController extends Controller
             }
 
             $photos = $upload['photos'];
+        } else {
+            // Check if there's video
+            if ($request['video']) {
+                $upload = $this->upload_video($request);
+
+                // Check upload status
+                if (!$upload) {
+                    return response()->json(['success' => false, 'message' => 'Internal Server Error'], 500);
+                }
+
+                $video = $upload;
+            }
         }
 
         // Try Post Save
@@ -65,6 +80,16 @@ class PostController extends Controller
                     ]);
                 }
                 Media::insert($data);
+            } else {
+                // Save video
+                if ($request['video'] && $video) {
+                    $media = new Media();
+                    $media->name = $video;
+                    $media->post_id = $post->id;
+                    $media->type = 'video';
+
+                    $media->save();
+                }
             }
 
             return response()->json([
@@ -75,8 +100,13 @@ class PostController extends Controller
             // Delete uploaded photos
             if ($request['images'] && $photos) {
                 foreach ($photos as $photo) {
-                    Storage::delete('/public/posts/' . $photo);
+                    Storage::delete('/public/posts/photos' . $photo);
                 }
+            }
+
+            // Delete Video
+            if ($request['video'] && $video) {
+                Storage::delete('/public/posts/videos' . $video);
             }
 
             // Delete Post
@@ -100,7 +130,7 @@ class PostController extends Controller
 
         // Upload photos
         foreach ($request['images'] as $photo) {
-            $stored = Storage::put('/public/posts', $photo);
+            $stored = Storage::put('/public/posts/photos/', $photo);
 
             if ($stored) {
                 array_push($resp['photos'], basename($stored));
@@ -117,12 +147,30 @@ class PostController extends Controller
             // Delete uploaded photos
             if (count($resp['photos'])) {
                 foreach ($resp['photos'] as $photo) {
-                    Storage::delete('/public/posts/' . $photo);
+                    Storage::delete('/public/posts/photos/' . $photo);
                 }
             }
 
             return $resp;
         }
+    }
+
+    /**
+     * Upload post video
+     * @return array
+     */
+    public function upload_video(Request $request)
+    {
+        $resp = false;
+
+        // Upload video
+        $stored = Storage::put('/public/posts/videos/', $request['video']);
+
+        if ($stored) {
+            $resp = basename($stored);
+        }
+
+        return $resp;
     }
 
     /**
@@ -137,5 +185,29 @@ class PostController extends Controller
             'images.*' => 'image|max:26214400',
             'video' => 'mimes:mp4,ogx,oga,ogv,ogg,webm',
         ]);
+    }
+
+    /**
+     * Get Posts
+     * @return view
+     */
+    public function get(Request $request)
+    {
+        // Vendor / User?
+        if (Auth::guest() && Auth::guard('user')->guest()) {
+            $posts = Post::orderBy('created_at', 'desc')->take(15)->get();
+
+            return view('components.posts', ['posts' => $posts]);
+        } else {
+            // Get logged in vendor or user
+            $logged_in = $request->user() ?? $request->user('user');
+
+            // Get Posts according to area
+            $posts = Post::whereHas('vendor', function (Builder $query) use ($logged_in) {
+                $query->where('area_id', $logged_in->area_id);
+            })->orderBy('created_at', 'desc')->take(15)->get();
+
+            return view('components.posts', ['posts' => $posts]);
+        }
     }
 }

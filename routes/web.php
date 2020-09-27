@@ -81,10 +81,13 @@ Route::group(['prefix' => 'user'], function () {
 
 // POST ROUTES
 Route::group(['prefix' => 'post'], function () {
+    // Get Posts
+    Route::get('get', 'PostController@get');
+
     // *** Protected ***
     Route::group(['middleware' => ['auth']], function () {
         // Create Post
-        Route::post('create', 'PostController@post');
+        Route::post('create', 'PostController@create');
     });
 });
 // -------------
