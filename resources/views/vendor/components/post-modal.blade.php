@@ -93,6 +93,7 @@
   <canvas id="canvas" class="d-none"></canvas>
 </div>
 
+@push('scripts')
 <script>
   let images = {};
   let video = {};
@@ -373,3 +374,4 @@
     }
   }
 </script>
+@endpush

@@ -14,7 +14,7 @@ function format_time($time) {
     $res = (int)($t_diff/60)."m ago";
   }
   elseif($t_diff >= 3600 && $t_diff < 86399) {
-    $res = (int)($t_diff/7200)."h ago";
+    $res = (int)($t_diff/3600)."h ago";
   }
   elseif($t_diff >= 86400 && $t_diff < 604799) {
     $res = (int)($t_diff/86400)."d ago";
@@ -77,9 +77,10 @@ function format_time($time) {
     @endforeach
   </div>
 
+  {{-- Actions --}}
   <div class="p-3 border-bottom osahan-post-footer">
-    <a href="#" class="mr-3 text-secondary" title="Like"><i class="la la-heart la-2x text-danger"></i> 16</a>
-    <a href="#" class="mr-3 text-secondary" title="Comment"><i class="la la-comment la-2x"></i> 8</a>
+    <a href="#" class="mr-3 text-secondary" title="Like"><i class="la la-heart-o la-2x text-danger" onclick="likePost('{{ $post->id }}', this)"></i> {{ $post->likes }}</a>
+    <a href="#" class="mr-3 text-secondary" title="Comment"><i class="la la-comment la-2x"></i> {{ $post->comments }}</a>
     <a href="#" class="mr-3 text-secondary" title="Share"><i class="la la-share la-2x"></i></a>
     <a href="#" class="btn btn-outline-danger btn-sm" style="float: right" title="Save"><i class="la la-bookmark"></i>
       Save Post</a>

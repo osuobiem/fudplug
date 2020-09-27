@@ -3,6 +3,10 @@
     --i-primary-h: #e44e3a6b;
 }
 
+body {
+    height: 100vh !important;
+}
+
 /* The switch - the box around the slider */
 .switch {
     position: relative;
@@ -312,11 +316,16 @@ a:visited {
     width: 29px;
 }
 
+#main-content {
+    margin-top: 60px;
+}
+
 @media(min-width: 1024px) {
     .side-section {
         position: fixed;
         height: 100%;
         overflow-y: auto;
+        margin-top: 60px;
     }
 
     .side-section-l {
@@ -335,7 +344,6 @@ a:visited {
     }
 
     .main-section {
-        margin-top: 60px;
         justify-content: center;
     }
 
@@ -372,10 +380,6 @@ a:visited {
         top: 0;
         width: 100%;
         z-index: 1000;
-    }
-
-    #main-content {
-        margin-top: 60px;
     }
 }
 
@@ -505,10 +509,6 @@ a:visited {
         top: 0;
         width: 100%;
         z-index: 1000;
-    }
-
-    #main-content {
-        margin-top: 60px;
     }
 }
 
@@ -1033,6 +1033,11 @@ a:visited {
     border: solid #dee2e6 1px;
 }
 
+.vid-bod:focus {
+    outline: unset !important;
+    border: solid 1.5px var(--i-primary);
+}
+
 @media (min-width: 768px) {
     .play-btn {
         margin-top: 16.5%;
@@ -1085,4 +1090,8 @@ a:visited {
     animation-iteration-count: infinite;
     animation-timing-function: ease-in-out;
     border-radius: 5px;
+}
+
+.uk-lightbox {
+    background: #000000de !important;
 }

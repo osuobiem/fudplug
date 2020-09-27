@@ -14,7 +14,9 @@
     </div>
   </div>
 </div>
+@endsection
 
+@push('scripts')
 <script>
   $(document).ready(function () {
     loadPosts()
@@ -85,4 +87,4 @@
   }
 </script>
 
-@endsection
+@endpush
