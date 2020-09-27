@@ -83,11 +83,6 @@
     $('.vid-bod').trigger('pause')
     $('#' + id).addClass('vid-bod');
   }
-
-  // Open Image Lightbox
-  function launchLight(a) {
-    document.getElementById('light-' + a).click()
-  }
 </script>
 
 @endsection

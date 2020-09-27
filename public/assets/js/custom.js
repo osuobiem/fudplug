@@ -60,9 +60,9 @@ function showAlert(status, message) {
 function goGet(url) {
     return new Promise((resolve, reject) => {
         $.ajax({
-                type: "GET",
-                url,
-            })
+            type: "GET",
+            url,
+        })
             .then((res) => {
                 resolve(res);
             })
@@ -110,7 +110,8 @@ function handleFormRes(res, form = false, prefix = false, modalAlert = false) {
             errors = res.message;
 
             if (typeof errors === "object") {
-                if (modalAlert) { //If modal alert is to be used
+                if (modalAlert) {
+                    //If modal alert is to be used
                     let errArr = [];
                     for (const [key, value] of Object.entries(errors)) {
                         [...value].forEach((m) => {
@@ -118,7 +119,7 @@ function handleFormRes(res, form = false, prefix = false, modalAlert = false) {
                         });
                     }
                     let uniqueChars = [...new Set(errArr)];
-                    e = document.getElementById(modalAlert)
+                    e = document.getElementById(modalAlert);
                     e.innerHTML = "<ul>";
                     uniqueChars.forEach((m) => {
                         e.innerHTML += `<li>${m}</li>`;
@@ -126,12 +127,16 @@ function handleFormRes(res, form = false, prefix = false, modalAlert = false) {
                     e.innerHTML += "</ul>";
 
                     // Show error modal after filling it with data
-                    $('#' + modalAlert).parent().parent().parent().modal('show');
+                    $("#" + modalAlert)
+                        .parent()
+                        .parent()
+                        .parent()
+                        .modal("show");
                 } else {
                     for (const [key, value] of Object.entries(errors)) {
-                        e = prefix ?
-                            document.getElementById(prefix + "-" + key) :
-                            document.getElementById(key);
+                        e = prefix
+                            ? document.getElementById(prefix + "-" + key)
+                            : document.getElementById(key);
                         e.innerHTML = "";
                         [...value].forEach((m) => {
                             e.innerHTML += `<p>${m}</p>`;
@@ -171,9 +176,8 @@ function spin(id) {
     $(`#${id}-spinner`).toggle();
 
     btnDis
-        ?
-        $(`#${id}-btn`).attr("disabled", true) :
-        $(`#${id}-btn`).removeAttr("disabled");
+        ? $(`#${id}-btn`).attr("disabled", true)
+        : $(`#${id}-btn`).removeAttr("disabled");
 }
 
 // Turn off Form Errors
@@ -212,6 +216,16 @@ $(".custom-file-input").on("change", function () {
 });
 
 // Hide Error Modal OnClick
-$('#error-modal').on('click', function () {
-    $(this).modal('hide');
+$("#error-modal").on("click", function () {
+    $(this).modal("hide");
 });
+
+// Goto a apecified page
+function gotoP(page) {
+    location.href = page;
+}
+
+// Open Image Lightbox
+function launchLight(a) {
+    document.getElementById("light-" + a).click();
+}
