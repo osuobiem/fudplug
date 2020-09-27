@@ -380,19 +380,15 @@ class VendorController extends Controller
             //Validate Input
             $validator = $this->dish_add_rules($request);
 
+            //return response()->json(['success' => true, 'message' => $request->all()], 200);die;
+
             if ($validator->fails()) {
                 return response()->json(['success' => false, 'message' => $validator->errors('image')->messages()], 200);
             } else {
-                foreach ($request->title as $key => $value) {
-                    $data = [
-                        'title' => $value,
-                        'quantity' => json_encode(['bulk' => $this->bulk_qty_json($request, $key), 'regular' => $this->regular_qty_json($request, $key)]),
-                        'image' => $this->dish_img_upload($request, $key) ? $this->dish_img_upload($request, $key) : null,
-                        'status' => "active",
-                    ];
-                    $item = new Item($data);
-                    $vendor = Vendor::find(Auth::user()->id);
-                    $vendor->item()->save($item);
+                if ($request->form_type == "simple") {
+                    $this->simple_put($request);
+                } else {
+                    $this->advanced_put($request);
                 }
                 return response()->json(['success' => true, 'message' => "Your dish was successfully uploaded."], 200);
             }
@@ -400,6 +396,44 @@ class VendorController extends Controller
             //throw $th;
             Log::error($th);
             return response()->json(['success' => false, 'message' => $th->getMessage()], 500);
+        }
+    }
+
+    /**
+     * Process Vendor Simple Dish Upload
+     * @return string
+     */
+    public function simple_put($request)
+    {
+        foreach ($request->title as $key => $value) {
+            $data = [
+                'title' => $value,
+                'quantity' => json_encode(['price' => $request->price[$key], 'quantity' => $request->quantity[$key]]),
+                'image' => $this->dish_img_upload($request, $key) ? $this->dish_img_upload($request, $key) : null,
+                'type' => "simple",
+            ];
+            $item = new Item($data);
+            $vendor = Vendor::find(Auth::user()->id);
+            $vendor->item()->save($item);
+        }
+    }
+
+    /**
+     * Process Vendor Advanced Dish Upload
+     * @return string
+     */
+    public function advanced_put($request)
+    {
+        foreach ($request->title as $key => $value) {
+            $data = [
+                'title' => $value,
+                'quantity' => json_encode(['bulk' => $this->bulk_qty_json($request, $key), 'regular' => $this->regular_qty_json($request, $key)]),
+                'image' => $this->dish_img_upload($request, $key) ? $this->dish_img_upload($request, $key) : null,
+                'type' => "advanced",
+            ];
+            $item = new Item($data);
+            $vendor = Vendor::find(Auth::user()->id);
+            $vendor->item()->save($item);
         }
     }
 

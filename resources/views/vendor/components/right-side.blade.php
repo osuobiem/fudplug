@@ -114,6 +114,7 @@
         </div>
         <div class="tab-pane fade" id="dish" role="tabpanel" aria-labelledby="home-tab">
             <div class="box-body p-3 overflow-auto" style="height: 300px;">
+                @if(!empty($dishes))
                 @foreach($dishes as $dish)
                 <div class="d-flex align-items-center osahan-post-header mb-3 people-list">
                     <div class="dropdown-list-image mr-3">
@@ -138,6 +139,12 @@
                     </span>
                 </div>
                 @endforeach
+                @else
+                <div class="bg-light text-center" style="height:inherit; padding-top: 7rem;">
+                    <i class="las la-info" style="font-size:xx-large;"></i><br>
+                    <small>Empty Content</small>
+                </div>
+                @endif
             </div>
             <div class="box-footer p-2 border-top">
                 <button type="button" class="btn btn-primary btn-block" data-toggle="modal"

@@ -314,6 +314,19 @@ body::-webkit-scrollbar-thumb {
     border-radius: 6px;
 }
 
+.generic-scrollbar::-webkit-scrollbar {
+    width: 5px;
+}
+
+.generic-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.generic-scrollbar::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.219);
+    border-radius: 6px;
+}
+
 .bright-ic {
     color: #000 !important;
 }

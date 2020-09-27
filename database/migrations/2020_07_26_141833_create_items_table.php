@@ -20,7 +20,7 @@ class CreateItemsTable extends Migration
             $table->json('quantity');
             $table->string('image');
             $table->foreignId('vendor_id')->constrained()->onDelete('cascade')->onUpdate('no action');
-            $table->enum('status', ['active', 'inactive']);
+            $table->enum('type', ['simple', 'advanced']);
             $table->softDeletes();
             $table->timestamps();
         });

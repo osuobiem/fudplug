@@ -141,12 +141,13 @@
 
     {{-- Additional Scripts--}}
     @stack('scripts')
-
     <!-- jQuery Steps Plugin -->
     <script src="{{ url('assets/js/jquery-steps-master/build/jquery.steps.js') }}"></script>
     <script src="{{ url('assets/js/uikit.min.js') }}"></script>
     <script src="{{ url('assets/js/uikit-icons.min.js') }}"></script>
 
+    {{-- Check for session availablity --}}
+    @if(!Auth::guest())
     <script>
         $(document).ready(function () {
             spin('right-side')
@@ -170,6 +171,8 @@
         });
 
     </script>
+    @else
+    @endif
 </body>
 
 </html
