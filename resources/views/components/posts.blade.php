@@ -77,9 +77,22 @@ function format_time($time) {
     @endforeach
   </div>
 
+  @php 
+  $is_liker = false;
+
+  if(!Auth::guest() || !Auth::guard('user')->guest()) {
+    $liker_type = Auth::guest() ? 'user' : 'vendor';
+    $liker = Auth::guest() ? Auth::guard('user')->user() : Auth::user();
+
+    $is_liker = $post->like()->where('liker_id', $liker->id)->where('liker_type', $liker_type)->count();
+
+    $is_liker = $is_liker > 0 ? true : false;
+  }
+  @endphp
+
   {{-- Actions --}}
   <div class="p-3 border-bottom osahan-post-footer">
-    <a href="#" class="mr-3 text-secondary" title="Like"><i class="la la-heart-o la-2x text-danger" onclick="likePost('{{ $post->id }}', this)"></i> {{ $post->likes }}</a>
+    <a class="mr-3 text-secondary" title="Like"><i class="la {{ $is_liker ? 'la-heart' : 'la-heart-o'}} la-2x text-danger" like-count="{{ $post->likes }}" onclick="likePost('{{ $post->id }}', this)"></i><span>&nbsp;{{ $post->likes }}</span></a>
     <a href="#" class="mr-3 text-secondary" title="Comment"><i class="la la-comment la-2x"></i> {{ $post->comments }}</a>
     <a href="#" class="mr-3 text-secondary" title="Share"><i class="la la-share la-2x"></i></a>
     <a href="#" class="btn btn-outline-danger btn-sm" style="float: right" title="Save"><i class="la la-bookmark"></i>

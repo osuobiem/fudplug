@@ -147,6 +147,70 @@
     <script src="{{ url('assets/js/uikit-icons.min.js') }}"></script>
 
     {{-- Check for session availablity --}}
+    @if(!Auth::guest() || !Auth::guard('user')->guest())
+    <script>
+        // Like/Unlike a post
+        function likePost(post_id, likon) {
+            likeCount = parseInt($(likon).attr('like-count'))
+
+            doLike(likeCount, likon, post_id, true)
+
+            url = `{{ url('post/like') }}/${post_id}`;
+
+            goGet(url)
+            .then(res => {
+                !res.success ? doUnlike(likeCount, likon, post_id) : null;
+            })
+            .catch(err => {
+                doUnlike(likeCount, likon, post_id)
+            })
+        }
+
+        // Unlike a Post
+        function unlikePost(post_id, likon) {
+            likeCount = parseInt($(likon).attr('like-count'))
+
+            doUnlike(likeCount, likon, post_id, true)
+
+            url = `{{ url('post/unlike/') }}${post_id}`;
+
+            goGet(url)
+            .then(res => {
+                !res.success ? doLike(likeCount, likon, post_id) : null;
+            })
+            .catch(err => {
+                doLike(likeCount, likon, post_id)
+            })
+        }
+
+        // Like
+        function doLike(likeCount, likon, post_id, change = false) {
+            $(likon).removeClass('la-heart-o');
+            $(likon).addClass('la-heart');
+            $(likon).attr('onclick', `unlikePost('${post_id}', this)`)
+
+            if(change) {
+                likeCount += 1
+            }
+
+            $(likon).attr('like-count', likeCount)
+            $($(likon).siblings()[0]).text(' '+likeCount)
+        }
+
+        // Unlike
+        function doUnlike(likeCount, likon, post_id, change = false) {
+            $(likon).removeClass('la-heart');
+            $(likon).addClass('la-heart-o');
+            $(likon).attr('onclick', `likePost('${post_id}', this)`);
+
+            if(change) {
+                likeCount = likeCount == 0 ? 0 : likeCount - 1
+            }
+
+            $(likon).attr('like-count', likeCount)
+            $($(likon).siblings()[0]).text(' '+likeCount)
+        }
+    </script>
     @if(!Auth::guest())
     <script>
         $(document).ready(function () {
@@ -171,7 +235,13 @@
         });
 
     </script>
+    @endif
     @else
+    <script>
+    function likePost(post_id, likon) {
+        $('#login-btn-top').click();
+    }
+    </script>
     @endif
 </body>
 

@@ -3,10 +3,6 @@
     --i-primary-h: #e44e3a6b;
 }
 
-body {
-    height: 100vh !important;
-}
-
 /* The switch - the box around the slider */
 .switch {
     position: relative;
