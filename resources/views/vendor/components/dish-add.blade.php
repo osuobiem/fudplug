@@ -11,6 +11,8 @@
             <div class="modal-body">
                 <form id="add-dish" enctype="multipart/form-data">
                     @csrf
+                    <!-- Form Type Input -->
+                    <input type="hidden" name="form-type" value="simple">
                     <!-- Info alert box -->
                     <div class="alert alert-info alert-dismissible fade show" role="alert">
                         <h4 class="alert-heading"><i class="las la-info"></i> Notice!</h4>
@@ -28,351 +30,581 @@
 
                     @include('vendor.components.error-modal')
 
-                    <div id="myRepeatingFields">
-                        <div class="row border rounded pt-2 mt-2 shadow-sm mb-2 bg-white">
-                            <div class="col text-center mb-2 d-block d-sm-none">
-                                <div class="btn btn-secondary btn-md" style="border-top-left-radius: 2.25rem;
-                                border-top-right-radius: 2.25rem;
-                                border-bottom-right-radius: 2.25rem;
-                                border-bottom-left-radius: 2.25rem;">1</div>
-                            </div>
+                    <div class="box shadow-sm border rounded bg-white mb-3">
+                        <ul class="nav nav-tabs border-bottom box-title d-flex justify-content-center osahan-line-tab"
+                            id="myTab" role="tablist">
+                            <li class="nav-item col-6">
+                                <a class="nav-link text-center active" id="profile-tab" data-toggle="tab" href="#simple"
+                                    role="tab" aria-controls="profile" aria-selected="false">Simple</a>
+                                <!-- <h6 class="m-0">Dishes</h6> -->
+                            </li>
+                            <li class="nav-item border-left col-6">
+                                <a class="nav-link text-center" id="home-tab" data-toggle="tab" href="#complex"
+                                    role="tab" aria-controls="home" aria-selected="true">Complex</a>
+                            </li>
+                        </ul>
+                        <div class="tab-content" id="myTabContent">
+                            <div class="tab-pane fade active show container" id="simple" role="tabpanel"
+                                aria-labelledby="profile-tab">
+                                <div class="row border rounded pt-2 mt-2 shadow-sm mb-2 bg-white">
+                                    <div class="col text-center mb-2 d-block d-sm-none">
+                                        <div class="btn btn-secondary btn-md" style="border-top-left-radius: 2.25rem;
+                                            border-top-right-radius: 2.25rem;
+                                            border-bottom-right-radius: 2.25rem;
+                                            border-bottom-left-radius: 2.25rem;">1</div>
+                                    </div>
 
-                            <div class="col-sm-6 col-xs-6 mb-2">
-                                <input class="form-control" name="title[]" type="text" placeholder="Name of dish" />
-                            </div>
-                            <div class="col-sm-6 col-xs-6 mb-2">
-                                <div class="custom-file">
-                                    <input type="file" class="custom-file-input" name="image[]">
-                                    <label class="custom-file-label" for="customFile">choose image</label>
-                                </div>
-                                <small class="text-danger error-message" id="image.0"></small>
-                            </div>
-
-                            <div class="col-sm-6 border text-center pt-3 pb-3">
-                                <label class="text-center"> Regular Quantity </label>
-                                <div>
-                                    <div class="mb-2 form-inline">
-                                        <input class="form-control rounded-right-0 col-sm-4" name="regular_title_one[]"
-                                            type="text" placeholder="Title" />
-                                        <input class="form-control col-sm-3 rounded-0" name="regular_price_one[]"
-                                            type="number" placeholder="Price" />
-                                        <input class="form-control rounded-left-0 col-sm-3"
-                                            name="regular_quantity_one[]" type="number"
-                                            placeholder="Quantity Available" />
-                                        <div class="col-sm-2">
-                                            <button type="button" onclick="toggleRegularFields(this)"
-                                                class="btn btn-success btn-sm qty-btn-add-1" style="float: right;">
-                                                <span class="las la-plus" aria-hidden="true"></span>
-                                            </button>
+                                    <div class="col-sm-6 col-xs-6 mb-2">
+                                        <input class="form-control" name="title[]" type="text"
+                                            placeholder="Name of dish" />
+                                    </div>
+                                    <div class="col-sm-6 col-xs-6 mb-2">
+                                        <div class="custom-file">
+                                            <input type="file" class="custom-file-input" name="image[]">
+                                            <label class="custom-file-label" for="customFile">choose image</label>
                                         </div>
+                                        <small class="text-danger error-message" id="image.0"></small>
+                                    </div>
+                                    <div class="col-sm-6 col-xs-6 mb-2">
+                                        <input class="form-control" name="price[]" type="number" placeholder="Price" />
+                                    </div>
+                                    <div class="col-sm-6 col-xs-6 mb-2">
+                                        <input class="form-control" name="Quantity[]" type="number"
+                                            placeholder="Quantity" />
+                                    </div>
+
+                                    <div class="input-group-btn col-sm-12 my-2">
+                                        <button type="button" onclick="toggleMain(this)"
+                                            class="btn btn-success btn-lg btn-add first">
+                                            <span class="las la-plus" aria-hidden="true"></span>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div class="row border rounded pt-2 mt-2 shadow-sm mb-2 bg-white d-none">
+                                    <div class="col text-center mb-2 d-block d-sm-none">
+                                        <div class="btn btn-secondary btn-md" style="border-top-left-radius: 2.25rem;
+                                            border-top-right-radius: 2.25rem;
+                                            border-bottom-right-radius: 2.25rem;
+                                            border-bottom-left-radius: 2.25rem;">2</div>
+                                    </div>
+                                    <div class="col-sm-6 mb-2">
+                                        <input class="form-control" name="title[]" type="text"
+                                            placeholder="Name of dish" disabled />
+                                    </div>
+                                    <div class="col-sm-6 mb-2">
+                                        <div class="custom-file">
+                                            <input type="file" class="custom-file-input" name="image[]" accept="image/*"
+                                                disabled>
+                                            <label class="custom-file-label" for="customFile">choose image</label>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-6 col-xs-6 mb-2">
+                                        <input class="form-control" name="price[]" type="number" placeholder="Price" />
+                                    </div>
+                                    <div class="col-sm-6 col-xs-6 mb-2">
+                                        <input class="form-control" name="Quantity[]" type="number"
+                                            placeholder="Quantity" />
+                                    </div>
+
+                                    <div class="input-group-btn col-sm-12 my-2">
+                                        <button type="button" onclick="toggleMain(this)"
+                                            class="btn btn-success btn-lg btn-add first">
+                                            <span class="las la-plus" aria-hidden="true"></span>
+                                        </button>
+                                        <button type="button" onclick='toggleMain(this, false)'
+                                            class="btn btn-danger btn-lg btn-remove first">
+                                            <span class="las la-minus" aria-hidden="true"></span>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div class="row border rounded pt-2 mt-2 shadow-sm mb-2 bg-white d-none">
+                                    <div class="col text-center mb-2 d-block d-sm-none">
+                                        <div class="btn btn-secondary btn-md" style="border-top-left-radius: 2.25rem;
+                                            border-top-right-radius: 2.25rem;
+                                            border-bottom-right-radius: 2.25rem;
+                                            border-bottom-left-radius: 2.25rem;">3</div>
+                                    </div>
+                                    <div class="col-sm-6 mb-2">
+                                        <input class="form-control" name="title[]" type="text"
+                                            placeholder="Name of dish" disabled />
+                                    </div>
+                                    <div class="col-sm-6 mb-2">
+                                        <div class="custom-file">
+                                            <input type="file" class="custom-file-input" name="image[]" accept="image/*"
+                                                disabled>
+                                            <label class="custom-file-label" for="customFile">choose image</label>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-6 col-xs-6 mb-2">
+                                        <input class="form-control" name="price[]" type="number" placeholder="Price" />
+                                    </div>
+                                    <div class="col-sm-6 col-xs-6 mb-2">
+                                        <input class="form-control" name="Quantity[]" type="number"
+                                            placeholder="Quantity" />
+                                    </div>
+
+                                    <div class="input-group-btn col-sm-12 my-2">
+                                        <button type="button" onclick="toggleMain(this)"
+                                            class="btn btn-success btn-lg btn-add first">
+                                            <span class="las la-plus" aria-hidden="true"></span>
+                                        </button>
+                                        <button type="button" onclick='toggleMain(this, false)'
+                                            class="btn btn-danger btn-lg btn-remove first">
+                                            <span class="las la-minus" aria-hidden="true"></span>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div class="row border rounded pt-2 mt-2 shadow-sm mb-2 bg-white d-none">
+                                    <div class="col text-center mb-2 d-block d-sm-none">
+                                        <div class="btn btn-secondary btn-md" style="border-top-left-radius: 2.25rem;
+                                            border-top-right-radius: 2.25rem;
+                                            border-bottom-right-radius: 2.25rem;
+                                            border-bottom-left-radius: 2.25rem;">4</div>
+                                    </div>
+                                    <div class="col-sm-6 mb-2">
+                                        <input class="form-control" name="title[]" type="text"
+                                            placeholder="Name of dish" disabled />
+                                    </div>
+                                    <div class="col-sm-6 mb-2">
+                                        <div class="custom-file">
+                                            <input type="file" class="custom-file-input" name="image[]" accept="image/*"
+                                                disabled>
+                                            <label class="custom-file-label" for="customFile">choose image</label>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-6 col-xs-6 mb-2">
+                                        <input class="form-control" name="price[]" type="number" placeholder="Price" />
+                                    </div>
+                                    <div class="col-sm-6 col-xs-6 mb-2">
+                                        <input class="form-control" name="Quantity[]" type="number"
+                                            placeholder="Quantity" />
+                                    </div>
+
+                                    <div class="input-group-btn col-sm-12 my-2">
+                                        <button type="button" onclick="toggleMain(this)"
+                                            class="btn btn-success btn-lg btn-add first">
+                                            <span class="las la-plus" aria-hidden="true"></span>
+                                        </button>
+                                        <button type="button" onclick='toggleMain(this, false)'
+                                            class="btn btn-danger btn-lg btn-remove first">
+                                            <span class="las la-minus" aria-hidden="true"></span>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div class="row border rounded pt-2 mt-2 shadow-sm mb-2 bg-white d-none">
+                                    <div class="col text-center mb-2 d-block d-sm-none">
+                                        <div class="btn btn-secondary btn-md" style="border-top-left-radius: 2.25rem;
+                                            border-top-right-radius: 2.25rem;
+                                            border-bottom-right-radius: 2.25rem;
+                                            border-bottom-left-radius: 2.25rem;">5</div>
+                                    </div>
+                                    <div class="col-sm-6 mb-2">
+                                        <input class="form-control" name="title[]" type="text"
+                                            placeholder="Name of dish" disabled />
+                                    </div>
+                                    <div class="col-sm-6 mb-2">
+                                        <div class="custom-file">
+                                            <input type="file" class="custom-file-input" name="image[]" accept="image/*"
+                                                disabled>
+                                            <label class="custom-file-label" for="customFile">choose image</label>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-6 col-xs-6 mb-2">
+                                        <input class="form-control" name="price[]" type="number" placeholder="Price" />
+                                    </div>
+                                    <div class="col-sm-6 col-xs-6 mb-2">
+                                        <input class="form-control" name="Quantity[]" type="number"
+                                            placeholder="Quantity" />
+                                    </div>
+
+                                    <div class="input-group-btn col-sm-12 my-2">
+                                        <button type="button" onclick='toggleMain(this, false)'
+                                            class="btn btn-danger btn-lg btn-remove first">
+                                            <span class="las la-minus" aria-hidden="true"></span>
+                                        </button>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-sm-6 border text-center pt-3 pb-3">
-                                <label class="text-center"> Bulk Quantity </label>
-                                <div>
-                                    <div class="bulk-entry-1 mb-2 form-inline">
-                                        <input class="form-control col-sm-5 rounded-right-0" name="bulk_title_one[]"
-                                            type="text" placeholder="Title" />
-                                        <input class="form-control col-sm-5 rounded-left-0" name="bulk_price_one[]"
-                                            type="number" placeholder="Price" />
-                                        <div class="col-sm-2">
-                                            <button type="button" onclick="toggleBulkFields(this)"
-                                                class="btn btn-success btn-sm bulk-btn-add-1" style="float: right;">
-                                                <span class="las la-plus" aria-hidden="true"></span>
-                                            </button>
-                                        </div>
-                                        <!-- <input class="form-control col-sm-4" name="fields[]" type="text"
-                                        placeholder="Quantity Available" /> -->
+                            <div class="tab-pane fade container" id="complex" role="tabpanel"
+                                aria-labelledby="home-tab">
+                                <div class="row border rounded pt-2 mt-2 shadow-sm mb-2 bg-white">
+                                    <div class="col text-center mb-2 d-block d-sm-none">
+                                        <div class="btn btn-secondary btn-md" style="border-top-left-radius: 2.25rem;
+                                            border-top-right-radius: 2.25rem;
+                                            border-bottom-right-radius: 2.25rem;
+                                            border-bottom-left-radius: 2.25rem;">1</div>
                                     </div>
-                                </div>
-                            </div>
 
-                            <div class="input-group-btn col-sm-12 my-2">
-                                <button type="button" onclick="toggleMain(this)"
-                                    class="btn btn-success btn-lg btn-add first">
-                                    <span class="las la-plus" aria-hidden="true"></span>
-                                </button>
-                            </div>
-                        </div>
+                                    <div class="col-sm-6 col-xs-6 mb-2">
+                                        <input class="form-control" name="title[]" type="text"
+                                            placeholder="Name of dish" />
+                                    </div>
+                                    <div class="col-sm-6 col-xs-6 mb-2">
+                                        <div class="custom-file">
+                                            <input type="file" class="custom-file-input" name="image[]">
+                                            <label class="custom-file-label" for="customFile">choose image</label>
+                                        </div>
+                                        <small class="text-danger error-message" id="image.0"></small>
+                                    </div>
 
-                        <div class="row border rounded pt-2 mt-2 shadow-sm mb-2 bg-white d-none">
-                            <div class="col text-center mb-2 d-block d-sm-none">
-                                <div class="btn btn-secondary btn-md" style="border-top-left-radius: 2.25rem;
-                                border-top-right-radius: 2.25rem;
-                                border-bottom-right-radius: 2.25rem;
-                                border-bottom-left-radius: 2.25rem;">2</div>
-                            </div>
-                            <div class="col-sm-6 mb-2">
-                                <input class="form-control" name="title[]" type="text" placeholder="Name of dish"
-                                    disabled />
-                            </div>
-                            <div class="col-sm-6 mb-2">
-                                <div class="custom-file">
-                                    <input type="file" class="custom-file-input" name="image[]" accept="image/*"
-                                        disabled>
-                                    <label class="custom-file-label" for="customFile">choose image</label>
-                                </div>
-                            </div>
-
-                            <div class="col-sm-6 border text-center">
-                                <label class="text-center"> Regular Quantity </label>
-                                <div>
-                                    <div class="mb-2 form-inline">
-                                        <input class="form-control rounded-right-0 col-sm-4" name="regular_title_two[]"
-                                            type="text" placeholder="Title" disabled />
-                                        <input class="form-control col-sm-3 rounded-0" name="regular_price_two[]"
-                                            type="number" placeholder="Price" disabled />
-                                        <input class="form-control rounded-left-0 col-sm-3"
-                                            name="regular_quantity_two[]" disabled type="number"
-                                            placeholder="Quantity Available" />
-                                        <div class="col-sm-2">
-                                            <button type="button" onclick="toggleRegularFields(this)"
-                                                class="btn btn-success btn-sm qty-btn-add-1" style="float: right;">
-                                                <span class="las la-plus" aria-hidden="true"></span>
-                                            </button>
+                                    <div class="col-sm-6 border text-center pt-3 pb-3">
+                                        <label class="text-center"> Regular Quantity </label>
+                                        <div>
+                                            <div class="mb-2 form-inline">
+                                                <input class="form-control rounded-right-0 col-sm-4"
+                                                    name="regular_title_one[]" type="text" placeholder="Title" />
+                                                <input class="form-control col-sm-3 rounded-0"
+                                                    name="regular_price_one[]" type="number" placeholder="Price" />
+                                                <input class="form-control rounded-left-0 col-sm-3"
+                                                    name="regular_quantity_one[]" type="number"
+                                                    placeholder="Quantity Available" />
+                                                <div class="col-sm-2">
+                                                    <button type="button" onclick="toggleRegularFields(this)"
+                                                        class="btn btn-success btn-sm qty-btn-add-1"
+                                                        style="float: right;">
+                                                        <span class="las la-plus" aria-hidden="true"></span>
+                                                    </button>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            </div>
-                            <div class="col-sm-6 border text-center">
-                                <label class="text-center"> Bulk Quantity </label>
-                                <div>
-                                    <div class="bulk-entry-1 mb-2 form-inline">
-                                        <input class="form-control col-sm-5 rounded-right-0" name="bulk_title_two[]"
-                                            type="text" placeholder="Title" disabled />
-                                        <input class="form-control col-sm-5 rounded-left-0" name="bulk_price_two[]"
-                                            type="number" placeholder="Price" disabled />
-                                        <div class="col-sm-2">
-                                            <button type="button" onclick="toggleBulkFields(this)"
-                                                class="btn btn-success btn-sm bulk-btn-add-1" style="float: right;">
-                                                <span class="las la-plus" aria-hidden="true"></span>
-                                            </button>
-                                        </div>
-                                        <!-- <input class="form-control col-sm-4" name="fields[]" type="text"
-                                        placeholder="Quantity Available" /> -->
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="input-group-btn col-sm-12 my-2">
-                                <button type="button" onclick="toggleMain(this)"
-                                    class="btn btn-success btn-lg btn-add first">
-                                    <span class="las la-plus" aria-hidden="true"></span>
-                                </button>
-                                <button type="button" onclick='toggleMain(this, false)'
-                                    class="btn btn-danger btn-lg btn-remove first">
-                                    <span class="las la-minus" aria-hidden="true"></span>
-                                </button>
-                            </div>
-                        </div>
-
-                        <div class="row border rounded pt-2 mt-2 shadow-sm mb-2 bg-white d-none">
-                            <div class="col text-center mb-2 d-block d-sm-none">
-                                <div class="btn btn-secondary btn-md" style="border-top-left-radius: 2.25rem;
-                                border-top-right-radius: 2.25rem;
-                                border-bottom-right-radius: 2.25rem;
-                                border-bottom-left-radius: 2.25rem;">3</div>
-                            </div>
-                            <div class="col-sm-6 mb-2">
-                                <input class="form-control" name="title[]" type="text" placeholder="Name of dish"
-                                    disabled />
-                            </div>
-                            <div class="col-sm-6 mb-2">
-                                <div class="custom-file">
-                                    <input type="file" class="custom-file-input" name="image[]" accept="image/*"
-                                        disabled>
-                                    <label class="custom-file-label" for="customFile">choose image</label>
-                                </div>
-                            </div>
-
-                            <div class="col-sm-6 border text-center">
-                                <label class="text-center"> Regular Quantity </label>
-                                <div>
-                                    <div class="mb-2 form-inline">
-                                        <input class="form-control rounded-right-0 col-sm-4"
-                                            name="regular_title_three[]" type="text" placeholder="Title" disabled />
-                                        <input class="form-control col-sm-3 rounded-0" name="regular_price_three[]"
-                                            type="number" placeholder="Price" disabled />
-                                        <input class="form-control rounded-left-0 col-sm-3"
-                                            name="regular_quantity_three[]" type="number"
-                                            placeholder="Quantity Available" disabled />
-                                        <div class="col-sm-2">
-                                            <button type="button" onclick="toggleRegularFields(this)"
-                                                class="btn btn-success btn-sm qty-btn-add-1" style="float: right;">
-                                                <span class="las la-plus" aria-hidden="true"></span>
-                                            </button>
+                                    <div class="col-sm-6 border text-center pt-3 pb-3">
+                                        <label class="text-center"> Bulk Quantity </label>
+                                        <div>
+                                            <div class="bulk-entry-1 mb-2 form-inline">
+                                                <input class="form-control col-sm-5 rounded-right-0"
+                                                    name="bulk_title_one[]" type="text" placeholder="Title" />
+                                                <input class="form-control col-sm-5 rounded-left-0"
+                                                    name="bulk_price_one[]" type="number" placeholder="Price" />
+                                                <div class="col-sm-2">
+                                                    <button type="button" onclick="toggleBulkFields(this)"
+                                                        class="btn btn-success btn-sm bulk-btn-add-1"
+                                                        style="float: right;">
+                                                        <span class="las la-plus" aria-hidden="true"></span>
+                                                    </button>
+                                                </div>
+                                                <!-- <input class="form-control col-sm-4" name="fields[]" type="text"
+                                                    placeholder="Quantity Available" /> -->
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            </div>
-                            <div class="col-sm-6 border text-center">
-                                <label class="text-center"> Bulk Quantity </label>
-                                <div>
-                                    <div class="bulk-entry-1 mb-2 form-inline">
-                                        <input class="form-control col-sm-5 rounded-right-0" name="bulk_title_three[]"
-                                            type="text" placeholder="Title" disabled />
-                                        <input class="form-control col-sm-5 rounded-left-0" name="bulk_price_three[]"
-                                            type="number" placeholder="Price" disabled />
-                                        <div class="col-sm-2">
-                                            <button type="button" onclick="toggleBulkFields(this)"
-                                                class="btn btn-success btn-sm bulk-btn-add-1" style="float: right;">
-                                                <span class="las la-plus" aria-hidden="true"></span>
-                                            </button>
-                                        </div>
-                                        <!-- <input class="form-control col-sm-4" name="fields[]" type="text"
-                                        placeholder="Quantity Available" /> -->
+
+                                    <div class="input-group-btn col-sm-12 my-2">
+                                        <button type="button" onclick="toggleMain(this)"
+                                            class="btn btn-success btn-lg btn-add first">
+                                            <span class="las la-plus" aria-hidden="true"></span>
+                                        </button>
                                     </div>
                                 </div>
-                            </div>
 
-                            <div class="input-group-btn col-sm-12 my-2">
-                                <button type="button" onclick="toggleMain(this)"
-                                    class="btn btn-success btn-lg btn-add first">
-                                    <span class="las la-plus" aria-hidden="true"></span>
-                                </button>
-                                <button type="button" onclick='toggleMain(this, false)'
-                                    class="btn btn-danger btn-lg btn-remove first">
-                                    <span class="las la-minus" aria-hidden="true"></span>
-                                </button>
-                            </div>
-                        </div>
-
-                        <div class="row border rounded pt-2 mt-2 shadow-sm mb-2 bg-white d-none">
-                            <div class="col text-center mb-2 d-block d-sm-none">
-                                <div class="btn btn-secondary btn-md" style="border-top-left-radius: 2.25rem;
-                                border-top-right-radius: 2.25rem;
-                                border-bottom-right-radius: 2.25rem;
-                                border-bottom-left-radius: 2.25rem;">4</div>
-                            </div>
-                            <div class="col-sm-6 mb-2">
-                                <input class="form-control" name="title[]" type="text" placeholder="Name of dish"
-                                    disabled />
-                            </div>
-                            <div class="col-sm-6 mb-2">
-                                <div class="custom-file">
-                                    <input type="file" class="custom-file-input" name="image[]" accept="image/*"
-                                        disabled>
-                                    <label class="custom-file-label" for="customFile">choose image</label>
-                                </div>
-                            </div>
-
-                            <div class="col-sm-6 border text-center">
-                                <label class="text-center"> Regular Quantity </label>
-                                <div>
-                                    <div class="mb-2 form-inline">
-                                        <input class="form-control rounded-right-0 col-sm-4" name="regular_title_four[]"
-                                            type="text" placeholder="Title" disabled />
-                                        <input class="form-control col-sm-3 rounded-0" name="regular_price_four[]"
-                                            type="number" placeholder="Price" disabled />
-                                        <input class="form-control rounded-left-0 col-sm-3"
-                                            name="regular_quantity_four[]" type="number"
-                                            placeholder="Quantity Available" disabled />
-                                        <div class="col-sm-2">
-                                            <button type="button" onclick="toggleRegularFields(this)"
-                                                class="btn btn-success btn-sm qty-btn-add-1" style="float: right;">
-                                                <span class="las la-plus" aria-hidden="true"></span>
-                                            </button>
+                                <div class="row border rounded pt-2 mt-2 shadow-sm mb-2 bg-white d-none">
+                                    <div class="col text-center mb-2 d-block d-sm-none">
+                                        <div class="btn btn-secondary btn-md" style="border-top-left-radius: 2.25rem;
+                                            border-top-right-radius: 2.25rem;
+                                            border-bottom-right-radius: 2.25rem;
+                                            border-bottom-left-radius: 2.25rem;">2</div>
+                                    </div>
+                                    <div class="col-sm-6 mb-2">
+                                        <input class="form-control" name="title[]" type="text"
+                                            placeholder="Name of dish" disabled />
+                                    </div>
+                                    <div class="col-sm-6 mb-2">
+                                        <div class="custom-file">
+                                            <input type="file" class="custom-file-input" name="image[]" accept="image/*"
+                                                disabled>
+                                            <label class="custom-file-label" for="customFile">choose image</label>
                                         </div>
                                     </div>
-                                </div>
-                            </div>
-                            <div class="col-sm-6 border text-center">
-                                <label class="text-center"> Bulk Quantity </label>
-                                <div>
-                                    <div class="bulk-entry-1 mb-2 form-inline">
-                                        <input class="form-control col-sm-5 rounded-right-0" name="bulk_title_four[]"
-                                            type="text" placeholder="Title" disabled />
-                                        <input class="form-control col-sm-5 rounded-left-0" name="bulk_price_four[]"
-                                            type="number" placeholder="Price" disabled />
-                                        <div class="col-sm-2">
-                                            <button type="button" onclick="toggleBulkFields(this)"
-                                                class="btn btn-success btn-sm bulk-btn-add-1" style="float: right;">
-                                                <span class="las la-plus" aria-hidden="true"></span>
-                                            </button>
-                                        </div>
-                                        <!-- <input class="form-control col-sm-4" name="fields[]" type="text"
-                                        placeholder="Quantity Available" /> -->
-                                    </div>
-                                </div>
-                            </div>
 
-                            <div class="input-group-btn col-sm-12 my-2">
-                                <button type="button" onclick="toggleMain(this)"
-                                    class="btn btn-success btn-lg btn-add first">
-                                    <span class="las la-plus" aria-hidden="true"></span>
-                                </button>
-                                <button type="button" onclick='toggleMain(this, false)'
-                                    class="btn btn-danger btn-lg btn-remove first">
-                                    <span class="las la-minus" aria-hidden="true"></span>
-                                </button>
-                            </div>
-                        </div>
-
-                        <div class="row border rounded pt-2 mt-2 shadow-sm mb-2 bg-white d-none">
-                            <div class="col text-center mb-2 d-block d-sm-none">
-                                <div class="btn btn-secondary btn-md" style="border-top-left-radius: 2.25rem;
-                                border-top-right-radius: 2.25rem;
-                                border-bottom-right-radius: 2.25rem;
-                                border-bottom-left-radius: 2.25rem;">5</div>
-                            </div>
-                            <div class="col-sm-6 mb-2">
-                                <input class="form-control" name="title[]" type="text" placeholder="Name of dish"
-                                    disabled />
-                            </div>
-                            <div class="col-sm-6 mb-2">
-                                <div class="custom-file">
-                                    <input type="file" class="custom-file-input" name="image[]" accept="image/*"
-                                        disabled>
-                                    <label class="custom-file-label" for="customFile">choose image</label>
-                                </div>
-                            </div>
-
-                            <div class="col-sm-6 border text-center">
-                                <label class="text-center"> Regular Quantity </label>
-                                <div>
-                                    <div class="mb-2 form-inline">
-                                        <input class="form-control rounded-right-0 col-sm-4" name="regular_title_five[]"
-                                            type="text" placeholder="Title" disabled />
-                                        <input class="form-control col-sm-3 rounded-0" name="regular_price_five[]"
-                                            type="number" placeholder="Price" disabled />
-                                        <input class="form-control rounded-left-0 col-sm-3"
-                                            name="regular_quantity_five[]" type="number"
-                                            placeholder="Quantity Available" disabled />
-                                        <div class="col-sm-2">
-                                            <button type="button" onclick="toggleRegularFields(this)"
-                                                class="btn btn-success btn-sm qty-btn-add-1" style="float: right;">
-                                                <span class="las la-plus" aria-hidden="true"></span>
-                                            </button>
+                                    <div class="col-sm-6 border text-center">
+                                        <label class="text-center"> Regular Quantity </label>
+                                        <div>
+                                            <div class="mb-2 form-inline">
+                                                <input class="form-control rounded-right-0 col-sm-4"
+                                                    name="regular_title_two[]" type="text" placeholder="Title"
+                                                    disabled />
+                                                <input class="form-control col-sm-3 rounded-0"
+                                                    name="regular_price_two[]" type="number" placeholder="Price"
+                                                    disabled />
+                                                <input class="form-control rounded-left-0 col-sm-3"
+                                                    name="regular_quantity_two[]" disabled type="number"
+                                                    placeholder="Quantity Available" />
+                                                <div class="col-sm-2">
+                                                    <button type="button" onclick="toggleRegularFields(this)"
+                                                        class="btn btn-success btn-sm qty-btn-add-1"
+                                                        style="float: right;">
+                                                        <span class="las la-plus" aria-hidden="true"></span>
+                                                    </button>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            </div>
-                            <div class="col-sm-6 border text-center">
-                                <label class="text-center"> Bulk Quantity </label>
-                                <div>
-                                    <div class="bulk-entry-1 mb-2 form-inline">
-                                        <input class="form-control col-sm-5 rounded-right-0" name="bulk_title_five[]"
-                                            type="text" placeholder="Title" disabled />
-                                        <input class="form-control col-sm-5 rounded-left-0" name="bulk_price_five[]"
-                                            type="number" placeholder="Price" disabled />
-                                        <div class="col-sm-2">
-                                            <button type="button" onclick="toggleBulkFields(this)"
-                                                class="btn btn-success btn-sm bulk-btn-add-1" style="float: right;">
-                                                <span class="las la-plus" aria-hidden="true"></span>
-                                            </button>
+                                    <div class="col-sm-6 border text-center">
+                                        <label class="text-center"> Bulk Quantity </label>
+                                        <div>
+                                            <div class="bulk-entry-1 mb-2 form-inline">
+                                                <input class="form-control col-sm-5 rounded-right-0"
+                                                    name="bulk_title_two[]" type="text" placeholder="Title" disabled />
+                                                <input class="form-control col-sm-5 rounded-left-0"
+                                                    name="bulk_price_two[]" type="number" placeholder="Price"
+                                                    disabled />
+                                                <div class="col-sm-2">
+                                                    <button type="button" onclick="toggleBulkFields(this)"
+                                                        class="btn btn-success btn-sm bulk-btn-add-1"
+                                                        style="float: right;">
+                                                        <span class="las la-plus" aria-hidden="true"></span>
+                                                    </button>
+                                                </div>
+                                                <!-- <input class="form-control col-sm-4" name="fields[]" type="text"
+                                                    placeholder="Quantity Available" /> -->
+                                            </div>
                                         </div>
-                                        <!-- <input class="form-control col-sm-4" name="fields[]" type="text"
-                                        placeholder="Quantity Available" /> -->
+                                    </div>
+
+                                    <div class="input-group-btn col-sm-12 my-2">
+                                        <button type="button" onclick="toggleMain(this)"
+                                            class="btn btn-success btn-lg btn-add first">
+                                            <span class="las la-plus" aria-hidden="true"></span>
+                                        </button>
+                                        <button type="button" onclick='toggleMain(this, false)'
+                                            class="btn btn-danger btn-lg btn-remove first">
+                                            <span class="las la-minus" aria-hidden="true"></span>
+                                        </button>
                                     </div>
                                 </div>
-                            </div>
 
-                            <div class="input-group-btn col-sm-12 my-2">
-                                <button type="button" onclick='toggleMain(this, false)'
-                                    class="btn btn-danger btn-lg btn-remove first">
-                                    <span class="las la-minus" aria-hidden="true"></span>
-                                </button>
+                                <div class="row border rounded pt-2 mt-2 shadow-sm mb-2 bg-white d-none">
+                                    <div class="col text-center mb-2 d-block d-sm-none">
+                                        <div class="btn btn-secondary btn-md" style="border-top-left-radius: 2.25rem;
+                                            border-top-right-radius: 2.25rem;
+                                            border-bottom-right-radius: 2.25rem;
+                                            border-bottom-left-radius: 2.25rem;">3</div>
+                                    </div>
+                                    <div class="col-sm-6 mb-2">
+                                        <input class="form-control" name="title[]" type="text"
+                                            placeholder="Name of dish" disabled />
+                                    </div>
+                                    <div class="col-sm-6 mb-2">
+                                        <div class="custom-file">
+                                            <input type="file" class="custom-file-input" name="image[]" accept="image/*"
+                                                disabled>
+                                            <label class="custom-file-label" for="customFile">choose image</label>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-6 border text-center">
+                                        <label class="text-center"> Regular Quantity </label>
+                                        <div>
+                                            <div class="mb-2 form-inline">
+                                                <input class="form-control rounded-right-0 col-sm-4"
+                                                    name="regular_title_three[]" type="text" placeholder="Title"
+                                                    disabled />
+                                                <input class="form-control col-sm-3 rounded-0"
+                                                    name="regular_price_three[]" type="number" placeholder="Price"
+                                                    disabled />
+                                                <input class="form-control rounded-left-0 col-sm-3"
+                                                    name="regular_quantity_three[]" type="number"
+                                                    placeholder="Quantity Available" disabled />
+                                                <div class="col-sm-2">
+                                                    <button type="button" onclick="toggleRegularFields(this)"
+                                                        class="btn btn-success btn-sm qty-btn-add-1"
+                                                        style="float: right;">
+                                                        <span class="las la-plus" aria-hidden="true"></span>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6 border text-center">
+                                        <label class="text-center"> Bulk Quantity </label>
+                                        <div>
+                                            <div class="bulk-entry-1 mb-2 form-inline">
+                                                <input class="form-control col-sm-5 rounded-right-0"
+                                                    name="bulk_title_three[]" type="text" placeholder="Title"
+                                                    disabled />
+                                                <input class="form-control col-sm-5 rounded-left-0"
+                                                    name="bulk_price_three[]" type="number" placeholder="Price"
+                                                    disabled />
+                                                <div class="col-sm-2">
+                                                    <button type="button" onclick="toggleBulkFields(this)"
+                                                        class="btn btn-success btn-sm bulk-btn-add-1"
+                                                        style="float: right;">
+                                                        <span class="las la-plus" aria-hidden="true"></span>
+                                                    </button>
+                                                </div>
+                                                <!-- <input class="form-control col-sm-4" name="fields[]" type="text"
+                                                    placeholder="Quantity Available" /> -->
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="input-group-btn col-sm-12 my-2">
+                                        <button type="button" onclick="toggleMain(this)"
+                                            class="btn btn-success btn-lg btn-add first">
+                                            <span class="las la-plus" aria-hidden="true"></span>
+                                        </button>
+                                        <button type="button" onclick='toggleMain(this, false)'
+                                            class="btn btn-danger btn-lg btn-remove first">
+                                            <span class="las la-minus" aria-hidden="true"></span>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div class="row border rounded pt-2 mt-2 shadow-sm mb-2 bg-white d-none">
+                                    <div class="col text-center mb-2 d-block d-sm-none">
+                                        <div class="btn btn-secondary btn-md" style="border-top-left-radius: 2.25rem;
+                                            border-top-right-radius: 2.25rem;
+                                            border-bottom-right-radius: 2.25rem;
+                                            border-bottom-left-radius: 2.25rem;">4</div>
+                                    </div>
+                                    <div class="col-sm-6 mb-2">
+                                        <input class="form-control" name="title[]" type="text"
+                                            placeholder="Name of dish" disabled />
+                                    </div>
+                                    <div class="col-sm-6 mb-2">
+                                        <div class="custom-file">
+                                            <input type="file" class="custom-file-input" name="image[]" accept="image/*"
+                                                disabled>
+                                            <label class="custom-file-label" for="customFile">choose image</label>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-6 border text-center">
+                                        <label class="text-center"> Regular Quantity </label>
+                                        <div>
+                                            <div class="mb-2 form-inline">
+                                                <input class="form-control rounded-right-0 col-sm-4"
+                                                    name="regular_title_four[]" type="text" placeholder="Title"
+                                                    disabled />
+                                                <input class="form-control col-sm-3 rounded-0"
+                                                    name="regular_price_four[]" type="number" placeholder="Price"
+                                                    disabled />
+                                                <input class="form-control rounded-left-0 col-sm-3"
+                                                    name="regular_quantity_four[]" type="number"
+                                                    placeholder="Quantity Available" disabled />
+                                                <div class="col-sm-2">
+                                                    <button type="button" onclick="toggleRegularFields(this)"
+                                                        class="btn btn-success btn-sm qty-btn-add-1"
+                                                        style="float: right;">
+                                                        <span class="las la-plus" aria-hidden="true"></span>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6 border text-center">
+                                        <label class="text-center"> Bulk Quantity </label>
+                                        <div>
+                                            <div class="bulk-entry-1 mb-2 form-inline">
+                                                <input class="form-control col-sm-5 rounded-right-0"
+                                                    name="bulk_title_four[]" type="text" placeholder="Title" disabled />
+                                                <input class="form-control col-sm-5 rounded-left-0"
+                                                    name="bulk_price_four[]" type="number" placeholder="Price"
+                                                    disabled />
+                                                <div class="col-sm-2">
+                                                    <button type="button" onclick="toggleBulkFields(this)"
+                                                        class="btn btn-success btn-sm bulk-btn-add-1"
+                                                        style="float: right;">
+                                                        <span class="las la-plus" aria-hidden="true"></span>
+                                                    </button>
+                                                </div>
+                                                <!-- <input class="form-control col-sm-4" name="fields[]" type="text"
+                                                    placeholder="Quantity Available" /> -->
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="input-group-btn col-sm-12 my-2">
+                                        <button type="button" onclick="toggleMain(this)"
+                                            class="btn btn-success btn-lg btn-add first">
+                                            <span class="las la-plus" aria-hidden="true"></span>
+                                        </button>
+                                        <button type="button" onclick='toggleMain(this, false)'
+                                            class="btn btn-danger btn-lg btn-remove first">
+                                            <span class="las la-minus" aria-hidden="true"></span>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div class="row border rounded pt-2 mt-2 shadow-sm mb-2 bg-white d-none">
+                                    <div class="col text-center mb-2 d-block d-sm-none">
+                                        <div class="btn btn-secondary btn-md" style="border-top-left-radius: 2.25rem;
+                                            border-top-right-radius: 2.25rem;
+                                            border-bottom-right-radius: 2.25rem;
+                                            border-bottom-left-radius: 2.25rem;">5</div>
+                                    </div>
+                                    <div class="col-sm-6 mb-2">
+                                        <input class="form-control" name="title[]" type="text"
+                                            placeholder="Name of dish" disabled />
+                                    </div>
+                                    <div class="col-sm-6 mb-2">
+                                        <div class="custom-file">
+                                            <input type="file" class="custom-file-input" name="image[]" accept="image/*"
+                                                disabled>
+                                            <label class="custom-file-label" for="customFile">choose image</label>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-6 border text-center">
+                                        <label class="text-center"> Regular Quantity </label>
+                                        <div>
+                                            <div class="mb-2 form-inline">
+                                                <input class="form-control rounded-right-0 col-sm-4"
+                                                    name="regular_title_five[]" type="text" placeholder="Title"
+                                                    disabled />
+                                                <input class="form-control col-sm-3 rounded-0"
+                                                    name="regular_price_five[]" type="number" placeholder="Price"
+                                                    disabled />
+                                                <input class="form-control rounded-left-0 col-sm-3"
+                                                    name="regular_quantity_five[]" type="number"
+                                                    placeholder="Quantity Available" disabled />
+                                                <div class="col-sm-2">
+                                                    <button type="button" onclick="toggleRegularFields(this)"
+                                                        class="btn btn-success btn-sm qty-btn-add-1"
+                                                        style="float: right;">
+                                                        <span class="las la-plus" aria-hidden="true"></span>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6 border text-center">
+                                        <label class="text-center"> Bulk Quantity </label>
+                                        <div>
+                                            <div class="bulk-entry-1 mb-2 form-inline">
+                                                <input class="form-control col-sm-5 rounded-right-0"
+                                                    name="bulk_title_five[]" type="text" placeholder="Title" disabled />
+                                                <input class="form-control col-sm-5 rounded-left-0"
+                                                    name="bulk_price_five[]" type="number" placeholder="Price"
+                                                    disabled />
+                                                <div class="col-sm-2">
+                                                    <button type="button" onclick="toggleBulkFields(this)"
+                                                        class="btn btn-success btn-sm bulk-btn-add-1"
+                                                        style="float: right;">
+                                                        <span class="las la-plus" aria-hidden="true"></span>
+                                                    </button>
+                                                </div>
+                                                <!-- <input class="form-control col-sm-4" name="fields[]" type="text"
+                                                    placeholder="Quantity Available" /> -->
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="input-group-btn col-sm-12 my-2">
+                                        <button type="button" onclick='toggleMain(this, false)'
+                                            class="btn btn-danger btn-lg btn-remove first">
+                                            <span class="las la-minus" aria-hidden="true"></span>
+                                        </button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -472,6 +704,19 @@
         }
     }
     // Function to handle Bulk Quantity form repeaters
+
+    // Disable Input Elements for Inactive Form Tabs
+    let activeForm = "";
+    $('.nav-tabs a:first').click(function () {
+        $("#simple div:nth-child(1)").find('input').removeAttr('disabled', '');
+        $("#complex div:nth-child(1)").find('input').attr('disabled', '');
+    })
+
+    $('.nav-tabs a:last').click(function () {
+        $("#complex div:nth-child(1)").find('input').removeAttr('disabled', '');
+        $("#simple div:nth-child(1)").find('input').attr('disabled', '');
+    })
+
 
 
     $(document).ready(function () {
