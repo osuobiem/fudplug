@@ -13,6 +13,7 @@
     <!-- Bootstrap core CSS -->
     <link href="{{ url('assets/vendor/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
 
+    <link href="{{ url('assets/css/uikit.min.css') }}" rel="stylesheet">
 
     <link rel="stylesheet" type="text/css" href="{{ url('assets/css/animate.min.css') }}" />
     <!-- Feather Icon-->
@@ -143,6 +144,8 @@
 
     <!-- jQuery Steps Plugin -->
     <script src="{{ url('assets/js/jquery-steps-master/build/jquery.steps.js') }}"></script>
+    <script src="{{ url('assets/js/uikit.min.js') }}"></script>
+    <script src="{{ url('assets/js/uikit-icons.min.js') }}"></script>
 
     <script>
         $(document).ready(function () {

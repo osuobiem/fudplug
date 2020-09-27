@@ -49,7 +49,7 @@ function format_time($time) {
       @if($post->media)
         @foreach($post->media as $media)
           @if($media->type == 'image')
-          <div class="pm pm-{{ count($post->media) }}" style="background-image: url('{{ Storage::url('posts/photos/'.$media->name) }}')"></div>
+          <div class="pm pm-im-l pm-{{ count($post->media) }}" onclick="launchLight('{{ $media->id }}')" style="background-image: url('{{ Storage::url('posts/photos/'.$media->name) }}')"><div></div></div>
           @else
           @php $thumb = explode('.', $media->name)[0] . '.png'; @endphp
           <div class="w-100 feed-vid-cont" onfocus="trackPosition('{{ $media->name }}', 'med-{{ $media->id }}', 'play{{ $media->id }}')" id="med-{{ $media->id }}">
@@ -67,6 +67,16 @@ function format_time($time) {
       @endif
     </div>
   </div>
+
+  {{-- Lightbox --}}
+  <div uk-lightbox>
+    @foreach($post->media as $media)
+      @if($media->type == 'image')
+      <a class="d-none" href="{{ Storage::url('posts/photos/'.$media->name) }}" id="light-{{ $media->id }}"></a>
+      @endif
+    @endforeach
+  </div>
+
   <div class="p-3 border-bottom osahan-post-footer">
     <a href="#" class="mr-3 text-secondary" title="Like"><i class="la la-heart la-2x text-danger"></i> 16</a>
     <a href="#" class="mr-3 text-secondary" title="Comment"><i class="la la-comment la-2x"></i> 8</a>
