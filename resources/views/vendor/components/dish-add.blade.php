@@ -12,7 +12,8 @@
                 <form id="add-dish" enctype="multipart/form-data">
                     @csrf
                     <!-- Form Type Input -->
-                    <input type="hidden" name="form-type" value="simple">
+                    <input type="hidden" name="form_type" id="form-type" value="simple">
+
                     <!-- Info alert box -->
                     <div class="alert alert-info alert-dismissible fade show" role="alert">
                         <h4 class="alert-heading"><i class="las la-info"></i> Notice!</h4>
@@ -39,8 +40,8 @@
                                 <!-- <h6 class="m-0">Dishes</h6> -->
                             </li>
                             <li class="nav-item border-left col-6">
-                                <a class="nav-link text-center" id="home-tab" data-toggle="tab" href="#complex"
-                                    role="tab" aria-controls="home" aria-selected="true">Complex</a>
+                                <a class="nav-link text-center" id="home-tab" data-toggle="tab" href="#advanced"
+                                    role="tab" aria-controls="home" aria-selected="true">advanced</a>
                             </li>
                         </ul>
                         <div class="tab-content" id="myTabContent">
@@ -69,7 +70,7 @@
                                         <input class="form-control" name="price[]" type="number" placeholder="Price" />
                                     </div>
                                     <div class="col-sm-6 col-xs-6 mb-2">
-                                        <input class="form-control" name="Quantity[]" type="number"
+                                        <input class="form-control" name="quantity[]" type="number"
                                             placeholder="Quantity" />
                                     </div>
 
@@ -101,11 +102,12 @@
                                     </div>
 
                                     <div class="col-sm-6 col-xs-6 mb-2">
-                                        <input class="form-control" name="price[]" type="number" placeholder="Price" />
+                                        <input class="form-control" name="price[]" type="number" placeholder="Price"
+                                            disabled />
                                     </div>
                                     <div class="col-sm-6 col-xs-6 mb-2">
-                                        <input class="form-control" name="Quantity[]" type="number"
-                                            placeholder="Quantity" />
+                                        <input class="form-control" name="quantity[]" type="number"
+                                            placeholder="Quantity" disabled />
                                     </div>
 
                                     <div class="input-group-btn col-sm-12 my-2">
@@ -140,11 +142,12 @@
                                     </div>
 
                                     <div class="col-sm-6 col-xs-6 mb-2">
-                                        <input class="form-control" name="price[]" type="number" placeholder="Price" />
+                                        <input class="form-control" name="price[]" type="number" placeholder="Price"
+                                            disabled />
                                     </div>
                                     <div class="col-sm-6 col-xs-6 mb-2">
-                                        <input class="form-control" name="Quantity[]" type="number"
-                                            placeholder="Quantity" />
+                                        <input class="form-control" name="quantity[]" type="number"
+                                            placeholder="Quantity" disabled />
                                     </div>
 
                                     <div class="input-group-btn col-sm-12 my-2">
@@ -179,11 +182,12 @@
                                     </div>
 
                                     <div class="col-sm-6 col-xs-6 mb-2">
-                                        <input class="form-control" name="price[]" type="number" placeholder="Price" />
+                                        <input class="form-control" name="price[]" type="number" placeholder="Price"
+                                            disabled />
                                     </div>
                                     <div class="col-sm-6 col-xs-6 mb-2">
-                                        <input class="form-control" name="Quantity[]" type="number"
-                                            placeholder="Quantity" />
+                                        <input class="form-control" name="quantity[]" type="number"
+                                            placeholder="Quantity" disabled />
                                     </div>
 
                                     <div class="input-group-btn col-sm-12 my-2">
@@ -218,11 +222,12 @@
                                     </div>
 
                                     <div class="col-sm-6 col-xs-6 mb-2">
-                                        <input class="form-control" name="price[]" type="number" placeholder="Price" />
+                                        <input class="form-control" name="price[]" type="number" placeholder="Price"
+                                            disabled />
                                     </div>
                                     <div class="col-sm-6 col-xs-6 mb-2">
-                                        <input class="form-control" name="Quantity[]" type="number"
-                                            placeholder="Quantity" />
+                                        <input class="form-control" name="quantity[]" type="number"
+                                            placeholder="Quantity" disabled />
                                     </div>
 
                                     <div class="input-group-btn col-sm-12 my-2">
@@ -233,7 +238,8 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="tab-pane fade container" id="complex" role="tabpanel"
+
+                            <div class="tab-pane fade container" id="advanced" role="tabpanel"
                                 aria-labelledby="home-tab">
                                 <div class="row border rounded pt-2 mt-2 shadow-sm mb-2 bg-white">
                                     <div class="col text-center mb-2 d-block d-sm-none">
@@ -245,11 +251,11 @@
 
                                     <div class="col-sm-6 col-xs-6 mb-2">
                                         <input class="form-control" name="title[]" type="text"
-                                            placeholder="Name of dish" />
+                                            placeholder="Name of dish" disabled />
                                     </div>
                                     <div class="col-sm-6 col-xs-6 mb-2">
                                         <div class="custom-file">
-                                            <input type="file" class="custom-file-input" name="image[]">
+                                            <input type="file" class="custom-file-input" name="image[]" disabled>
                                             <label class="custom-file-label" for="customFile">choose image</label>
                                         </div>
                                         <small class="text-danger error-message" id="image.0"></small>
@@ -260,12 +266,14 @@
                                         <div>
                                             <div class="mb-2 form-inline">
                                                 <input class="form-control rounded-right-0 col-sm-4"
-                                                    name="regular_title_one[]" type="text" placeholder="Title" />
+                                                    name="regular_title_one[]" type="text" placeholder="Title"
+                                                    disabled />
                                                 <input class="form-control col-sm-3 rounded-0"
-                                                    name="regular_price_one[]" type="number" placeholder="Price" />
+                                                    name="regular_price_one[]" type="number" placeholder="Price"
+                                                    disabled />
                                                 <input class="form-control rounded-left-0 col-sm-3"
                                                     name="regular_quantity_one[]" type="number"
-                                                    placeholder="Quantity Available" />
+                                                    placeholder="Quantity Available" disabled />
                                                 <div class="col-sm-2">
                                                     <button type="button" onclick="toggleRegularFields(this)"
                                                         class="btn btn-success btn-sm qty-btn-add-1"
@@ -281,9 +289,10 @@
                                         <div>
                                             <div class="bulk-entry-1 mb-2 form-inline">
                                                 <input class="form-control col-sm-5 rounded-right-0"
-                                                    name="bulk_title_one[]" type="text" placeholder="Title" />
+                                                    name="bulk_title_one[]" type="text" placeholder="Title" disabled />
                                                 <input class="form-control col-sm-5 rounded-left-0"
-                                                    name="bulk_price_one[]" type="number" placeholder="Price" />
+                                                    name="bulk_price_one[]" type="number" placeholder="Price"
+                                                    disabled />
                                                 <div class="col-sm-2">
                                                     <button type="button" onclick="toggleBulkFields(this)"
                                                         class="btn btn-success btn-sm bulk-btn-add-1"
@@ -708,13 +717,19 @@
     // Disable Input Elements for Inactive Form Tabs
     let activeForm = "";
     $('.nav-tabs a:first').click(function () {
-        $("#simple div:nth-child(1)").find('input').removeAttr('disabled', '');
-        $("#complex div:nth-child(1)").find('input').attr('disabled', '');
+        $("#form-type").val("simple")
+        $("#simple").children('div').eq(0).find('input').removeAttr('disabled', '');
+        $("#simple").children('div').eq(0).find('.input-group-btn').removeClass('d-none');
+        $("#simple").children().not(':eq(0)').addClass('d-none')
+        $("#advanced").find('input').attr('disabled', '');
     })
 
     $('.nav-tabs a:last').click(function () {
-        $("#complex div:nth-child(1)").find('input').removeAttr('disabled', '');
-        $("#simple div:nth-child(1)").find('input').attr('disabled', '');
+        $("#form-type").val("advanced")
+        $("#advanced").children('div').eq(0).find('input').removeAttr('disabled', '');
+        $("#advanced").children('div').eq(0).find('.input-group-btn').removeClass('d-none');
+        $("#advanced").children().not(':eq(0)').addClass('d-none').find('input').val("")
+        $("#simple").find('input').attr('disabled', '');
     })
 
 
@@ -755,10 +770,11 @@
                 spin('vendor')
 
                 if (handleFormRes(res, false, false, 'modal-body')) {
+                    console.log(res)
                     showAlert(true, res.message);
-                    setTimeout(() => {
-                        $('#add-dish').trigger('reset');
-                    }, 2000)
+                    // setTimeout(() => {
+                    //     $('#add-dish').trigger('reset');
+                    // }, 2000)
                 }
             })
             .catch(err => {

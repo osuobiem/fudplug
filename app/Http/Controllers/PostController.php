@@ -107,6 +107,9 @@ class PostController extends Controller
             // Delete Video
             if ($request['video'] && $video) {
                 Storage::delete('/public/posts/videos' . $video);
+
+                $th_name = explode('.', $video)[0] . '.png';
+                Storage::delete('/public/posts/videos/thumbnails/' . $th_name);
             }
 
             // Delete Post
@@ -166,7 +169,14 @@ class PostController extends Controller
         // Upload video
         $stored = Storage::put('/public/posts/videos/', $request['video']);
 
-        if ($stored) {
+        // Save video thumbnail
+        $name = '/public/posts/videos/thumbnails/' . explode('.', basename($stored))[0] . '.png';
+        $image_parts = explode(";base64,", $request['thumbnail']);
+        $image_base64 = base64_decode($image_parts[1]);
+
+        $th = Storage::put($name, $image_base64);
+
+        if ($stored && $th) {
             $resp = basename($stored);
         }
 

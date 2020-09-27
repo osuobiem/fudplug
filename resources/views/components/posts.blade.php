@@ -1,3 +1,4 @@
+@if(count($posts))
 @foreach ($posts as $post)
     <!-- Post -->
 <div class="box shadow-sm border rounded bg-white mb-3 osahan-post">
@@ -16,13 +17,17 @@
       {{ $post->content }}
     </p>
 
-    <div class="post-media-container">
+    <div class="post-media-container justify-content-center">
       @if($post->media)
         @foreach($post->media as $media)
           @if($media->type == 'image')
           <div class="pm pm-{{ count($post->media) }}" style="background-image: url('{{ Storage::url('posts/photos/'.$media->name) }}')"></div>
           @else
-          <video class="pm-1" src="{{ Storage::url('posts/videos/'.$media->name) }}" controls="true" muted autoplay></video>
+          @php $thumb = explode('.', $media->name)[0] . '.png'; @endphp
+          <div class="w-100">
+            <img class="pm-1" style="border: solid #dee2e6 1px;" src="{{ Storage::url('posts/videos/thumbnails/'.$thumb) }}" />
+          </div>
+          <i class="la la-play-circle la-5x play-btn"></i>
           @endif
         @endforeach
       @endif
@@ -37,3 +42,10 @@
   </div>
 </div>
 @endforeach
+@else
+<div class="box shadow-sm border rounded bg-white mb-3 osahan-post">
+  <div class="p-3 d-flex align-items-center border-bottom osahan-post-header justify-content-center">
+    <p class="m-0"><strong>No Posts Yet!</strong></p>
+  </div>
+</div>
+@endif

@@ -88,11 +88,14 @@
     </form>
     <!--/ Post Form -->
   </div>
+
+  <canvas id="canvas" class="d-none"></canvas>
 </div>
 
 <script>
   let images = {};
   let video = {};
+  let videoThumb = '';
   $(document).ready(function () {
     $('#post-form').submit(el => {
       sendPost(el)
@@ -149,7 +152,10 @@
   // Send Post
   function sendPost(el) {
     el.preventDefault()
+
     spin('post')
+    liner();
+
     let url = `{{ url('post/create') }}`;
     let data = new FormData(el.target)
 
@@ -162,11 +168,14 @@
     // Attach video to form data
     if (video.file) {
       data.append('video', video.file);
+      data.append('thumbnail', videoThumb);
     }
 
     goPost(url, data)
       .then(res => {
         spin('post')
+        liner(false)
+
         if (handleFormRes(res)) {
           showAlert(true, 'Post Sent Successfully!');
           refreshPostForm();
@@ -174,6 +183,8 @@
       })
       .catch(err => {
         spin('post')
+        liner(false)
+
         handleFormRes(err);
       })
   }
@@ -242,9 +253,9 @@
     if (input.files) {
       hideMediaInputs();
       [...input.files].forEach((file, ind) => {
-        if (file.size > 536870912) {
+        if (file.size > 141557760) {
           $('#video-spinner').addClass('d-none')
-          showAlert(false, "Video size must not be more than 512MB");
+          showAlert(false, "Video size must not be more than 135MB");
           hideMediaInputs(false);
         } else if (file.type.split("/")[0] != "video") {
           $('#video-spinner').addClass('d-none')
@@ -252,6 +263,7 @@
           hideMediaInputs(false);
         } else {
           var vid = document.createElement('video')
+
           var reader = new FileReader();
           reader.onload = (e) => {
             vid.setAttribute(
@@ -264,14 +276,14 @@
             "width: 100%; border-radius: 12px; border: solid #dee2e6 1px;"
           );
           vid.setAttribute('controls', true)
-          vid.setAttribute('id', 'video-file')
+          vid.setAttribute('id', 'video-loaded')
           reader.readAsDataURL(file);
           // Check video duration
           var timer = setInterval(function () {
             if (vid.readyState === 4) {
-              if (vid.duration.toFixed(2) > 180) {
+              if (vid.duration.toFixed(2) > 60) {
                 $('#video-spinner').addClass('d-none')
-                showAlert(false, "The video duration must not be more than 3 minutes");
+                showAlert(false, "The video duration must not be more than 1 minute");
               }
               else {
                 $('#video-spinner').addClass('d-none')
@@ -279,11 +291,15 @@
                 cont = document.getElementById('post-video-container');
                 cont.innerHTML = `<span class="pmmc-ixv" onclick="removePostVid()"><i class="la la-times la-lg"></i></span>`;
                 cont.prepend(vid)
+
+                setTimeout(() => {
+                  capture()
+                }, 500)
               }
               clearInterval(timer);
               hideMediaInputs(false)
             }
-          }, 500)
+          }, 1000)
         }
       })
     }
@@ -335,5 +351,24 @@
   // Hide/Show Post Media Inputs 
   function hideMediaInputs(hide = true) {
     hide ? $('#media-input-div').addClass('d-none') : $('#media-input-div').removeClass('d-none');
+  }
+
+  // Capture Thumbnail from video
+  function capture() {
+    var canvas = document.getElementById('canvas');
+    var video = document.getElementById('video-loaded');
+    canvas.getContext('2d').drawImage(video, 0, 0, video.clientWidth, video.clientHeight);
+
+    videoThumb = canvas.toDataURL();
+  }
+
+  // Toggle Post Sending Line
+  function liner(show = true) {
+    if (screen.width > 768) {
+      show ? $('#send-post-liner-lg').removeClass('d-none') : $('#send-post-liner-lg').addClass('d-none')
+    }
+    else {
+      show ? $('#send-post-liner-sm').removeClass('d-none') : $('#send-post-liner-sm').addClass('d-none')
+    }
   }
 </script>
