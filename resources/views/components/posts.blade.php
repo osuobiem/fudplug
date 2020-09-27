@@ -24,10 +24,16 @@
           <div class="pm pm-{{ count($post->media) }}" style="background-image: url('{{ Storage::url('posts/photos/'.$media->name) }}')"></div>
           @else
           @php $thumb = explode('.', $media->name)[0] . '.png'; @endphp
-          <div class="w-100">
-            <img class="pm-1" style="border: solid #dee2e6 1px;" src="{{ Storage::url('posts/videos/thumbnails/'.$thumb) }}" />
+          <div class="w-100 feed-vid-cont" onfocus="trackPosition('{{ $media->name }}', 'med-{{ $media->id }}', 'play{{ $media->id }}')" id="med-{{ $media->id }}">
+            <img class="pm-1 vid-bod" src="{{ Storage::url('posts/videos/thumbnails/'.$thumb) }}" />
           </div>
-          <i class="la la-play-circle la-5x play-btn"></i>
+          
+          <div class="spinner-border play-btn p-4" style="display: none" id="play{{ $media->id }}-spinner" role="status">
+            <span class="sr-only">Loading...</span>
+          </div>
+
+          <i class="la la-play-circle la-5x play-btn" onclick="playVideo('{{ $media->name }}', 'med-{{ $media->id }}', 'play{{ $media->id }}')" id="play{{ $media->id }}-txt"></i>
+
           @endif
         @endforeach
       @endif

@@ -20,6 +20,7 @@
     loadPosts()
   });
 
+  // Load Posts
   function loadPosts() {
     url = `{{ url('post/get') }}`
 
@@ -28,6 +29,60 @@
         $('#in-post-container').html(res)
       })
   }
+
+  // Play Post Video
+  function playVideo(vid, container, oth) {
+    spin(oth)
+
+    video_url = `{{ Storage::url('posts/videos/') }}${vid}`;
+    container = document.getElementById(container)
+
+    var video = document.createElement('video')
+
+    video.setAttribute(
+      "class",
+      "pm-1 vid-bod"
+    );
+
+    video.setAttribute(
+      "id",
+      oth + "-video"
+    );
+
+
+    video.setAttribute(
+      "src",
+      video_url
+    );
+
+    video.setAttribute('controls', true)
+
+    // Monitor video load
+    var timer = setInterval(function () {
+      if (video.readyState === 4) {
+        $('#' + oth + '-spinner').addClass('d-none')
+        container.innerHTML = '';
+        container.append(video)
+
+        $('.vid-bod').trigger('pause')
+        $('#' + oth + '-video').trigger('play')
+
+        video.setAttribute(
+          "onplay",
+          `pauseOthers('${oth}-video')`
+        );
+
+        clearInterval(timer);
+      }
+    }, 1000);
+  }
+
+  // Pause other videos
+  function pauseOthers(id) {
+    $('#' + id).removeClass('vid-bod');
+    $('.vid-bod').trigger('pause')
+    $('#' + id).addClass('vid-bod');
+  } 
 </script>
 
 @endsection
