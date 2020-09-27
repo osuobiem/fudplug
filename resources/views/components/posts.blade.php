@@ -1,4 +1,32 @@
 @if(count($posts))
+
+{{-- Format Time/Date --}}
+@php
+function format_time($time) {
+  $time = strtotime($time);
+  $t_diff = time() - $time;
+  $res = "";
+
+  if($t_diff >= 1 && $t_diff < 60) {
+    $res = $t_diff."s ago";
+  }
+  elseif($t_diff >= 60 && $t_diff < 3600) {
+    $res = (int)($t_diff/60)."m ago";
+  }
+  elseif($t_diff >= 3600 && $t_diff < 86399) {
+    $res = (int)($t_diff/7200)."h ago";
+  }
+  elseif($t_diff >= 86400 && $t_diff < 604799) {
+    $res = (int)($t_diff/86400)."d ago";
+  }
+  else {
+    $res = date("y") == date("y", $time) ? date("d M", $time) : date("d M y", $time);
+  }
+
+  return $res;
+}
+@endphp
+
 @foreach ($posts as $post)
     <!-- Post -->
 <div class="box shadow-sm border rounded bg-white mb-3 osahan-post">
@@ -10,7 +38,7 @@
       <div class="text-truncate post-profile">{{ $post->vendor->business_name }}</div>
       <div class="small post-profile">{{ '@'.$post->vendor->username }}</div>
     </div>
-    <span class="ml-auto small">3h ago</span>
+    <span class="ml-auto small">{{ format_time($post->created_at) }}</span>
   </div>
   <div class="p-3 border-bottom osahan-post-body">
     <p class="mb-0 f-post">
