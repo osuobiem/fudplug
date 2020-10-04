@@ -40,7 +40,7 @@ function format_time($time) {
     </div>
     <span class="ml-auto small">{{ format_time($post->created_at) }}</span>
   </div>
-  <div class="p-3 border-bottom osahan-post-body">
+  <div class="p-3 border-bottom osahan-post-body post-inner">
     <p class="mb-0 f-post">
       {{ $post->content }}
     </p>

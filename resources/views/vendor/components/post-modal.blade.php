@@ -3,14 +3,14 @@
   <div class="box shadow-sm border rounded bg-white mb-3 osahan-share-post">
     <ul class="nav nav-justified border-bottom osahan-line-tab" id="myTab" role="tablist">
       <li class="nav-item text-left">
-        <a class="nav-link active" id="home-tab" data-toggle="tab" role="tab" aria-controls="home"
+        <a class="nav-link active" style="padding: 1rem .5rem !important" id="home-tab" data-toggle="tab" role="tab" aria-controls="home"
           aria-selected="true"><i class="la la-utensil-spoon la-lg"></i> What did you cook today?
         </a>
       </li>
     </ul>
     <div class="tab-content" id="myTabContent">
       <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
-        <div class="px-3 pt-2 d-flex align-items-center w-100" href="#">
+        <div class="p-3 pt-2 d-flex align-items-center w-100" href="#">
           <div class="post-textarea-cont-2 w-100">
             <textarea placeholder="Post something delicious..." class="form-control border-0 p-0 shadow-none"
               rows="2"></textarea>
@@ -26,7 +26,7 @@
   <div class="box shadow-sm border rounded bg-white mb-3 osahan-share-post">
     <ul class="nav nav-justified border-bottom osahan-line-tab" id="myTab" role="tablist">
       <li class="nav-item text-left">
-        <a class="nav-link active" id="home-tab" data-toggle="tab" role="tab" aria-controls="home"
+        <a class="nav-link active" style="padding: 1rem .5rem !important" id="home-tab" data-toggle="tab" role="tab" aria-controls="home"
           aria-selected="true"><i class="la la-utensil-spoon la-lg"></i> What did you cook today?
           <i class="la la-times-circle la-lg post-ico py-1" id="close-post"></i>
         </a>
@@ -39,7 +39,7 @@
       <!-- Post Text -->
       <div class="tab-content" id="myTabContent">
         <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
-          <div class="px-3 pt-2 d-flex align-items-center w-100" href="#">
+          <div class="p-3 pt-2 d-flex align-items-center w-100" href="#">
             <div class="post-textarea-cont w-100">
               <textarea placeholder="Post something delicious..."
                 class="form-control border-0 p-0 shadow-none post-input" required name="content" rows="5"
@@ -55,13 +55,13 @@
       <input type="file" accept="image/*" multiple id="image-3" class="d-none" onchange="fill(this)">
       <input type="file" accept="image/*" multiple id="image-4" class="d-none" onchange="fill(this)">
       <div id="vid-in">
-        <input type="file" accept="video/*" multiple id="video-file" class="d-none" onchange="fillVideo(this)">
+        <input type="file" accept="video/*" id="video-file" class="d-none" onchange="fillVideo(this)">
       </div>
 
       <!-- Media Container -->
-      <div class="post-modal-media-container post-media-container" id="post-media-container">
+      <div class="post-modal-media-container post-media-container p-3 d-none" id="post-media-container">
       </div>
-      <div class="post-modal-media-container post-media-container" id="post-video-container">
+      <div class="post-modal-media-container post-media-container p-3 d-none" id="post-video-container">
       </div>
       <div id="video-spinner" class="justify-content-center text-center w-100 pb-2 d-none">
         <p><strong>Loading Video...</strong></p>
@@ -235,6 +235,8 @@
             img.innerHTML = `<span class="pmmc-ix" onclick="removePostImg('${pid}')"><i class="la la-times la-lg"></i></span>`;
             images[pid] = file
             hideMediaInputs(false);
+            $('#post-media-container').removeClass('d-none')
+            $('#post-video-container').addClass('d-none')
           }
         }
         else {
@@ -297,6 +299,9 @@
                 setTimeout(() => {
                   capture()
                 }, 500)
+
+                $('#post-video-container').removeClass('d-none')
+                $('#post-media-container').addClass('d-none')
               }
               clearInterval(timer);
               hideMediaInputs(false)
@@ -330,11 +335,16 @@
     imageCounter = $('.pmmc-i').length + 1
     arrangeImages()
 
+    if(imageCounter == 1) {
+      $('#post-media-container').addClass('d-none')
+    }
+
     // Remove all images
     if (all) {
       images = {};
       imageCounter = 1;
       $('#post-media-container').html('')
+      $('#post-media-container').addClass('d-none')
     }
   }
   // Remove Post Video
@@ -344,6 +354,7 @@
     $('#vid-in').html(
       `<input type="file" accept="video/*" multiple id="video-file" class="d-none" onchange="fillVideo(this)">`
     );
+    $('#post-video-container').addClass('d-none')
   }
   // Submit Post
   function submitPost() {

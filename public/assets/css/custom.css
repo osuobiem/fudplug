@@ -390,7 +390,6 @@ a:visited {
 }
 
 .post-media-container {
-    margin-top: 15px;
     display: flex;
     flex-wrap: wrap;
 }
@@ -565,10 +564,6 @@ a:visited {
     font-weight: 600;
     box-shadow: 0 0 10px 0px #3c3b3bb8;
     padding: 9px 10px;
-}
-
-.post-modal-media-container {
-    padding: 0 15px;
 }
 
 .pmmc-ix {
@@ -1090,4 +1085,13 @@ a:visited {
 
 .uk-lightbox {
     background: #000000de !important;
+}
+
+.post-inner:hover {
+    box-shadow: 0 0 15px 5px #00000013;
+    cursor: pointer;
+}
+
+.p-3 {
+    padding: .5rem !important;
 }

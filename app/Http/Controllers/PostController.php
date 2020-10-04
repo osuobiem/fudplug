@@ -208,7 +208,7 @@ class PostController extends Controller
         if (Auth::guest() && Auth::guard('user')->guest()) {
             $posts = Post::orderBy('created_at', 'desc')->take(15)->get();
 
-            return view('components.posts', ['posts' => $posts]);
+            return view('components.post.index', ['posts' => $posts]);
         } else {
             // Get logged in vendor or user
             $logged_in = $request->user() ?? $request->user('user');
@@ -218,7 +218,7 @@ class PostController extends Controller
                 $query->where('area_id', $logged_in->area_id);
             })->orderBy('created_at', 'desc')->take(15)->get();
 
-            return view('components.posts', ['posts' => $posts]);
+            return view('components.post.index', ['posts' => $posts]);
         }
     }
 

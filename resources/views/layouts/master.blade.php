@@ -162,13 +162,13 @@
             url = `{{ url('post/like') }}/${post_id}`;
 
             goGet(url)
-            .then(res => {
-                !res.success ? doUnlike(likeCount, likon, post_id) 
-                : null
-            })
-            .catch(err => {
-                doUnlike(likeCount, likon, post_id)
-            })
+                .then(res => {
+                    !res.success ? doUnlike(likeCount, likon, post_id)
+                        : null
+                })
+                .catch(err => {
+                    doUnlike(likeCount, likon, post_id)
+                })
         }
 
         // Unlike a Post
@@ -184,12 +184,12 @@
             url = `{{ url('post/unlike') }}/${post_id}`;
 
             goGet(url)
-            .then(res => {
-                !res.success ? doLike(likeCount, likon, post_id) : null;
-            })
-            .catch(err => {
-                doLike(likeCount, likon, post_id)
-            })
+                .then(res => {
+                    !res.success ? doLike(likeCount, likon, post_id) : null;
+                })
+                .catch(err => {
+                    doLike(likeCount, likon, post_id)
+                })
         }
 
         // Like
@@ -198,12 +198,12 @@
             $(likon).addClass('la-heart');
             $(likon).attr('onclick', `unlikePost('${post_id}', this)`)
 
-            if(change) {
+            if (change) {
                 likeCount += 1
             }
 
             $(likon).attr('like-count', likeCount)
-            $($(likon).siblings()[0]).text(' '+likeCount)
+            $($(likon).siblings()[0]).text(' ' + likeCount)
         }
 
         // Unlike
@@ -212,12 +212,12 @@
             $(likon).addClass('la-heart-o');
             $(likon).attr('onclick', `likePost('${post_id}', this)`);
 
-            if(change) {
+            if (change) {
                 likeCount = likeCount == 0 ? 0 : likeCount - 1
             }
 
             $(likon).attr('like-count', likeCount)
-            $($(likon).siblings()[0]).text(' '+likeCount)
+            $($(likon).siblings()[0]).text(' ' + likeCount)
         }
     </script>
     @if(!Auth::guest())
@@ -247,9 +247,9 @@
     @endif
     @else
     <script>
-    function likePost(post_id, likon) {
-        $('#login-btn-top').click();
-    }
+        function likePost(post_id, likon) {
+            $('#login-btn-top').click();
+        }
     </script>
     @endif
 </body>
