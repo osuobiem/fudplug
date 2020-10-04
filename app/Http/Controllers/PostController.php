@@ -233,7 +233,7 @@ class PostController extends Controller
         if (Auth::guest() && Auth::guard('user')->guest()) {
             return response()->json([
                 "success" => false,
-                "messahe" => "You're not logged in"
+                "message" => "You're not logged in"
             ]);
         }
 
@@ -268,6 +268,56 @@ class PostController extends Controller
             return response()->json([
                 'success' => true,
                 'message' => 'Like Successful'
+            ]);
+        } catch (\Throwable $th) {
+            Log::error($th);
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Internal Server Error'
+            ], 500);
+        }
+    }
+
+    /**
+     * Unlike Post
+     * @param int $post_id Post ID
+     * @return json
+     */
+    public function unlike(Request $request, $post_id)
+    {
+        // Check Login
+        if (Auth::guest() && Auth::guard('user')->guest()) {
+            return response()->json([
+                "success" => false,
+                "message" => "You're not logged in"
+            ]);
+        }
+
+        $post = Post::findOrFail($post_id);
+
+        // User or Vendor?
+        $liker = Auth::guest() ? $request->user('user') : $request->user();
+        $liker_type = Auth::guest() ? 'user' : 'vendor';
+
+        $like = Like::where('post_id', $post->id)->where('liker_type', $liker_type)->where('liker_id', $liker->id)->first();
+
+        // Check if post is liked
+        if (!$like) {
+            return response()->json([
+                'success' => false,
+                'message' => "You can't unlike this post"
+            ]);
+        }
+
+        $post->likes -= 1;
+        try {
+            $like->forceDelete();
+            $post->save();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Unlike Successful'
             ]);
         } catch (\Throwable $th) {
             Log::error($th);

@@ -151,6 +151,10 @@
     <script>
         // Like/Unlike a post
         function likePost(post_id, likon) {
+            // Animate Like
+            $(likon).removeClass('animate__animated animate__pulse animate__faster');
+            $(likon).addClass('animate__animated animate__heartBeat');
+
             likeCount = parseInt($(likon).attr('like-count'))
 
             doLike(likeCount, likon, post_id, true)
@@ -159,7 +163,8 @@
 
             goGet(url)
             .then(res => {
-                !res.success ? doUnlike(likeCount, likon, post_id) : null;
+                !res.success ? doUnlike(likeCount, likon, post_id) 
+                : null
             })
             .catch(err => {
                 doUnlike(likeCount, likon, post_id)
@@ -168,11 +173,15 @@
 
         // Unlike a Post
         function unlikePost(post_id, likon) {
+            // Animate Dislike
+            $(likon).removeClass('animate__animated animate__heartBeat');
+            $(likon).addClass('animate__animated animate__pulse animate__faster');
+
             likeCount = parseInt($(likon).attr('like-count'))
 
             doUnlike(likeCount, likon, post_id, true)
 
-            url = `{{ url('post/unlike/') }}${post_id}`;
+            url = `{{ url('post/unlike') }}/${post_id}`;
 
             goGet(url)
             .then(res => {

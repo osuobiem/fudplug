@@ -87,6 +87,9 @@ Route::group(['prefix' => 'post'], function () {
     // Like Post
     Route::get('like/{post_id}', 'PostController@like');
 
+    // Unlike Post
+    Route::get('unlike/{post_id}', 'PostController@unlike');
+
     // *** Protected ***
     Route::group(['middleware' => ['auth']], function () {
         // Create Post
