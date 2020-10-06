@@ -63,6 +63,7 @@
 </div>
 <span class="d-none" data-toggle="modal" href="#signupModal" id="sign-pop"></span>
 
+@push('scripts')
 <script>
   $(document).ready(function () {
     // Attach login form event listener
@@ -98,3 +99,4 @@
     $('#sign-pop').click()
   }
 </script>
+@endpush

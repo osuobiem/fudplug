@@ -81,6 +81,7 @@
   </div>
   <span class="d-none" data-toggle="modal" href="#signupModal" id="sign-pop"></span>
 
+  @push('scripts')
   <script>
     $(document).ready(function () {
       seenInit = localStorage.getItem('seenInit')
@@ -150,3 +151,4 @@
         })
     }
   </script>
+  @endpush

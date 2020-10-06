@@ -14,7 +14,9 @@
     </div>
   </div>
 </div>
+@endsection
 
+@push('scripts')
 <script>
   $(document).ready(function () {
     loadPosts()
@@ -82,7 +84,7 @@
     $('#' + id).removeClass('vid-bod');
     $('.vid-bod').trigger('pause')
     $('#' + id).addClass('vid-bod');
-  } 
+  }
 </script>
 
-@endsection
+@endpush

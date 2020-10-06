@@ -157,6 +157,7 @@
 
 <span class="d-none" data-toggle="modal" href="#loginModal" id="login-pop"></span>
 
+@push('scripts')
 <script>
   $(document).ready(function () {
     // Attach vendor form event listener
@@ -219,3 +220,4 @@
     $('#login-pop').click()
   }
 </script>
+@endpush

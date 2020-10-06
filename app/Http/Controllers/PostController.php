@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Like;
 use App\Media;
 use App\Post;
 use Illuminate\Database\Eloquent\Builder;
@@ -207,7 +208,7 @@ class PostController extends Controller
         if (Auth::guest() && Auth::guard('user')->guest()) {
             $posts = Post::orderBy('created_at', 'desc')->take(15)->get();
 
-            return view('components.posts', ['posts' => $posts]);
+            return view('components.post.index', ['posts' => $posts]);
         } else {
             // Get logged in vendor or user
             $logged_in = $request->user() ?? $request->user('user');
@@ -217,7 +218,114 @@ class PostController extends Controller
                 $query->where('area_id', $logged_in->area_id);
             })->orderBy('created_at', 'desc')->take(15)->get();
 
-            return view('components.posts', ['posts' => $posts]);
+            return view('components.post.index', ['posts' => $posts]);
+        }
+    }
+
+    /**
+     * Like Post
+     * @param int $post_id Post ID
+     * @return json
+     */
+    public function like(Request $request, $post_id)
+    {
+        // Check Login
+        if (Auth::guest() && Auth::guard('user')->guest()) {
+            return response()->json([
+                "success" => false,
+                "message" => "You're not logged in"
+            ]);
+        }
+
+        $post = Post::findOrFail($post_id);
+
+        // User or Vendor?
+        $liker = Auth::guest() ? $request->user('user') : $request->user();
+        $liker_type = Auth::guest() ? 'user' : 'vendor';
+
+        // Check for duplication
+        $liked_before = Like::where('post_id', $post->id)->where('liker_type', $liker_type)->where('liker_id', $liker->id)->count();
+        if ($liked_before > 0) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Duplicate like not allowed'
+            ]);
+        }
+
+        // Create New Like
+        $like = new Like();
+        $like->post_id = $post_id;
+        $like->liker_id = $liker->id;
+        $like->liker_type = $liker_type;
+
+        // Update post like count
+        $post->likes += 1;
+
+        try {
+            $like->save();
+            $post->save();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Like Successful'
+            ]);
+        } catch (\Throwable $th) {
+            Log::error($th);
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Internal Server Error'
+            ], 500);
+        }
+    }
+
+    /**
+     * Unlike Post
+     * @param int $post_id Post ID
+     * @return json
+     */
+    public function unlike(Request $request, $post_id)
+    {
+        // Check Login
+        if (Auth::guest() && Auth::guard('user')->guest()) {
+            return response()->json([
+                "success" => false,
+                "message" => "You're not logged in"
+            ]);
+        }
+
+        $post = Post::findOrFail($post_id);
+
+        // User or Vendor?
+        $liker = Auth::guest() ? $request->user('user') : $request->user();
+        $liker_type = Auth::guest() ? 'user' : 'vendor';
+
+        $like = Like::where('post_id', $post->id)->where('liker_type', $liker_type)->where('liker_id', $liker->id)->first();
+
+        // Check if post is liked
+        if (!$like) {
+            return response()->json([
+                'success' => false,
+                'message' => "You can't unlike this post"
+            ]);
+        }
+
+        $post->likes -= 1;
+        try {
+            $like->forceDelete();
+            $post->save();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Unlike Successful'
+            ]);
+        } catch (\Throwable $th) {
+            Log::error($th);
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Internal Server Error'
+            ], 500);
         }
     }
 }
