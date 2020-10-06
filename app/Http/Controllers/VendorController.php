@@ -380,8 +380,6 @@ class VendorController extends Controller
             //Validate Input
             $validator = $this->dish_add_rules($request);
 
-            return response()->json(['success' => true, 'message' => $request->all()], 200);die;
-
             if ($validator->fails()) {
                 return response()->json(['success' => false, 'message' => $validator->errors('image')->messages()], 200);
             } else {
@@ -525,45 +523,49 @@ class VendorController extends Controller
     {
         $bulk_arr = [];
         //foreach ($titles as $key => $value) {
-        switch ($key) {
-            case 0:
-                # Array for first group of quantities
-                foreach ($request->bulk_title_one as $key_one => $value_one) {
-                    $bulk_arr[$key_one] = ['title' => $value_one, 'price' => $request->bulk_price_one[$key_one]];
-                }
-                break;
+        if (in_array(null, $request->bulk_title_one) || in_array(null, $request->bulk_price_one)) {
+            $bulk_arr = null;
+        } else {
+            switch ($key) {
+                case 0:
+                    # Array for first group of quantities
+                    foreach ($request->bulk_title_one as $key_one => $value_one) {
+                        $bulk_arr[$key_one] = ['title' => $value_one, 'price' => $request->bulk_price_one[$key_one]];
+                    }
+                    break;
 
-            case 1:
-                # Array for second group of quantities
-                foreach ($request->bulk_title_two as $key_two => $value_two) {
-                    $bulk_arr[$key_two] = ['title' => $value_two, 'price' => $request->bulk_price_two[$key_two]];
-                }
-                break;
+                case 1:
+                    # Array for second group of quantities
+                    foreach ($request->bulk_title_two as $key_two => $value_two) {
+                        $bulk_arr[$key_two] = ['title' => $value_two, 'price' => $request->bulk_price_two[$key_two]];
+                    }
+                    break;
 
-            case 2:
-                # Array for third group of quantities
-                foreach ($request->bulk_title_three as $key_three => $value_three) {
-                    $bulk_arr[$key_three] = ['title' => $value_three, 'price' => $request->bulk_price_three[$key_three]];
-                }
-                break;
+                case 2:
+                    # Array for third group of quantities
+                    foreach ($request->bulk_title_three as $key_three => $value_three) {
+                        $bulk_arr[$key_three] = ['title' => $value_three, 'price' => $request->bulk_price_three[$key_three]];
+                    }
+                    break;
 
-            case 3:
-                # Array for fourth group of quantities
-                foreach ($request->bulk_title_four as $key_four => $value_four) {
-                    $bulk_arr[$key_four] = ['title' => $value_four, 'price' => $request->bulk_price_four[$key_four]];
-                }
-                break;
+                case 3:
+                    # Array for fourth group of quantities
+                    foreach ($request->bulk_title_four as $key_four => $value_four) {
+                        $bulk_arr[$key_four] = ['title' => $value_four, 'price' => $request->bulk_price_four[$key_four]];
+                    }
+                    break;
 
-            case 4:
-                # Array for fifth group of quantities
-                foreach ($request->bulk_title_five as $key_five => $value_five) {
-                    $bulk_arr[$key_five] = ['title' => $value_five, 'price' => $request->bulk_price_five[$key_five]];
-                }
-                break;
+                case 4:
+                    # Array for fifth group of quantities
+                    foreach ($request->bulk_title_five as $key_five => $value_five) {
+                        $bulk_arr[$key_five] = ['title' => $value_five, 'price' => $request->bulk_price_five[$key_five]];
+                    }
+                    break;
 
-            default:
-                # code...
-                break;
+                default:
+                    # code...
+                    break;
+            }
         }
 
         return json_encode($bulk_arr);
