@@ -18,6 +18,55 @@
                     <img id="image" class="img-edit rounded" style="height:430px;"
                         src="{{Storage::url('vendor/dish/'.$dish->image)}}">
                 </div>
+                @if($dish->type == "simple")
+                <div class="col-md-5">
+                    <div id="basics">
+
+                        <div class="mb-3 mt-0 text-lg-left text-center">
+                            <h4 class="font-weight-semi-bold">{{ucfirst($dish->title)}}</h4>
+                        </div>
+
+
+                        <div id="basicsAccordion">
+
+                            <div class="box shadow-sm border rounded bg-white mb-2">
+                                <div id="basicsHeadingOne">
+                                    <h5 class="mb-0">
+                                        <button
+                                            class="shadow-none btn btn-block d-flex justify-content-between card-btn p-3 collapsed font-weight-bold"
+                                            data-toggle="collapse" data-target="#basicsCollapseOne"
+                                            aria-expanded="false" aria-controls="basicsCollapseOne">
+                                            Regular Quantity
+                                            <!-- <span class="card-btn-arrow">
+                                                <span class="la la-chevron-down"></span>
+                                            </span> -->
+                                        </button>
+                                    </h5>
+                                </div>
+                                <div id="basicsCollapseOne" class="collapse show" aria-labelledby="basicsHeadingOne"
+                                    data-parent="#basicsAccordion" style="">
+                                    <div class="card-body border-top p-2 text-muted" style="font-size: large;">
+                                        <ul class="list-group box-body generic-scrollbar"
+                                            style="max-height: 250px; overflow: auto;">
+                                            <li class="list-group-item pt-0">
+                                                <small>Price</small>
+                                                <p>
+                                                    <span class="float-left text-danger" style="font-size: larger;">
+                                                        ₦{{$price}}</span>
+                                                    <span class="badge badge-secondary float-right">
+                                                        {{$quantity}} left</span>
+                                                </p>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+                @else
                 <div class="col-md-5">
                     <div id="basics">
 
@@ -105,6 +154,7 @@
 
                     </div>
                 </div>
+                @endif
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>

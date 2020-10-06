@@ -113,7 +113,7 @@
             </div>
         </div>
         <div class="tab-pane fade" id="dish" role="tabpanel" aria-labelledby="home-tab">
-            <div class="box-body p-3 overflow-auto" style="height: 300px;">
+            <div class="box-body p-3 overflow-auto generic-scrollbar" style="height: 300px;">
                 @if(!empty($dishes))
                 @foreach($dishes as $dish)
                 <div class="d-flex align-items-center osahan-post-header mb-3 people-list">

@@ -380,7 +380,7 @@ class VendorController extends Controller
             //Validate Input
             $validator = $this->dish_add_rules($request);
 
-            //return response()->json(['success' => true, 'message' => $request->all()], 200);die;
+            return response()->json(['success' => true, 'message' => $request->all()], 200);die;
 
             if ($validator->fails()) {
                 return response()->json(['success' => false, 'message' => $validator->errors('image')->messages()], 200);
@@ -401,7 +401,7 @@ class VendorController extends Controller
 
     /**
      * Process Vendor Simple Dish Upload
-     * @return string
+     * @return void
      */
     public function simple_put($request)
     {
@@ -420,7 +420,7 @@ class VendorController extends Controller
 
     /**
      * Process Vendor Advanced Dish Upload
-     * @return string
+     * @return void
      */
     public function advanced_put($request)
     {
@@ -631,10 +631,19 @@ class VendorController extends Controller
         try {
             if (isset($dish_id)) {
                 $dish = Item::where(['vendor_id' => Auth::user()->id, 'id' => $dish_id])->first();
-                $qty = $dish->quantity = json_decode($dish->quantity);
-                $regular_qty = json_decode($qty->regular);
-                $bulk_qty = json_decode($qty->bulk);
-                return view('vendor.components.dish-view', compact('dish', 'regular_qty', 'bulk_qty'));
+                $data = [];
+                if ($dish->type == "simple") {
+                    $qty = json_decode($dish->quantity);
+                    $data['dish'] = $dish;
+                    $data['price'] = $qty->price;
+                    $data['quantity'] = $qty->quantity;
+                } else {
+                    $qty = $dish->quantity = json_decode($dish->quantity);
+                    $data['dish'] = $dish;
+                    $data['regular_qty'] = json_decode($qty->regular);
+                    $data['bulk_qty'] = json_decode($qty->bulk);
+                }
+                return view('vendor.components.dish-view', $data);
             } else {
                 $dishes = Item::where('vendor_id', Auth::user()->id)->get();
                 return view('vendor.components.right-side', ['dishes' => $dishes]);

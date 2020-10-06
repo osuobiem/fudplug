@@ -268,17 +268,96 @@
                                                 <input class="form-control rounded-right-0 col-sm-4"
                                                     name="regular_title_one[]" type="text" placeholder="Title"
                                                     disabled />
-                                                <input class="form-control col-sm-3 rounded-0"
+                                                <input class="form-control col-sm-4 rounded-0"
                                                     name="regular_price_one[]" type="number" placeholder="Price"
                                                     disabled />
-                                                <input class="form-control rounded-left-0 col-sm-3"
+                                                <input class="form-control rounded-left-0 col-sm-4"
                                                     name="regular_quantity_one[]" type="number"
                                                     placeholder="Quantity Available" disabled />
-                                                <div class="col-sm-2">
-                                                    <button type="button" onclick="toggleRegularFields(this)"
-                                                        class="btn btn-success btn-sm qty-btn-add-1"
-                                                        style="float: right;">
+                                                <div class="col-sm-12 pt-2 text-left input-group-btn">
+                                                    <button type="button" onclick="toggleMain(this)"
+                                                        class="btn btn-success btn-sm qty-btn-add-1">
                                                         <span class="las la-plus" aria-hidden="true"></span>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div class="mb-2 form-inline d-none">
+                                                <input class="form-control rounded-right-0 col-sm-4"
+                                                    name="regular_title_one[]" type="text" placeholder="Title"
+                                                    disabled />
+                                                <input class="form-control col-sm-4 rounded-0"
+                                                    name="regular_price_one[]" type="number" placeholder="Price"
+                                                    disabled />
+                                                <input class="form-control rounded-left-0 col-sm-4"
+                                                    name="regular_quantity_one[]" type="number"
+                                                    placeholder="Quantity Available" disabled />
+                                                <div class="col-sm-12 pt-2 text-left input-group-btn">
+                                                    <button type="button" onclick="toggleMain(this)"
+                                                        class="btn btn-success btn-sm qty-btn-add-1">
+                                                        <span class="las la-plus" aria-hidden="true"></span>
+                                                    </button>
+                                                    <button type="button" onclick="toggleMain(this, false)"
+                                                        class="btn btn-danger btn-sm qty-btn-add-1">
+                                                        <span class="las la-minus" aria-hidden="true"></span>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div class="mb-2 form-inline d-none">
+                                                <input class="form-control rounded-right-0 col-sm-4"
+                                                    name="regular_title_one[]" type="text" placeholder="Title"
+                                                    disabled />
+                                                <input class="form-control col-sm-4 rounded-0"
+                                                    name="regular_price_one[]" type="number" placeholder="Price"
+                                                    disabled />
+                                                <input class="form-control rounded-left-0 col-sm-4"
+                                                    name="regular_quantity_one[]" type="number"
+                                                    placeholder="Quantity Available" disabled />
+                                                <div class="col-sm-12 pt-2 text-left input-group-btn">
+                                                    <button type="button" onclick="toggleMain(this)"
+                                                        class="btn btn-success btn-sm qty-btn-add-1">
+                                                        <span class="las la-plus" aria-hidden="true"></span>
+                                                    </button>
+                                                    <button type="button" onclick="toggleMain(this, false)"
+                                                        class="btn btn-danger btn-sm qty-btn-add-1">
+                                                        <span class="las la-minus" aria-hidden="true"></span>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div class="mb-2 form-inline d-none">
+                                                <input class="form-control rounded-right-0 col-sm-4"
+                                                    name="regular_title_one[]" type="text" placeholder="Title"
+                                                    disabled />
+                                                <input class="form-control col-sm-4 rounded-0"
+                                                    name="regular_price_one[]" type="number" placeholder="Price"
+                                                    disabled />
+                                                <input class="form-control rounded-left-0 col-sm-4"
+                                                    name="regular_quantity_one[]" type="number"
+                                                    placeholder="Quantity Available" disabled />
+                                                <div class="col-sm-12 pt-2 text-left input-group-btn">
+                                                    <button type="button" onclick="toggleMain(this)"
+                                                        class="btn btn-success btn-sm qty-btn-add-1">
+                                                        <span class="las la-plus" aria-hidden="true"></span>
+                                                    </button>
+                                                    <button type="button" onclick="toggleMain(this, false)"
+                                                        class="btn btn-danger btn-sm qty-btn-add-1">
+                                                        <span class="las la-minus" aria-hidden="true"></span>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div class="mb-2 form-inline d-none">
+                                                <input class="form-control rounded-right-0 col-sm-4"
+                                                    name="regular_title_one[]" type="text" placeholder="Title"
+                                                    disabled />
+                                                <input class="form-control col-sm-4 rounded-0"
+                                                    name="regular_price_one[]" type="number" placeholder="Price"
+                                                    disabled />
+                                                <input class="form-control rounded-left-0 col-sm-4"
+                                                    name="regular_quantity_one[]" type="number"
+                                                    placeholder="Quantity Available" disabled />
+                                                <div class="col-sm-12 pt-2 text-left input-group-btn">
+                                                    <button type="button" onclick="toggleMain(this, false)"
+                                                        class="btn btn-danger btn-sm qty-btn-add-1">
+                                                        <span class="las la-minus" aria-hidden="true"></span>
                                                     </button>
                                                 </div>
                                             </div>
@@ -288,16 +367,87 @@
                                         <label class="text-center"> Bulk Quantity </label>
                                         <div>
                                             <div class="bulk-entry-1 mb-2 form-inline">
-                                                <input class="form-control col-sm-5 rounded-right-0"
+                                                <input class="form-control col-sm-6 rounded-right-0"
                                                     name="bulk_title_one[]" type="text" placeholder="Title" disabled />
-                                                <input class="form-control col-sm-5 rounded-left-0"
+                                                <input class="form-control col-sm-6 rounded-left-0"
                                                     name="bulk_price_one[]" type="number" placeholder="Price"
                                                     disabled />
-                                                <div class="col-sm-2">
-                                                    <button type="button" onclick="toggleBulkFields(this)"
-                                                        class="btn btn-success btn-sm bulk-btn-add-1"
-                                                        style="float: right;">
+                                                <div class="col-sm-12 pt-2 text-left input-group-btn">
+                                                    <button type="button" onclick="toggleMain(this)"
+                                                        class="btn btn-success btn-sm qty-btn-add-1">
                                                         <span class="las la-plus" aria-hidden="true"></span>
+                                                    </button>
+                                                </div>
+                                                <!-- <input class="form-control col-sm-4" name="fields[]" type="text"
+                                                    placeholder="Quantity Available" /> -->
+                                            </div>
+                                            <div class="bulk-entry-1 mb-2 form-inline d-none">
+                                                <input class="form-control col-sm-6 rounded-right-0"
+                                                    name="bulk_title_one[]" type="text" placeholder="Title" disabled />
+                                                <input class="form-control col-sm-6 rounded-left-0"
+                                                    name="bulk_price_one[]" type="number" placeholder="Price"
+                                                    disabled />
+                                                <div class="col-sm-12 pt-2 text-left input-group-btn">
+                                                    <button type="button" onclick="toggleMain(this)"
+                                                        class="btn btn-success btn-sm qty-btn-add-1">
+                                                        <span class="las la-plus" aria-hidden="true"></span>
+                                                    </button>
+                                                    <button type="button" onclick="toggleMain(this, false)"
+                                                        class="btn btn-danger btn-sm qty-btn-add-1">
+                                                        <span class="las la-minus" aria-hidden="true"></span>
+                                                    </button>
+                                                </div>
+                                                <!-- <input class="form-control col-sm-4" name="fields[]" type="text"
+                                                    placeholder="Quantity Available" /> -->
+                                            </div>
+                                            <div class="bulk-entry-1 mb-2 form-inline d-none">
+                                                <input class="form-control col-sm-6 rounded-right-0"
+                                                    name="bulk_title_one[]" type="text" placeholder="Title" disabled />
+                                                <input class="form-control col-sm-6 rounded-left-0"
+                                                    name="bulk_price_one[]" type="number" placeholder="Price"
+                                                    disabled />
+                                                <div class="col-sm-12 pt-2 text-left input-group-btn">
+                                                    <button type="button" onclick="toggleMain(this)"
+                                                        class="btn btn-success btn-sm qty-btn-add-1">
+                                                        <span class="las la-plus" aria-hidden="true"></span>
+                                                    </button>
+                                                    <button type="button" onclick="toggleMain(this, false)"
+                                                        class="btn btn-danger btn-sm qty-btn-add-1">
+                                                        <span class="las la-minus" aria-hidden="true"></span>
+                                                    </button>
+                                                </div>
+                                                <!-- <input class="form-control col-sm-4" name="fields[]" type="text"
+                                                    placeholder="Quantity Available" /> -->
+                                            </div>
+                                            <div class="bulk-entry-1 mb-2 form-inline d-none">
+                                                <input class="form-control col-sm-6 rounded-right-0"
+                                                    name="bulk_title_one[]" type="text" placeholder="Title" disabled />
+                                                <input class="form-control col-sm-6 rounded-left-0"
+                                                    name="bulk_price_one[]" type="number" placeholder="Price"
+                                                    disabled />
+                                                <div class="col-sm-12 pt-2 text-left input-group-btn">
+                                                    <button type="button" onclick="toggleMain(this)"
+                                                        class="btn btn-success btn-sm qty-btn-add-1">
+                                                        <span class="las la-plus" aria-hidden="true"></span>
+                                                    </button>
+                                                    <button type="button" onclick="toggleMain(this, false)"
+                                                        class="btn btn-danger btn-sm qty-btn-add-1">
+                                                        <span class="las la-minus" aria-hidden="true"></span>
+                                                    </button>
+                                                </div>
+                                                <!-- <input class="form-control col-sm-4" name="fields[]" type="text"
+                                                    placeholder="Quantity Available" /> -->
+                                            </div>
+                                            <div class="bulk-entry-1 mb-2 form-inline d-none">
+                                                <input class="form-control col-sm-6 rounded-right-0"
+                                                    name="bulk_title_one[]" type="text" placeholder="Title" disabled />
+                                                <input class="form-control col-sm-6 rounded-left-0"
+                                                    name="bulk_price_one[]" type="number" placeholder="Price"
+                                                    disabled />
+                                                <div class="col-sm-12 pt-2 text-left input-group-btn">
+                                                    <button type="button" onclick="toggleMain(this, false)"
+                                                        class="btn btn-danger btn-sm qty-btn-add-1">
+                                                        <span class="las la-minus" aria-hidden="true"></span>
                                                     </button>
                                                 </div>
                                                 <!-- <input class="form-control col-sm-4" name="fields[]" type="text"
@@ -333,43 +483,193 @@
                                         </div>
                                     </div>
 
-                                    <div class="col-sm-6 border text-center">
+                                    <div class="col-sm-6 border text-center pt-3 pb-3">
                                         <label class="text-center"> Regular Quantity </label>
                                         <div>
                                             <div class="mb-2 form-inline">
                                                 <input class="form-control rounded-right-0 col-sm-4"
                                                     name="regular_title_two[]" type="text" placeholder="Title"
                                                     disabled />
-                                                <input class="form-control col-sm-3 rounded-0"
+                                                <input class="form-control col-sm-4 rounded-0"
                                                     name="regular_price_two[]" type="number" placeholder="Price"
                                                     disabled />
-                                                <input class="form-control rounded-left-0 col-sm-3"
-                                                    name="regular_quantity_two[]" disabled type="number"
-                                                    placeholder="Quantity Available" />
-                                                <div class="col-sm-2">
-                                                    <button type="button" onclick="toggleRegularFields(this)"
-                                                        class="btn btn-success btn-sm qty-btn-add-1"
-                                                        style="float: right;">
+                                                <input class="form-control rounded-left-0 col-sm-4"
+                                                    name="regular_quantity_two[]" type="number"
+                                                    placeholder="Quantity Available" disabled />
+                                                <div class="col-sm-12 pt-2 text-left input-group-btn">
+                                                    <button type="button" onclick="toggleMain(this)"
+                                                        class="btn btn-success btn-sm qty-btn-add-1">
                                                         <span class="las la-plus" aria-hidden="true"></span>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div class="mb-2 form-inline d-none">
+                                                <input class="form-control rounded-right-0 col-sm-4"
+                                                    name="regular_title_two[]" type="text" placeholder="Title"
+                                                    disabled />
+                                                <input class="form-control col-sm-4 rounded-0"
+                                                    name="regular_price_two[]" type="number" placeholder="Price"
+                                                    disabled />
+                                                <input class="form-control rounded-left-0 col-sm-4"
+                                                    name="regular_quantity_two[]" type="number"
+                                                    placeholder="Quantity Available" disabled />
+                                                <div class="col-sm-12 pt-2 text-left input-group-btn">
+                                                    <button type="button" onclick="toggleMain(this)"
+                                                        class="btn btn-success btn-sm qty-btn-add-1">
+                                                        <span class="las la-plus" aria-hidden="true"></span>
+                                                    </button>
+                                                    <button type="button" onclick="toggleMain(this, false)"
+                                                        class="btn btn-danger btn-sm qty-btn-add-1">
+                                                        <span class="las la-minus" aria-hidden="true"></span>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div class="mb-2 form-inline d-none">
+                                                <input class="form-control rounded-right-0 col-sm-4"
+                                                    name="regular_title_two[]" type="text" placeholder="Title"
+                                                    disabled />
+                                                <input class="form-control col-sm-4 rounded-0"
+                                                    name="regular_price_two[]" type="number" placeholder="Price"
+                                                    disabled />
+                                                <input class="form-control rounded-left-0 col-sm-4"
+                                                    name="regular_quantity_two[]" type="number"
+                                                    placeholder="Quantity Available" disabled />
+                                                <div class="col-sm-12 pt-2 text-left input-group-btn">
+                                                    <button type="button" onclick="toggleMain(this)"
+                                                        class="btn btn-success btn-sm qty-btn-add-1">
+                                                        <span class="las la-plus" aria-hidden="true"></span>
+                                                    </button>
+                                                    <button type="button" onclick="toggleMain(this, false)"
+                                                        class="btn btn-danger btn-sm qty-btn-add-1">
+                                                        <span class="las la-minus" aria-hidden="true"></span>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div class="mb-2 form-inline d-none">
+                                                <input class="form-control rounded-right-0 col-sm-4"
+                                                    name="regular_title_two[]" type="text" placeholder="Title"
+                                                    disabled />
+                                                <input class="form-control col-sm-4 rounded-0"
+                                                    name="regular_price_two[]" type="number" placeholder="Price"
+                                                    disabled />
+                                                <input class="form-control rounded-left-0 col-sm-4"
+                                                    name="regular_quantity_two[]" type="number"
+                                                    placeholder="Quantity Available" disabled />
+                                                <div class="col-sm-12 pt-2 text-left input-group-btn">
+                                                    <button type="button" onclick="toggleMain(this)"
+                                                        class="btn btn-success btn-sm qty-btn-add-1">
+                                                        <span class="las la-plus" aria-hidden="true"></span>
+                                                    </button>
+                                                    <button type="button" onclick="toggleMain(this, false)"
+                                                        class="btn btn-danger btn-sm qty-btn-add-1">
+                                                        <span class="las la-minus" aria-hidden="true"></span>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div class="mb-2 form-inline d-none">
+                                                <input class="form-control rounded-right-0 col-sm-4"
+                                                    name="regular_title_two[]" type="text" placeholder="Title"
+                                                    disabled />
+                                                <input class="form-control col-sm-4 rounded-0"
+                                                    name="regular_price_two[]" type="number" placeholder="Price"
+                                                    disabled />
+                                                <input class="form-control rounded-left-0 col-sm-4"
+                                                    name="regular_quantity_two[]" type="number"
+                                                    placeholder="Quantity Available" disabled />
+                                                <div class="col-sm-12 pt-2 text-left input-group-btn">
+                                                    <button type="button" onclick="toggleMain(this, false)"
+                                                        class="btn btn-danger btn-sm qty-btn-add-1">
+                                                        <span class="las la-minus" aria-hidden="true"></span>
                                                     </button>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-sm-6 border text-center">
+                                    <div class="col-sm-6 border text-center pt-3 pb-3">
                                         <label class="text-center"> Bulk Quantity </label>
                                         <div>
                                             <div class="bulk-entry-1 mb-2 form-inline">
-                                                <input class="form-control col-sm-5 rounded-right-0"
+                                                <input class="form-control col-sm-6 rounded-right-0"
                                                     name="bulk_title_two[]" type="text" placeholder="Title" disabled />
-                                                <input class="form-control col-sm-5 rounded-left-0"
+                                                <input class="form-control col-sm-6 rounded-left-0"
                                                     name="bulk_price_two[]" type="number" placeholder="Price"
                                                     disabled />
-                                                <div class="col-sm-2">
-                                                    <button type="button" onclick="toggleBulkFields(this)"
-                                                        class="btn btn-success btn-sm bulk-btn-add-1"
-                                                        style="float: right;">
+                                                <div class="col-sm-12 pt-2 text-left input-group-btn">
+                                                    <button type="button" onclick="toggleMain(this)"
+                                                        class="btn btn-success btn-sm qty-btn-add-1">
                                                         <span class="las la-plus" aria-hidden="true"></span>
+                                                    </button>
+                                                </div>
+                                                <!-- <input class="form-control col-sm-4" name="fields[]" type="text"
+                                                    placeholder="Quantity Available" /> -->
+                                            </div>
+                                            <div class="bulk-entry-1 mb-2 form-inline d-none">
+                                                <input class="form-control col-sm-6 rounded-right-0"
+                                                    name="bulk_title_two[]" type="text" placeholder="Title" disabled />
+                                                <input class="form-control col-sm-6 rounded-left-0"
+                                                    name="bulk_price_two[]" type="number" placeholder="Price"
+                                                    disabled />
+                                                <div class="col-sm-12 pt-2 text-left input-group-btn">
+                                                    <button type="button" onclick="toggleMain(this)"
+                                                        class="btn btn-success btn-sm qty-btn-add-1">
+                                                        <span class="las la-plus" aria-hidden="true"></span>
+                                                    </button>
+                                                    <button type="button" onclick="toggleMain(this, false)"
+                                                        class="btn btn-danger btn-sm qty-btn-add-1">
+                                                        <span class="las la-minus" aria-hidden="true"></span>
+                                                    </button>
+                                                </div>
+                                                <!-- <input class="form-control col-sm-4" name="fields[]" type="text"
+                                                    placeholder="Quantity Available" /> -->
+                                            </div>
+                                            <div class="bulk-entry-1 mb-2 form-inline d-none">
+                                                <input class="form-control col-sm-6 rounded-right-0"
+                                                    name="bulk_title_two[]" type="text" placeholder="Title" disabled />
+                                                <input class="form-control col-sm-6 rounded-left-0"
+                                                    name="bulk_price_two[]" type="number" placeholder="Price"
+                                                    disabled />
+                                                <div class="col-sm-12 pt-2 text-left input-group-btn">
+                                                    <button type="button" onclick="toggleMain(this)"
+                                                        class="btn btn-success btn-sm qty-btn-add-1">
+                                                        <span class="las la-plus" aria-hidden="true"></span>
+                                                    </button>
+                                                    <button type="button" onclick="toggleMain(this, false)"
+                                                        class="btn btn-danger btn-sm qty-btn-add-1">
+                                                        <span class="las la-minus" aria-hidden="true"></span>
+                                                    </button>
+                                                </div>
+                                                <!-- <input class="form-control col-sm-4" name="fields[]" type="text"
+                                                    placeholder="Quantity Available" /> -->
+                                            </div>
+                                            <div class="bulk-entry-1 mb-2 form-inline d-none">
+                                                <input class="form-control col-sm-6 rounded-right-0"
+                                                    name="bulk_title_two[]" type="text" placeholder="Title" disabled />
+                                                <input class="form-control col-sm-6 rounded-left-0"
+                                                    name="bulk_price_two[]" type="number" placeholder="Price"
+                                                    disabled />
+                                                <div class="col-sm-12 pt-2 text-left input-group-btn">
+                                                    <button type="button" onclick="toggleMain(this)"
+                                                        class="btn btn-success btn-sm qty-btn-add-1">
+                                                        <span class="las la-plus" aria-hidden="true"></span>
+                                                    </button>
+                                                    <button type="button" onclick="toggleMain(this, false)"
+                                                        class="btn btn-danger btn-sm qty-btn-add-1">
+                                                        <span class="las la-minus" aria-hidden="true"></span>
+                                                    </button>
+                                                </div>
+                                                <!-- <input class="form-control col-sm-4" name="fields[]" type="text"
+                                                    placeholder="Quantity Available" /> -->
+                                            </div>
+                                            <div class="bulk-entry-1 mb-2 form-inline d-none">
+                                                <input class="form-control col-sm-6 rounded-right-0"
+                                                    name="bulk_title_two[]" type="text" placeholder="Title" disabled />
+                                                <input class="form-control col-sm-6 rounded-left-0"
+                                                    name="bulk_price_two[]" type="number" placeholder="Price"
+                                                    disabled />
+                                                <div class="col-sm-12 pt-2 text-left input-group-btn">
+                                                    <button type="button" onclick="toggleMain(this, false)"
+                                                        class="btn btn-danger btn-sm qty-btn-add-1">
+                                                        <span class="las la-minus" aria-hidden="true"></span>
                                                     </button>
                                                 </div>
                                                 <!-- <input class="form-control col-sm-4" name="fields[]" type="text"
@@ -409,44 +709,198 @@
                                         </div>
                                     </div>
 
-                                    <div class="col-sm-6 border text-center">
+                                    <div class="col-sm-6 border text-center pt-3 pb-3">
                                         <label class="text-center"> Regular Quantity </label>
                                         <div>
                                             <div class="mb-2 form-inline">
                                                 <input class="form-control rounded-right-0 col-sm-4"
                                                     name="regular_title_three[]" type="text" placeholder="Title"
                                                     disabled />
-                                                <input class="form-control col-sm-3 rounded-0"
+                                                <input class="form-control col-sm-4 rounded-0"
                                                     name="regular_price_three[]" type="number" placeholder="Price"
                                                     disabled />
-                                                <input class="form-control rounded-left-0 col-sm-3"
+                                                <input class="form-control rounded-left-0 col-sm-4"
                                                     name="regular_quantity_three[]" type="number"
                                                     placeholder="Quantity Available" disabled />
-                                                <div class="col-sm-2">
-                                                    <button type="button" onclick="toggleRegularFields(this)"
-                                                        class="btn btn-success btn-sm qty-btn-add-1"
-                                                        style="float: right;">
+                                                <div class="col-sm-12 pt-2 text-left input-group-btn">
+                                                    <button type="button" onclick="toggleMain(this)"
+                                                        class="btn btn-success btn-sm qty-btn-add-1">
                                                         <span class="las la-plus" aria-hidden="true"></span>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div class="mb-2 form-inline d-none">
+                                                <input class="form-control rounded-right-0 col-sm-4"
+                                                    name="regular_title_three[]" type="text" placeholder="Title"
+                                                    disabled />
+                                                <input class="form-control col-sm-4 rounded-0"
+                                                    name="regular_price_three[]" type="number" placeholder="Price"
+                                                    disabled />
+                                                <input class="form-control rounded-left-0 col-sm-4"
+                                                    name="regular_quantity_three[]" type="number"
+                                                    placeholder="Quantity Available" disabled />
+                                                <div class="col-sm-12 pt-2 text-left input-group-btn">
+                                                    <button type="button" onclick="toggleMain(this)"
+                                                        class="btn btn-success btn-sm qty-btn-add-1">
+                                                        <span class="las la-plus" aria-hidden="true"></span>
+                                                    </button>
+                                                    <button type="button" onclick="toggleMain(this, false)"
+                                                        class="btn btn-danger btn-sm qty-btn-add-1">
+                                                        <span class="las la-minus" aria-hidden="true"></span>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div class="mb-2 form-inline d-none">
+                                                <input class="form-control rounded-right-0 col-sm-4"
+                                                    name="regular_title_three[]" type="text" placeholder="Title"
+                                                    disabled />
+                                                <input class="form-control col-sm-4 rounded-0"
+                                                    name="regular_price_three[]" type="number" placeholder="Price"
+                                                    disabled />
+                                                <input class="form-control rounded-left-0 col-sm-4"
+                                                    name="regular_quantity_three[]" type="number"
+                                                    placeholder="Quantity Available" disabled />
+                                                <div class="col-sm-12 pt-2 text-left input-group-btn">
+                                                    <button type="button" onclick="toggleMain(this)"
+                                                        class="btn btn-success btn-sm qty-btn-add-1">
+                                                        <span class="las la-plus" aria-hidden="true"></span>
+                                                    </button>
+                                                    <button type="button" onclick="toggleMain(this, false)"
+                                                        class="btn btn-danger btn-sm qty-btn-add-1">
+                                                        <span class="las la-minus" aria-hidden="true"></span>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div class="mb-2 form-inline d-none">
+                                                <input class="form-control rounded-right-0 col-sm-4"
+                                                    name="regular_title_three[]" type="text" placeholder="Title"
+                                                    disabled />
+                                                <input class="form-control col-sm-4 rounded-0"
+                                                    name="regular_price_three[]" type="number" placeholder="Price"
+                                                    disabled />
+                                                <input class="form-control rounded-left-0 col-sm-4"
+                                                    name="regular_quantity_three[]" type="number"
+                                                    placeholder="Quantity Available" disabled />
+                                                <div class="col-sm-12 pt-2 text-left input-group-btn">
+                                                    <button type="button" onclick="toggleMain(this)"
+                                                        class="btn btn-success btn-sm qty-btn-add-1">
+                                                        <span class="las la-plus" aria-hidden="true"></span>
+                                                    </button>
+                                                    <button type="button" onclick="toggleMain(this, false)"
+                                                        class="btn btn-danger btn-sm qty-btn-add-1">
+                                                        <span class="las la-minus" aria-hidden="true"></span>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div class="mb-2 form-inline d-none">
+                                                <input class="form-control rounded-right-0 col-sm-4"
+                                                    name="regular_title_three[]" type="text" placeholder="Title"
+                                                    disabled />
+                                                <input class="form-control col-sm-4 rounded-0"
+                                                    name="regular_price_three[]" type="number" placeholder="Price"
+                                                    disabled />
+                                                <input class="form-control rounded-left-0 col-sm-4"
+                                                    name="regular_quantity_three[]" type="number"
+                                                    placeholder="Quantity Available" disabled />
+                                                <div class="col-sm-12 pt-2 text-left input-group-btn">
+                                                    <button type="button" onclick="toggleMain(this, false)"
+                                                        class="btn btn-danger btn-sm qty-btn-add-1">
+                                                        <span class="las la-minus" aria-hidden="true"></span>
                                                     </button>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-sm-6 border text-center">
+                                    <div class="col-sm-6 border text-center pt-3 pb-3">
                                         <label class="text-center"> Bulk Quantity </label>
                                         <div>
                                             <div class="bulk-entry-1 mb-2 form-inline">
-                                                <input class="form-control col-sm-5 rounded-right-0"
+                                                <input class="form-control col-sm-6 rounded-right-0"
                                                     name="bulk_title_three[]" type="text" placeholder="Title"
                                                     disabled />
-                                                <input class="form-control col-sm-5 rounded-left-0"
+                                                <input class="form-control col-sm-6 rounded-left-0"
                                                     name="bulk_price_three[]" type="number" placeholder="Price"
                                                     disabled />
-                                                <div class="col-sm-2">
-                                                    <button type="button" onclick="toggleBulkFields(this)"
-                                                        class="btn btn-success btn-sm bulk-btn-add-1"
-                                                        style="float: right;">
+                                                <div class="col-sm-12 pt-2 text-left input-group-btn">
+                                                    <button type="button" onclick="toggleMain(this)"
+                                                        class="btn btn-success btn-sm qty-btn-add-1">
                                                         <span class="las la-plus" aria-hidden="true"></span>
+                                                    </button>
+                                                </div>
+                                                <!-- <input class="form-control col-sm-4" name="fields[]" type="text"
+                                                    placeholder="Quantity Available" /> -->
+                                            </div>
+                                            <div class="bulk-entry-1 mb-2 form-inline d-none">
+                                                <input class="form-control col-sm-6 rounded-right-0"
+                                                    name="bulk_title_three[]" type="text" placeholder="Title"
+                                                    disabled />
+                                                <input class="form-control col-sm-6 rounded-left-0"
+                                                    name="bulk_price_three[]" type="number" placeholder="Price"
+                                                    disabled />
+                                                <div class="col-sm-12 pt-2 text-left input-group-btn">
+                                                    <button type="button" onclick="toggleMain(this)"
+                                                        class="btn btn-success btn-sm qty-btn-add-1">
+                                                        <span class="las la-plus" aria-hidden="true"></span>
+                                                    </button>
+                                                    <button type="button" onclick="toggleMain(this, false)"
+                                                        class="btn btn-danger btn-sm qty-btn-add-1">
+                                                        <span class="las la-minus" aria-hidden="true"></span>
+                                                    </button>
+                                                </div>
+                                                <!-- <input class="form-control col-sm-4" name="fields[]" type="text"
+                                                    placeholder="Quantity Available" /> -->
+                                            </div>
+                                            <div class="bulk-entry-1 mb-2 form-inline d-none">
+                                                <input class="form-control col-sm-6 rounded-right-0"
+                                                    name="bulk_title_three[]" type="text" placeholder="Title"
+                                                    disabled />
+                                                <input class="form-control col-sm-6 rounded-left-0"
+                                                    name="bulk_price_three[]" type="number" placeholder="Price"
+                                                    disabled />
+                                                <div class="col-sm-12 pt-2 text-left input-group-btn">
+                                                    <button type="button" onclick="toggleMain(this)"
+                                                        class="btn btn-success btn-sm qty-btn-add-1">
+                                                        <span class="las la-plus" aria-hidden="true"></span>
+                                                    </button>
+                                                    <button type="button" onclick="toggleMain(this, false)"
+                                                        class="btn btn-danger btn-sm qty-btn-add-1">
+                                                        <span class="las la-minus" aria-hidden="true"></span>
+                                                    </button>
+                                                </div>
+                                                <!-- <input class="form-control col-sm-4" name="fields[]" type="text"
+                                                    placeholder="Quantity Available" /> -->
+                                            </div>
+                                            <div class="bulk-entry-1 mb-2 form-inline d-none">
+                                                <input class="form-control col-sm-6 rounded-right-0"
+                                                    name="bulk_title_three[]" type="text" placeholder="Title"
+                                                    disabled />
+                                                <input class="form-control col-sm-6 rounded-left-0"
+                                                    name="bulk_price_three[]" type="number" placeholder="Price"
+                                                    disabled />
+                                                <div class="col-sm-12 pt-2 text-left input-group-btn">
+                                                    <button type="button" onclick="toggleMain(this)"
+                                                        class="btn btn-success btn-sm qty-btn-add-1">
+                                                        <span class="las la-plus" aria-hidden="true"></span>
+                                                    </button>
+                                                    <button type="button" onclick="toggleMain(this, false)"
+                                                        class="btn btn-danger btn-sm qty-btn-add-1">
+                                                        <span class="las la-minus" aria-hidden="true"></span>
+                                                    </button>
+                                                </div>
+                                                <!-- <input class="form-control col-sm-4" name="fields[]" type="text"
+                                                    placeholder="Quantity Available" /> -->
+                                            </div>
+                                            <div class="bulk-entry-1 mb-2 form-inline d-none">
+                                                <input class="form-control col-sm-6 rounded-right-0"
+                                                    name="bulk_title_three[]" type="text" placeholder="Title"
+                                                    disabled />
+                                                <input class="form-control col-sm-6 rounded-left-0"
+                                                    name="bulk_price_three[]" type="number" placeholder="Price"
+                                                    disabled />
+                                                <div class="col-sm-12 pt-2 text-left input-group-btn">
+                                                    <button type="button" onclick="toggleMain(this, false)"
+                                                        class="btn btn-danger btn-sm qty-btn-add-1">
+                                                        <span class="las la-minus" aria-hidden="true"></span>
                                                     </button>
                                                 </div>
                                                 <!-- <input class="form-control col-sm-4" name="fields[]" type="text"
@@ -486,43 +940,193 @@
                                         </div>
                                     </div>
 
-                                    <div class="col-sm-6 border text-center">
+                                    <div class="col-sm-6 border text-center pt-3 pb-3">
                                         <label class="text-center"> Regular Quantity </label>
                                         <div>
                                             <div class="mb-2 form-inline">
                                                 <input class="form-control rounded-right-0 col-sm-4"
                                                     name="regular_title_four[]" type="text" placeholder="Title"
                                                     disabled />
-                                                <input class="form-control col-sm-3 rounded-0"
+                                                <input class="form-control col-sm-4 rounded-0"
                                                     name="regular_price_four[]" type="number" placeholder="Price"
                                                     disabled />
-                                                <input class="form-control rounded-left-0 col-sm-3"
+                                                <input class="form-control rounded-left-0 col-sm-4"
                                                     name="regular_quantity_four[]" type="number"
                                                     placeholder="Quantity Available" disabled />
-                                                <div class="col-sm-2">
-                                                    <button type="button" onclick="toggleRegularFields(this)"
-                                                        class="btn btn-success btn-sm qty-btn-add-1"
-                                                        style="float: right;">
+                                                <div class="col-sm-12 pt-2 text-left input-group-btn">
+                                                    <button type="button" onclick="toggleMain(this)"
+                                                        class="btn btn-success btn-sm qty-btn-add-1">
                                                         <span class="las la-plus" aria-hidden="true"></span>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div class="mb-2 form-inline d-none">
+                                                <input class="form-control rounded-right-0 col-sm-4"
+                                                    name="regular_title_four[]" type="text" placeholder="Title"
+                                                    disabled />
+                                                <input class="form-control col-sm-4 rounded-0"
+                                                    name="regular_price_four[]" type="number" placeholder="Price"
+                                                    disabled />
+                                                <input class="form-control rounded-left-0 col-sm-4"
+                                                    name="regular_quantity_four[]" type="number"
+                                                    placeholder="Quantity Available" disabled />
+                                                <div class="col-sm-12 pt-2 text-left input-group-btn">
+                                                    <button type="button" onclick="toggleMain(this)"
+                                                        class="btn btn-success btn-sm qty-btn-add-1">
+                                                        <span class="las la-plus" aria-hidden="true"></span>
+                                                    </button>
+                                                    <button type="button" onclick="toggleMain(this, false)"
+                                                        class="btn btn-danger btn-sm qty-btn-add-1">
+                                                        <span class="las la-minus" aria-hidden="true"></span>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div class="mb-2 form-inline d-none">
+                                                <input class="form-control rounded-right-0 col-sm-4"
+                                                    name="regular_title_four[]" type="text" placeholder="Title"
+                                                    disabled />
+                                                <input class="form-control col-sm-4 rounded-0"
+                                                    name="regular_price_four[]" type="number" placeholder="Price"
+                                                    disabled />
+                                                <input class="form-control rounded-left-0 col-sm-4"
+                                                    name="regular_quantity_four[]" type="number"
+                                                    placeholder="Quantity Available" disabled />
+                                                <div class="col-sm-12 pt-2 text-left input-group-btn">
+                                                    <button type="button" onclick="toggleMain(this)"
+                                                        class="btn btn-success btn-sm qty-btn-add-1">
+                                                        <span class="las la-plus" aria-hidden="true"></span>
+                                                    </button>
+                                                    <button type="button" onclick="toggleMain(this, false)"
+                                                        class="btn btn-danger btn-sm qty-btn-add-1">
+                                                        <span class="las la-minus" aria-hidden="true"></span>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div class="mb-2 form-inline d-none">
+                                                <input class="form-control rounded-right-0 col-sm-4"
+                                                    name="regular_title_four[]" type="text" placeholder="Title"
+                                                    disabled />
+                                                <input class="form-control col-sm-4 rounded-0"
+                                                    name="regular_price_four[]" type="number" placeholder="Price"
+                                                    disabled />
+                                                <input class="form-control rounded-left-0 col-sm-4"
+                                                    name="regular_quantity_four[]" type="number"
+                                                    placeholder="Quantity Available" disabled />
+                                                <div class="col-sm-12 pt-2 text-left input-group-btn">
+                                                    <button type="button" onclick="toggleMain(this)"
+                                                        class="btn btn-success btn-sm qty-btn-add-1">
+                                                        <span class="las la-plus" aria-hidden="true"></span>
+                                                    </button>
+                                                    <button type="button" onclick="toggleMain(this, false)"
+                                                        class="btn btn-danger btn-sm qty-btn-add-1">
+                                                        <span class="las la-minus" aria-hidden="true"></span>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div class="mb-2 form-inline d-none">
+                                                <input class="form-control rounded-right-0 col-sm-4"
+                                                    name="regular_title_four[]" type="text" placeholder="Title"
+                                                    disabled />
+                                                <input class="form-control col-sm-4 rounded-0"
+                                                    name="regular_price_four[]" type="number" placeholder="Price"
+                                                    disabled />
+                                                <input class="form-control rounded-left-0 col-sm-4"
+                                                    name="regular_quantity_four[]" type="number"
+                                                    placeholder="Quantity Available" disabled />
+                                                <div class="col-sm-12 pt-2 text-left input-group-btn">
+                                                    <button type="button" onclick="toggleMain(this, false)"
+                                                        class="btn btn-danger btn-sm qty-btn-add-1">
+                                                        <span class="las la-minus" aria-hidden="true"></span>
                                                     </button>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-sm-6 border text-center">
+                                    <div class="col-sm-6 border text-center pt-3 pb-3">
                                         <label class="text-center"> Bulk Quantity </label>
                                         <div>
                                             <div class="bulk-entry-1 mb-2 form-inline">
-                                                <input class="form-control col-sm-5 rounded-right-0"
+                                                <input class="form-control col-sm-6 rounded-right-0"
                                                     name="bulk_title_four[]" type="text" placeholder="Title" disabled />
-                                                <input class="form-control col-sm-5 rounded-left-0"
+                                                <input class="form-control col-sm-6 rounded-left-0"
                                                     name="bulk_price_four[]" type="number" placeholder="Price"
                                                     disabled />
-                                                <div class="col-sm-2">
-                                                    <button type="button" onclick="toggleBulkFields(this)"
-                                                        class="btn btn-success btn-sm bulk-btn-add-1"
-                                                        style="float: right;">
+                                                <div class="col-sm-12 pt-2 text-left input-group-btn">
+                                                    <button type="button" onclick="toggleMain(this)"
+                                                        class="btn btn-success btn-sm qty-btn-add-1">
                                                         <span class="las la-plus" aria-hidden="true"></span>
+                                                    </button>
+                                                </div>
+                                                <!-- <input class="form-control col-sm-4" name="fields[]" type="text"
+                                                    placeholder="Quantity Available" /> -->
+                                            </div>
+                                            <div class="bulk-entry-1 mb-2 form-inline d-none">
+                                                <input class="form-control col-sm-6 rounded-right-0"
+                                                    name="bulk_title_four[]" type="text" placeholder="Title" disabled />
+                                                <input class="form-control col-sm-6 rounded-left-0"
+                                                    name="bulk_price_four[]" type="number" placeholder="Price"
+                                                    disabled />
+                                                <div class="col-sm-12 pt-2 text-left input-group-btn">
+                                                    <button type="button" onclick="toggleMain(this)"
+                                                        class="btn btn-success btn-sm qty-btn-add-1">
+                                                        <span class="las la-plus" aria-hidden="true"></span>
+                                                    </button>
+                                                    <button type="button" onclick="toggleMain(this, false)"
+                                                        class="btn btn-danger btn-sm qty-btn-add-1">
+                                                        <span class="las la-minus" aria-hidden="true"></span>
+                                                    </button>
+                                                </div>
+                                                <!-- <input class="form-control col-sm-4" name="fields[]" type="text"
+                                                    placeholder="Quantity Available" /> -->
+                                            </div>
+                                            <div class="bulk-entry-1 mb-2 form-inline d-none">
+                                                <input class="form-control col-sm-6 rounded-right-0"
+                                                    name="bulk_title_four[]" type="text" placeholder="Title" disabled />
+                                                <input class="form-control col-sm-6 rounded-left-0"
+                                                    name="bulk_price_four[]" type="number" placeholder="Price"
+                                                    disabled />
+                                                <div class="col-sm-12 pt-2 text-left input-group-btn">
+                                                    <button type="button" onclick="toggleMain(this)"
+                                                        class="btn btn-success btn-sm qty-btn-add-1">
+                                                        <span class="las la-plus" aria-hidden="true"></span>
+                                                    </button>
+                                                    <button type="button" onclick="toggleMain(this, false)"
+                                                        class="btn btn-danger btn-sm qty-btn-add-1">
+                                                        <span class="las la-minus" aria-hidden="true"></span>
+                                                    </button>
+                                                </div>
+                                                <!-- <input class="form-control col-sm-4" name="fields[]" type="text"
+                                                    placeholder="Quantity Available" /> -->
+                                            </div>
+                                            <div class="bulk-entry-1 mb-2 form-inline d-none">
+                                                <input class="form-control col-sm-6 rounded-right-0"
+                                                    name="bulk_title_four[]" type="text" placeholder="Title" disabled />
+                                                <input class="form-control col-sm-6 rounded-left-0"
+                                                    name="bulk_price_four[]" type="number" placeholder="Price"
+                                                    disabled />
+                                                <div class="col-sm-12 pt-2 text-left input-group-btn">
+                                                    <button type="button" onclick="toggleMain(this)"
+                                                        class="btn btn-success btn-sm qty-btn-add-1">
+                                                        <span class="las la-plus" aria-hidden="true"></span>
+                                                    </button>
+                                                    <button type="button" onclick="toggleMain(this, false)"
+                                                        class="btn btn-danger btn-sm qty-btn-add-1">
+                                                        <span class="las la-minus" aria-hidden="true"></span>
+                                                    </button>
+                                                </div>
+                                                <!-- <input class="form-control col-sm-4" name="fields[]" type="text"
+                                                    placeholder="Quantity Available" /> -->
+                                            </div>
+                                            <div class="bulk-entry-1 mb-2 form-inline d-none">
+                                                <input class="form-control col-sm-6 rounded-right-0"
+                                                    name="bulk_title_four[]" type="text" placeholder="Title" disabled />
+                                                <input class="form-control col-sm-6 rounded-left-0"
+                                                    name="bulk_price_four[]" type="number" placeholder="Price"
+                                                    disabled />
+                                                <div class="col-sm-12 pt-2 text-left input-group-btn">
+                                                    <button type="button" onclick="toggleMain(this, false)"
+                                                        class="btn btn-danger btn-sm qty-btn-add-1">
+                                                        <span class="las la-minus" aria-hidden="true"></span>
                                                     </button>
                                                 </div>
                                                 <!-- <input class="form-control col-sm-4" name="fields[]" type="text"
@@ -562,43 +1166,193 @@
                                         </div>
                                     </div>
 
-                                    <div class="col-sm-6 border text-center">
+                                    <div class="col-sm-6 border text-center pt-3 pb-3">
                                         <label class="text-center"> Regular Quantity </label>
                                         <div>
                                             <div class="mb-2 form-inline">
                                                 <input class="form-control rounded-right-0 col-sm-4"
                                                     name="regular_title_five[]" type="text" placeholder="Title"
                                                     disabled />
-                                                <input class="form-control col-sm-3 rounded-0"
+                                                <input class="form-control col-sm-4 rounded-0"
                                                     name="regular_price_five[]" type="number" placeholder="Price"
                                                     disabled />
-                                                <input class="form-control rounded-left-0 col-sm-3"
+                                                <input class="form-control rounded-left-0 col-sm-4"
                                                     name="regular_quantity_five[]" type="number"
                                                     placeholder="Quantity Available" disabled />
-                                                <div class="col-sm-2">
-                                                    <button type="button" onclick="toggleRegularFields(this)"
-                                                        class="btn btn-success btn-sm qty-btn-add-1"
-                                                        style="float: right;">
+                                                <div class="col-sm-12 pt-2 text-left input-group-btn">
+                                                    <button type="button" onclick="toggleMain(this)"
+                                                        class="btn btn-success btn-sm qty-btn-add-1">
                                                         <span class="las la-plus" aria-hidden="true"></span>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div class="mb-2 form-inline d-none">
+                                                <input class="form-control rounded-right-0 col-sm-4"
+                                                    name="regular_title_five[]" type="text" placeholder="Title"
+                                                    disabled />
+                                                <input class="form-control col-sm-4 rounded-0"
+                                                    name="regular_price_five[]" type="number" placeholder="Price"
+                                                    disabled />
+                                                <input class="form-control rounded-left-0 col-sm-4"
+                                                    name="regular_quantity_five[]" type="number"
+                                                    placeholder="Quantity Available" disabled />
+                                                <div class="col-sm-12 pt-2 text-left input-group-btn">
+                                                    <button type="button" onclick="toggleMain(this)"
+                                                        class="btn btn-success btn-sm qty-btn-add-1">
+                                                        <span class="las la-plus" aria-hidden="true"></span>
+                                                    </button>
+                                                    <button type="button" onclick="toggleMain(this, false)"
+                                                        class="btn btn-danger btn-sm qty-btn-add-1">
+                                                        <span class="las la-minus" aria-hidden="true"></span>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div class="mb-2 form-inline d-none">
+                                                <input class="form-control rounded-right-0 col-sm-4"
+                                                    name="regular_title_five[]" type="text" placeholder="Title"
+                                                    disabled />
+                                                <input class="form-control col-sm-4 rounded-0"
+                                                    name="regular_price_five[]" type="number" placeholder="Price"
+                                                    disabled />
+                                                <input class="form-control rounded-left-0 col-sm-4"
+                                                    name="regular_quantity_five[]" type="number"
+                                                    placeholder="Quantity Available" disabled />
+                                                <div class="col-sm-12 pt-2 text-left input-group-btn">
+                                                    <button type="button" onclick="toggleMain(this)"
+                                                        class="btn btn-success btn-sm qty-btn-add-1">
+                                                        <span class="las la-plus" aria-hidden="true"></span>
+                                                    </button>
+                                                    <button type="button" onclick="toggleMain(this, false)"
+                                                        class="btn btn-danger btn-sm qty-btn-add-1">
+                                                        <span class="las la-minus" aria-hidden="true"></span>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div class="mb-2 form-inline d-none">
+                                                <input class="form-control rounded-right-0 col-sm-4"
+                                                    name="regular_title_five[]" type="text" placeholder="Title"
+                                                    disabled />
+                                                <input class="form-control col-sm-4 rounded-0"
+                                                    name="regular_price_five[]" type="number" placeholder="Price"
+                                                    disabled />
+                                                <input class="form-control rounded-left-0 col-sm-4"
+                                                    name="regular_quantity_five[]" type="number"
+                                                    placeholder="Quantity Available" disabled />
+                                                <div class="col-sm-12 pt-2 text-left input-group-btn">
+                                                    <button type="button" onclick="toggleMain(this)"
+                                                        class="btn btn-success btn-sm qty-btn-add-1">
+                                                        <span class="las la-plus" aria-hidden="true"></span>
+                                                    </button>
+                                                    <button type="button" onclick="toggleMain(this, false)"
+                                                        class="btn btn-danger btn-sm qty-btn-add-1">
+                                                        <span class="las la-minus" aria-hidden="true"></span>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div class="mb-2 form-inline d-none">
+                                                <input class="form-control rounded-right-0 col-sm-4"
+                                                    name="regular_title_five[]" type="text" placeholder="Title"
+                                                    disabled />
+                                                <input class="form-control col-sm-4 rounded-0"
+                                                    name="regular_price_five[]" type="number" placeholder="Price"
+                                                    disabled />
+                                                <input class="form-control rounded-left-0 col-sm-4"
+                                                    name="regular_quantity_five[]" type="number"
+                                                    placeholder="Quantity Available" disabled />
+                                                <div class="col-sm-12 pt-2 text-left input-group-btn">
+                                                    <button type="button" onclick="toggleMain(this, false)"
+                                                        class="btn btn-danger btn-sm qty-btn-add-1">
+                                                        <span class="las la-minus" aria-hidden="true"></span>
                                                     </button>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-sm-6 border text-center">
+                                    <div class="col-sm-6 border text-center pt-3 pb-3">
                                         <label class="text-center"> Bulk Quantity </label>
                                         <div>
                                             <div class="bulk-entry-1 mb-2 form-inline">
-                                                <input class="form-control col-sm-5 rounded-right-0"
+                                                <input class="form-control col-sm-6 rounded-right-0"
                                                     name="bulk_title_five[]" type="text" placeholder="Title" disabled />
-                                                <input class="form-control col-sm-5 rounded-left-0"
+                                                <input class="form-control col-sm-6 rounded-left-0"
                                                     name="bulk_price_five[]" type="number" placeholder="Price"
                                                     disabled />
-                                                <div class="col-sm-2">
-                                                    <button type="button" onclick="toggleBulkFields(this)"
-                                                        class="btn btn-success btn-sm bulk-btn-add-1"
-                                                        style="float: right;">
+                                                <div class="col-sm-12 pt-2 text-left input-group-btn">
+                                                    <button type="button" onclick="toggleMain(this)"
+                                                        class="btn btn-success btn-sm qty-btn-add-1">
                                                         <span class="las la-plus" aria-hidden="true"></span>
+                                                    </button>
+                                                </div>
+                                                <!-- <input class="form-control col-sm-4" name="fields[]" type="text"
+                                                    placeholder="Quantity Available" /> -->
+                                            </div>
+                                            <div class="bulk-entry-1 mb-2 form-inline d-none">
+                                                <input class="form-control col-sm-6 rounded-right-0"
+                                                    name="bulk_title_five[]" type="text" placeholder="Title" disabled />
+                                                <input class="form-control col-sm-6 rounded-left-0"
+                                                    name="bulk_price_five[]" type="number" placeholder="Price"
+                                                    disabled />
+                                                <div class="col-sm-12 pt-2 text-left input-group-btn">
+                                                    <button type="button" onclick="toggleMain(this)"
+                                                        class="btn btn-success btn-sm qty-btn-add-1">
+                                                        <span class="las la-plus" aria-hidden="true"></span>
+                                                    </button>
+                                                    <button type="button" onclick="toggleMain(this, false)"
+                                                        class="btn btn-danger btn-sm qty-btn-add-1">
+                                                        <span class="las la-minus" aria-hidden="true"></span>
+                                                    </button>
+                                                </div>
+                                                <!-- <input class="form-control col-sm-4" name="fields[]" type="text"
+                                                    placeholder="Quantity Available" /> -->
+                                            </div>
+                                            <div class="bulk-entry-1 mb-2 form-inline d-none">
+                                                <input class="form-control col-sm-6 rounded-right-0"
+                                                    name="bulk_title_five[]" type="text" placeholder="Title" disabled />
+                                                <input class="form-control col-sm-6 rounded-left-0"
+                                                    name="bulk_price_five[]" type="number" placeholder="Price"
+                                                    disabled />
+                                                <div class="col-sm-12 pt-2 text-left input-group-btn">
+                                                    <button type="button" onclick="toggleMain(this)"
+                                                        class="btn btn-success btn-sm qty-btn-add-1">
+                                                        <span class="las la-plus" aria-hidden="true"></span>
+                                                    </button>
+                                                    <button type="button" onclick="toggleMain(this, false)"
+                                                        class="btn btn-danger btn-sm qty-btn-add-1">
+                                                        <span class="las la-minus" aria-hidden="true"></span>
+                                                    </button>
+                                                </div>
+                                                <!-- <input class="form-control col-sm-4" name="fields[]" type="text"
+                                                    placeholder="Quantity Available" /> -->
+                                            </div>
+                                            <div class="bulk-entry-1 mb-2 form-inline d-none">
+                                                <input class="form-control col-sm-6 rounded-right-0"
+                                                    name="bulk_title_five[]" type="text" placeholder="Title" disabled />
+                                                <input class="form-control col-sm-6 rounded-left-0"
+                                                    name="bulk_price_five[]" type="number" placeholder="Price"
+                                                    disabled />
+                                                <div class="col-sm-12 pt-2 text-left input-group-btn">
+                                                    <button type="button" onclick="toggleMain(this)"
+                                                        class="btn btn-success btn-sm qty-btn-add-1">
+                                                        <span class="las la-plus" aria-hidden="true"></span>
+                                                    </button>
+                                                    <button type="button" onclick="toggleMain(this, false)"
+                                                        class="btn btn-danger btn-sm qty-btn-add-1">
+                                                        <span class="las la-minus" aria-hidden="true"></span>
+                                                    </button>
+                                                </div>
+                                                <!-- <input class="form-control col-sm-4" name="fields[]" type="text"
+                                                    placeholder="Quantity Available" /> -->
+                                            </div>
+                                            <div class="bulk-entry-1 mb-2 form-inline d-none">
+                                                <input class="form-control col-sm-6 rounded-right-0"
+                                                    name="bulk_title_five[]" type="text" placeholder="Title" disabled />
+                                                <input class="form-control col-sm-6 rounded-left-0"
+                                                    name="bulk_price_five[]" type="number" placeholder="Price"
+                                                    disabled />
+                                                <div class="col-sm-12 pt-2 text-left input-group-btn">
+                                                    <button type="button" onclick="toggleMain(this, false)"
+                                                        class="btn btn-danger btn-sm qty-btn-add-1">
+                                                        <span class="las la-minus" aria-hidden="true"></span>
                                                     </button>
                                                 </div>
                                                 <!-- <input class="form-control col-sm-4" name="fields[]" type="text"
@@ -636,10 +1390,6 @@
 
 <script>
     // Block to handle main form repeaters
-    let index = 1;
-    let originalCopy = $("#original-entry").clone(true);
-    let originalContainer = $("#original-container");
-
     function toggleMain(element, newf = true) {
         if (newf) {
             //let parentDiv = $(element).parent().parent().parent()
@@ -675,24 +1425,24 @@
     // Block to handle main form repeaters
 
 
-    // Functions to handle Regular Quantity form repeaters
-    function toggleRegularFields(element, newf = true) {
-        if (newf) {
-            let parentDiv = $(element).parent().parent().parent()
-            let origCop = $(element).parent().parent().clone(true)
-            origCop.find('input').val("")
-            //origCop.attr('id', '')
-            parentDiv.append(origCop)
+    // // Functions to handle Regular Quantity form repeaters
+    // function toggleMain(element, newf = true) {
+    //     if (newf) {
+    //         let parentDiv = $(element).parent().parent().parent()
+    //         let origCop = $(element).parent().parent().clone(true)
+    //         origCop.find('input').val("")
+    //         //origCop.attr('id', '')
+    //         parentDiv.append(origCop)
 
-            $(element).attr('onclick', `toggleRegularFields(this, false)`)
-            $(element).removeClass('btn-add').addClass('btn-remove').removeClass(
-                'btn-success').addClass('btn-danger').html(`<i class="las la-minus"></i>`);
-        } else {
-            let parentDiv = $(element).parent().parent()
-            parentDiv.remove()
-        }
-    }
-    // Functions to handle Regular Quantity form repeaters
+    //         $(element).attr('onclick', `toggleMain(this, false)`)
+    //         $(element).removeClass('btn-add').addClass('btn-remove').removeClass(
+    //             'btn-success').addClass('btn-danger').html(`<i class="las la-minus"></i>`);
+    //     } else {
+    //         let nextDiv = $(element).parent().parent().next()
+    //         $(element).parent().parent()
+    //     }
+    // }
+    // // Functions to handle Regular Quantity form repeaters
 
 
     // Function to handle Bulk Quantity form repeaters
@@ -700,16 +1450,22 @@
         if (newf) {
             let parentDiv = $(element).parent().parent().parent()
             let origCop = $(element).parent().parent().clone(true)
-            origCop.find('input').val("")
+            origCop.find('input').val("").attr('required', '')
+            $(element).parent().parent().find('input').attr('required', '')
             //origCop.attr('id', '')
             parentDiv.append(origCop)
+            console.log($(".bulk-entry-1").index($(element).parent().parent()));
 
             $(element).attr('onclick', `toggleBulkFields(this, false)`)
             $(element).removeClass('btn-add').addClass('btn-remove').removeClass(
                 'btn-success').addClass('btn-danger').html(`<i class="las la-minus"></i>`);
         } else {
-            let parentDiv = $(element).parent().parent()
-            parentDiv.remove()
+            let nextDiv = $(element).parent().parent().next()
+            nextDiv.find('input').removeAttr('required')
+            nextDiv.remove()
+            $(element).attr('onclick', `toggleMain(this, true)`)
+            $(element).removeClass('btn-remove').addClass('btn-add').removeClass(
+                'btn-danger').addClass('btn-success').html(`<i class="las la-plus"></i>`);
         }
     }
     // Function to handle Bulk Quantity form repeaters
