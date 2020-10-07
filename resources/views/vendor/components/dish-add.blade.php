@@ -1,5 +1,5 @@
-<div class="modal fade" id="dish-add-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-    aria-hidden="true">
+<div class="modal fade" id="dish-add-modal" data-backdrop="static" tabindex="-1" role="dialog"
+    aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog mt-1 modal-lg" style="height: 500px;" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -32,7 +32,7 @@
                     @include('vendor.components.error-modal')
 
                     <div class="box shadow-sm border rounded bg-white mb-3">
-                        <ul class="nav nav-tabs border-bottom box-title d-flex justify-content-center osahan-line-tab"
+                        <ul class="nav nav-tab border-bottom box-title d-flex justify-content-center osahan-line-tab"
                             id="myTab" role="tablist">
                             <li class="nav-item col-6">
                                 <a class="nav-link text-center active" id="profile-tab" data-toggle="tab" href="#simple"
@@ -41,7 +41,7 @@
                             </li>
                             <li class="nav-item border-left col-6">
                                 <a class="nav-link text-center" id="home-tab" data-toggle="tab" href="#advanced"
-                                    role="tab" aria-controls="home" aria-selected="true">advanced</a>
+                                    role="tab" aria-controls="home" aria-selected="true">Advanced</a>
                             </li>
                         </ul>
                         <div class="tab-content" id="myTabContent">
@@ -1425,7 +1425,7 @@
 
 
     // Disable Input Elements for Inactive Form Tabs
-    $('.nav-tabs a:first').click(function () {
+    $('.nav-tab a:first').click(function () {
         $("#form-type").val("simple")
         $("#simple").children('div').eq(0).find('input').removeAttr('disabled', '');
         $("#simple").children('div').eq(0).find('.input-group-btn').removeClass('d-none');
@@ -1433,7 +1433,7 @@
         $("#advanced").find('input').attr('disabled', '');
     })
 
-    $('.nav-tabs a:last').click(function () {
+    $('.nav-tab a:last').click(function () {
         $("#form-type").val("advanced")
         $("#advanced").children('div').eq(0).find('.one').removeAttr('disabled', '');
         $("#advanced").children('div').eq(0).find('.input-group-btn').removeClass('d-none');

@@ -122,10 +122,8 @@
 
                     </div>
                     <div class="font-weight-bold mr-2">
-                        <div class="text-truncate"><a href="http://">
-                                {{$dish->title}}
-                            </a></div>
-                        <div class="small text-gray-500"><b>Qty:</b> 10
+                        <div class="text-truncate">
+                            {{$dish->title}}
                         </div>
                     </div>
                     <span title="add to today's menu" class="ml-auto">
