@@ -79,7 +79,7 @@
     spin('login')
     offError('login-error')
 
-    let url = `{{ url('login') }}`;
+    let url = `{{ url('p-login') }}`;
     let data = new FormData(el.target)
 
     goPost(url, data)

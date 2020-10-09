@@ -107,3 +107,7 @@ function format_time($time) {
   </div>
 </div>
 @endif
+
+<div class="comments-container">
+  <div class="comments-inner"></div>
+</div>

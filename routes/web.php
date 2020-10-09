@@ -21,7 +21,7 @@ Route::get('', 'ViewController@feed');
 // LOGIC
 
 // Vendor/User Login
-Route::post('login', 'AuthController@login');
+Route::post('p-login', 'AuthController@login');
 
 // Get Areas
 Route::get('areas/{state_id}', 'AreaController@get');
