@@ -1131,3 +1131,28 @@ a:visited {
         margin: 0 26%
     }
 }
+
+.comments-top-ico {
+    background: #e6554a;
+    padding: 10px;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+    border-bottom-right-radius: 15px;
+    color: #fff;
+}
+
+.comments-top-ico:hover {
+    cursor: pointer;
+}
+
+.comments-top-a {
+    font-size: 16px;
+}
+
+.comments-top-a:hover {
+    cursor: unset;
+}
+
+.comments-ico-a:hover {
+    cursor: pointer;
+}

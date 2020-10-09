@@ -201,11 +201,17 @@ $("#close-post").click(() => {
 
 function popPostModal() {
     $(".post-modal").removeClass("d-none");
+    $(".post-modal").removeClass("animate__fadeOut");
+    $(".post-modal").addClass("animate__fadeIn");
     $("#post-textarea").focus();
 }
 
 function closePostModal() {
-    $(".post-modal").addClass("d-none");
+    $(".post-modal").removeClass("animate__fadeIn");
+    $(".post-modal").addClass("animate__fadeOut");
+    setTimeout(() => {
+        $(".post-modal").addClass("d-none");
+    }, 500);
 }
 
 // Block that displays file names on input fields when selected
@@ -227,5 +233,31 @@ function gotoP(page) {
 
 // Open Image Lightbox
 function launchLight(a) {
+    event.stopPropagation();
+
     document.getElementById("light-" + a).click();
+}
+
+// Open Comments Modal
+function openComments() {
+    $(".comments-container").removeClass("d-none");
+
+    $(".comments-inner").addClass("animate__fadeInUp");
+    $(".comments-container").addClass("animate__fadeIn");
+
+    $(".comments-inner").removeClass("animate__fadeOutDown");
+    $(".comments-container").removeClass("animate__fadeOut");
+}
+
+// Close Comments Modal
+function closeComments() {
+    $(".comments-inner").removeClass("animate__fadeInUp");
+    $(".comments-container").removeClass("animate__fadeIn");
+
+    $(".comments-inner").addClass("animate__fadeOutDown");
+    $(".comments-container").addClass("animate__fadeOut");
+
+    setTimeout(() => {
+        $(".comments-container").addClass("d-none");
+    }, 500);
 }

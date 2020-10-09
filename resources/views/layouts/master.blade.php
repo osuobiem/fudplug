@@ -239,7 +239,6 @@
                 }
             }).catch((err) => {
                 spin('right-side')
-                console.error(err);
             });
         });
 
