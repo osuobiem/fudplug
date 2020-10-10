@@ -57,6 +57,8 @@ Route::group(['prefix' => 'vendor'], function () {
         Route::post('add-dish', 'VendorController@add_dish');
         // Get Vendor Dishes
         Route::get('dish/{id?}', 'VendorController@get_dish');
+        // Update Vendor Dish
+        Route::post('update-dish', 'VendorController@update_dish');
     });
 });
 // -------------

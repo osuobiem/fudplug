@@ -29,7 +29,20 @@
                         </button>
                     </div>
 
-                    @include('vendor.components.error-modal')
+                    <!-- Form Error Toast -->
+                    <div class="modal" id="error-modal" tabindex="-1" role="dialog">
+                        <div class="modal-dialog animate__heartBeat" role="document" style="top: 200px;">
+                            <div class="modal-content shadow-lg" style="color: #721c24;
+                            background-color: #f8d7da;
+                            border-color: #f5c6cb;">
+                                <div class="modal-body" id="modal-body">
+                                    <p>Modal body text goes here.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Form Error Toast -->
+
 
                     <div class="box shadow-sm border rounded bg-white mb-3">
                         <ul class="nav nav-tab border-bottom box-title d-flex justify-content-center osahan-line-tab"
@@ -1396,6 +1409,7 @@
                 $(element).parent().parent().next().find('.init').removeAttr('disabled');
             } else {
                 $(element).parent().parent().next().find('input').removeAttr('disabled');
+                $(element).parent().parent().next().find('input').addClass('one');
             }
             $(element).parent().parent().next().removeClass('d-none');
             $(element).parent().addClass('d-none');
@@ -1411,6 +1425,10 @@
             $(element).parent().parent().addClass('d-none');
             $(element).parent().parent().find('input').attr('disabled', '');
             $(element).parent().parent().prev().find('.input-group-btn').removeClass('d-none');
+
+            if (!main) {
+                $(element).parent().parent().find('input').removeClass('one');
+            }
 
             let str = $(element).parent().parent().find('input').attr('name')
             if (str.includes("bulk")) {
@@ -1428,7 +1446,7 @@
     $('.nav-tab a:first').click(function () {
         $("#form-type").val("simple")
         $("#simple").children('div').eq(0).find('input').removeAttr('disabled', '');
-        $("#simple").children('div').eq(0).find('.input-group-btn').removeClass('d-none');
+        // $("#simple").children('div').eq(0).find('.input-group-btn').removeClass('d-none');
         $("#simple").children().not(':eq(0)').addClass('d-none')
         $("#advanced").find('input').attr('disabled', '');
     })
@@ -1436,7 +1454,7 @@
     $('.nav-tab a:last').click(function () {
         $("#form-type").val("advanced")
         $("#advanced").children('div').eq(0).find('.one').removeAttr('disabled', '');
-        $("#advanced").children('div').eq(0).find('.input-group-btn').removeClass('d-none');
+        //$("#advanced").children('div').eq(0).find('.input-group-btn').removeClass('d-none');
         $("#advanced").children().not(':eq(0)').addClass('d-none').find('input').val("")
         $("#simple").find('input').attr('disabled', '');
     })

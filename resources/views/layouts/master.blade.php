@@ -163,8 +163,8 @@
 
             goGet(url)
                 .then(res => {
-                    !res.success ? doUnlike(likeCount, likon, post_id)
-                        : null
+                    !res.success ? doUnlike(likeCount, likon, post_id) :
+                        null
                 })
                 .catch(err => {
                     doUnlike(likeCount, likon, post_id)
@@ -219,6 +219,7 @@
             $(likon).attr('like-count', likeCount)
             $($(likon).siblings()[0]).text(' ' + likeCount)
         }
+
     </script>
     @if(!Auth::guest())
     <script>
@@ -250,6 +251,7 @@
         function likePost(post_id, likon) {
             $('#login-btn-top').click();
         }
+
     </script>
     @endif
 </body>

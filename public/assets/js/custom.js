@@ -60,9 +60,9 @@ function showAlert(status, message) {
 function goGet(url) {
     return new Promise((resolve, reject) => {
         $.ajax({
-            type: "GET",
-            url,
-        })
+                type: "GET",
+                url,
+            })
             .then((res) => {
                 resolve(res);
             })
@@ -134,9 +134,9 @@ function handleFormRes(res, form = false, prefix = false, modalAlert = false) {
                         .modal("show");
                 } else {
                     for (const [key, value] of Object.entries(errors)) {
-                        e = prefix
-                            ? document.getElementById(prefix + "-" + key)
-                            : document.getElementById(key);
+                        e = prefix ?
+                            document.getElementById(prefix + "-" + key) :
+                            document.getElementById(key);
                         e.innerHTML = "";
                         [...value].forEach((m) => {
                             e.innerHTML += `<p>${m}</p>`;
@@ -176,8 +176,9 @@ function spin(id) {
     $(`#${id}-spinner`).toggle();
 
     btnDis
-        ? $(`#${id}-btn`).attr("disabled", true)
-        : $(`#${id}-btn`).removeAttr("disabled");
+        ?
+        $(`#${id}-btn`).attr("disabled", true) :
+        $(`#${id}-btn`).removeAttr("disabled");
 }
 
 // Turn off Form Errors
