@@ -200,7 +200,7 @@ p {
 .osahan-line-tab .nav-link.active:after {
     content: "";
     background: var(--i-primary);
-    height: 3px;
+    height: 2px;
     position: absolute;
     bottom: -2px;
     left: 0;

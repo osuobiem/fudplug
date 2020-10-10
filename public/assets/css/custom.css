@@ -595,7 +595,7 @@ a:visited {
 }
 
 .post-textarea-cont {
-    border: solid 1px #ccd0d4;
+    border: solid 1px #00000060;
     border-radius: 5px;
     padding: 2px 5px;
 }
@@ -1155,4 +1155,10 @@ a:visited {
 
 .comments-ico-a:hover {
     cursor: pointer;
+}
+
+.comments-input-cont {
+    position: absolute;
+    bottom: 0;
+    border-top: solid var(--i-primary) .5px;
 }

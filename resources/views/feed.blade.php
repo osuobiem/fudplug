@@ -62,6 +62,7 @@
     );
 
     video.setAttribute('controls', true)
+    video.setAttribute('style', 'max-height: 300px')
 
     // Monitor video load
     var timer = setInterval(function () {

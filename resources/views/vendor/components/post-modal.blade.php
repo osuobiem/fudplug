@@ -257,9 +257,9 @@
     if (input.files) {
       hideMediaInputs();
       [...input.files].forEach((file, ind) => {
-        if (file.size > 141557760) {
+        if (file.size > 83886080) {
           $('#video-spinner').addClass('d-none')
-          showAlert(false, "Video size must not be more than 135MB");
+          showAlert(false, "Video size must not be more than 80MB");
           hideMediaInputs(false);
         } else if (file.type.split("/")[0] != "video") {
           $('#video-spinner').addClass('d-none')
@@ -277,7 +277,7 @@
           };
           vid.setAttribute(
             "style",
-            "width: 100%; border-radius: 12px; border: solid #dee2e6 1px;"
+            "width: 100%; border-radius: 12px; border: solid #dee2e6 1px; max-height: 300px"
           );
           vid.setAttribute('controls', true)
           vid.setAttribute('id', 'video-loaded')
@@ -285,9 +285,9 @@
           // Check video duration
           var timer = setInterval(function () {
             if (vid.readyState === 4) {
-              if (vid.duration.toFixed(2) > 60) {
+              if (vid.duration.toFixed(2) > 30) {
                 $('#video-spinner').addClass('d-none')
-                showAlert(false, "The video duration must not be more than 1 minute");
+                showAlert(false, "The video duration must not be more than 30 seconds");
               }
               else {
                 $('#video-spinner').addClass('d-none')
