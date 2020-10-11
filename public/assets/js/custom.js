@@ -261,3 +261,8 @@ function closeComments() {
         $(".comments-container").addClass("d-none");
     }, 500);
 }
+
+// Stop Comments Inner Event Propagation
+$(".comments-inner").click(() => {
+    event.stopPropagation();
+});

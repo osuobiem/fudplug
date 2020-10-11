@@ -1162,3 +1162,37 @@ a:visited {
     bottom: 0;
     border-top: solid var(--i-primary) .5px;
 }
+
+.comments-img {
+    width: 30px;
+    height: 30px;
+    background-size: cover;
+    background-position: center;
+    border-radius: 50px;
+}
+
+.comment-main {
+    padding: 10px;
+    margin: 0 8px 10px 8px;
+    box-shadow: 0 0px 25px 0px rgb(216, 216, 216);
+    border-radius: 15px;
+    border: solid .5px #c5c5c5e3;
+}
+
+.c-left {
+    border-top-left-radius: unset;
+}
+
+.c-right {
+    border-bottom-right-radius: unset;
+}
+
+.more-comments {
+    margin: 10px;
+    text-align: center;
+}
+
+.comments-holder {
+    max-height: 71.5%;
+    overflow: auto;
+}
