@@ -72,14 +72,23 @@
 
                 </div>
                 <!-- Dish View Modal Holder -->
+
+                <!-- Menu Update Modal Holder -->
+                <div id="menu-modal-holder">
+
+                </div>
+                <!-- Menu Update Modal Holder -->
             </main>
 
             <!-- Right Sidebar -->
             @if(!Auth::guest())
             <aside class="col col-lg-3 d-none d-lg-block side-section side-section-r right-side-large text-center">
-                <div class="spinner-border spinner-border-sm p-3 mt-5" id="right-side-spinner" style="display: none;"
-                    role="status">
-                    <span class="sr-only">Loading...</span>
+                <div class="justify-content-center text-center w-100 pb-2 box shadow-sm border rounded bg-white p-2"
+                    id="right-side-spinner" style="display: none;">
+                    <p><strong>Loading Dishes</strong></p>
+                    <div class="spinner-border spinner-border-sm" role="status">
+                        <span class="sr-only">Loading...</span>
+                    </div>
                 </div>
 
             </aside>
@@ -149,6 +158,14 @@
     {{-- Check for session availablity --}}
     @if(!Auth::guest() || !Auth::guard('user')->guest())
     <script>
+        $(document).ready(function () {
+            // Load The Right Side when Document is Ready
+            loadRight();
+
+            // Load Menu Modal Data whenDocument is Ready
+            loadMenuModal()
+        });
+
         // Like/Unlike a post
         function likePost(post_id, likon) {
             // Animate Like
@@ -163,8 +180,8 @@
 
             goGet(url)
                 .then(res => {
-                    !res.success ? doUnlike(likeCount, likon, post_id)
-                        : null
+                    !res.success ? doUnlike(likeCount, likon, post_id) :
+                        null
                 })
                 .catch(err => {
                     doUnlike(likeCount, likon, post_id)
@@ -219,10 +236,9 @@
             $(likon).attr('like-count', likeCount)
             $($(likon).siblings()[0]).text(' ' + likeCount)
         }
-    </script>
-    @if(!Auth::guest())
-    <script>
-        $(document).ready(function () {
+
+        // Load Right Side (Vendor Dish & Menu)
+        function loadRight() {
             spin('right-side')
             // Populate dishes tab on page load
             let getUrl = "{{url('vendor/dish')}}";
@@ -230,25 +246,39 @@
                 spin('right-side')
                 if (window.matchMedia("(max-width: 767px)").matches) {
                     // The viewport is less than 768 pixels wide (mobile device)
+                    $("#dish-menu").remove();
                     $(".right-side-large").empty();
                     $(".right-side-small").append(res);
                 } else {
                     // The viewport is at least 768 pixels wide (Desktop or tablet)
+                    $("#dish-menu").remove();
                     $(".right-side-small").empty();
                     $(".right-side-large").append(res);
                 }
             }).catch((err) => {
                 spin('right-side')
             });
-        });
+        }
+
+        // Load Menu Modal Data
+        function loadMenuModal() {
+            let getUrl = "{{url('vendor/menu')}}";
+            goGet(getUrl).then((res) => {
+                $("#menu-modal-holder").empty();
+                $("#menu-modal-holder").html(res);
+                console.log(res)
+            }).catch((err) => {
+                console.error(err);
+            });
+        }
 
     </script>
-    @endif
     @else
     <script>
         function likePost(post_id, likon) {
             $('#login-btn-top').click();
         }
+
     </script>
     @endif
 </body>

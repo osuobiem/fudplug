@@ -12,7 +12,7 @@ class Item extends Model
      * @var array
      */
     protected $fillable = [
-        'title', 'quantity', 'image', 'status',
+        'title', 'quantity', 'image', 'status', 'type',
     ];
 
     public function menu()
