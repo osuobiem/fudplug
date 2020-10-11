@@ -176,22 +176,26 @@ class VendorController extends Controller
      */
     public function profile()
     {
-        // Get States Data
-        $states = State::get();
+        try {
+            // Get States Data
+            $states = State::get();
 
-        // Fetch Vendor Location Data
-        $area_id = Auth::user()->area_id;
-        $vendor_location = State::join('areas', 'areas.state_id', '=', 'states.id')
-            ->select(['areas.name AS area', 'areas.id AS area_id', 'states.name AS state', 'states.id AS state_id'])
-            ->where('areas.id', $area_id)->first();
+            // Fetch Vendor Location Data
+            $area_id = Auth::user()->area_id;
+            $vendor_location = State::join('areas', 'areas.state_id', '=', 'states.id')
+                ->select(['areas.name AS area', 'areas.id AS area_id', 'states.name AS state', 'states.id AS state_id'])
+                ->where('areas.id', $area_id)->first();
 
-        // Get Areas In User State
-        $areas = Area::where('state_id', $vendor_location->state_id)->get();
+            // Get Areas In User State
+            $areas = Area::where('state_id', $vendor_location->state_id)->get();
 
-        // Social Media Links
-        $social_handles = json_decode(Auth::user()->social_handles);
+            // Social Media Links
+            $social_handles = json_decode(Auth::user()->social_handles);
 
-        return view('vendor.profile', compact('vendor_location', 'states', 'areas', 'social_handles'));
+            return view('vendor.profile', compact('vendor_location', 'states', 'areas', 'social_handles'));
+        } catch (\Throwable $th) {
+            Log::error($th);
+        }
     }
 
     /**
@@ -685,7 +689,6 @@ class VendorController extends Controller
             }
         } catch (\Throwable $th) {
             Log::error($th);
-            return response()->json(['success' => false, 'message' => $th->getMessage()], 500);
         }
     }
 
