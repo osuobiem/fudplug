@@ -59,6 +59,10 @@ Route::group(['prefix' => 'vendor'], function () {
         Route::get('dish/{id?}', 'VendorController@get_dish');
         // Update Vendor Dish
         Route::post('update-dish', 'VendorController@update_dish');
+        // Populate Vendor Menu Select Modal
+        Route::get('menu', 'VendorController@get_menu');
+        // Update Vendor Menu
+        Route::post('update-menu', 'VendorController@update_menu');
     });
 });
 // -------------

@@ -381,7 +381,7 @@
         updateDish(el)
     });
 
-    // Add dish
+    // Update dish
     function updateDish(el) {
         el.preventDefault()
 
@@ -396,11 +396,11 @@
                 spin('vendor')
 
                 if (handleFormRes(res, false, false, 'modal-edit-body')) {
-                    console.log(res)
+                    // console.log(res)
                     showAlert(true, res.message);
-                    setTimeout(() => {
-                        //$('#add-dish').trigger('reset');
-                    }, 2000)
+
+                    // Reload the Right Bar on Completion
+                    loadRight();
                 }
             })
             .catch(err => {

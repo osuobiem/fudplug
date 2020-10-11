@@ -1499,6 +1499,9 @@
                     showAlert(true, res.message);
                     setTimeout(() => {
                         $('#add-dish').trigger('reset');
+
+                        // Reload the Right Bar on Completion
+                        loadRight()
                     }, 2000)
                 }
             })

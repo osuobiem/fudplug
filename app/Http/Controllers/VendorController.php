@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Area;
 use App\Item;
+use App\Menu;
 use App\State;
 use App\User;
 use App\Vendor;
@@ -661,8 +662,26 @@ class VendorController extends Controller
                 }
                 return view('vendor.components.dish-view', $data);
             } else {
-                $dishes = Item::where('vendor_id', Auth::user()->id)->get();
-                return view('vendor.components.right-side', ['dishes' => $dishes]);
+                // Fetch the Menu Item
+                $menu = Menu::where('vendor_id', Auth::user()->id)->first("items");
+                $menu = json_decode($menu);
+
+                // Get the Array of Dish IDs
+                $menu = json_decode($menu->items);
+                $menu = $menu->item;
+
+                // Fetch Dishes for Menu
+                $menu_data = Item::select("*")
+                    ->whereIn('id', $menu);
+                $menu_count = $menu_data->count();
+                $menu_dishes = $menu_data->get();
+
+                // Get All Vendor Dishes
+                $dish_data = Item::where('vendor_id', Auth::user()->id);
+                $dish_count = $dish_data->count();
+                $dishes = $dish_data->get();
+
+                return view('vendor.components.right-side', compact('dishes', 'menu_dishes', 'menu_count', 'dish_count'));
             }
         } catch (\Throwable $th) {
             Log::error($th);
@@ -671,8 +690,8 @@ class VendorController extends Controller
     }
 
     /**
-     * Get Vendor Dishes
-     * @return object Laravel View Instance
+     * Update Vendor Dishes
+     * @return string JSON response
      */
     public function update_dish(Request $request)
     {
@@ -768,6 +787,45 @@ class VendorController extends Controller
         } catch (\Throwable $th) {
             Log::error($th);
             return false;
+        }
+    }
+
+    /**
+     * Populate Vendor Menu Modal
+     * @return object Laravel View Instance
+     */
+    public function get_menu(Request $request)
+    {
+        try {
+            // Fetch the Menu Item
+            $menu = Menu::where('vendor_id', Auth::user()->id)->first("items");
+            $menu = json_decode($menu);
+
+            // Get the Array of Dish IDs
+            $menu_items = json_decode($menu->items);
+            $menu_items = $menu_items->item;
+
+            $dishes = Item::where('vendor_id', Auth::user()->id)->get();
+
+            return view('vendor.components.menu-update', compact('dishes', 'menu_items'));
+        } catch (\Throwable $th) {
+            Log::error($th);
+        }
+    }
+
+    /**
+     * Update Vendor Menu
+     * @return string JSON response
+     */
+    public function update_menu(Request $request)
+    {
+        try {
+            $items = ['item' => $request->has('item') ? $request->item : null];
+            Menu::updateOrCreate(['vendor_id' => 1], ['items' => json_encode($items)]);
+            return response()->json(['success' => true, 'message' => "Menu Updated Successfully"], 200);
+        } catch (\Throwable $th) {
+            Log::error($th);
+            return response()->json(['success' => false, 'message' => $th->getMessage()], 500);
         }
     }
 }
