@@ -60,9 +60,9 @@ function showAlert(status, message) {
 function goGet(url) {
     return new Promise((resolve, reject) => {
         $.ajax({
-                type: "GET",
-                url,
-            })
+            type: "GET",
+            url,
+        })
             .then((res) => {
                 resolve(res);
             })
@@ -134,9 +134,9 @@ function handleFormRes(res, form = false, prefix = false, modalAlert = false) {
                         .modal("show");
                 } else {
                     for (const [key, value] of Object.entries(errors)) {
-                        e = prefix ?
-                            document.getElementById(prefix + "-" + key) :
-                            document.getElementById(key);
+                        e = prefix
+                            ? document.getElementById(prefix + "-" + key)
+                            : document.getElementById(key);
                         e.innerHTML = "";
                         [...value].forEach((m) => {
                             e.innerHTML += `<p>${m}</p>`;
@@ -176,9 +176,8 @@ function spin(id) {
     $(`#${id}-spinner`).toggle();
 
     btnDis
-        ?
-        $(`#${id}-btn`).attr("disabled", true) :
-        $(`#${id}-btn`).removeAttr("disabled");
+        ? $(`#${id}-btn`).attr("disabled", true)
+        : $(`#${id}-btn`).removeAttr("disabled");
 }
 
 // Turn off Form Errors
@@ -241,6 +240,7 @@ function launchLight(a) {
 
 // Open Comments Modal
 function openComments() {
+    $("body").addClass("modal-open");
     $(".comments-container").removeClass("d-none");
 
     $(".comments-inner").addClass("animate__fadeInUp");
@@ -248,10 +248,14 @@ function openComments() {
 
     $(".comments-inner").removeClass("animate__fadeOutDown");
     $(".comments-container").removeClass("animate__fadeOut");
+
+    comments_holder = document.getElementById("comments-holder");
+    comments_holder.scrollTop = comments_holder.scrollHeight;
 }
 
 // Close Comments Modal
 function closeComments() {
+    $("body").removeClass("modal-open");
     $(".comments-inner").removeClass("animate__fadeInUp");
     $(".comments-container").removeClass("animate__fadeIn");
 

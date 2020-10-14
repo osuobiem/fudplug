@@ -10,9 +10,64 @@
       </li>
     </ul>
 
-    <div class="comments-holder">
+    <div class="pb-2 pt-3" id="comments-holder">
+
       <div class="more-comments">
-        <a href=""><strong>Load More Comments...</strong></a>
+      <a href=""><strong>Load More Comments...</strong></a>
+    </div>
+
+      <div class="comment-main c-left">
+        <div class="comment row">
+
+          <div class="col-2 col-md-1 pr-1">
+            <div class="comments-img"
+              style="background-image: url('{{ Storage::url('vendor/profile/'.Auth::user()->profile_image) }}')"></div>
+          </div>
+          <div class="col-10 col-md-11 pl-0">
+            <div class="mb-1 d-flex">
+              <a href="#" style="color: unset;">
+                <strong>Name of User</strong>
+                &VerticalSeparator;
+                <span class="small" style="color: #212529 !important;">@imabi_k</span>
+              </a>
+              <span class="small ml-auto">22h ago</span>
+            </div>
+            <hr class="m-1">
+            <span>
+              This is a test This is a test This is a test This is a test This is a test This is a test This is a test
+              This
+              is a test This is a test This is a test This is a test
+            </span>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="comment-main c-left">
+        <div class="comment row">
+
+          <div class="col-2 col-md-1 pr-1">
+            <div class="comments-img"
+              style="background-image: url('{{ Storage::url('vendor/profile/'.Auth::user()->profile_image) }}')"></div>
+          </div>
+          <div class="col-10 col-md-11 pl-0">
+            <div class="mb-1 d-flex">
+              <a href="#" style="color: unset;">
+                <strong>Name of User</strong>
+                &VerticalSeparator;
+                <span class="small" style="color: #212529 !important;">@imabi_k</span>
+              </a>
+              <span class="small ml-auto">22h ago</span>
+            </div>
+            <hr class="m-1">
+            <span>
+              This is a test This is a test This is a test This is a test This is a test This is a test This is a test
+              This
+              is a test This is a test This is a test This is a test
+            </span>
+          </div>
+
+        </div>
       </div>
 
       <div class="comment-main c-left">
@@ -126,8 +181,9 @@
     <div class="p-3 pt-2 d-flex align-items-center w-100 comments-input-cont bg-white">
       <div class="post-textarea-cont w-100">
         <textarea placeholder="What do you think?..." class="form-control border-0 p-0 shadow-none post-input" required
-          name="content" rows="5" id="comment-textarea" name="content"></textarea>
-        <small class="text-danger error-message" id="content"></small>
+          name="content" rows="3" id="comment-textarea" name="comment-content"></textarea>
+        <i class="la la-paper-plane la-lg comment-post-ico"></i>
+        <small class="text-danger error-message" id="comment-content"></small>
       </div>
     </div>
 
@@ -140,8 +196,6 @@
     $("#comment-textarea").emojioneArea({
       pickerPosition: "top"
     });
-
-    $("#comments-holder").scrollTop($("#comments-holder")[0].scrollHeight);
   });
 </script>
 @endpush

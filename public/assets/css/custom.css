@@ -972,6 +972,7 @@ a:visited {
 
 .emojionearea-editor {
     padding: 0 !important;
+    min-height: 5.5em !important;
 }
 
 .emojionearea-editor::before {
@@ -1169,11 +1170,29 @@ a:visited {
 }
 
 .more-comments {
-    margin: 10px;
+    margin-bottom: 10px;
     text-align: center;
 }
 
-.comments-holder {
+#comments-holder {
     max-height: 71.5%;
     overflow: auto;
+}
+
+.comment-post-ico {
+    background: #e6554a;
+    padding: 9px 6px;
+    border-radius: 50px;
+    color: #fff;
+    float: right;
+    font-size: 25px;
+}
+
+.comment-post-ico:hover {
+    cursor: pointer;
+}
+
+.modal-open {
+    height: 100vh;
+    overflow-y: hidden;
 }
