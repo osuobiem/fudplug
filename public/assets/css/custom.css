@@ -1180,7 +1180,7 @@ a:visited {
 }
 
 .comment-post-ico {
-    background: #e6554a;
+    background: var(--i-primary);
     padding: 9px 6px;
     border-radius: 50px;
     color: #fff;
@@ -1195,4 +1195,10 @@ a:visited {
 .modal-open {
     height: 100vh;
     overflow-y: hidden;
+}
+
+#comment-spinner {
+    padding: 4.5px 6px;
+    border-radius: 50px;
+    float: right;
 }

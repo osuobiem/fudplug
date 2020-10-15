@@ -12,180 +12,33 @@
 
     <div class="pb-2 pt-3" id="comments-holder">
 
-      <div class="more-comments">
-      <a href=""><strong>Load More Comments...</strong></a>
+      <div class="justify-content-center text-center w-100 pb-2 box p-2 mt-4">
+        <p><strong>Loading Comments</strong></p>
+        <div class="spinner-border spinner-border-sm btn-pr p-2" role="status">
+          <span class="sr-only">Loading...</span>
+        </div>
+      </div>
+
     </div>
 
-      <div class="comment-main c-left">
-        <div class="comment row">
+    <form id="comment-form">
+      <div class="p-3 pt-2 d-flex align-items-center w-100 comments-input-cont bg-white">
+        <div class="post-textarea-cont w-100" id="comment-form">
+          @csrf
+          <textarea placeholder="What do you think?..." class="form-control border-0 p-0 shadow-none post-input"
+            required rows="3" id="comment-textarea" name="comment_content"></textarea>
 
-          <div class="col-2 col-md-1 pr-1">
-            <div class="comments-img"
-              style="background-image: url('{{ Storage::url('vendor/profile/'.Auth::user()->profile_image) }}')"></div>
-          </div>
-          <div class="col-10 col-md-11 pl-0">
-            <div class="mb-1 d-flex">
-              <a href="#" style="color: unset;">
-                <strong>Name of User</strong>
-                &VerticalSeparator;
-                <span class="small" style="color: #212529 !important;">@imabi_k</span>
-              </a>
-              <span class="small ml-auto">22h ago</span>
+          <i class="la la-paper-plane la-lg comment-post-ico" id="comment-txt" onclick="submitComment()"></i>
+          <button class="btn btn-primary btn-sm" id="comment-spinner" style="display: none;">
+            <div class="spinner-border spinner-border-sm btn-pr p-2" role="status">
+              <span class="sr-only">Loading...</span>
             </div>
-            <hr class="m-1">
-            <span>
-              This is a test This is a test This is a test This is a test This is a test This is a test This is a test
-              This
-              is a test This is a test This is a test This is a test
-            </span>
-          </div>
+          </button>
 
+          <small class="text-danger error-message" id="comment_content"></small>
         </div>
       </div>
-
-      <div class="comment-main c-left">
-        <div class="comment row">
-
-          <div class="col-2 col-md-1 pr-1">
-            <div class="comments-img"
-              style="background-image: url('{{ Storage::url('vendor/profile/'.Auth::user()->profile_image) }}')"></div>
-          </div>
-          <div class="col-10 col-md-11 pl-0">
-            <div class="mb-1 d-flex">
-              <a href="#" style="color: unset;">
-                <strong>Name of User</strong>
-                &VerticalSeparator;
-                <span class="small" style="color: #212529 !important;">@imabi_k</span>
-              </a>
-              <span class="small ml-auto">22h ago</span>
-            </div>
-            <hr class="m-1">
-            <span>
-              This is a test This is a test This is a test This is a test This is a test This is a test This is a test
-              This
-              is a test This is a test This is a test This is a test
-            </span>
-          </div>
-
-        </div>
-      </div>
-
-      <div class="comment-main c-left">
-        <div class="comment row">
-
-          <div class="col-2 col-md-1 pr-1">
-            <div class="comments-img"
-              style="background-image: url('{{ Storage::url('vendor/profile/'.Auth::user()->profile_image) }}')"></div>
-          </div>
-          <div class="col-10 col-md-11 pl-0">
-            <div class="mb-1 d-flex">
-              <a href="#" style="color: unset;">
-                <strong>Name of User</strong>
-                &VerticalSeparator;
-                <span class="small" style="color: #212529 !important;">@imabi_k</span>
-              </a>
-              <span class="small ml-auto">22h ago</span>
-            </div>
-            <hr class="m-1">
-            <span>
-              This is a test This is a test This is a test This is a test This is a test This is a test This is a test
-              This
-              is a test This is a test This is a test This is a test
-            </span>
-          </div>
-
-        </div>
-      </div>
-
-      <div class="comment-main c-right">
-        <div class="comment row">
-
-          <div class="col-2 col-md-1 pr-1">
-            <div class="comments-img"
-              style="background-image: url('{{ Storage::url('vendor/profile/'.Auth::user()->profile_image) }}')"></div>
-          </div>
-          <div class="col-10 col-md-11 pl-0">
-            <div class="mb-1 d-flex">
-              <a href="#" style="color: unset;">
-                <strong>Name of User</strong>
-                &VerticalSeparator;
-                <span class="small" style="color: #212529 !important;">@imabi_k</span>
-              </a>
-              <span class="small ml-auto">22h ago</span>
-            </div>
-            <hr class="m-1">
-            <span>
-              This is a test This is a test This is a test This is a test This is a test This is a test This is a test
-              This
-              is a test This is a test This is a test This is a test
-            </span>
-          </div>
-
-        </div>
-      </div>
-
-      <div class="comment-main c-left">
-        <div class="comment row">
-
-          <div class="col-2 col-md-1 pr-1">
-            <div class="comments-img"
-              style="background-image: url('{{ Storage::url('vendor/profile/'.Auth::user()->profile_image) }}')"></div>
-          </div>
-          <div class="col-10 col-md-11 pl-0">
-            <div class="mb-1 d-flex">
-              <a href="#" style="color: unset;">
-                <strong>Name of User</strong>
-                &VerticalSeparator;
-                <span class="small" style="color: #212529 !important;">@imabi_k</span>
-              </a>
-              <span class="small ml-auto">22h ago</span>
-            </div>
-            <hr class="m-1">
-            <span>
-              This is a test This is a test This is a test This is a test This is a test This is a test This is a test
-              This
-              is a test This is a test This is a test This is a test
-            </span>
-          </div>
-
-        </div>
-      </div>
-      <div class="comment-main c-left">
-        <div class="comment row">
-
-          <div class="col-2 col-md-1 pr-1">
-            <div class="comments-img"
-              style="background-image: url('{{ Storage::url('vendor/profile/'.Auth::user()->profile_image) }}')"></div>
-          </div>
-          <div class="col-10 col-md-11 pl-0">
-            <div class="mb-1 d-flex">
-              <a href="#" style="color: unset;">
-                <strong>Name of User</strong>
-                &VerticalSeparator;
-                <span class="small" style="color: #212529 !important;">@imabi_k</span>
-              </a>
-              <span class="small ml-auto">22h ago</span>
-            </div>
-            <hr class="m-1">
-            <span>
-              This is a test This is a test This is a test This is a test This is a test This is a test This is a test
-              This
-              is a test This is a test This is a test This is a test
-            </span>
-          </div>
-
-        </div>
-      </div>
-    </div>
-
-    <div class="p-3 pt-2 d-flex align-items-center w-100 comments-input-cont bg-white">
-      <div class="post-textarea-cont w-100">
-        <textarea placeholder="What do you think?..." class="form-control border-0 p-0 shadow-none post-input" required
-          name="content" rows="3" id="comment-textarea" name="comment-content"></textarea>
-        <i class="la la-paper-plane la-lg comment-post-ico"></i>
-        <small class="text-danger error-message" id="comment-content"></small>
-      </div>
-    </div>
+    </form>
 
   </div>
 </div>
@@ -196,6 +49,62 @@
     $("#comment-textarea").emojioneArea({
       pickerPosition: "top"
     });
+
+    $('#comment-form').submit(el => {
+      el.preventDefault()
+
+      createComment(el)
+    })
   });
+
+  // Fetch Comments
+  function fetchComments(post_id) {
+    post = post_id
+
+    url = `{{ url('comment/get') }}/${post_id}`
+    goGet(url)
+      .then(res => {
+        $('#comments-holder').html(res)
+        comments_holder = document.getElementById("comments-holder");
+        comments_holder.scrollTop = comments_holder.scrollHeight;
+      })
+  }
+
+  // Fetch Comments
+  function fetchMoreComments(post_id, from) {
+    url = `{{ url('comment/get') }}/${post_id}/${from}`
+    goGet(url)
+      .then(res => {
+        $('#comments-holder').prepend(res)
+      })
+  }
+
+  // Submit Comment
+  function submitComment() {
+    $('#comment-form').submit()
+  }
+
+  // Create Comment
+  function createComment(el) {
+    spin('comment')
+
+    url = `{{ url('comment/create') }}/${post}`;
+    data = new FormData(el.target)
+
+    goPost(url, data)
+      .then(res => {
+        if (handleFormRes(res)) {
+          spin('comment')
+          console.log(res.data)
+        }
+        else {
+          spin('comment')
+        }
+      })
+      .catch(() => {
+        spin('comment')
+        showAlert(false, "Oops! Something's not right. Try Again");
+      })
+  }
 </script>
 @endpush

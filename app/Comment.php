@@ -13,12 +13,12 @@ class Comment extends Model
 
     public function vendor()
     {
-        return $this->belongsTo('App\Vendor');
+        return $this->belongsTo('App\Vendor', 'commentor_id', 'id');
     }
 
     public function user()
     {
-        return $this->belongsTo('App\User');
+        return $this->belongsTo('App\User', 'commentor_id', 'id');
     }
 
     public function notification()

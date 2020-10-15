@@ -1,0 +1,112 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Comment;
+use App\Post;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Validator;
+
+class CommentController extends Controller
+{
+    /**
+     * Get comments of a specific post
+     * @param int $post_id Post ID
+     * @param int $from Previous comment ID.
+     * @return view
+     */
+    function get($post_id, $from = 0)
+    {
+        // Check if this is the first fetch
+        $comments = $from == 0
+            ? Comment::where('post_id', $post_id)->orderBy('created_at')->take(11)->get()
+            : Comment::where('post_id', $post_id)->where('id', '<', $from)->orderBy('created_at')->take(11)->get();
+
+        // Check for pagination
+        $show_load_more = (count($comments) == 11) ? true : false;
+
+        return view('components.post.comments-inner', ['comments' => $comments, 'slm' => $show_load_more]);
+    }
+
+    /**
+     * Create a comment
+     * @param int $post_id Post ID
+     * @return json
+     */
+    public function create(Request $request, $post_id)
+    {
+        // Get validation rules
+        $validate = $this->comment_rules($request);
+
+        // Run validation
+        if ($validate->fails()) {
+            return response()->json([
+                "success" => false,
+                "message" => $validate->errors()
+            ]);
+        }
+
+        // Get Post
+        $post = Post::findOrFail($post_id);
+
+        // Get commentor
+        if (!Auth::guest()) {
+            $commentor_id = $request->user()->id;
+            $commentor_type = 'vendor';
+        } elseif (!Auth::guard('user')->guest()) {
+            $commentor_id = $request->user('user')->id;
+            $commentor_type = 'user';
+        } else {
+            return response()->json([
+                'success' => false,
+                'message' => "You're not logged in"
+            ]);
+        }
+
+        // Create new comment object
+        $comment = new Comment();
+        $comment->content = $request['comment_content'];
+        $comment->commentor_id = $commentor_id;
+        $comment->commentor_type = $commentor_type;
+        $comment->post_id = $post_id;
+
+        // Increase post comments count
+        $post->comments++;
+
+        // Try Save
+        try {
+            $comment->save();
+            $post->save();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Comment Created',
+                'data' => $comment
+            ]);
+        } catch (\Throwable $th) {
+            Log::error($th);
+
+            // Delete comments on error
+            $comment->forceDelete();
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Internal Server Error'
+            ], 500);
+        }
+    }
+
+    /**
+     * Create Comment validation Rules
+     * @return array
+     */
+    public function comment_rules(Request $request)
+    {
+        // Make and return validation rules
+        return Validator::make($request->all(), [
+            'comment_content' => 'required|max:1500',
+        ]);
+    }
+}

@@ -239,7 +239,7 @@ function launchLight(a) {
 }
 
 // Open Comments Modal
-function openComments() {
+function openComments(post_id) {
     $("body").addClass("modal-open");
     $(".comments-container").removeClass("d-none");
 
@@ -249,8 +249,7 @@ function openComments() {
     $(".comments-inner").removeClass("animate__fadeOutDown");
     $(".comments-container").removeClass("animate__fadeOut");
 
-    comments_holder = document.getElementById("comments-holder");
-    comments_holder.scrollTop = comments_holder.scrollHeight;
+    fetchComments(post_id)
 }
 
 // Close Comments Modal
