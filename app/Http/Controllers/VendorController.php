@@ -674,11 +674,17 @@ class VendorController extends Controller
                 $menu = json_decode($menu->items);
                 $menu = $menu->item;
 
-                // Fetch Dishes for Menu
-                $menu_data = Item::select("*")
-                    ->whereIn('id', $menu);
-                $menu_count = $menu_data->count();
-                $menu_dishes = $menu_data->get();
+                if (!empty($menu)) {
+                    // Fetch Dishes for Menu
+                    $menu_data = Item::select("*")
+                        ->whereIn('id', $menu);
+                    $menu_count = $menu_data->count();
+                    $menu_dishes = $menu_data->get();
+
+                } else {
+                    $menu_count = 0;
+                    $menu_dishes = null;
+                }
 
                 // Get All Vendor Dishes
                 $dish_data = Item::where('vendor_id', Auth::user()->id);
