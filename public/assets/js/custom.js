@@ -214,7 +214,7 @@ function closePostModal() {
     $(".post-modal").addClass("animate__fadeOut");
     setTimeout(() => {
         $(".post-modal").addClass("d-none");
-    }, 500);
+    }, 1000);
 }
 
 // Block that displays file names on input fields when selected

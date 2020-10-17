@@ -66,9 +66,7 @@ elseif(!Auth::guest() && $comment->commentor_type == 'vendor') {
         <span class="small ml-auto">{{ ftime($comment->created_at) }}</span>
       </div>
       <hr class="m-1">
-      <span>
-        {{ $comment->content }}
-      </span>
+      <span style="white-space: pre-wrap">{{ $comment->content }}</span>
     </div>
 
   </div>

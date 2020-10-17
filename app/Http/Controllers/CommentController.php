@@ -75,7 +75,8 @@ class CommentController extends Controller
 
         // Create new comment object
         $comment = new Comment();
-        $comment->content = nl2br($request['comment_content']);
+
+        $comment->content = trim($request['comment_content']);
         $comment->commentor_id = $commentor_id;
         $comment->commentor_type = $commentor_type;
         $comment->post_id = $post_id;

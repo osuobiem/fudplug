@@ -230,7 +230,7 @@
                             <label class="mb-1">About Business</label>
                             <span class="text-danger">*</span>
                             <div class="position-relative">
-                                <textarea class="form-control" rows="8" name="about"
+                                <textarea class="form-control" rows="4" name="about"
                                     placeholder="Enter business info">{{Auth::user()->about_business}}</textarea>
                             </div>
                             <small class="text-danger error-message" id="about"></small>

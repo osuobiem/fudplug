@@ -41,9 +41,7 @@ function format_time($time) {
     <span class="ml-auto small">{{ format_time($post->created_at) }}</span>
   </div>
   <div class="p-3 border-bottom osahan-post-body post-inner">
-    <p class="mb-0 f-post" onclick="openComments('{{ $post->id }}')">
-      {{ $post->content }}
-    </p>
+    <p class="mb-0 f-post" onclick="openComments('{{ $post->id }}')">{{ $post->content }}</p>
 
     <div class="post-media-container justify-content-center">
       @if($post->media)
