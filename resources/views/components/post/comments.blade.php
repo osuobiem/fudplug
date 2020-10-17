@@ -95,7 +95,17 @@
       .then(res => {
         if (handleFormRes(res)) {
           spin('comment')
-          console.log(res.data)
+          // Append new comment
+          $('#no-comment').html() === undefined
+            ? $('#comments-holder').append(res)
+            : $('#comments-holder').html(res)
+
+          // Scroll to bottom
+          comments_holder = document.getElementById("comments-holder");
+          comments_holder.scrollTop = comments_holder.scrollHeight;
+
+          // Clear Textarea
+          $($('.emojionearea-editor')[1]).text("")
         }
         else {
           spin('comment')

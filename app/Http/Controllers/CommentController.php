@@ -33,7 +33,7 @@ class CommentController extends Controller
     /**
      * Create a comment
      * @param int $post_id Post ID
-     * @return json
+     * @return json/view
      */
     public function create(Request $request, $post_id)
     {
@@ -80,11 +80,7 @@ class CommentController extends Controller
             $comment->save();
             $post->save();
 
-            return response()->json([
-                'success' => true,
-                'message' => 'Comment Created',
-                'data' => $comment
-            ]);
+            return view('components/post/comment', ['comment' => $comment]);
         } catch (\Throwable $th) {
             Log::error($th);
 

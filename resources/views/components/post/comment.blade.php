@@ -1,11 +1,3 @@
-@if(count($comments))
-
-@if($slm)
-<div class="more-comments">
-  <a href=""><strong>Load More Comments...</strong></a>
-</div>
-@endif
-
 {{-- Format Time/Date --}}
 @php
 function ftime($time) {
@@ -33,7 +25,6 @@ function ftime($time) {
 }
 @endphp
 
-@foreach($comments as $comment)
 @php
 $id = '';
 if(!Auth::guard('user')->guest() && $comment->commentor_type == 'user') {
@@ -44,7 +35,7 @@ elseif(!Auth::guest() && $comment->commentor_type == 'vendor') {
 }
 @endphp
 
-<div class="comment-main {{ $id == $comment->commentor_id ? 'c-right' : 'c-left'}}">
+<div class="comment-main {{ $id == $comment->commentor_id ? 'c-right' : 'c-left'}} animate__animated animate__fadeInUp animate__faster">
   <div class="comment row">
 
     <div class="col-2 col-md-1 pr-1">
@@ -73,10 +64,3 @@ elseif(!Auth::guest() && $comment->commentor_type == 'vendor') {
 
   </div>
 </div>
-@endforeach
-
-@else
-<div class="justify-content-center text-center w-100 pb-2 box p-2 mt-4" id="no-comment">
-  <p><strong>No Comments Yet</strong></p>
-</div>
-@endif
