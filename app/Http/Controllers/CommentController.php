@@ -21,13 +21,21 @@ class CommentController extends Controller
     {
         // Check if this is the first fetch
         $comments = $from == 0
-            ? Comment::where('post_id', $post_id)->orderBy('created_at')->take(11)->get()
-            : Comment::where('post_id', $post_id)->where('id', '<', $from)->orderBy('created_at')->take(11)->get();
+            ? Comment::where('post_id', $post_id)->orderBy('created_at', 'desc')->take(11)->get()
+            : Comment::where('post_id', $post_id)->where('id', '<', $from)->orderBy('created_at', 'desc')->take(11)->get();
+
+        $comments = $comments->reverse();
 
         // Check for pagination
         $show_load_more = (count($comments) == 11) ? true : false;
+        $fr = (count($comments) == 11) ? $comments[10]->id : 0;
 
-        return view('components.post.comments-inner', ['comments' => $comments, 'slm' => $show_load_more]);
+        return view('components.post.comments-inner', [
+            'comments' => $comments,
+            'slm' => $show_load_more,
+            'post_id' => $post_id,
+            'from' => $fr
+        ]);
     }
 
     /**
@@ -67,7 +75,7 @@ class CommentController extends Controller
 
         // Create new comment object
         $comment = new Comment();
-        $comment->content = $request['comment_content'];
+        $comment->content = nl2br($request['comment_content']);
         $comment->commentor_id = $commentor_id;
         $comment->commentor_type = $commentor_type;
         $comment->post_id = $post_id;

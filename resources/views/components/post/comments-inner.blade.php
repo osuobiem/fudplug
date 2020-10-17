@@ -2,7 +2,7 @@
 
 @if($slm)
 <div class="more-comments">
-  <a href=""><strong>Load More Comments...</strong></a>
+  <a style="color: var(--i-primary)" onclick="fetchMoreComments(`{{ $post_id }}`, `{{ $from }}`)"><strong>Load More Comments...</strong></a>
 </div>
 @endif
 
