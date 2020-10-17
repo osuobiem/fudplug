@@ -105,7 +105,10 @@
           comments_holder.scrollTop = comments_holder.scrollHeight;
 
           // Clear Textarea
-          $($('.emojionearea-editor')[1]).text("")
+          [...$('.emojionearea-editor')].forEach(el => {
+            $(el).attr('placeholder') == "What do you think?..."
+              ? $(el).text('') : null;
+          })
         }
         else {
           spin('comment')

@@ -5,8 +5,8 @@ function ftime($time) {
   $t_diff = time() - $time;
   $res = "";
 
-  if($t_diff >= 1 && $t_diff < 60) {
-    $res = $t_diff."s ago";
+  if($t_diff < 60) {
+    $res = $t_diff == 0 ? 'now' : $t_diff."s ago";
   }
   elseif($t_diff >= 60 && $t_diff < 3600) {
     $res = (int)($t_diff/60)."m ago";
