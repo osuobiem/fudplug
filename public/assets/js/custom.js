@@ -105,6 +105,9 @@ function goPost(url, data) {
 
 // Handle form error
 function handleFormRes(res, form = false, prefix = false, modalAlert = false) {
+    if (res.success === undefined) {
+        return true;
+    }
     if (res.status === 200) {
         if (!res.success) {
             errors = res.message;
@@ -211,7 +214,7 @@ function closePostModal() {
     $(".post-modal").addClass("animate__fadeOut");
     setTimeout(() => {
         $(".post-modal").addClass("d-none");
-    }, 500);
+    }, 1000);
 }
 
 // Block that displays file names on input fields when selected
@@ -249,7 +252,7 @@ function openComments(post_id) {
     $(".comments-inner").removeClass("animate__fadeOutDown");
     $(".comments-container").removeClass("animate__fadeOut");
 
-    fetchComments(post_id)
+    fetchComments(post_id);
 }
 
 // Close Comments Modal

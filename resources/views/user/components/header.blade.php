@@ -68,7 +68,7 @@
 						<a class="nav-link dropdown-toggle pr-0 u-link" href="#" role="button" data-toggle="dropdown"
 							aria-haspopup="true" aria-expanded="false">
 							<p class="m-auto d-none d-md-block bright-ic" style="font-size: medium;">
-								{{ Auth::guard('user')->user()->name }}
+								{{ strlen(Auth::guard('user')->user()->business_name) > 20 ? substr(Auth::guard('user')->user()->business_name, 0, 15).'...' : Auth::guard('user')->user()->business_name }}
 							</p>
 							&nbsp; &nbsp;
 							<img class="img-profile rounded-circle" src="{{ Storage::url('user/'.Auth::guard('user')->user()->profile_image) }}">

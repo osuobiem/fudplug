@@ -1,11 +1,3 @@
-@if(count($comments))
-
-@if($slm)
-<div class="more-comments">
-  <a style="color: var(--i-primary)" onclick="fetchMoreComments(`{{ $post_id }}`, `{{ $from }}`)"><strong>Load More Comments...</strong></a>
-</div>
-@endif
-
 {{-- Format Time/Date --}}
 @php
 function ftime($time) {
@@ -13,7 +5,7 @@ function ftime($time) {
   $t_diff = time() - $time;
   $res = "";
 
-  if($t_diff >= 1 && $t_diff < 60) {
+  if($t_diff < 60) {
     $res = $t_diff == 0 ? 'now' : $t_diff."s ago";
   }
   elseif($t_diff >= 60 && $t_diff < 3600) {
@@ -33,7 +25,6 @@ function ftime($time) {
 }
 @endphp
 
-@foreach($comments as $comment)
 @php
 $id = '';
 if(!Auth::guard('user')->guest() && $comment->commentor_type == 'user') {
@@ -44,7 +35,7 @@ elseif(!Auth::guest() && $comment->commentor_type == 'vendor') {
 }
 @endphp
 
-<div class="comment-main {{ $id == $comment->commentor_id ? 'c-right' : 'c-left'}}">
+<div class="comment-main {{ $id == $comment->commentor_id ? 'c-right' : 'c-left'}} animate__animated animate__fadeInUp animate__faster">
   <div class="comment row">
 
     <div class="col-2 col-md-1 pr-1">
@@ -64,7 +55,6 @@ elseif(!Auth::guest() && $comment->commentor_type == 'vendor') {
             style="color: #212529 !important;">{{ '@'.$comment->{$comment->commentor_type}->username }}</span>
         </a>
         <span class="small ml-auto">{{ ftime($comment->created_at) }}</span>
-        
       </div>
       <hr class="m-1">
       <span style="white-space: pre-wrap">{{ $comment->content }}</span>
@@ -72,10 +62,3 @@ elseif(!Auth::guest() && $comment->commentor_type == 'vendor') {
 
   </div>
 </div>
-@endforeach
-
-@else
-<div class="justify-content-center text-center w-100 pb-2 box p-2 mt-4" id="no-comment">
-  <p><strong>No Comments Yet</strong></p>
-</div>
-@endif

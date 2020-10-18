@@ -12,7 +12,7 @@
       <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
         <div class="p-3 pt-2 d-flex align-items-center w-100" href="#">
           <div class="post-textarea-cont-2 w-100">
-            <textarea placeholder="Post something delicious..." class="form-control border-0 p-0 shadow-none"
+            <textarea placeholder="Post something delicious..." id="dummy-post-area" disabled class="form-control border-0 p-0 shadow-none"
               rows="2"></textarea>
           </div>
         </div>
@@ -43,7 +43,7 @@
             <div class="post-textarea-cont w-100">
               <textarea placeholder="Post something delicious..."
                 class="form-control border-0 p-0 shadow-none post-input" required name="content" rows="5"
-                id="post-textarea" name="content"></textarea>
+                id="post-textarea" name="content" autofocus="true"></textarea>
               <small class="text-danger error-message" id="content"></small>
             </div>
           </div>

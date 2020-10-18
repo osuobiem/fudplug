@@ -64,7 +64,7 @@
     url = `{{ url('comment/get') }}/${post_id}`
     goGet(url)
       .then(res => {
-        $('#comments-holder').html(res)
+        $('#comments-holder').html($.parseHTML(res))
         comments_holder = document.getElementById("comments-holder");
         comments_holder.scrollTop = comments_holder.scrollHeight;
       })
@@ -75,7 +75,13 @@
     url = `{{ url('comment/get') }}/${post_id}/${from}`
     goGet(url)
       .then(res => {
+        comments_holder = document.getElementById("comments-holder");
+        h = comments_holder.scrollHeight;
+
+        $('.more-comments').remove()
+
         $('#comments-holder').prepend(res)
+        comments_holder.scrollTop = comments_holder.scrollHeight - h;
       })
   }
 
@@ -95,7 +101,20 @@
       .then(res => {
         if (handleFormRes(res)) {
           spin('comment')
-          console.log(res.data)
+          // Append new comment
+          $('#no-comment').html() === undefined
+            ? $('#comments-holder').append($.parseHTML(res))
+            : $('#comments-holder').html(res)
+
+          // Scroll to bottom
+          comments_holder = document.getElementById("comments-holder");
+          comments_holder.scrollTop = comments_holder.scrollHeight;
+
+          // Clear Textarea
+          [...$('.emojionearea-editor')].forEach(el => {
+            $(el).attr('placeholder') == "What do you think?..."
+              ? $(el).text('') : null;
+          })
         }
         else {
           spin('comment')

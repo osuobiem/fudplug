@@ -33,7 +33,7 @@ class PostController extends Controller
 
         // Post Data
         $post = new Post();
-        $post->content = $request['content'];
+        $post->content = trim($request['content']);
         $post->likes = 0;
         $post->comments = 0;
         $post->vendor_id = $request->user()->id;

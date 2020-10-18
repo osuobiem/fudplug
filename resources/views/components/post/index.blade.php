@@ -8,7 +8,7 @@ function format_time($time) {
   $res = "";
 
   if($t_diff >= 1 && $t_diff < 60) {
-    $res = $t_diff."s ago";
+    $res = $t_diff == 0 ? 'now' : $t_diff."s ago";
   }
   elseif($t_diff >= 60 && $t_diff < 3600) {
     $res = (int)($t_diff/60)."m ago";
@@ -28,6 +28,13 @@ function format_time($time) {
 @endphp
 
 @foreach ($posts as $post)
+@php
+$id = '';
+if(!Auth::guest()) {
+  $id = Auth::user()->id;
+}
+@endphp
+
     <!-- Post -->
 <div class="box shadow-sm border rounded bg-white mb-3 osahan-post">
   <div class="p-3 d-flex align-items-center border-bottom osahan-post-header">
@@ -35,15 +42,36 @@ function format_time($time) {
       <img class="rounded-circle" src="{{ Storage::url('vendor/profile/'.$post->vendor->profile_image) }}" alt="">
     </div>
     <div class="font-weight-bold">
-      <div class="text-truncate post-profile">{{ $post->vendor->business_name }}</div>
+      <div class="text-truncate post-profile">{{ strlen($post->vendor->business_name) > 23 ? substr($post->vendor->business_name, 0, 23).'...' : $post->vendor->business_name }}</div>
       <div class="small post-profile">{{ '@'.$post->vendor->username }}</div>
     </div>
     <span class="ml-auto small">{{ format_time($post->created_at) }}</span>
+
+    {{-- Post Dropdown --}}
+    @if(!Auth::guest() || !Auth::guard('user')->guest())
+      <i class="la la-ellipsis-v la-2x icon-hover bright-ic ml-2 p-0" data-toggle="dropdown">
+        <div class="dropdown-menu dropdown-menu-right shadow">
+          @if($id == $post->vendor_id)
+            <a class="dropdown-item">
+              <i class="la la-pencil la-lg mr-1"></i>
+              <span style="font-family: 'Ubuntu', sans-serif;">Edit Post</span>
+            </a>
+            <a class="dropdown-item">
+              <i class="la la-trash la-lg mr-1"></i>
+              <span style="font-family: 'Ubuntu', sans-serif;">Delete Post</span>
+            </a>
+          @else
+          <a class="dropdown-item">
+              <i class="la la-flag la-lg mr-1"></i>
+              <span style="font-family: 'Ubuntu', sans-serif;">Report Post</span>
+            </a>
+          @endif
+        </div>
+      </i>
+    @endif
   </div>
   <div class="p-3 border-bottom osahan-post-body post-inner">
-    <p class="mb-0 f-post" onclick="openComments('{{ $post->id }}')">
-      {{ $post->content }}
-    </p>
+    <p class="mb-0 f-post" onclick="openComments('{{ $post->id }}')">{{ $post->content }}</p>
 
     <div class="post-media-container justify-content-center">
       @if($post->media)
