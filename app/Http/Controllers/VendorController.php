@@ -525,7 +525,6 @@ class VendorController extends Controller
         }
 
         return json_encode($regular_arr);
-
     }
 
     /**
@@ -680,7 +679,6 @@ class VendorController extends Controller
                         ->whereIn('id', $menu);
                     $menu_count = $menu_data->count();
                     $menu_dishes = $menu_data->get();
-
                 } else {
                     $menu_count = 0;
                     $menu_dishes = null;

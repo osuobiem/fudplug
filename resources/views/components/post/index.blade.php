@@ -35,10 +35,11 @@ function format_time($time) {
       <img class="rounded-circle" src="{{ Storage::url('vendor/profile/'.$post->vendor->profile_image) }}" alt="">
     </div>
     <div class="font-weight-bold">
-      <div class="text-truncate post-profile">{{ $post->vendor->business_name }}</div>
+      <div class="text-truncate post-profile">{{ strlen($post->vendor->business_name) > 23 ? substr($post->vendor->business_name, 0, 23).'...' : $post->vendor->business_name }}</div>
       <div class="small post-profile">{{ '@'.$post->vendor->username }}</div>
     </div>
     <span class="ml-auto small">{{ format_time($post->created_at) }}</span>
+    <i class="la la-ellipsis-v la-2x icon-hover bright-ic ml-2 p-0"></i>
   </div>
   <div class="p-3 border-bottom osahan-post-body post-inner">
     <p class="mb-0 f-post" onclick="openComments('{{ $post->id }}')">{{ $post->content }}</p>
