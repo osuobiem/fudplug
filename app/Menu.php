@@ -12,7 +12,7 @@ class Menu extends Model
      * @var array
      */
     protected $fillable = [
-        'items',
+        'items', 'vendor_id',
     ];
 
     public function vendor()

@@ -55,14 +55,20 @@ Route::group(['prefix' => 'vendor'], function () {
         Route::post('cover_image_update', 'VendorController@cover_image_update');
         // Add Dishes
         Route::post('add-dish', 'VendorController@add_dish');
-        // Get Vendor Dishes
+        // Get Vendor Dish & Populate RightSidebar
         Route::get('dish/{id?}', 'VendorController@get_dish');
+        // Get Dish To Delete
+        Route::get('dish-delete/{id}', 'VendorController@dish_delete');
+        // Delete Dish
+        Route::get('delete-dish/{id}', 'VendorController@delete_dish');
         // Update Vendor Dish
         Route::post('update-dish', 'VendorController@update_dish');
         // Populate Vendor Menu Select Modal
         Route::get('menu', 'VendorController@get_menu');
         // Update Vendor Menu
         Route::post('update-menu', 'VendorController@update_menu');
+        // Get Vendor Menu
+        Route::get('get-menu/{vendor_id?}', 'VendorController@main_menu');
     });
 });
 // -------------

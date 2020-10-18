@@ -66,7 +66,7 @@
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home"
-                            aria-selected="false">About</a>
+                            aria-selected="false">Feed</a>
                     </li>
                     <li class="nav-item d-lg-none">
                         <a class="nav-link" id="home-tab" data-toggle="tab" href="#order" role="tab"
@@ -74,7 +74,7 @@
                     </li>
                     <li class="nav-item d-lg-none">
                         <a class="nav-link" id="home-tab" data-toggle="tab" href="#menu-dish" role="tab"
-                            aria-controls="home" aria-selected="false">Menu</a>
+                            aria-controls="home" aria-selected="false">Menu/Dishes</a>
                     </li>
                 </ul>
             </div>
@@ -139,6 +139,10 @@
                                     </ul>
                                 </td>
                             </tr>
+                            <tr class="border-bottom">
+                                <th class="p-3">About</th>
+                                <td class="p-3">{{ Auth::user()->about_business }}</td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
@@ -146,12 +150,15 @@
         </div>
 
         <div class="tab-pane fade" id="home" role="tabpanel" aria-labelledby="home-tab">
-            <div class="box shadow-sm border rounded bg-white mb-3">
-                <div class="box-title border-bottom p-3">
+            <div class="box shadow-sm border rounded bg-white mb-3 p-3">
+                <!-- <div class="box-title border-bottom p-3">
                     <h6 class="m-0">About</h6>
                 </div>
                 <div class="box-body p-3">
                     <p>{{ Auth::user()->about_business }}</p>
+                </div> -->
+                <div class="alert alert-warning">
+                    Coming soon
                 </div>
             </div>
         </div>

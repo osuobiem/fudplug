@@ -108,13 +108,10 @@
                         </div>
                     </button>
                 </div>
-
             </div>
         </div>
     </div>
 </div>
-
-<span class="d-none" data-toggle="modal" href="#loginModal" id="login-pop"></span>
 
 <script>
     $(document).ready(function () {
@@ -151,7 +148,7 @@
                     showAlert(true, res.message);
 
                     // Reload the Right Bar on Completion
-                    loadRight();
+                    loadRight('1');
                 }
             })
             .catch(err => {
