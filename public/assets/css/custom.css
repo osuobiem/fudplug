@@ -1211,3 +1211,11 @@ a:visited {
 #dummy-post-area:hover {
     cursor: text;
 }
+
+.univ-a {
+    color: var(--i-primary);
+}
+
+.univ-a:hover {
+    cursor: pointer;
+}

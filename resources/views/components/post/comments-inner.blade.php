@@ -64,6 +64,7 @@ elseif(!Auth::guest() && $comment->commentor_type == 'vendor') {
             style="color: #212529 !important;">{{ '@'.$comment->{$comment->commentor_type}->username }}</span>
         </a>
         <span class="small ml-auto">{{ ftime($comment->created_at) }}</span>
+        
       </div>
       <hr class="m-1">
       <span style="white-space: pre-wrap">{{ $comment->content }}</span>
