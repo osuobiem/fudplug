@@ -45,12 +45,12 @@
     </div>
     <div class="text-center">
         <div class="row">
-            <div class="col-6 border-right p-4">
+            <div class="col-6 border-right p-2">
                 <h6 class="font-weight-bold text-dark mb-1">Joined</h6>
                 <p class="mb-0 text-black-50 small">{{ date("d M, Y", strtotime(Auth::user()->created_at)) }}
                 </p>
             </div>
-            <div class="col-6 p-3">
+            <div class="col-6 p-2">
                 <h6 class="font-weight-bold text-dark mb-1">Location</h6>
                 <p class="mb-0 text-black-50 small"><i class="las la-map-marker-alt"></i>{{ $vendor_location->area }},
                     {{ $vendor_location->state }}</p>
@@ -384,6 +384,9 @@
                         data: formData,
                         processData: false,
                         contentType: false,
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
 
                         xhr: function () {
                             var xhr = new XMLHttpRequest();
