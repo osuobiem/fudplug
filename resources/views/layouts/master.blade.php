@@ -73,6 +73,12 @@
                 </div>
                 <!-- Dish View Modal Holder -->
 
+                <!-- Dish Delete Modal Holder -->
+                <div id="dish-delete-modal-holder">
+
+                </div>
+                <!-- Dish Delete Modal Holder -->
+
                 <!-- Menu Update Modal Holder -->
                 <div id="menu-modal-holder">
 
@@ -85,7 +91,7 @@
             <aside class="col col-lg-3 d-none d-lg-block side-section side-section-r right-side-large text-center">
                 <div class="justify-content-center text-center w-100 pb-2 box shadow-sm border rounded bg-white p-2"
                     id="right-side-spinner" style="display: none;">
-                    <p><strong>Loading Dishes</strong></p>
+                    <p><strong>Loading...</strong></p>
                     <div class="spinner-border spinner-border-sm" role="status">
                         <span class="sr-only">Loading...</span>
                     </div>
@@ -159,11 +165,11 @@
     @if(!Auth::guest() || !Auth::guard('user')->guest())
     <script>
         $(document).ready(function () {
-            // Load The Right Side when Document is Ready
-            loadRight();
+            // Variable to Hold Right Side Bar Active Tab
+            let activeTab = '1';
 
-            // Load Menu Modal Data whenDocument is Ready
-            loadMenuModal()
+            // Load The Right Side when Document is Ready
+            loadRight(activeTab);
         });
 
         // Like/Unlike a post
@@ -238,10 +244,11 @@
         }
 
         // Load Right Side (Vendor Dish & Menu)
-        function loadRight() {
+        function loadRight(activeTab) {
             spin('right-side')
             // Populate dishes tab on page load
             let getUrl = "{{url('vendor/dish')}}";
+
             goGet(getUrl).then((res) => {
                 spin('right-side')
                 if (window.matchMedia("(max-width: 767px)").matches) {
@@ -249,11 +256,13 @@
                     $("#dish-menu").remove();
                     $(".right-side-large").empty();
                     $(".right-side-small").append(res);
+                    $(`#rightTab li:nth-child(${activeTab}) a`).tab('show');
                 } else {
                     // The viewport is at least 768 pixels wide (Desktop or tablet)
                     $("#dish-menu").remove();
                     $(".right-side-small").empty();
                     $(".right-side-large").append(res);
+                    $(`#rightTab li:nth-child(${activeTab}) a`).tab('show');
                 }
             }).catch((err) => {
                 spin('right-side')
@@ -266,10 +275,15 @@
             goGet(getUrl).then((res) => {
                 $("#menu-modal-holder").empty();
                 $("#menu-modal-holder").html(res);
-                console.log(res)
+                $("#menu-update-modal").modal('show');
             }).catch((err) => {
                 console.error(err);
             });
+        }
+
+        // Function Keeps Track of Active Tab
+        function track(active = '1') {
+            activeTab = active;
         }
 
     </script>

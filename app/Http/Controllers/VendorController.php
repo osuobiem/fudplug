@@ -523,7 +523,6 @@ class VendorController extends Controller
                     break;
             }
         }
-
         return json_encode($regular_arr);
     }
 
@@ -649,7 +648,7 @@ class VendorController extends Controller
     public function get_dish(Request $request, $dish_id = null)
     {
         try {
-            if (isset($dish_id)) {
+            if (!empty($dish_id)) {
                 $dish = Item::where(['vendor_id' => Auth::user()->id, 'id' => $dish_id])->first();
                 $data = [];
                 if ($dish->type == "simple") {
@@ -665,29 +664,44 @@ class VendorController extends Controller
                 }
                 return view('vendor.components.dish-view', $data);
             } else {
-                // Fetch the Menu Item
-                $menu = Menu::where('vendor_id', Auth::user()->id)->first("items");
-                $menu = json_decode($menu);
+                // Get All Vendor Dishes
+                $dish_data = Item::where('vendor_id', Auth::user()->id);
 
-                // Get the Array of Dish IDs
-                $menu = json_decode($menu->items);
-                $menu = $menu->item;
+                if ($dish_data->count() > 0) {
+                    // Set Dish Parameters
+                    $dish_count = $dish_data->count();
+                    $dishes = $dish_data->get();
 
-                if (!empty($menu)) {
-                    // Fetch Dishes for Menu
-                    $menu_data = Item::select("*")
-                        ->whereIn('id', $menu);
-                    $menu_count = $menu_data->count();
-                    $menu_dishes = $menu_data->get();
+                    // Fetch the Menu Item
+                    $menu_data = Menu::where('vendor_id', Auth::user()->id)->first("items");
+                    if (!empty($menu_data)) {
+                        $menu = json_decode($menu_data);
+
+                        // Get the Array of Dish IDs
+                        $menu = json_decode($menu->items);
+                        $menu = $menu->item;
+
+                        if (!empty($menu)) {
+                            // Fetch Dishes for Menu
+                            $menu_data = Item::select("*")
+                                ->whereIn('id', $menu);
+                            $menu_count = $menu_data->count();
+                            $menu_dishes = $menu_data->get();
+                        } else {
+                            $menu_count = 0;
+                            $menu_dishes = null;
+                        }
+                    } else {
+                        $menu_count = 0;
+                        $menu_dishes = null;
+                    }
                 } else {
+                    $dish_count = 0;
+                    $dishes = null;
+
                     $menu_count = 0;
                     $menu_dishes = null;
                 }
-
-                // Get All Vendor Dishes
-                $dish_data = Item::where('vendor_id', Auth::user()->id);
-                $dish_count = $dish_data->count();
-                $dishes = $dish_data->get();
 
                 return view('vendor.components.right-side', compact('dishes', 'menu_dishes', 'menu_count', 'dish_count'));
             }
@@ -804,17 +818,40 @@ class VendorController extends Controller
     public function get_menu(Request $request)
     {
         try {
-            // Fetch the Menu Item
-            $menu = Menu::where('vendor_id', Auth::user()->id)->first("items");
-            $menu = json_decode($menu);
-
-            // Get the Array of Dish IDs
-            $menu_items = json_decode($menu->items);
-            $menu_items = $menu_items->item;
-
+            // Fetch Vendor Dishes
             $dishes = Item::where('vendor_id', Auth::user()->id)->get();
 
-            return view('vendor.components.menu-update', compact('dishes', 'menu_items'));
+            if (!empty($dishes)) {
+                // Fetch the Menu Item
+                $menu = Menu::where('vendor_id', Auth::user()->id)->first("items");
+                if (!empty($menu)) {
+                    $menu = json_decode($menu);
+
+                    // Get the Array of Dish IDs
+                    $menu_items = json_decode($menu->items);
+                    $menu_items = $menu_items->item;
+
+                    if (!empty($menu)) {
+                        // Fetch Dishes for Menu
+                        $menu_data = Item::select("*")
+                            ->whereIn('id', $menu_items);
+                        $menu_count = $menu_data->count();
+                        $menu_dishes = $menu_data->get();
+                    } else {
+                        $menu_count = 0;
+                        $menu_dishes = null;
+                    }
+                } else {
+                    $menu_items = null;
+                    $menu_dishes = null;
+                }
+            } else {
+                $dishes = null;
+                $menu_items = null;
+                $menu_dishes = null;
+            }
+
+            return view('vendor.components.menu-update', compact('dishes', 'menu_items', 'menu_dishes'));
         } catch (\Throwable $th) {
             Log::error($th);
         }
@@ -828,8 +865,39 @@ class VendorController extends Controller
     {
         try {
             $items = ['item' => $request->has('item') ? $request->item : null];
-            Menu::updateOrCreate(['vendor_id' => 1], ['items' => json_encode($items)]);
+            Menu::updateOrCreate(['vendor_id' => Auth::user()->id], ['items' => json_encode($items)]);
             return response()->json(['success' => true, 'message' => "Menu Updated Successfully"], 200);
+        } catch (\Throwable $th) {
+            Log::error($th);
+            return response()->json(['success' => false, 'message' => $th->getMessage()], 500);
+        }
+    }
+
+    /**
+     * Get Dish To Delete
+     * @return object Laravel View Instance
+     */
+    public function dish_delete(Request $request, $dish_id)
+    {
+        try {
+            $dish = Item::where(['vendor_id' => Auth::user()->id, 'id' => $dish_id])->first();
+            return view('vendor.components.dish-delete', compact('dish'));
+        } catch (\Throwable $th) {
+            Log::error($th);
+        }
+    }
+
+    /**
+     * Delete Dish
+     * @return string JSON
+     */
+    public function delete_dish(Request $request, $dish_id)
+    {
+        try {
+            $dish = Item::find($dish_id);
+            $dish->delete();
+
+            return response()->json(['success' => true, 'message' => "Dish Deleted Successfully"], 200);
         } catch (\Throwable $th) {
             Log::error($th);
             return response()->json(['success' => false, 'message' => $th->getMessage()], 500);

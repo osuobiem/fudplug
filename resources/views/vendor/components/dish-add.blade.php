@@ -1501,7 +1501,7 @@
                         $('#add-dish').trigger('reset');
 
                         // Reload the Right Bar on Completion
-                        loadRight()
+                        loadRight(activeTab);
                     }, 2000)
                 }
             })

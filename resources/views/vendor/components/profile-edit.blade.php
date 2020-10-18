@@ -1,6 +1,6 @@
 <div class="modal fade" id="profile-edit-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
     aria-hidden="true">
-    <div class="modal-dialog mt-1" role="document">
+    <div class="modal-dialog mt-1 modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">Edit Profile</h5>
@@ -254,7 +254,7 @@
 
 <span class="d-none" data-toggle="modal" href="#loginModal" id="login-pop"></span>
 
-@section('scripts')
+
 <script>
     $(document).ready(function () {
         // Attach vendor form event listener
@@ -291,5 +291,3 @@
     }
 
 </script>
-
-@endsection

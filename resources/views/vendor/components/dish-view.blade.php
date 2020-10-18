@@ -400,7 +400,7 @@
                     showAlert(true, res.message);
 
                     // Reload the Right Bar on Completion
-                    loadRight();
+                    loadRight(activeTab);
                 }
             })
             .catch(err => {

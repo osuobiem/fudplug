@@ -1,14 +1,15 @@
 <div class="box shadow-sm border rounded bg-white mb-3" id="dish-menu">
-    <ul class="nav border-bottom box-title d-flex justify-content-center osahan-line-tab" id="myTab" role="tablist">
+    <ul class="nav border-bottom box-title d-flex justify-content-center osahan-line-tab" id="rightTab" role="tablist">
         <li class="nav-item col-6">
-            <a class="nav-link text-center active" id="profile-tab" data-toggle="tab" href="#menu" role="tab"
-                aria-controls="profile" aria-selected="false">Today's Menu <span
+            <a class="nav-link text-center active" id="profile-tab" onclick="track('1')" data-toggle="tab" href="#menu"
+                role="tab" aria-controls="profile" aria-selected="false">Today's Menu <span
                     class="badge badge-dark">{{$menu_count}}</span></a>
             <!-- <h6 class="m-0">Dishes</h6> -->
         </li>
         <li class="nav-item border-left col-6">
-            <a class="nav-link text-center" id="home-tab" data-toggle="tab" href="#dish" role="tab" aria-controls="home"
-                aria-selected="false">Dishes <span class="badge badge-dark">{{$dish_count}}</span></a>
+            <a class="nav-link text-center" id="home-tab" onclick="track('2')" data-toggle="tab" href="#dish" role="tab"
+                aria-controls="home" aria-selected="false">Dishes <span
+                    class="badge badge-dark">{{$dish_count}}</span></a>
         </li>
     </ul>
     <div class="tab-content" id="myTabContent">
@@ -45,15 +46,8 @@
                 @endif
 
             </div>
-            <div class="box-footer p-2 border-top row">
-                <div class="col-6">
-                    <button type="button" data-toggle="modal" data-target="#menu-update-modal"
-                        class="btn btn-primary btn-block"> Update Menu </button>
-                </div>
-                <div class="col-6">
-                    <button type="button" data-toggle="modal" data-target="#menu-update-modal"
-                        class="btn btn-primary btn-block"> View Menu </button>
-                </div>
+            <div class="box-footer p-2 border-top">
+                <button type="button" onclick="loadMenuModal()" class="btn btn-primary btn-block"> Update Menu </button>
             </div>
         </div>
         <div class="tab-pane fade" id="dish" role="tabpanel" aria-labelledby="home-tab">
@@ -74,6 +68,9 @@
                         <button type="button" class="btn btn-outline-danger btn-sm text-nowrap"
                             onclick="viewDish('{{$dish->id}}')"><i class="feather-eye"></i>
                             View</button>
+                        <button type="button" class="btn btn-outline-danger btn-sm text-nowrap"
+                            onclick="dishDelete('{{$dish->id}}')"><i class="feather-pen"></i>
+                            Delete</button>
                         <!-- <div class="custom-control custom-switch pull-left">
                             <input type="checkbox" class="custom-control-input" id="customSwitch1">
                             <label class="custom-control-label" for="customSwitch1"></label>
@@ -104,6 +101,18 @@
         goGet(getUrl).then((res) => {
             $("#dish-modal-holder").html(res);
             $("#dish-view-modal").modal('show');
+        }).catch((err) => {
+            console.error(err);
+        });
+    }
+
+    // Function that displays dish delete modal
+    function dishDelete(dishId) {
+        let getUrl = "{{url('vendor/dish-delete/')}}";
+        getUrl += '/' + dishId;
+        goGet(getUrl).then((res) => {
+            $("#dish-delete-modal-holder").html(res);
+            $("#dish-delete-modal").modal('show');
         }).catch((err) => {
             console.error(err);
         });
