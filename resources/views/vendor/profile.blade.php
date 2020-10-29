@@ -259,7 +259,7 @@
 {{--Profile Image Edit Modal--}}
 @include('vendor.components.profile-image-edit')
 
-{{--Profile Image Edit Modal--}}
+{{--Cover Image Edit Modal--}}
 @include('vendor.components.cover-image-edit')
 
 @endsection

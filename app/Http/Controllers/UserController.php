@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\State;
 use App\User;
 use App\Vendor;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
@@ -26,7 +28,7 @@ class UserController extends Controller
         if ($validate->fails()) {
             return response()->json([
                 "success" => false,
-                "message" => $validate->errors()
+                "message" => $validate->errors(),
             ]);
         }
 
@@ -78,7 +80,7 @@ class UserController extends Controller
             'name' => 'required|max:50',
             'email' => 'required|email|unique:users|unique:vendors', // email:rfc,dns should be used in production
             'phone' => 'required|numeric|digits_between:5,11|unique:users,phone_number|unique:vendors,phone_number',
-            'password' => 'required|alpha_dash|min:6|max:30'
+            'password' => 'required|alpha_dash|min:6|max:30',
         ]);
     }
     // -------------
@@ -149,4 +151,71 @@ class UserController extends Controller
     }
 
     // ------------------
+
+    /**
+     * Load Right Side
+     * @return string HTML
+     */
+    public function profile()
+    {
+        try {
+            // Get States Data
+            $states = State::get();
+
+            // Fetch User Location Data
+            $area_id = Auth::guard('user')->user()->area_id;
+            $user_location = State::join('areas', 'areas.state_id', '=', 'states.id')
+                ->select(['areas.name AS area', 'areas.id AS area_id', 'states.name AS state', 'states.id AS state_id'])
+                ->where('areas.id', $area_id)->first();
+
+            return view('user.components.right-side', compact('user_location'));
+        } catch (\Throwable $th) {
+            Log::error($th);
+        }
+    }
+
+    /**
+     * Process vendor profile image update
+     * @return string
+     */
+    public function profile_image_update(Request $request)
+    {
+        // Custom message
+        $message = [
+            'max' => 'The :attribute may not be greater than 25mb.',
+        ];
+        // Validate uploaded image
+        $validate = Validator::make($request->all(), [
+            'image' => 'required|max:25000',
+        ], $message);
+        if ($validate->fails()) {
+            return response()->json(['success' => false, 'message' => $validate->errors('image')->messages()], 200);
+        } else {
+            try {
+                $user = User::find(Auth::guard('user')->user()->id);
+                $filenameWithExt = $request->file('image')->getClientOriginalName();
+                //Get just filename
+                $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME);
+                // Get just ext
+                $extension = $request->file('image')->getClientOriginalExtension();
+                // Filename to store
+                $image = "user_" . Auth::guard('user')->user()->id . '_' . time() . '.' . $extension;
+                // Previous Image
+                $prev_image = Auth::guard('user')->user()->profile_image;
+                // Delete prev image
+                if ($prev_image != "placeholder.png") {
+                    Storage::delete('/public/user/profile/' . $prev_image);
+                }
+                // Upload Image
+                $request->file('image')->storeAs('public/user/profile', $image);
+                $user->profile_image = $image;
+                $user->save();
+                return response()->json(['success' => true, 'data' => $image], 200);
+                // }
+            } catch (\Throwable $th) {
+                Log::error($th);
+                return response()->json(['success' => false, 'message' => 'Oops! Something went wrong. Try Again!'], 500);
+            }
+        }
+    }
 }

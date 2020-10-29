@@ -87,6 +87,10 @@ Route::group(['prefix' => 'user'], function () {
     Route::group(['middleware' => ['auth:user']], function () {
         // User Logout
         Route::get('logout', 'UserController@logout');
+        // User Profile
+        Route::get('profile', 'UserController@profile');
+        // Change Profile Image
+        Route::post('profile-image-update', 'UserController@profile_image_update');
     });
 });
 // -------------

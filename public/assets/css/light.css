@@ -904,6 +904,32 @@ small {
     border: .125rem solid #fff;
 }
 
+/*  */
+
+.profile-image {
+    position: relative;
+    height: 5.5rem;
+    width: 7.5rem;
+}
+
+.profile-image img {
+    height: 7.5rem;
+    width: 100%;
+}
+
+.profile-image .status-indicator {
+    background-color: #eaecf4;
+    height: 1.95rem;
+    width: 1.95rem;
+    border-radius: 100%;
+    position: absolute;
+    bottom: -32px;
+    right: 0px;
+    border: .125rem solid #fff;
+}
+
+/*  */
+
 /* Extra End */
 /* Mobile Media */
 @media (max-width: 768px) {

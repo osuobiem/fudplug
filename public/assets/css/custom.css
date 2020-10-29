@@ -127,6 +127,38 @@ input:checked+.slider:before {
     border-radius: 30px;
 }
 
+/*  */
+.pimg-icon-hover {
+    padding: 0px;
+}
+
+.pimg-icon-hover:hover {
+    background: var(--primary)9c;
+    padding: 0px;
+    border-radius: 30px;
+    cursor: pointer;
+}
+
+.h-link:focus .pimg-icon-hover {
+    background: var(--primary)9c;
+    padding: 0px;
+    border-radius: 30px;
+}
+
+.h-link:focus .pimg-icon-hover {
+    background: var(--i-primary-h);
+    padding: 0px;
+    border-radius: 30px;
+}
+
+.pimg-icon-hover:hover {
+    background: var(--i-primary-h);
+    border-radius: 30px;
+    cursor: pointer;
+}
+
+/*  */
+
 .icon-hover {
     padding: 8px;
 }

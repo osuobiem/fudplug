@@ -101,6 +101,23 @@
             </aside>
 
             @elseif(!Auth::guard('user')->guest())
+            <aside class="col col-lg-3 d-none d-lg-block side-section side-section-r text-center"
+                id="user-right-side-large">
+                <div class="justify-content-center text-center w-100 pb-2 box shadow-sm border rounded bg-white p-2"
+                    id="user-right-side-spinner" style="display: none;">
+                    <p><strong>Loading...</strong></p>
+                    <div class="spinner-border spinner-border-sm" role="status">
+                        <span class="sr-only">Loading...</span>
+                    </div>
+                </div>
+
+            </aside>
+            <div id="user-right-side-small">
+
+            </div>
+            {{--Profile Image Edit Modal--}}
+            @include('user.components.profile-image-edit')
+
             @else
             @endif
 
@@ -165,14 +182,6 @@
     {{-- Check for session availablity --}}
     @if(!Auth::guest() || !Auth::guard('user')->guest())
     <script>
-        $(document).ready(function () {
-            // Variable to Hold Right Side Bar Active Tab
-            let activeTab = '1';
-
-            // Load The Right Side when Document is Ready
-            loadRight(activeTab);
-        });
-
         // Like/Unlike a post
         function likePost(post_id, likon) {
             // Animate Like
@@ -244,6 +253,31 @@
             $($(likon).siblings()[0]).text(' ' + likeCount)
         }
 
+    </script>
+
+
+    @else
+    <script>
+        function likePost(post_id, likon) {
+            $('#login-btn-top').click();
+        }
+
+    </script>
+    @endif
+
+
+    {{-- Execute for Different Users --}}
+    @if(Auth::check())
+    <!-- Vendor Scipts -->
+    <script>
+        $(document).ready(function () {
+            // Variable to Hold Right Side Bar Active Tab
+            let activeTab = '1';
+
+            // Load The Right Side when Document is Ready
+            loadRight(activeTab);
+        });
+
         // Load Right Side (Vendor Dish & Menu)
         function loadRight(activeTab) {
             spin('right-side')
@@ -288,13 +322,37 @@
         }
 
     </script>
-    @else
+    <!-- Vendor Scipts -->
+    @elseif(Auth::guard('user')->check())
+    <!-- USER SCRIPTS -->
     <script>
-        function likePost(post_id, likon) {
-            $('#login-btn-top').click();
+        $(document).ready(function () {
+            // Load The Right Side when Document is Ready
+            loadUserRight();
+        });
+
+        // Load User Right Side (User Profile)
+        function loadUserRight() {
+            spin('user-right-side');
+            // Populate dishes tab on page load
+            let getUrl = "{{url('user/profile')}}";
+
+            goGet(getUrl).then((res) => {
+                if (window.matchMedia("(max-width: 767px)").matches) {
+                    // The viewport is less than 768 pixels wide (mobile device)
+                    $("#user-right-side-small").html(res);
+                } else {
+                    // The viewport is at least 768 pixels wide (Desktop or tablet)
+                    spin('user-right-side');
+                    $("#user-right-side-large").html(res);
+                }
+            }).catch((err) => {
+                spin('user-right-side');
+            });
         }
 
     </script>
+    <!-- USER SCRIPTS -->
     @endif
 </body>
 

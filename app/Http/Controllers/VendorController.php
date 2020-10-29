@@ -320,8 +320,12 @@ class VendorController extends Controller
                 $extension = $request->file('image')->getClientOriginalExtension();
                 // Filename to store
                 $image = "ven_" . Auth::user()->id . '_' . time() . '.' . $extension;
+                // Previous Image
+                $prev_image = Auth::user()->profile_image;
                 // Delete prev image
-                Storage::delete('/public/vendor/profile/' . Auth::user()->profile_image);
+                if ($prev_image != "placeholder.png") {
+                    Storage::delete('/public/vendor/profile/' . $prev_image);
+                }
                 // Upload Image
                 $request->file('image')->storeAs('public/vendor/profile', $image);
                 $vendor->profile_image = $image;

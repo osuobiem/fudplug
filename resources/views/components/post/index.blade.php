@@ -83,7 +83,7 @@ if(!Auth::guest()) {
           <div class="w-100 feed-vid-cont" onfocus="trackPosition('{{ $media->name }}', 'med-{{ $media->id }}', 'play{{ $media->id }}')" id="med-{{ $media->id }}">
             <img class="pm-1 vid-bod" src="{{ Storage::url('posts/videos/thumbnails/'.$thumb) }}" />
           </div>
-          
+
           <div class="spinner-border play-btn p-4" style="display: none" id="play{{ $media->id }}-spinner" role="status">
             <span class="sr-only">Loading...</span>
           </div>
@@ -105,7 +105,7 @@ if(!Auth::guest()) {
     @endforeach
   </div>
 
-  @php 
+  @php
   $is_liker = false;
 
   if(!Auth::guest() || !Auth::guard('user')->guest()) {
