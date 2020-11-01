@@ -44,7 +44,7 @@ elseif(!Auth::guest() && $comment->commentor_type == 'vendor') {
 }
 @endphp
 
-<div class="comment-main {{ $id == $comment->commentor_id ? 'c-right' : 'c-left'}}">
+<div class="comment-main {{ $id == $comment->commentor_id ? 'c-right' : 'c-left'}}" id="comment__{{ $comment->id }}">
   <div class="comment row">
 
     <div class="col-2 col-md-1 pr-1">
@@ -63,7 +63,13 @@ elseif(!Auth::guest() && $comment->commentor_type == 'vendor') {
           <span class="small"
             style="color: #212529 !important;">{{ '@'.$comment->{$comment->commentor_type}->username }}</span>
         </a>
-        <span class="small ml-auto">{{ ftime($comment->created_at) }}</span>
+        <span class="small ml-auto">
+          @if($id == $comment->commentor_id)
+            <i class="la la-pencil la-lg text-primary comment-x-ico mr-1" title="Edit Comment"></i>
+            <i class="la la-trash la-lg text-danger comment-x-ico mr-1" onclick="deleteComment('{{ $comment->id }}')" title="Delete Comment"></i>
+          @endif
+          {{ ftime($comment->created_at) }}
+        </span>
         
       </div>
       <hr class="m-1">

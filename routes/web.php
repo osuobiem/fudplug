@@ -116,10 +116,13 @@ Route::group(['prefix' => 'post'], function () {
 
 // COMMENT ROUTES
 Route::group(['prefix' => 'comment'], function () {
-    // Get Posts
+    // Get Comments
     Route::get('get/{post_id}/{from?}', 'CommentController@get');
 
-    // Create Post
+    // Create Comment
     Route::post('create/{post_id}', 'CommentController@create');
+
+    // Delete Comment
+    Route::get('delete/{comment_id}', 'CommentController@delete');
 });
 // -------------

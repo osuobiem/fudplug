@@ -166,6 +166,8 @@
     <script src="{{ url('assets/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
     <!-- slick Slider JS -->
     <script type="text/javascript" src="{{ url('assets/vendor/slick/slick.min.js') }}"></script>
+    <!-- Sweetalert -->
+    <script type="text/javascript" src="{{ url('assets/vendor/sweetalert/sweetalert.min.js') }}"></script>
     <!-- Cropper.js -->
     <script src="{{ url('assets/js/cropper.js') }}"></script>
     <!-- Custom scripts for all pages-->

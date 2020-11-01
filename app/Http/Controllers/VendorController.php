@@ -899,7 +899,7 @@ class VendorController extends Controller
     {
         try {
             $dish = Item::find($dish_id);
-            $dish->delete();
+            $dish->forceDelete();
 
             return response()->json(['success' => true, 'message' => "Dish Deleted Successfully"], 200);
         } catch (\Throwable $th) {

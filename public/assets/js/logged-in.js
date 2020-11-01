@@ -70,3 +70,42 @@ function doUnlike(likeCount, likon, post_id, change = false) {
     $(likon).attr("like-count", likeCount);
     $($(likon).siblings()[0]).text(" " + likeCount);
 }
+
+// Delete Comment
+function deleteComment(id) {
+    swal({
+        title: "Are you sure?",
+        buttons: ["Cancel", "Delete"],
+        dangerMode: true,
+    }).then((willDelete) => {
+        if (willDelete) {
+            doDelete();
+        }
+    });
+
+    // Process Comment Delete
+    function doDelete() {
+        url = `${server}/comment/delete/${id}`;
+        goGet(url)
+            .then((res) => {
+                if (res.success) {
+                    popComment();
+                    showAlert(true, res.message);
+                } else {
+                    showAlert(false, res.message);
+                }
+            })
+            .catch((err) => {
+                showAlert(false, "Oops! Something's not right. Try Again");
+            });
+    }
+
+    // Remove comment from container
+    function popComment() {
+        $("#comment__" + id).addClass("animate__animated animate__fadeOutDown");
+
+        setTimeout(() => {
+            $("#comment__" + id).remove();
+        }, 1000);
+    }
+}

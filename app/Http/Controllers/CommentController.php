@@ -114,4 +114,46 @@ class CommentController extends Controller
             'comment_content' => 'required|max:1500',
         ]);
     }
+
+    /**
+     * Delete Comment
+     * @param int $id Comment ID
+     * @return json
+     */
+    public function delete($id)
+    {
+        // Get Comment
+        $comment = Comment::findOrFail($id);
+
+        // Get commentor
+        if (Auth::guest() && Auth::guard('user')->guest()) {
+            return response()->json([
+                'success' => false,
+                'message' => "You're not logged in"
+            ]);
+        }
+
+        // Get post
+        $post = $comment->post;
+        // Upadate post comment count
+        $post->comments = $post->comments > 0 ? $post->comments - 1 : 0;
+
+        // Try Delete and Save
+        try {
+            $post->save();
+            $comment->forceDelete();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Comment Deleted'
+            ]);
+        } catch (\Throwable $th) {
+            Log::error($th);
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Internal Server Error'
+            ], 500);
+        }
+    }
 }
