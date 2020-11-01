@@ -90,7 +90,7 @@
                                     <span class="text-danger">*</span>
                                 </label>
                                 <div class="form-group">
-                                    <select name="area" class="form-control">
+                                    <select name="area" onchange="fetchAreas(this.value)" class="form-control">
                                         @foreach($states as $key=>$val)
                                         @if($vendor_location->state_id == $val->id)
                                         <option value="{{$val->id}}" selected>{{$val->name}}</option>
@@ -111,8 +111,7 @@
                                     <span class="text-danger">*</span>
                                 </label>
                                 <div class="form-group">
-                                    <select name="area" class="form-control">
-                                        <option selected="">Choose...</option>
+                                    <select name="area" id="area-list" class="form-control">
                                         @foreach($areas as $key=>$val)
                                         @if($vendor_location->area_id == $val->id)
                                         <option value="{{$val->id}}" selected>{{$val->name}}</option>
@@ -287,6 +286,29 @@
             .catch(err => {
                 spin('vendor')
                 handleFormRes(err, 'v-sign-error');
+            })
+    }
+
+    // Fetch Areas according to state
+    function fetchAreas(state) {
+        let url = `{{ url('areas') }}/${state}`;
+
+        goGet(url)
+            .then(res => {
+
+                $('#area-list').html('');
+
+                [...res.areas].forEach(area => {
+                    $('#area-list').append(`
+        <option value="${area.id}">${area.name}</option>
+        `)
+                })
+
+                $('#area-list-cont').removeClass('d-none');
+                $('#proceed-btn').removeClass('d-none')
+            })
+            .catch(err => {
+                showAlert(false, "Oops! Something's not right. Please Reload Page")
             })
     }
 
