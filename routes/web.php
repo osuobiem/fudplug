@@ -91,6 +91,10 @@ Route::group(['prefix' => 'user'], function () {
         Route::get('profile', 'UserController@profile');
         // Change Profile Image
         Route::post('profile-image-update', 'UserController@profile_image_update');
+        // Get User Profile Edit Modal
+        Route::get('profile-edit', 'UserController@profile_edit');
+        // Update User Profile
+        Route::post('update-profile', 'UserController@update_profile');
     });
 });
 // -------------

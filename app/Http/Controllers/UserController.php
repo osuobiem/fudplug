@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Area;
 use App\State;
 use App\User;
 use App\Vendor;
@@ -11,6 +12,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 
 class UserController extends Controller
 {
@@ -217,5 +219,119 @@ class UserController extends Controller
                 return response()->json(['success' => false, 'message' => 'Oops! Something went wrong. Try Again!'], 500);
             }
         }
+    }
+
+    /**
+     * Load Profile Edit Modal
+     * @return string HTML
+     */
+    public function profile_edit()
+    {
+        try {
+            // Get States Data
+            $states = State::get();
+
+            // Fetch User Location Data
+            $area_id = Auth::guard('user')->user()->area_id;
+            $user_location = State::join('areas', 'areas.state_id', '=', 'states.id')
+                ->select(['areas.name AS area', 'areas.id AS area_id', 'states.name AS state', 'states.id AS state_id'])
+                ->where('areas.id', $area_id)->first();
+
+            // Get Areas In User State
+            $areas = Area::where('state_id', $user_location->state_id)->get();
+
+            return view('user.components.profile-edit', compact('user_location', 'states', 'areas'));
+        } catch (\Throwable $th) {
+            Log::error($th);
+        }
+    }
+
+    /**
+     * Update User Profile
+     */
+    public function update_profile(Request $request)
+    {
+        // Get validation rules
+        $validate = $this->profile_update_rules($request);
+
+        // Run validation
+        if ($validate->fails()) {
+            return response()->json([
+                "success" => false,
+                "message" => $validate->errors(),
+            ]);
+        }
+
+        if ($request['username']) {
+            // Check for dashes and other chars
+            if (!preg_match('/^[a-z_0-9A-Z]+$/', $request['username'])) {
+                return response()->json([
+                    "success" => false,
+                    "message" => [
+                        'username' => [
+                            'Username must contain only letters, numbers and underscores',
+                        ],
+                    ],
+                ]);
+            }
+        }
+
+        // Update User Info
+        return response()->json($this->update_store($request));
+    }
+
+    /**
+     * User Profile Update Validation Rules
+     * @return object The validator object
+     */
+    private function profile_update_rules(Request $request)
+    {
+        // Make and return validation rules
+        return Validator::make($request->all(), [
+            'username' => ['required', 'max:15', Rule::unique('users')->ignore(Auth::guard('user')->user()->id), 'unique:vendors'],
+            'email' => ['required', 'email', Rule::unique('users')->ignore(Auth::guard('user')->user()->id), 'unique:vendors'], // email:rfc,dns should be used in production
+            'phone_number' => ['required', 'numeric', 'digits_between:5,11', Rule::unique('users')->ignore(Auth::guard('user')->user()->id), 'unique:vendors,phone_number'],
+            'address' => 'required',
+        ]);
+    }
+
+    /**
+     * Process User Update
+     * @return array
+     */
+    private function update_store(Request $request)
+    {
+        // New User object
+        $user = User::find(Auth::guard('user')->user()->id);
+
+        // Assign user object properties
+        $user->username = $request->username;
+        $user->email = $request->email;
+        $user->phone_number = $request->phone_number;
+        $user->area_id = $request->area;
+        $user->address = $request->address;
+
+        // Try user save or catch error if any
+        try {
+            $user->save();
+            return ['success' => true, 'status' => 200, 'message' => 'Update Successful'];
+        } catch (\Throwable $th) {
+            Log::error($th);
+            return ['success' => false, 'status' => 500, 'message' => 'Oops! Something went wrong. Try Again!'];
+        }
+    }
+
+    public function change_password(Request $request)
+    {
+
+        $validate = Validator::make($request->all(), [
+            'current_password' => ['required', new MatchOldPassword],
+            'new_password' => ['required'],
+        ]);
+
+        User::find(auth()->user()->id)->update(['password' => Hash::make($request->new_password)]);
+
+        dd('Password change successfully.');
+
     }
 }

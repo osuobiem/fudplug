@@ -87,7 +87,7 @@
                 <!-- Menu Update Modal Holder -->
             </main>
 
-            <!-- Right Sidebar -->
+            {{--Right Sidebar Vendor--}}
             @if(!Auth::guest())
             <aside class="col col-lg-3 d-none d-lg-block side-section side-section-r right-side-large text-center">
                 <div class="justify-content-center text-center w-100 pb-2 box shadow-sm border rounded bg-white p-2"
@@ -100,7 +100,9 @@
 
             </aside>
 
+            {{--Right Sidebar User--}}
             @elseif(!Auth::guard('user')->guest())
+            <!-- Hold User Right Sidebar For Desktop -->
             <aside class="col col-lg-3 d-none d-lg-block side-section side-section-r text-center"
                 id="user-right-side-large">
                 <div class="justify-content-center text-center w-100 pb-2 box shadow-sm border rounded bg-white p-2"
@@ -112,11 +114,19 @@
                 </div>
 
             </aside>
+
+            <!-- Hold User Right Sidebar For Mobile -->
             <div id="user-right-side-small">
 
             </div>
+
             {{--Profile Image Edit Modal--}}
             @include('user.components.profile-image-edit')
+
+            <!-- Hold Profile Edit Modal For User -->
+            <div id="edit-modal-container">
+
+            </div>
 
             @else
             @endif
