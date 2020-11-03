@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Area;
+use App\Rules\MatchOldPassword;
 use App\State;
 use App\User;
 use App\Vendor;
@@ -155,10 +156,10 @@ class UserController extends Controller
     // ------------------
 
     /**
-     * Load Right Side
+     * Load Right Side (User Profile)
      * @return string HTML
      */
-    public function profile()
+    public function profile($type)
     {
         try {
             // Get States Data
@@ -170,7 +171,14 @@ class UserController extends Controller
                 ->select(['areas.name AS area', 'areas.id AS area_id', 'states.name AS state', 'states.id AS state_id'])
                 ->where('areas.id', $area_id)->first();
 
-            return view('user.components.right-side', compact('user_location'));
+            // Retrieve View Based On Request Type (Mobile or Desktop)
+            if ($type == "mobile") {
+                $view = view('user.components.right-side-mobile', compact('user_location'));
+            } else {
+                $view = view('user.components.right-side-desktop', compact('user_location'));
+            }
+
+            return $view;
         } catch (\Throwable $th) {
             Log::error($th);
         }
@@ -288,6 +296,7 @@ class UserController extends Controller
     {
         // Make and return validation rules
         return Validator::make($request->all(), [
+            'name' => 'required',
             'username' => ['required', 'max:15', Rule::unique('users')->ignore(Auth::guard('user')->user()->id), 'unique:vendors'],
             'email' => ['required', 'email', Rule::unique('users')->ignore(Auth::guard('user')->user()->id), 'unique:vendors'], // email:rfc,dns should be used in production
             'phone_number' => ['required', 'numeric', 'digits_between:5,11', Rule::unique('users')->ignore(Auth::guard('user')->user()->id), 'unique:vendors,phone_number'],
@@ -305,6 +314,7 @@ class UserController extends Controller
         $user = User::find(Auth::guard('user')->user()->id);
 
         // Assign user object properties
+        $user->name = $request->name;
         $user->username = $request->username;
         $user->email = $request->email;
         $user->phone_number = $request->phone_number;
@@ -321,17 +331,31 @@ class UserController extends Controller
         }
     }
 
-    public function change_password(Request $request)
+    /**
+     * Update User Password
+     * @return string JSON
+     */
+    public function update_password(Request $request)
     {
+        try {
+            $validate = Validator::make($request->all(), [
+                'current_password' => ['required', new MatchOldPassword],
+                'new_password' => ['required'],
+            ]);
 
-        $validate = Validator::make($request->all(), [
-            'current_password' => ['required', new MatchOldPassword],
-            'new_password' => ['required'],
-        ]);
+            // Run validation
+            if ($validate->fails()) {
+                return response()->json([
+                    "success" => false,
+                    "message" => $validate->errors(),
+                ]);
+            }
 
-        User::find(auth()->user()->id)->update(['password' => Hash::make($request->new_password)]);
-
-        dd('Password change successfully.');
-
+            User::find(Auth::guard('user')->user()->id)->update(['password' => Hash::make($request->new_password)]);
+            return response()->json(['success' => true, 'status' => 200, 'message' => 'Update Successful']);
+        } catch (\Throwable $th) {
+            Log::error($th);
+            return response()->json(['success' => false, 'status' => 500, 'message' => 'Oops! Something went wrong. Try Again!']);
+        }
     }
 }

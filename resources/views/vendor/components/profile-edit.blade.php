@@ -65,7 +65,7 @@
                     </div>
                     <div class="row">
                         <!-- Input -->
-                        <div class="col-sm-4 mb-2">
+                        <div class="col-sm-6 mb-2">
                             <div class="js-form-message">
                                 <label id="usernameLabel" class="form-label">
                                     Username
@@ -83,7 +83,27 @@
                         </div>
                         <!-- End Input -->
                         <!-- Input -->
-                        <div class="col-sm-4 mb-2">
+                        <div class="col-sm-6 mb-2">
+                            <div class="js-form-message">
+                                <label id="phoneNumberLabel" class="form-label">
+                                    Phone number
+                                    <span class="text-danger">*</span>
+                                </label>
+                                <div cfreachlass="form-group">
+                                    <input class="form-control" type="tel" name="phone_number"
+                                        value="{{Auth::user()->phone_number}}" placeholder="Enter your phone number"
+                                        aria-label="Enter your phone number" required=""
+                                        aria-describedby="phoneNumberLabel" data-msg="Please enter a valid phone number"
+                                        data-error-class="u-has-error" data-success-class="u-has-success">
+                                </div>
+                            </div>
+                            <small class="text-danger error-message" id="phone_number"></small>
+                        </div>
+                        <!-- End Input -->
+                    </div>
+                    <div class="row">
+                        <!-- Input -->
+                        <div class="col-sm-6 mb-2">
                             <div class="js-form-message">
                                 <label id="locationLabel" class="form-label">
                                     State
@@ -104,7 +124,7 @@
                         </div>
                         <!-- End Input -->
                         <!-- Input -->
-                        <div class="col-sm-4 mb-2">
+                        <div class="col-sm-6 mb-2">
                             <div class="js-form-message">
                                 <label id="locationLabel" class="form-label">
                                     Area
@@ -122,44 +142,6 @@
                                     </select>
                                 </div>
                             </div>
-                        </div>
-                        <!-- End Input -->
-                    </div>
-                    <div class="row">
-                        <!-- Input -->
-                        <div class="col-sm-6 mb-2">
-                            <div class="js-form-message">
-                                <label id="organizationLabel" class="form-label">
-                                    Adress
-                                    <span class="text-danger">*</span>
-                                </label>
-                                <div class="form-group">
-                                    <input type="text" class="form-control" name="address"
-                                        value="{{Auth::user()->address}}" placeholder="Enter your address"
-                                        aria-label="Enter your address" required="" aria-describedby="organizationLabel"
-                                        data-msg="Please enter your address" data-error-class="u-has-error"
-                                        data-success-class="u-has-success">
-                                </div>
-                            </div>
-                            <small class="text-danger error-message" id="address"></small>
-                        </div>
-                        <!-- End Input -->
-                        <!-- Input -->
-                        <div class="col-sm-6 mb-2">
-                            <div class="js-form-message">
-                                <label id="phoneNumberLabel" class="form-label">
-                                    Phone number
-                                    <span class="text-danger">*</span>
-                                </label>
-                                <div cfreachlass="form-group">
-                                    <input class="form-control" type="tel" name="phone_number"
-                                        value="{{Auth::user()->phone_number}}" placeholder="Enter your phone number"
-                                        aria-label="Enter your phone number" required=""
-                                        aria-describedby="phoneNumberLabel" data-msg="Please enter a valid phone number"
-                                        data-error-class="u-has-error" data-success-class="u-has-success">
-                                </div>
-                            </div>
-                            <small class="text-danger error-message" id="phone_number"></small>
                         </div>
                         <!-- End Input -->
                     </div>
@@ -225,16 +207,28 @@
                         <!-- End Social Input -->
                     </div>
                     <div class="row">
-                        <div class="form-group mb-4 col-md-12">
-                            <label class="mb-1">About Business</label>
+                        <!-- Input -->
+                        <div class="form-group mb-4 col-md-6">
+                            <label class="mb-1">Address</label>
                             <span class="text-danger">*</span>
                             <div class="position-relative">
-                                <textarea class="form-control" rows="4" name="about"
-                                    placeholder="Enter business info">{{Auth::user()->about_business}}</textarea>
+                                <textarea class="form-control" rows="4" name="address" placeholder="Enter business info"
+                                    required>{{Auth::user()->address}}</textarea>
                             </div>
                             <small class="text-danger error-message" id="about"></small>
                         </div>
-
+                        <!-- End Input -->
+                        <!-- Input -->
+                        <div class="form-group mb-4 col-md-6">
+                            <label class="mb-1">About Business</label>
+                            <span class="text-danger">*</span>
+                            <div class="position-relative">
+                                <textarea class="form-control" rows="4" name="about" placeholder="Enter business info"
+                                    required>{{Auth::user()->about_business}}</textarea>
+                            </div>
+                            <small class="text-danger error-message" id="about"></small>
+                        </div>
+                        <!-- End Input -->
                     </div>
                     <div class="form-group text-center col-sm-12">
                         <button class="btn btn-primary px-5" type="submit">

@@ -17,9 +17,9 @@ class CreateUsersTable extends Migration
             $table->id();
             $table->string('name');
             $table->string('phone_number')->unique();
-            // Please Comment This Before Rolling Back Migration
-            $table->string('address')->nullable();
-            // Please Comment This Before Rolling Back Migration
+            // Please Use This After Rolling Back Migration To Add Address Field On User Table
+            //$table->text('address')->nullable();
+            // Please Use This After Rolling Back Migration To Add Address Field On User Table
             $table->string('email')->unique();
             $table->string('username')->unique();
             $table->string('profile_image')->default('placeholder.png');

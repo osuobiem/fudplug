@@ -19,7 +19,10 @@ class CreateVendorsTable extends Migration
             $table->string('username')->unique();
             $table->string('email')->unique();
             $table->string('phone_number')->unique();
-            $table->string('address')->nullable();
+            $table->string('address')->nullable(); // Remove This After Rolling Back Migrations
+            // Use This After Rolling Back Migrations
+            //$table->text('address')->nullable();
+            // Use This After Rolling Back Migrations
             $table->json('social_handles')->nullable();
             $table->text('about_business')->nullable();
             $table->foreignId('area_id')->nullable()->constrained()->onDelete('cascade')->onUpdate('no action');

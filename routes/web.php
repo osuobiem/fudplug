@@ -88,13 +88,15 @@ Route::group(['prefix' => 'user'], function () {
         // User Logout
         Route::get('logout', 'UserController@logout');
         // User Profile
-        Route::get('profile', 'UserController@profile');
+        Route::get('profile/{type}', 'UserController@profile');
         // Change Profile Image
         Route::post('profile-image-update', 'UserController@profile_image_update');
         // Get User Profile Edit Modal
         Route::get('profile-edit', 'UserController@profile_edit');
         // Update User Profile
         Route::post('update-profile', 'UserController@update_profile');
+        // Update User Password
+        Route::post('update-password', 'UserController@update_password');
     });
 });
 // -------------

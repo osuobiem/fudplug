@@ -1,5 +1,5 @@
 <!-- DESKTOP VIEW -->
-<div class="box mb-3 d-none d-lg-block shadow-sm border rounded bg-white profile-box text-center">
+<div id="desktop-view" class="box mb-3 shadow-sm border rounded bg-white profile-box text-center">
     <div class="py-3 px-3 border-bottom">
         <div class="row justify-content-center">
             <div class="profile-image">
@@ -35,82 +35,6 @@
         <a class="font-weight-bold p-3 d-block" data-toggle="modal" href="#profile-edit-modal"> Edit my profile </a>
     </div>
 </div>
-
-<!-- MOBILE VIEW -->
-<div class="modal fade" id="user-profile-modal" tabindex="-1" data-backdrop="static" role="dialog"
-    aria-labelledby="modalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-body">
-                <!-- <div class="row">
-                    <div class="col-md-12 pb-3">
-                        <button type="button" class="close icon-hover" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                </div>
-                <div class="bg-light text-center" style="height:inherit;">
-                    <h6 class="pt-3">
-                        <i class="las la-info pb-0" style="font-size:xx-large;"></i><br>
-                        <span>Delete ?</span>
-                    </h6>
-                    <div class="pb-3">
-                        <button type="button" class="btn btn-md btn-secondary" data-dismiss="modal">No</button>
-                        <button type="button" onclick="deleteDish('')" class="btn btn-md btn-primary"
-                            id="crop">Yes</button>
-                    </div>
-                </div> -->
-                <div class="row">
-                    <div class="col-md-12 pb-3">
-                        <button type="button" class="close icon-hover" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                </div>
-                <div class="box mb-3 shadow-sm border rounded bg-white profile-box text-center">
-                    <div class="py-3 px-3 border-bottom">
-                        <div class="row justify-content-center">
-                            <div class="profile-image">
-                                <img id="avatar" class="rounded-circle shadow-sm"
-                                    src="{{ Storage::url('user/profile/'.Auth::guard('user')->user()->profile_image) }}"
-                                    alt="">
-                                <label for="input" class="status-indicator pimg-icon-hover shadow-sm"><span
-                                        class="la la-camera-retro text-dark" style="font-size: 24px;"></span></label>
-                                <input type="file" class="sr-only" id="input" name="image" accept="image/*">
-                            </div>
-
-                        </div>
-                        <div class="mt-5">
-                            <h5 class="font-weight-bold text-dark mb-0 mt-2">{{Auth::guard('user')->user()->name}}</h5>
-                            <p class="text-muted m-1">@<b></b>{{ Auth::guard('user')->user()->username }}</b></p>
-                        </div>
-                    </div>
-                    <div class="d-flex">
-                        <div class="col-6 border-right p-3">
-                            <h6 class="font-weight-bold text-dark mb-1">Joined</h6>
-                            <p class="mb-0 text-black-50 small">
-                                {{ date("d M, Y", strtotime(Auth::guard('user')->user()->created_at)) }}
-                            </p>
-                        </div>
-                        <div class="col-6 p-3">
-                            <!-- <h6 class="font-weight-bold text-dark mb-1">85</h6>
-                                            <p class="mb-0 text-black-50 small">Views</p> -->
-                            <h6 class="font-weight-bold text-dark mb-1">Location</h6>
-                            <p class="mb-0 text-black-50 small"><i
-                                    class="las la-map-marker-alt"></i>{{ $user_location->area }},
-                                {{ $user_location->state }}</p>
-                        </div>
-                    </div>
-                    <div class="overflow-hidden border-top">
-                        <a class="font-weight-bold p-3 d-block" data-toggle="modal" href="#profile-edit-modal"> Edit my
-                            profile </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
 
 <script>
     // Initialize crop for profile image
