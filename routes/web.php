@@ -97,6 +97,8 @@ Route::group(['prefix' => 'user'], function () {
         Route::post('update-profile', 'UserController@update_profile');
         // Update User Password
         Route::post('update-password', 'UserController@update_password');
+        // Get Nearby Vendors
+        Route::get('get-vendors', 'UserController@get_vendor');
     });
 });
 // -------------

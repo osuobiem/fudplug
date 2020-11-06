@@ -358,4 +358,21 @@ class UserController extends Controller
             return response()->json(['success' => false, 'status' => 500, 'message' => 'Oops! Something went wrong. Try Again!']);
         }
     }
+
+    /**
+     * Get Vendors In User Area
+     * @return string HTML
+     */
+    public function get_vendor(Request $request)
+    {
+        try {
+            $vendors = Vendor::join('areas', 'areas.id', '=', 'vendors.area_id')
+                ->join('states', 'areas.state_id', '=', 'states.id')->select(['vendors.business_name as business_name', 'vendors.username as username', 'vendors.id as vendor_id', 'vendors.cover_image as cover_image', 'vendors.profile_image as profile_image', 'areas.name AS area', 'areas.id AS area_id', 'states.name AS state', 'states.id AS state_id'])
+                ->where('areas.id', Auth::guard('user')->user()->area_id)->get();
+            return view('user.components.left-side', compact('vendors'));
+        } catch (\Throwable $th) {
+            Log::error($th);
+            return response()->json(['success' => false, 'status' => 500, 'message' => $th->getMessage()]);
+        }
+    }
 }

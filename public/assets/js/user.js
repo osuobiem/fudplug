@@ -4,6 +4,9 @@ server = document.currentScript.getAttribute("server");
 $(document).ready(function () {
     // Load The Right Side when Document is Ready
     loadUserRight();
+
+    // Load The Left Side when Document is Ready
+    loadUserLeft();
 });
 
 // Load User Right Side (User Profile) For Mobile
@@ -54,5 +57,18 @@ function loadEditModal() {
         $("#edit-modal-container").html(res);
     }).catch((err) => {
         //spin('user-right-side');
+    });
+}
+
+// Load User Left Side (Nearby Vendors)
+function loadUserLeft() {
+    spin('user-left-side');
+
+    let getUrl = `${server}/user/get-vendors`;
+
+    goGet(getUrl).then((res) => {
+        $("#user-left-side").html(res);
+    }).catch((err) => {
+        spin('user-left-side');
     });
 }

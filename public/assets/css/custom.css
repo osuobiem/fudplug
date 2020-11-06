@@ -348,6 +348,20 @@ a:visited {
     margin-top: 60px;
 }
 
+.side-section-l {
+    margin-top: 60px;
+    margin-bottom: -57px;
+}
+
+/* Vendor image on user page */
+.vend-img {
+    width: 70px !important;
+    height: 70px !important;
+    margin-bottom: -40px;
+}
+
+/* Vendor image on user page */
+
 @media(min-width: 1024px) {
     .side-section {
         position: fixed;

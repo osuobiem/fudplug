@@ -58,6 +58,18 @@
             @include('vendor.components.left-side')
 
             @elseif(!Auth::guard('user')->guest())
+            {{--Left Sidebar User--}}
+            <!-- Hold User Left Sidebar For Desktop -->
+            <aside class="col-lg-3 col-md-10 side-section side-section-l text-center" id="user-left-side">
+                <div class="justify-content-center text-center w-100 pb-2 box shadow-sm border rounded bg-white p-2"
+                    id="user-left-side-spinner" style="display: none;">
+                    <p><strong>Loading...</strong></p>
+                    <div class="spinner-border spinner-border-sm" role="status">
+                        <span class="sr-only">Loading...</span>
+                    </div>
+                </div>
+
+            </aside>
             @else
             @endif
 
