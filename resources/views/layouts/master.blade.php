@@ -58,9 +58,15 @@
             @include('vendor.components.left-side')
 
             @elseif(!Auth::guard('user')->guest())
+
+            <!-- Large Modal To View All Vendors -->
+            <div id="all-vendors">
+
+            </div>
+
             {{--Left Sidebar User--}}
             <!-- Hold User Left Sidebar For Desktop -->
-            <aside class="col-lg-3 col-md-10 side-section side-section-l text-center" id="user-left-side">
+            <aside class="col-lg-3 col-md-10 side-section side-section-l" id="user-left-side">
                 <div class="justify-content-center text-center w-100 pb-2 box shadow-sm border rounded bg-white p-2"
                     id="user-left-side-spinner" style="display: none;">
                     <p><strong>Loading...</strong></p>

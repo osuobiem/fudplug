@@ -7,6 +7,9 @@ $(document).ready(function () {
 
     // Load The Left Side when Document is Ready
     loadUserLeft();
+
+    // Load "All Vendors" Modal When Document Is Ready
+    allVendors();
 });
 
 // Load User Right Side (User Profile) For Mobile
@@ -70,5 +73,18 @@ function loadUserLeft() {
         $("#user-left-side").html(res);
     }).catch((err) => {
         spin('user-left-side');
+    });
+}
+all - vendors
+
+// Load "All Vendors" Modal
+function allVendors() {
+
+    let getUrl = `${server}/user/all-vendors`;
+
+    goGet(getUrl).then((res) => {
+        $("#all-vendors").html(res);
+    }).catch((err) => {
+        //spin('user-left-side');
     });
 }

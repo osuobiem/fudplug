@@ -1,8 +1,17 @@
 <div class="box shadow-sm border rounded bg-white mb-3">
-    <div class="box-title border-bottom p-3">
-        <h6 class="m-0">Today's Vendors</h6>
+    <div class="box-title border-bottom pt-2 pl-2 pr-2 pb-0 row">
+        <div class="col-10 mb-n3">
+            <h6 class="m-0"> <strong>Vendors In
+                    Your Area</strong></h6>
+        </div>
+
+        <div class="col-2 mb-n3">
+            <h6>
+                <i class="la la-map-marker-alt text-warning text-bold" style="font-size:25px;"></i>
+            </h6>
+        </div>
     </div>
-    <div class="box-body p-3 h-100 overflow-auto">
+    <div class="box-body p-3 h-100 overflow-auto text-center">
         <div id="featured-properties" class="carousel slide" data-ride="carousel">
             <!-- <ol class="carousel-indicators">
                 <li data-target="#featured-properties" data-slide-to="0" class="text-dark">
@@ -13,9 +22,9 @@
                 @php $i = 1; @endphp
                 @foreach($vendors as $vendor)
                 @if($i == 1)
-                <div class="carousel-item active">
+                <div class="carousel-item active shadow-lg">
                     @else
-                    <div class="carousel-item">
+                    <div class="carousel-item shadow-lg">
                         @endif
                         <div class="border rounded bg-white job-item">
                             <div class="d-flex job-item-header border-bottom"
@@ -42,35 +51,6 @@
                     </div>
                     @php $i++; @endphp
                     @endforeach
-
-                    <!-- <div class="carousel-item">
-                        <div class="border rounded bg-white job-item">
-                            <div class="d-flex align-items-center p-3 job-item-header">
-                                <div class="overflow-hidden mr-2">
-                                    <h6 class="font-weight-bold text-dark mb-0 text-truncate">Product Director</h6>
-                                    <div class="text-truncate text-primary">Spotify Inc.</div>
-                                    <div class="small text-gray-500"><i class="feather-map-pin"></i> India, Punjab</div>
-                                </div>
-                                <img class="img-fluid ml-auto" src="img/l3.png" alt="">
-                            </div>
-                            <div class="d-flex align-items-center p-3 border-top border-bottom job-item-body">
-                                <div class="overlap-rounded-circle">
-                                    <img class="rounded-circle shadow-sm" data-toggle="tooltip" data-placement="top"
-                                        title="" src="img/p9.png" alt="" data-original-title="Sophia Lee">
-                                    <img class="rounded-circle shadow-sm" data-toggle="tooltip" data-placement="top"
-                                        title="" src="img/p10.png" alt="" data-original-title="John Doe">
-                                    <img class="rounded-circle shadow-sm" data-toggle="tooltip" data-placement="top"
-                                        title="" src="img/p11.png" alt="" data-original-title="Julia Cox">
-                                    <img class="rounded-circle shadow-sm" data-toggle="tooltip" data-placement="top"
-                                        title="" src="img/p12.png" alt="" data-original-title="Robert Cook">
-                                </div>
-                                <span class="font-weight-bold text-muted">18 connections</span>
-                            </div>
-                            <div class="p-3 job-item-footer">
-                                <small class="text-gray-500"><i class="feather-clock"></i> Posted 3 Days ago</small>
-                            </div>
-                        </div>
-                    </div> -->
                 </div>
                 <a class="carousel-control-prev" href="#featured-properties" role="button" data-slide="prev">
                     <span class="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -83,6 +63,7 @@
             </div>
         </div>
         <div class="box-footer p-2 border-top">
-            <button type="button" class="btn btn-primary btn-block"> View all </button>
+            <button type="button" class="btn btn-primary btn-block" data-toggle="modal" data-target="#view-all-modal">
+                View all </button>
         </div>
     </div>
