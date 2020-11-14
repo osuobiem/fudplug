@@ -12,4 +12,9 @@ function initIO(server, username) {
         $(`#post-likes-${data.postId}`).attr("like-count", data.likesCount);
         $(`#post-likes-inner-${data.postId}`).html(`&nbsp;${data.likesCount}`);
     });
+
+    // Listen for new post event
+    socket.on("new-post", (data) => {
+        $("#in-post-container").prepend($.parseHTML(data.markup));
+    });
 }

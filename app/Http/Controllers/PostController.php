@@ -94,6 +94,11 @@ class PostController extends Controller
                 }
             }
 
+            // Send Notification
+            Http::post(env('SOCKET_SERVER') . '/send-new-post', [
+                "post_markup" => view('components.post.single-post', ['post' => $post])->render()
+            ]);
+
             return response()->json([
                 'success' => true,
                 'messgae' => 'Post Sent Successfully'
