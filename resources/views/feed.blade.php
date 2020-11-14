@@ -6,6 +6,10 @@
 @include('vendor.components.post-modal')
 @endif
 
+<div>
+  <button class="btn btn-primary d-none" onclick="scrollToTop()" id="see-l-posts-btn">See Latest Posts <i class="la la-arrow-up"></i></button>
+</div>
+
 <div id="in-post-container">
   <div class="justify-content-center text-center w-100 pb-2 box shadow-sm border rounded bg-white p-2">
     <p><strong>Loading Feed</strong></p>

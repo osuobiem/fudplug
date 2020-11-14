@@ -19,8 +19,19 @@ function initIO(server, username, area) {
 
     // Listen for new post event
     socket.on("new-post", (data) => {
-        data.area == area
-            ? $("#in-post-container").prepend($.parseHTML(data.markup))
-            : null;
+        if (data.area == area) {
+            $("#in-post-container").prepend($.parseHTML(data.markup));
+
+            if (
+                document.body.scrollTop > 150 ||
+                document.documentElement.scrollTop > 150
+            ) {
+                $("#see-l-posts-btn").removeClass("d-none");
+
+                setTimeout(() => {
+                    $("#see-l-posts-btn").addClass("d-none");
+                }, 10000);
+            }
+        }
     });
 }
