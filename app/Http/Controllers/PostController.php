@@ -96,7 +96,8 @@ class PostController extends Controller
 
             // Send Notification
             Http::post(env('SOCKET_SERVER') . '/send-new-post', [
-                "post_markup" => view('components.post.single-post', ['post' => $post])->render()
+                "post_markup" => view('components.post.single-post', ['post' => $post])->render(),
+                "area" => $post->vendor->area_id
             ]);
 
             return response()->json([
@@ -274,7 +275,8 @@ class PostController extends Controller
             // Send Notification
             Http::post(env('SOCKET_SERVER') . '/send-likes-count', [
                 "post_id" => $post->id,
-                "likes_count" => $post->likes
+                "likes_count" => $post->likes,
+                "area" => $post->vendor->area_id
             ]);
 
             return response()->json([
@@ -330,7 +332,8 @@ class PostController extends Controller
             // Send Notification
             Http::post(env('SOCKET_SERVER') . '/send-likes-count', [
                 "post_id" => $post->id,
-                "likes_count" => $post->likes
+                "likes_count" => $post->likes,
+                "area" => $post->vendor->area_id
             ]);
 
             return response()->json([

@@ -216,10 +216,10 @@
     <!-- Socket.IO -->
     <script src="{{ url('assets/js/socket.io/socket.io.min.js') }}"></script>
     <script src="{{ url('assets/js/socket.io.js') }}"></script>
-    @php $username = Auth::guest() ? Auth::guard('user')->user()->username : Auth::user()->username; @endphp
+    @php $logged_in = Auth::guest() ? Auth::guard('user')->user() : Auth::user(); @endphp
     <script>
         $(document).ready(function () {
-            initIO(`{{ env('SOCKET_SERVER') }}`, `{{ $username }}`)
+            initIO(`{{ env('SOCKET_SERVER') }}`, `{{ $logged_in->username }}`, `{{ $logged_in->area_id }}`)
         });
     </script>
     @else
