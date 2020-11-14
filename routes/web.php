@@ -26,6 +26,9 @@ Route::post('p-login', 'AuthController@login');
 // Get Areas
 Route::get('areas/{state_id}', 'AreaController@get');
 
+// Get States
+Route::get('states', 'StateController@get');
+
 // Update Location form onboarding
 Route::get('location/{area_id}', 'AuthController@update_location');
 

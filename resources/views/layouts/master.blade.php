@@ -59,10 +59,8 @@
 
             @elseif(!Auth::guard('user')->guest())
 
-            <!-- Large Modal To View All Vendors -->
-            <div id="all-vendors">
-
-            </div>
+            {{--Large Modal To View All Vendors--}}
+            @include('user.components.view-all')
 
             {{--Left Sidebar User--}}
             <!-- Hold User Left Sidebar For Desktop -->

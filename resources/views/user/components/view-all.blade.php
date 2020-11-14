@@ -1,6 +1,6 @@
 <div class="modal fade" id="view-all-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
     aria-hidden="true">
-    <div class="modal-dialog mt-1" role="document">
+    <div class="modal-dialog mt-1 modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">Vendors</h5>
@@ -10,109 +10,48 @@
             </div>
             <div class="modal-body pt-2">
                 <div class="row">
-                    <div class="col-12">
-                        <div class="input-group">
-                            <input type="text" class="form-control " placeholder="Search fudplug" aria-label="Search"
-                                aria-describedby="basic-addon2">
-                            <div class="input-group-append">
-                                <button class="btn btn-primary hover-lift" type="button">
-                                    <i class="la la-search la-lg"></i>
-                                </button>
+
+                    <div class="col-md-5 col-12">
+                        <form id="search-form">
+                            <div class="input-group">
+                                <input type="text" id="search-input" class="form-control form-control-sm"
+                                    placeholder="Search fudplug" aria-label="Search" aria-describedby="basic-addon2"
+                                    required>
+                                <div class="input-group-append">
+                                    <button type="submit" class="btn btn-primary btn-sm hover-lift" type="button"
+                                        id="search-btn" title="Search">
+                                        <i class="la la-search la-lg"></i>
+                                    </button>
+                                </div>
                             </div>
-                        </div>
+                        </form>
                     </div>
-                    <div class="col-6 my-2">
-                        <select class="form-control form-control-sm">
+                    <div class="col-md-2 offset-md-2 col-5 mt-md-0 mt-2">
+                        <select class="form-control form-control-sm" id="state-list" onchange="getAreas(this.value)"
+                            required>
                             <option>Select State</option>
                         </select>
                     </div>
-                    <div class="col-6 my-2">
-                        <select class="form-control form-control-sm">
+                    <div class="col-md-2 col-5 mt-md-0 mt-2">
+                        <select class="form-control form-control-sm" id="area-list" required>
                             <option>Select Area</option>
                         </select>
                     </div>
+                    <div class="col-md-1 col-2 mt-md-0 mt-2">
+                        <button class="btn btn-primary hover-lift btn-sm" title="Filter"><i
+                                class="la la-filter la-lg"></i></button>
+                    </div>
                 </div>
                 <hr class="my-2">
-                <div class="row" style="height: 455px; overflow-y: scroll;">
-                    @php $i = 1; @endphp
-                    @foreach($vendors as $vendor)
-                    <div class="col-md-4 col-6 text-center mb-2">
-                        <div class="border rounded bg-white job-item shadow">
-                            <div class="d-flex job-item-header border-bottom"
-                                style="height: 200px; background-position: center; background-size: cover; background-repeat: no-repeat; background-image: url('{{ Storage::url("vendor/cover/") }}{{$vendor->cover_image}}');">
+                <div class="row" id="results" style="height: 100px; overflow-y: scroll;">
 
-                                <div class="overflow-hidden" style="width:100%; background-color: rgba(0,0,0,0.5)">
-                                    <img class="img-fluid vend-img rounded-circle mt-5"
-                                        src="{{ Storage::url('vendor/profile/') }}{{$vendor->profile_image}} " alt="">
-                                    <h6 class="font-weight-bold text-white mb-0 text-truncate">
-                                        {{$vendor->business_name}}
-                                    </h6>
-                                    <div class="text-truncate text-white">@<span>{{$vendor->username}}</span></div>
-                                    <div class="small text-gray-500"><i
-                                            class="la la-map-marker-alt text-warning text-bold"></i>
-                                        {{$vendor->area}}, {{$vendor->state}}
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="p-3 job-item-footer">
-                                <a class="font-weight-bold d-block" data-toggle="modal" href="#profile-edit-modal">
-                                    View
-                                </a>
-                            </div>
+                </div>
+                <div class="row">
+                    <div class="col-12 text-center ajax-loading">
+                        <div class="spinner-border spinner-border-sm btn-pr" role="status">
+                            <span class="sr-only">Loading...</span>
                         </div>
                     </div>
-                    <div class="col-md-4 col-6 text-center">
-                        <div class="border rounded bg-white job-item shadow">
-                            <div class="d-flex job-item-header border-bottom"
-                                style="height: 200px; background-position: center; background-size: cover; background-repeat: no-repeat; background-image: url('{{ Storage::url("vendor/cover/") }}{{$vendor->cover_image}}');">
-
-                                <div class="overflow-hidden" style="width:100%; background-color: rgba(0,0,0,0.5)">
-                                    <img class="img-fluid vend-img rounded-circle mt-5"
-                                        src="{{ Storage::url('vendor/profile/') }}{{$vendor->profile_image}} " alt="">
-                                    <h6 class="font-weight-bold text-white mb-0 text-truncate">
-                                        {{$vendor->business_name}}
-                                    </h6>
-                                    <div class="text-truncate text-white">@<span>{{$vendor->username}}</span></div>
-                                    <div class="small text-gray-500"><i
-                                            class="la la-map-marker-alt text-warning text-bold"></i>
-                                        {{$vendor->area}}, {{$vendor->state}}
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="p-3 job-item-footer">
-                                <a class="font-weight-bold d-block" data-toggle="modal" href="#profile-edit-modal">
-                                    View
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4 col-6 text-center">
-                        <div class="border rounded bg-white job-item shadow">
-                            <div class="d-flex job-item-header border-bottom"
-                                style="height: 200px; background-position: center; background-size: cover; background-repeat: no-repeat; background-image: url('{{ Storage::url("vendor/cover/") }}{{$vendor->cover_image}}');">
-
-                                <div class="overflow-hidden" style="width:100%; background-color: rgba(0,0,0,0.5)">
-                                    <img class="img-fluid vend-img rounded-circle mt-5"
-                                        src="{{ Storage::url('vendor/profile/') }}{{$vendor->profile_image}} " alt="">
-                                    <h6 class="font-weight-bold text-white mb-0 text-truncate">
-                                        {{$vendor->business_name}}
-                                    </h6>
-                                    <div class="text-truncate text-white">@<span>{{$vendor->username}}</span></div>
-                                    <div class="small text-gray-500"><i
-                                            class="la la-map-marker-alt text-warning text-bold"></i>
-                                        {{$vendor->area}}, {{$vendor->state}}
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="p-3 job-item-footer">
-                                <a class="font-weight-bold d-block" data-toggle="modal" href="#profile-edit-modal">
-                                    View
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                    @php $i++; @endphp
-                    @endforeach
                 </div>
             </div>
         </div>
@@ -120,92 +59,123 @@
 </div>
 
 
+
 <script>
     $(document).ready(function () {
-        // Attach User Profile Update Form Event Listener
-        $('#profile-update').submit(el => {
-            userUpdate(el)
-        })
+        // Populate state list
+        fetchStates();
 
-        // Attach User Password Update Form Event Listener
-        $('#password-update').submit(el => {
-            passwordUpdate(el)
-        })
+        //track user scroll as page number, right now page number is 1
+        var page = 1;
+
+        //initial content load
+        load_more(page);
+
+        $('#results').bind('scroll', function (e) {
+            var elem = $(e.currentTarget);
+            if (elem[0].scrollHeight - elem.scrollTop() == elem.outerHeight()) {
+                // console.log("bottom");
+                page++; //page number increment
+                load_more(page); //load content
+            }
+        });
+
+        $("#search-form").on('submit', function (e) {
+            e.preventDefault();
+
+            let searchData = $("#search-input").val();
+            let stateData = $("#state-list").val();
+            let areaData = $("#area-list").val();
+
+            //Reset page number to 1
+            var page = 1;
+
+            //Content load
+            load_more(page, searchData, stateData, areaData);
+
+            console.log(searchInput);
+        });
     });
 
-    // User Profile Update
-    function userUpdate(el) {
-        el.preventDefault()
+    // Function to load more data on scrolling to bottom
+    function load_more(page, searchData = "", stateData = "", areaData = "") {
 
-        spin('profile')
-        offError('pr-update-error')
-
-        let url = `{{ url('user/update-profile') }}`;
-        let data = new FormData(el.target)
-
-        goPost(url, data)
-            .then(res => {
-                spin('profile')
-
-                if (handleFormRes(res)) {
-                    showAlert(true, res.message);
-
-                    // Hide Profile Edit Modal & Remove Excess Modal Backdrops On Successful Profile Edit
-                    $("#profile-edit-modal").modal('hide');
-                    $(".modal-backdrop").remove();
-                    // Hide Profile Edit Modal & Remove Excess Modal Backdrops On Successful Profile Edit
-
-                    // Refresh Right Side Without Removing Profile Edit Modal
-                    loadUserRight(true, true);
+        url = "{{ url('/user/all-vendors') }}";
+        $.ajax({
+                url: url + '?page=' + page,
+                type: "get",
+                datatype: "html",
+                beforeSend: function () {
+                    $('.ajax-loading').appendTo($('#results'));
+                    $('.ajax-loading').show();
                 }
             })
-            .catch(err => {
-                spin('profile');
-                handleFormRes(err, 'pr-update-error');
+            .done(function (data) {
+                if (data.length == 0) {
+                    // console.log(data.length);
+
+                    //notify user if nothing to load
+                    $('.ajax-loading').html("No more records!");
+                    return;
+                }
+                $('.ajax-loading').hide(); //hide loading animation once data is received
+                $("#results").append(data); //append data into #results element
             })
+            .fail(function (jqXHR, ajaxOptions, thrownError) {
+                alert('No response from server');
+            });
     }
 
-    // User Password Update
-    function passwordUpdate(el) {
-        el.preventDefault()
+    // Fetch States
+    function fetchStates() {
+        let url = `{{ url('states') }}`;
 
-        spin('password')
-        offError('p-update-error')
-
-        let url = `{{ url('user/update-password') }}`;
-        let data = new FormData(el.target)
-
-        goPost(url, data)
+        goGet(url)
             .then(res => {
-                spin('password')
+                let html = `<option value="*">Select State</option>`;
+                $('#state-list').html('');
 
-                if (handleFormRes(res)) {
-                    showAlert(true, res.message);
+                [...res.states].forEach(state => {
+                    html += `
+        <option value="${state.id}">${state.name}</option>
+        `;
+                    //             $('#state-list').append(`
+                    // <option value="${state.id}">${state.name}</option>
+                    // `)
+                });
 
-                    // Remove Profile Edit Form Modal After Password Change
-                    $("#profile-edit-modal").modal('hide');
-                }
+                $('#state-list').html(html);
+
+                $('#state-list-cont').removeClass('d-none');
+                $('#proceed-btn').removeClass('d-none')
             })
             .catch(err => {
-                spin('password')
-                handleFormRes(err, 'p-update-error');
+                showAlert(false, "Oops! Something's not right. Please Reload Page")
             })
     }
 
     // Fetch Areas according to state
-    function fetchAreas(state) {
+    function getAreas(state) {
         let url = `{{ url('areas') }}/${state}`;
 
         goGet(url)
             .then(res => {
+                let html = `<option value="*">All Areas</option>`;
 
-                $('#area-list').html('');
+                $('#area').html('');
 
                 [...res.areas].forEach(area => {
-                    $('#area-list').append(`
+                    html += `
         <option value="${area.id}">${area.name}</option>
-        `)
-                })
+        `;
+                    //             $('#area-list').append(`
+                    // <option value="${area.id}">${area.name}</option>
+                    // `)
+                });
+
+
+
+                $('#area-list').html(html);
 
                 $('#area-list-cont').removeClass('d-none');
                 $('#proceed-btn').removeClass('d-none')
