@@ -1269,3 +1269,13 @@ a:visited {
 .comment-x-ico:hover {
     cursor: pointer;
 }
+
+.scrollpane {
+    height: 100px;
+    overflow: auto;
+    width: 200px;
+}
+
+.loading {
+    color: red;
+}
