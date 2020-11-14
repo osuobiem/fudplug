@@ -6,4 +6,10 @@ function initIO(server, username) {
     socket.on("connect", () => {
         socket.emit("save-id", username);
     });
+
+    // Listen for like count event
+    socket.on("like-count", (data) => {
+        $(`#post-likes-${data.postId}`).attr("like-count", data.likesCount);
+        $(`#post-likes-inner-${data.postId}`).html(`&nbsp;${data.likesCount}`);
+    });
 }

@@ -8,6 +8,7 @@ use App\Post;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
@@ -265,6 +266,12 @@ class PostController extends Controller
             $like->save();
             $post->save();
 
+            // Send Notification
+            Http::post(env('SOCKET_SERVER') . '/send-likes-count', [
+                "post_id" => $post->id,
+                "likes_count" => $post->likes
+            ]);
+
             return response()->json([
                 'success' => true,
                 'message' => 'Like Successful'
@@ -314,6 +321,12 @@ class PostController extends Controller
         try {
             $like->forceDelete();
             $post->save();
+
+            // Send Notification
+            Http::post(env('SOCKET_SERVER') . '/send-likes-count', [
+                "post_id" => $post->id,
+                "likes_count" => $post->likes
+            ]);
 
             return response()->json([
                 'success' => true,
