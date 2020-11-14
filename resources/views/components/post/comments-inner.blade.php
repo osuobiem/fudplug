@@ -65,7 +65,6 @@ elseif(!Auth::guest() && $comment->commentor_type == 'vendor') {
         </a>
         <span class="small ml-auto">
           @if($id == $comment->commentor_id)
-            <i class="la la-pencil la-lg text-primary comment-x-ico mr-1" title="Edit Comment"></i>
             <i class="la la-trash la-lg text-danger comment-x-ico mr-1" onclick="deleteComment('{{ $comment->id }}')" title="Delete Comment"></i>
           @endif
           {{ ftime($comment->created_at) }}

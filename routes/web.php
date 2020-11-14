@@ -136,3 +136,11 @@ Route::group(['prefix' => 'comment'], function () {
     Route::get('delete/{comment_id}', 'CommentController@delete');
 });
 // -------------
+
+
+// SOCKET ROUTES
+Route::group(['prefix' => 'socket'], function () {
+    // Get Comments
+    Route::get('save-id/{username}/{socket_id}', 'SocketController@save_id');
+});
+// -------------

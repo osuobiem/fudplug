@@ -198,6 +198,8 @@
     <script type="text/javascript" src="{{ url('assets/vendor/sweetalert/sweetalert.min.js') }}"></script>
     <!-- Cropper.js -->
     <script src="{{ url('assets/js/cropper.js') }}"></script>
+
+
     <!-- Custom scripts for all pages-->
     <script src="{{ url('assets/js/osahan.js') }}"></script>
     <script src="{{ url('assets/js/custom.js') }}"></script>
@@ -213,6 +215,15 @@
     @if(!Auth::guest() || !Auth::guard('user')->guest())
     <script src="{{ url('assets/js/logged-in.js') }}" server="{{ url('') }}"></script>
 
+    <!-- Socket.IO -->
+    <script src="{{ url('assets/js/socket.io/socket.io.min.js') }}"></script>
+    <script src="{{ url('assets/js/socket.io.js') }}"></script>
+    @php $username = Auth::guest() ? Auth::guard('user')->user()->username : Auth::user()->username; @endphp
+    <script>
+        $(document).ready(function () {
+            initIO(`{{ env('SOCKET_SERVER') }}`, `{{ $username }}`)
+        });
+    </script>
     @else
     <script src="{{ url('assets/js/not-logged-in.js') }}"></script>
     @endif
