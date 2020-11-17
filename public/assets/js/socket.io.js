@@ -37,11 +37,36 @@ function initIO(server, username, area) {
 
     // Listen for comment count event
     socket.on("comment-count", (data) => {
-        console.log(data)
         if (data.area == area) {
             $(`#post-comm-inner-${data.postId}`).html(
                 `&nbsp;${data.commentsCount}`
             );
         }
     });
+
+    // Listen for new comment event
+    socket.on("new-comment", (data) => {
+        if (data.area == area && commentModalOpen && data.commentor != socket.id) {
+            // Append new comment
+            $("#no-comment").html() === undefined
+                ? $("#comments-holder").append($.parseHTML(data.newComment))
+                : $("#comments-holder").html(data.newComment);
+
+            // Scroll to bottom
+            comments_holder = document.getElementById("comments-holder");
+            if(comments_holder.scrollHeight - comments_holder.scrollTop == 410) {
+                comments_holder.scrollTop = comments_holder.scrollHeight;
+            }
+            else {
+                
+            }
+
+            // Clear Textarea
+            [...$(".emojionearea-editor")].forEach((el) => {
+                $(el).attr("placeholder") == "What do you think?..."
+                    ? $(el).text("")
+                    : null;
+            });
+        }
+    })
 }

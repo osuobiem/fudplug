@@ -1140,7 +1140,7 @@ a:visited {
 .comments-inner {
     background: #fff;
     height: 90%;
-    width: 92%;
+    width: 100%;
     position: inherit;
     bottom: 0;
     border-top-right-radius: 15px;
@@ -1193,11 +1193,12 @@ a:visited {
 }
 
 .comments-img {
-    width: 25px;
-    height: 25px;
+    width: 28px;
+    height: 28px;
     background-size: cover;
     background-position: center;
     border-radius: 50px;
+    box-shadow: 0 0 5px 0 #21252999;
 }
 
 .comment-main {
@@ -1289,9 +1290,22 @@ a:visited {
     font-weight: 500;
 }
 
+#see-n-comms-btn {
+    position: fixed;
+    bottom: 25%;
+    left: 30%;
+    z-index: 2000;
+    border-radius: 20px;
+    font-weight: 500;
+}
+
 @media (min-width: 768px) {
     #see-new-posts-btn {
         left: 43%;
+    }
+
+    #see-n-comms-btn {
+        left: 38%;
     }
 }
 
@@ -1299,10 +1313,18 @@ a:visited {
     #see-new-posts-btn {
         left: 45%;
     }
+
+    #see-n-comms-btn {
+        left: 34%;
+    }
 }
 
 @media (min-width: 1440px) {
     #see-new-posts-btn {
         left: 46.5%;
+    }
+
+    #see-n-comms-btn {
+        left: 38%;
     }
 }

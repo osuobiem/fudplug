@@ -242,6 +242,10 @@ function launchLight(a) {
     document.getElementById("light-" + a).click();
 }
 
+
+// Spy for open comment modal
+commentModalOpen = false;
+
 // Open Comments Modal
 function openComments(post_id) {
     $("body").addClass("modal-open");
@@ -252,6 +256,8 @@ function openComments(post_id) {
 
     $(".comments-inner").removeClass("animate__fadeOutDown");
     $(".comments-container").removeClass("animate__fadeOut");
+
+    commentModalOpen = true;
 
     fetchComments(post_id);
 }
@@ -264,6 +270,8 @@ function closeComments() {
 
     $(".comments-inner").addClass("animate__fadeOutDown");
     $(".comments-container").addClass("animate__fadeOut");
+
+    commentModalOpen = false;
 
     setTimeout(() => {
         $(".comments-container").addClass("d-none");

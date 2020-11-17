@@ -1,6 +1,6 @@
 {{-- Format Time/Date --}}
 @php
-function ftime($time) {
+function fmtime($time) {
   $time = strtotime($time);
   $t_diff = time() - $time;
   $res = "";
@@ -35,7 +35,7 @@ elseif(!Auth::guest() && $comment->commentor_type == 'vendor') {
 }
 @endphp
 
-<div class="comment-main {{ $id == $comment->commentor_id ? 'c-right' : 'c-left'}} animate__animated animate__fadeInUp animate__faster" id="comment__{{ $comment->id }}">
+<div class="comment-main c-left animate__animated animate__fadeInUp animate__faster" id="comment__{{ $comment->id }}">
   <div class="comment row">
 
     <div class="col-2 col-md-1 pr-1">
@@ -55,10 +55,7 @@ elseif(!Auth::guest() && $comment->commentor_type == 'vendor') {
             style="color: #212529 !important;">{{ '@'.$comment->{$comment->commentor_type}->username }}</span>
         </a>
         <span class="small ml-auto mt-auto mb-auto" style="font-size: 10px;">
-          @if($id == $comment->commentor_id)
-            <i class="la la-trash la-lg text-danger comment-x-ico" onclick="deleteComment('{{ $comment->id }}')" title="Delete Comment"></i>
-          @endif
-          {{ ftime($comment->created_at) }}
+          {{ fmtime($comment->created_at) }}
         </span>
         
       </div>

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Comment;
 use App\Post;
+use App\SocketData;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
@@ -62,10 +63,12 @@ class CommentController extends Controller
 
         // Get commentor
         if (!Auth::guest()) {
-            $commentor_id = $request->user()->id;
+            $commentor = $request->user();
+            $commentor_id = $commentor->id;
             $commentor_type = 'vendor';
         } elseif (!Auth::guard('user')->guest()) {
-            $commentor_id = $request->user('user')->id;
+            $commentor = $request->user('user');
+            $commentor_id = $commentor->id;
             $commentor_type = 'user';
         } else {
             return response()->json([
@@ -89,11 +92,18 @@ class CommentController extends Controller
         try {
             $comment->save();
             $post->save();
-            
+
             // Send Notification
             Http::post(env('SOCKET_SERVER') . '/send-comments-count', [
                 "post_id" => $post->id,
                 "comments_count" => $post->comments,
+                "area" => $post->vendor->area_id
+            ]);
+
+            // Send Notification
+            Http::post(env('SOCKET_SERVER') . '/send-new-comment', [
+                "new_comment" => view('components/post/comment-new', ['comment' => $comment])->render(),
+                "commentor_socket" => SocketData::where('username', $commentor->username)->first()->socket_id,
                 "area" => $post->vendor->area_id
             ]);
 
