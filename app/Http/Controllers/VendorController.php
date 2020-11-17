@@ -95,7 +95,7 @@ class VendorController extends Controller
     {
         // Make and return validation rules
         return Validator::make($request->all(), [
-            'business_name' => 'required|max:50',
+            'business_name' => 'required|max:25',
             'username' => 'max:15|unique:vendors|unique:users',
             'email' => 'required|email|unique:vendors|unique:users', // email:rfc,dns should be used in production
             'phone' => 'required|numeric|digits_between:5,11|unique:vendors,phone_number|unique:users,phone_number',
@@ -240,7 +240,7 @@ class VendorController extends Controller
     {
         // Make and return validation rules
         return Validator::make($request->all(), [
-            'business_name' => 'required|max:50',
+            'business_name' => 'required|max:25',
             'username' => ['required', 'max:15', Rule::unique('vendors')->ignore(Auth::user()->id), 'unique:users'],
             'email' => ['required', 'email', Rule::unique('vendors')->ignore(Auth::user()->id), 'unique:users'], // email:rfc,dns should be used in production
             'phone_number' => ['required', 'numeric', 'digits_between:5,11', Rule::unique('vendors')->ignore(Auth::user()->id), 'unique:users,phone_number'],
