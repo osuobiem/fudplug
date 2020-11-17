@@ -34,4 +34,14 @@ function initIO(server, username, area) {
             }
         }
     });
+
+    // Listen for comment count event
+    socket.on("comment-count", (data) => {
+        console.log(data)
+        if (data.area == area) {
+            $(`#post-comm-inner-${data.postId}`).html(
+                `&nbsp;${data.commentsCount}`
+            );
+        }
+    });
 }

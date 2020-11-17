@@ -6,6 +6,7 @@ use App\Comment;
 use App\Post;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 
@@ -88,6 +89,13 @@ class CommentController extends Controller
         try {
             $comment->save();
             $post->save();
+            
+            // Send Notification
+            Http::post(env('SOCKET_SERVER') . '/send-comments-count', [
+                "post_id" => $post->id,
+                "comments_count" => $post->comments,
+                "area" => $post->vendor->area_id
+            ]);
 
             return view('components/post/comment', ['comment' => $comment]);
         } catch (\Throwable $th) {
@@ -142,6 +150,13 @@ class CommentController extends Controller
         try {
             $post->save();
             $comment->forceDelete();
+
+            // Send Notification
+            Http::post(env('SOCKET_SERVER') . '/send-comments-count', [
+                "post_id" => $post->id,
+                "comments_count" => $post->comments,
+                "area" => $post->vendor->area_id
+            ]);
 
             return response()->json([
                 'success' => true,
