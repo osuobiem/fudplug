@@ -1,6 +1,7 @@
 :root {
     --i-primary: #e44d3a;
     --i-primary-h: #e44e3a6b;
+    scroll-behavior: smooth;
 }
 
 /* The switch - the box around the slider */
@@ -1139,12 +1140,11 @@ a:visited {
 .comments-inner {
     background: #fff;
     height: 90%;
-    width: 92%;
+    width: 100%;
     position: inherit;
     bottom: 0;
     border-top-right-radius: 15px;
     border-top-left-radius: 15px;
-    margin: 0 4%;
 }
 
 @media (min-width: 768px) {
@@ -1193,11 +1193,12 @@ a:visited {
 }
 
 .comments-img {
-    width: 30px;
-    height: 30px;
+    width: 28px;
+    height: 28px;
     background-size: cover;
     background-position: center;
     border-radius: 50px;
+    box-shadow: 0 0 5px 0 #21252999;
 }
 
 .comment-main {
@@ -1278,4 +1279,52 @@ a:visited {
 
 .loading {
     color: red;
+}
+
+#see-l-posts-btn {
+    position: fixed;
+    top: 60px;
+    left: 33%;
+    z-index: 2000;
+    border-radius: 20px;
+    font-weight: 500;
+}
+
+#see-n-comms-btn {
+    position: fixed;
+    bottom: 25%;
+    left: 30%;
+    z-index: 2000;
+    border-radius: 20px;
+    font-weight: 500;
+}
+
+@media (min-width: 768px) {
+    #see-new-posts-btn {
+        left: 43%;
+    }
+
+    #see-n-comms-btn {
+        left: 38%;
+    }
+}
+
+@media (min-width: 992px) {
+    #see-new-posts-btn {
+        left: 45%;
+    }
+
+    #see-n-comms-btn {
+        left: 34%;
+    }
+}
+
+@media (min-width: 1440px) {
+    #see-new-posts-btn {
+        left: 46.5%;
+    }
+
+    #see-n-comms-btn {
+        left: 38%;
+    }
 }

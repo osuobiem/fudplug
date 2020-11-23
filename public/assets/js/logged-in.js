@@ -109,3 +109,11 @@ function deleteComment(id) {
         }, 1000);
     }
 }
+
+// Scroll to top
+function scrollToTop() {
+    document.body.scrollTop = 0;
+    document.documentElement.scrollTop = 0;
+
+    $("#see-l-posts-btn").addClass("d-none");
+}

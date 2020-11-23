@@ -40,6 +40,10 @@
       </div>
     </form>
 
+    <div>
+      <button class="btn btn-primary animate__animated animate__fadeInUp" onclick="scrollToNewComments()" id="see-n-comms-btn">See New Comments <i class="la la-arrow-down"></i></button>
+    </div>
+
   </div>
 </div>
 

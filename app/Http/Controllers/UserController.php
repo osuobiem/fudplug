@@ -83,7 +83,7 @@ class UserController extends Controller
     {
         // Make and return validation rules
         return Validator::make($request->all(), [
-            'name' => 'required|max:50',
+            'name' => 'required|max:25',
             'email' => 'required|email|unique:users|unique:vendors', // email:rfc,dns should be used in production
             'phone' => 'required|numeric|digits_between:5,11|unique:users,phone_number|unique:vendors,phone_number',
             'password' => 'required|alpha_dash|min:6|max:30',
@@ -299,7 +299,7 @@ class UserController extends Controller
     {
         // Make and return validation rules
         return Validator::make($request->all(), [
-            'name' => 'required',
+            'name' => 'required|max:25',
             'username' => ['required', 'max:15', Rule::unique('users')->ignore(Auth::guard('user')->user()->id), 'unique:vendors'],
             'email' => ['required', 'email', Rule::unique('users')->ignore(Auth::guard('user')->user()->id), 'unique:vendors'], // email:rfc,dns should be used in production
             'phone_number' => ['required', 'numeric', 'digits_between:5,11', Rule::unique('users')->ignore(Auth::guard('user')->user()->id), 'unique:vendors,phone_number'],

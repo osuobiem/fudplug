@@ -58,15 +58,14 @@ elseif(!Auth::guest() && $comment->commentor_type == 'vendor') {
       @endphp
       <div class="mb-1 d-flex">
         <a href="#" style="color: unset;">
-          <strong>{{ $name }}</strong>
+          <strong style="font-size: 12px">{{ $name }}</strong>
           &VerticalSeparator;
           <span class="small"
             style="color: #212529 !important;">{{ '@'.$comment->{$comment->commentor_type}->username }}</span>
         </a>
-        <span class="small ml-auto">
+        <span class="small ml-auto mt-auto mb-auto" style="font-size: 10px;">
           @if($id == $comment->commentor_id)
-            <i class="la la-pencil la-lg text-primary comment-x-ico mr-1" title="Edit Comment"></i>
-            <i class="la la-trash la-lg text-danger comment-x-ico mr-1" onclick="deleteComment('{{ $comment->id }}')" title="Delete Comment"></i>
+            <i class="la la-trash la-lg text-danger comment-x-ico" onclick="deleteComment('{{ $comment->id }}')" title="Delete Comment"></i>
           @endif
           {{ ftime($comment->created_at) }}
         </span>
