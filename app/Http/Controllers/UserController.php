@@ -17,6 +17,9 @@ use Illuminate\Validation\Rule;
 
 class UserController extends Controller
 {
+    // Number Of Items Per Page
+    private $vendor_paginate = 6;
+
     // USER SIGN UP
     /**
      * User sign up
@@ -383,165 +386,36 @@ class UserController extends Controller
     public function all_vendors(Request $request)
     {
         try {
-            $vendors = Vendor::join('areas', 'areas.id', '=', 'vendors.area_id')
-                ->join('states', 'areas.state_id', '=', 'states.id')->select(['vendors.business_name as business_name', 'vendors.username as username', 'vendors.id as vendor_id', 'vendors.cover_image as cover_image', 'vendors.profile_image as profile_image', 'areas.name AS area', 'areas.id AS area_id', 'states.name AS state', 'states.id AS state_id'])
-                ->where('areas.id', Auth::guard('user')->user()->area_id)->paginate(1);
+            $area_id = Auth::guard('user')->user()->area_id;
+            $option = $request->fetch_status;
+            $search_data = $request->search_data;
+            $state_data = $request->state_data;
+            $area_data = $request->area_data;
+            $vendors = "";
+
+            switch ($option) {
+                case 'all':
+                    $vendors = $this->fetch_all($area_id);
+                    break;
+
+                case 'search':
+                    $vendors = $this->fetch_search($area_id, $search_data, $state_data, $area_data);
+                    break;
+
+                case 'filter':
+                    $vendors = $this->fetch_filter($area_id, $search_data, $state_data, $area_data);
+                    break;
+
+                default:
+                    # code...
+                    break;
+            }
 
             // Variable to hold Html
             $html = '';
 
             foreach ($vendors as $vendor) {
-                $html .= "
-                <div class=\"col-md-4 col-6 text-center mb-2\">
-                <div class=\"border rounded bg-white job-item shadow\">
-                    <div class=\"d-flex job-item-header border-bottom\"
-                        style=\"height: 200px; background-position: center; background-size: cover; background-repeat: no-repeat; background-image: url('" . Storage::url("vendor/cover/") . $vendor->cover_image . "');\">
-
-                        <div class=\"overflow-hidden\" style=\"width:100%; background-color: rgba(0,0,0,0.5)\">
-                            <img class=\"img-fluid vend-img rounded-circle mt-5\"
-                                src=\"" . Storage::url('vendor/profile/') . $vendor->profile_image . "\" alt=\"\">
-                            <h6 class=\"font-weight-bold text-white mb-0 text-truncate\">
-" . $vendor->business_name . "
-                            </h6>
-                            <div class=\"text-truncate text-white\">@<span>" . $vendor->username . "</span></div>
-                            <div class=\"small text-gray-500\"><i
-                                    class=\"la la-map-marker-alt text-warning text-bold\"></i>
-" . $vendor->area . ", " . $vendor->state . "</div>
-                        </div>
-                    </div>
-                    <div class=\"p-3 job-item-footer\">
-                        <a class=\"font-weight-bold d-block\" data-toggle=\"modal\" href=\"#profile-edit-modal\">
-                            View
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-            <div class=\"col-md-4 col-6 text-center mb-2\">
-                <div class=\"border rounded bg-white job-item shadow\">
-                    <div class=\"d-flex job-item-header border-bottom\"
-                        style=\"height: 200px; background-position: center; background-size: cover; background-repeat: no-repeat; background-image: url('" . Storage::url("vendor/cover/") . $vendor->cover_image . "');\">
-
-                        <div class=\"overflow-hidden\" style=\"width:100%; background-color: rgba(0,0,0,0.5)\">
-                            <img class=\"img-fluid vend-img rounded-circle mt-5\"
-                                src=\"" . Storage::url('vendor/profile/') . $vendor->profile_image . "\" alt=\"\">
-                            <h6 class=\"font-weight-bold text-white mb-0 text-truncate\">
-" . $vendor->business_name . "
-                            </h6>
-                            <div class=\"text-truncate text-white\">@<span>" . $vendor->username . "</span></div>
-                            <div class=\"small text-gray-500\"><i
-                                    class=\"la la-map-marker-alt text-warning text-bold\"></i>
-" . $vendor->area . ", " . $vendor->state . "</div>
-                        </div>
-                    </div>
-                    <div class=\"p-3 job-item-footer\">
-                        <a class=\"font-weight-bold d-block\" data-toggle=\"modal\" href=\"#profile-edit-modal\">
-                            View
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-            <div class=\"col-md-4 col-6 text-center mb-2\">
-                <div class=\"border rounded bg-white job-item shadow\">
-                    <div class=\"d-flex job-item-header border-bottom\"
-                        style=\"height: 200px; background-position: center; background-size: cover; background-repeat: no-repeat; background-image: url('" . Storage::url("vendor/cover/") . $vendor->cover_image . "');\">
-
-                        <div class=\"overflow-hidden\" style=\"width:100%; background-color: rgba(0,0,0,0.5)\">
-                            <img class=\"img-fluid vend-img rounded-circle mt-5\"
-                                src=\"" . Storage::url('vendor/profile/') . $vendor->profile_image . "\" alt=\"\">
-                            <h6 class=\"font-weight-bold text-white mb-0 text-truncate\">
-" . $vendor->business_name . "
-                            </h6>
-                            <div class=\"text-truncate text-white\">@<span>" . $vendor->username . "</span></div>
-                            <div class=\"small text-gray-500\"><i
-                                    class=\"la la-map-marker-alt text-warning text-bold\"></i>
-" . $vendor->area . ", " . $vendor->state . "</div>
-                        </div>
-                    </div>
-                    <div class=\"p-3 job-item-footer\">
-                        <a class=\"font-weight-bold d-block\" data-toggle=\"modal\" href=\"#profile-edit-modal\">
-                            View
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-            <div class=\"col-md-4 col-6 text-center mb-2\">
-                <div class=\"border rounded bg-white job-item shadow\">
-                    <div class=\"d-flex job-item-header border-bottom\"
-                        style=\"height: 200px; background-position: center; background-size: cover; background-repeat: no-repeat; background-image: url('" . Storage::url("vendor/cover/") . $vendor->cover_image . "');\">
-
-                        <div class=\"overflow-hidden\" style=\"width:100%; background-color: rgba(0,0,0,0.5)\">
-                            <img class=\"img-fluid vend-img rounded-circle mt-5\"
-                                src=\"" . Storage::url('vendor/profile/') . $vendor->profile_image . "\" alt=\"\">
-                            <h6 class=\"font-weight-bold text-white mb-0 text-truncate\">
-" . $vendor->business_name . "
-                            </h6>
-                            <div class=\"text-truncate text-white\">@<span>" . $vendor->username . "</span></div>
-                            <div class=\"small text-gray-500\"><i
-                                    class=\"la la-map-marker-alt text-warning text-bold\"></i>
-" . $vendor->area . ", " . $vendor->state . "</div>
-                        </div>
-                    </div>
-                    <div class=\"p-3 job-item-footer\">
-                        <a class=\"font-weight-bold d-block\" data-toggle=\"modal\" href=\"#profile-edit-modal\">
-                            View
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-            <div class=\"col-md-4 col-6 text-center mb-2\">
-                <div class=\"border rounded bg-white job-item shadow\">
-                    <div class=\"d-flex job-item-header border-bottom\"
-                        style=\"height: 200px; background-position: center; background-size: cover; background-repeat: no-repeat; background-image: url('" . Storage::url("vendor/cover/") . $vendor->cover_image . "');\">
-
-                        <div class=\"overflow-hidden\" style=\"width:100%; background-color: rgba(0,0,0,0.5)\">
-                            <img class=\"img-fluid vend-img rounded-circle mt-5\"
-                                src=\"" . Storage::url('vendor/profile/') . $vendor->profile_image . "\" alt=\"\">
-                            <h6 class=\"font-weight-bold text-white mb-0 text-truncate\">
-" . $vendor->business_name . "
-                            </h6>
-                            <div class=\"text-truncate text-white\">@<span>" . $vendor->username . "</span></div>
-                            <div class=\"small text-gray-500\"><i
-                                    class=\"la la-map-marker-alt text-warning text-bold\"></i>
-" . $vendor->area . ", " . $vendor->state . "</div>
-                        </div>
-                    </div>
-                    <div class=\"p-3 job-item-footer\">
-                        <a class=\"font-weight-bold d-block\" data-toggle=\"modal\" href=\"#profile-edit-modal\">
-                            View
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-            <div class=\"col-md-4 col-6 text-center mb-2\">
-                <div class=\"border rounded bg-white job-item shadow\">
-                    <div class=\"d-flex job-item-header border-bottom\"
-                        style=\"height: 200px; background-position: center; background-size: cover; background-repeat: no-repeat; background-image: url('" . Storage::url("vendor/cover/") . $vendor->cover_image . "');\">
-
-                        <div class=\"overflow-hidden\" style=\"width:100%; background-color: rgba(0,0,0,0.5)\">
-                            <img class=\"img-fluid vend-img rounded-circle mt-5\"
-                                src=\"" . Storage::url('vendor/profile/') . $vendor->profile_image . "\" alt=\"\">
-                            <h6 class=\"font-weight-bold text-white mb-0 text-truncate\">
-" . $vendor->business_name . "
-                            </h6>
-                            <div class=\"text-truncate text-white\">@<span>" . $vendor->username . "</span></div>
-                            <div class=\"small text-gray-500\"><i
-                                    class=\"la la-map-marker-alt text-warning text-bold\"></i>
-" . $vendor->area . ", " . $vendor->state . "</div>
-                        </div>
-                    </div>
-                    <div class=\"p-3 job-item-footer\">
-                        <a class=\"font-weight-bold d-block\" data-toggle=\"modal\" href=\"#profile-edit-modal\">
-                            View
-                        </a>
-                    </div>
-                </div>
-            </div>
-";
+                $html .= $this->card($vendor);
             }
 
             if ($request->ajax()) {
@@ -552,6 +426,139 @@ class UserController extends Controller
         } catch (\Throwable $th) {
             Log::error($th);
             return response()->json(['success' => false, 'status' => 500, 'message' => $th->getMessage()]);
+        }
+    }
+
+    /**
+     * Fetch All Vendors
+     * @return Array
+     */
+    public function fetch_all($area_id)
+    {
+        $vendors = Vendor::join('areas', 'areas.id', '=', 'vendors.area_id')
+            ->join('states', 'areas.state_id', '=', 'states.id')->select(['vendors.business_name as business_name', 'vendors.username as username', 'vendors.id as vendor_id', 'vendors.cover_image as cover_image', 'vendors.profile_image as profile_image', 'areas.name AS area', 'areas.id AS area_id', 'states.name AS state', 'states.id AS state_id'])
+            ->where('areas.id', $area_id)->paginate($this->vendor_paginate);
+
+        return $vendors;
+    }
+
+    /**
+     * Fetch Vendors Based on Search Keyword
+     * @return Array
+     */
+    public function fetch_search($area_id, $search_data, $state_data, $area_data)
+    {
+        try {
+            $vendors = Vendor::join('areas', 'areas.id', '=', 'vendors.area_id')
+                ->join('states', 'areas.state_id', '=', 'states.id')->select(['vendors.business_name as business_name', 'vendors.username as username', 'vendors.id as vendor_id', 'vendors.cover_image as cover_image', 'vendors.profile_image as profile_image', 'areas.name AS area', 'areas.id AS area_id', 'states.name AS state', 'states.id AS state_id'])
+                ->where([['vendors.business_name', 'like', '%' . $search_data . '%'], $this->fix_condition('states.id', $state_data), $this->fix_condition('areas.id', $area_data)])->paginate($this->vendor_paginate);
+            return $vendors;
+        } catch (\Throwable $th) {
+            Log::error($th);
+            return response()->json(['success' => false, 'status' => 500, 'message' => $th->getMessage()]);
+        }
+    }
+
+    /**
+     * Fetch Vendors Based on Filter Values
+     * @return Array
+     */
+    public function fetch_filter($area_id, $search_data, $state_data, $area_data)
+    {
+        try {
+            if (empty($search_data)) {
+                $vendors = Vendor::join('areas', 'areas.id', '=', 'vendors.area_id')
+                    ->join('states', 'areas.state_id', '=', 'states.id')->select(['vendors.business_name as business_name', 'vendors.username as username', 'vendors.id as vendor_id', 'vendors.cover_image as cover_image', 'vendors.profile_image as profile_image', 'areas.name AS area', 'areas.id AS area_id', 'states.name AS state', 'states.id AS state_id'])
+                    ->where([$this->fix_condition('states.id', $state_data), $this->fix_condition('areas.id', $area_data)])->paginate($this->vendor_paginate);
+            } else {
+                $vendors = Vendor::join('areas', 'areas.id', '=', 'vendors.area_id')
+                    ->join('states', 'areas.state_id', '=', 'states.id')->select(['vendors.business_name as business_name', 'vendors.username as username', 'vendors.id as vendor_id', 'vendors.cover_image as cover_image', 'vendors.profile_image as profile_image', 'areas.name AS area', 'areas.id AS area_id', 'states.name AS state', 'states.id AS state_id'])
+                    ->where([['vendors.business_name', 'like', '%' . $search_data . '%'], $this->fix_condition('states.id', $state_data), $this->fix_condition('areas.id', $area_data)])->paginate($this->vendor_paginate);
+            }
+            return $vendors;
+        } catch (\Throwable $th) {
+            Log::error($th);
+            return response()->json(['success' => false, 'status' => 500, 'message' => $th->getMessage()]);
+        }
+    }
+
+    /**
+     * Format "All-Vendors" Card Component
+     * @return string HTML
+     */
+    public function card($vendor)
+    {
+        $html = "
+        <div class=\"col-md-4 col-6 text-center vend mb-2\">
+        <div class=\"border rounded bg-white job-item shadow\">
+            <div class=\"d-flex job-item-header border-bottom\"
+                style=\"height: 200px; background-position: center; background-size: cover; background-repeat: no-repeat; background-image: url('" . Storage::url("vendor/cover/") . $vendor->cover_image . "');\">
+
+                <div class=\"overflow-hidden\" style=\"width:100%; background-color: rgba(0,0,0,0.5)\">
+                    <img class=\"img-fluid vend-img rounded-circle mt-5\"
+                        src=\"" . Storage::url('vendor/profile/') . $vendor->profile_image . "\" alt=\"\">
+                    <h6 class=\"font-weight-bold text-white mb-0 text-truncate\">
+" . $vendor->business_name . "
+                    </h6>
+                    <div class=\"text-truncate text-white\">@<span>" . $vendor->username . "</span></div>
+                    <div class=\"small text-gray-500\"><i
+                            class=\"la la-map-marker-alt text-warning text-bold\"></i>
+" . $vendor->area . ", " . $vendor->state . "</div>
+                </div>
+            </div>
+            <div class=\"p-3 job-item-footer\">
+                <a class=\"font-weight-bold d-block\" data-toggle=\"modal\" href=\"#profile-edit-modal\">
+                    View
+                </a>
+            </div>
+        </div>
+    </div>
+";
+        return $html;
+    }
+
+    /**
+     * Fix Query Conditions Based On Value
+     * @return Array
+     */
+    public function fix_condition($key, $value)
+    {
+        $condition = [];
+        if ($value == "*") {
+            $condition = [$key, '<>', $value];
+        } else {
+            $condition = [$key, '=', $value];
+        }
+        return $condition;
+    }
+
+    /**
+     * Vendor Profile Page
+     */
+    public function vendor_profile($vendor_id)
+    {
+        try {
+            // Get States Data
+            $states = State::get();
+
+            // Vendor Details
+            $vendor = Vendor::where('id', $vendor_id)->first();
+
+            // Fetch Vendor Location Data
+            $area_id = $vendor->area_id;
+            $vendor_location = State::join('areas', 'areas.state_id', '=', 'states.id')
+                ->select(['areas.name AS area', 'areas.id AS area_id', 'states.name AS state', 'states.id AS state_id'])
+                ->where('areas.id', $area_id)->first();
+
+            // Get Areas In User State
+            $areas = Area::where('state_id', $vendor_location->state_id)->get();
+
+            // Social Media Links
+            $social_handles = json_decode($vendor->social_handles);
+
+            return view('user.vendor-profile', compact('vendor', 'vendor_location', 'states', 'areas', 'social_handles'));
+        } catch (\Throwable $th) {
+            Log::error($th);
         }
     }
 }

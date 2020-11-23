@@ -44,7 +44,9 @@
                                 </div>
                             </div>
                             <div class="p-3 job-item-footer">
-                                <a class="font-weight-bold d-block" data-toggle="modal" href="#profile-edit-modal"> View
+                                <a class="font-weight-bold d-block"
+                                    href="{{url('user/vendor-profile/'.$vendor->vendor_id)}}">
+                                    View
                                 </a>
                             </div>
                         </div>

@@ -27,7 +27,7 @@ Route::post('p-login', 'AuthController@login');
 Route::get('areas/{state_id}', 'AreaController@get');
 
 // Get States
-Route::get('states', 'StateController@get');
+Route::get('states/{area_id?}', 'StateController@get');
 
 // Update Location form onboarding
 Route::get('location/{area_id}', 'AuthController@update_location');
@@ -104,6 +104,8 @@ Route::group(['prefix' => 'user'], function () {
         Route::get('get-vendors', 'UserController@get_vendor');
         // Get All Vendors
         Route::get('all-vendors', 'UserController@all_vendors');
+        // Vendor Profile Page
+        Route::get('vendor-profile/{vendor_id}', 'UserController@vendor_profile');
     });
 });
 // -------------

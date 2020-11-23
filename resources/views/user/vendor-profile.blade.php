@@ -4,7 +4,7 @@
 
 <style>
     #cover-holder {
-        background-image: url("{{ Storage::url('vendor/cover/'.Auth::user()->cover_image) }}");
+        background-image: url("{{ Storage::url('vendor/cover/'.$vendor->cover_image) }}");
     }
 
 </style>
@@ -13,7 +13,7 @@
 
     <div id="cover-holder">
         <!-- Cover image holder -->
-        <img id="cover" src="{{ Storage::url('vendor/cover/'.Auth::user()->cover_image) }}" class="d-none">
+        <img id="cover" src="{{ Storage::url('vendor/cover/'.$vendor->cover_image) }}" class="d-none">
         <!-- Cover image file input -->
         <input type="file" class="sr-only" id="cover-input" name="cover-image" accept="image/*">
 
@@ -21,7 +21,8 @@
             rel="noopener noreferrer">
             <i class="la la-ellipsis-v la-2x icon-hover text-white" style="margin-left: 90%;"></i>
         </a> -->
-        <div class="profile-dropdown">
+
+        <!-- <div class="profile-dropdown">
             <a class="" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <i class="la la-ellipsis-v la-2x icon-hover text-white"></i>
             </a>
@@ -31,23 +32,23 @@
                 <label class="dropdown-item" for="input">Change Profile Image</label>
                 <label class="dropdown-item" for="cover-input">Change Cover Photo</label>
             </div>
-        </div>
+        </div> -->
 
         <div class="py-4 px-3 border-bottom text-center">
-            <img id="avatar" src="{{ Storage::url('vendor/profile/'.Auth::user()->profile_image) }}"
+            <img id="avatar" src="{{ Storage::url('vendor/profile/'.$vendor->profile_image) }}"
                 class="mt-2 img-fluid rounded-circle col-md-3" alt="Responsive image">
             <input type="file" class="sr-only" id="input" name="image" accept="image/*">
             <br />
 
-            <h5 class="font-weight-bold text-white mb-1 mt-4">{{ Auth::user()->business_name }}</h5>
-            <p class="mb-0 text-white">@<b>{{ Auth::user()->username }}</b></p>
+            <h5 class="font-weight-bold text-white mb-1 mt-4">{{ $vendor->business_name }}</h5>
+            <p class="mb-0 text-white">@<b>{{ $vendor->username }}</b></p>
         </div>
     </div>
     <div class="text-center">
         <div class="row">
             <div class="col-6 border-right p-2">
                 <h6 class="font-weight-bold text-dark mb-1">Joined</h6>
-                <p class="mb-0 text-black-50 small">{{ date("d M, Y", strtotime(Auth::user()->created_at)) }}
+                <p class="mb-0 text-black-50 small">{{ date("d M, Y", strtotime($vendor->created_at)) }}
                 </p>
             </div>
             <div class="col-6 p-2">
@@ -93,15 +94,15 @@
                         <tbody>
                             <tr class="border-bottom">
                                 <th class="p-3">Email</th>
-                                <td class="p-3">{{ Auth::user()->email }}</td>
+                                <td class="p-3">{{ $vendor->email }}</td>
                             </tr>
                             <tr class="border-bottom">
                                 <th class="p-3">Phone</th>
-                                <td class="p-3">{{ Auth::user()->phone_number }}</td>
+                                <td class="p-3">{{ $vendor->phone_number }}</td>
                             </tr>
                             <tr class="border-bottom">
                                 <th class="p-3">Address</th>
-                                <td class="p-3">{{ Auth::user()->address }}</td>
+                                <td class="p-3">{{ $vendor->address }}</td>
                             </tr>
                             <tr class="border-bottom">
                                 <th class="p-3">Media Handles</th>
@@ -141,7 +142,7 @@
                             </tr>
                             <tr class="border-bottom">
                                 <th class="p-3">About</th>
-                                <td class="p-3">{{ Auth::user()->about_business }}</td>
+                                <td class="p-3">{{ $vendor->about_business }}</td>
                             </tr>
                         </tbody>
                     </table>
@@ -155,7 +156,7 @@
                     <h6 class="m-0">About</h6>
                 </div>
                 <div class="box-body p-3">
-                    <p>{{ Auth::user()->about_business }}</p>
+                    <p>{{ $vendor->about_business }}</p>
                 </div> -->
                 <div class="alert alert-warning">
                     Coming soon
@@ -251,203 +252,4 @@
     </div>
 
 </div>
-
-{{-- Profile Edit Modal--}}
-@include('vendor.components.profile-edit')
-
-{{--Profile Image Edit Modal--}}
-@include('vendor.components.profile-image-edit')
-
-{{--Cover Image Edit Modal--}}
-@include('vendor.components.cover-image-edit')
-
 @endsection
-
-@push('scripts')
-<script>
-    // Cropper.JS Initialize any crop by calling the crop function
-    window.addEventListener("DOMContentLoaded", function () {
-        // Initialize crop for profile image
-        crop("avatar", "image", "input", "progress", "progress-bar", "alert", "modal", "change", "crop",
-            "profile_image_update");
-
-        // Initialize crop for cover image
-        crop("cover", "cover-image", "cover-input", "progress", "progress-bar", "alert", "cover-modal",
-            "cover-change", "cover-crop", "cover_image_update");
-    });
-
-    function crop(...params) {
-        var avatar = document.getElementById(params[0]);
-        var image = document.getElementById(params[1]);
-        var input = document.getElementById(params[2]);
-        var $progress = $("." + params[3]);
-        var $progressBar = $("." + params[4]);
-        var $alert = $("." + params[5]);
-        var $modal = $("#" + params[6]);
-        var $change = $("#" + params[7]);
-        var $crop = $("#" + params[8]);
-        var upload_url = params[9];
-        var cropper;
-
-        $('[data-toggle="tooltip"]').tooltip();
-
-        input.addEventListener("change", function (e) {
-            var files = e.target.files;
-            var done = function (url) {
-                input.value = "";
-                image.src = url;
-                $alert.hide();
-                // Show crop modal when modal not visible
-                if (!$modal.is(":visible")) {
-                    $change.addClass("d-none");
-                    $crop.removeClass("d-none");
-                    $modal.modal("show");
-                } else {
-                    $change.addClass("d-none");
-                    $crop.removeClass("d-none");
-                    // Reinitialize ccropper when file change button is clicked
-                    cropper = new Cropper(image, {
-                        aspectRatio: 1,
-                        viewMode: 3,
-                        setDragMode: 'none',
-                        aspectRatio: NaN
-                    });
-                }
-            };
-            var reader;
-            var file;
-            var url;
-
-            if (files && files.length > 0) {
-                file = files[0];
-
-                if (URL) {
-                    done(URL.createObjectURL(file));
-                } else if (FileReader) {
-                    reader = new FileReader();
-                    reader.onload = function (e) {
-                        done(reader.result);
-                    };
-                    reader.readAsDataURL(file);
-                }
-            }
-        });
-
-        // Initialize cropper on modal popup
-        $modal.on("shown.bs.modal", function () {
-            cropper = new Cropper(image, {
-                aspectRatio: 1,
-                viewMode: 3,
-                setDragMode: 'none',
-                aspectRatio: NaN
-            });
-        }).on("hidden.bs.modal", function () {
-            // destroy cropper on modal close
-            if (cropper != null) {
-                cropper.destroy();
-                cropper = null;
-            }
-        });
-
-        document.getElementById(params[8]).addEventListener("click", function () {
-            var initialAvatarURL;
-            var canvas;
-
-            if (cropper) {
-                canvas = cropper.getCroppedCanvas({
-                    width: 1000,
-                    height: 2000
-                });
-                initialAvatarURL = avatar.src;
-                console.log(params[0]);
-                if (params[0] == "avatar") {
-                    avatar.src = canvas.toDataURL();
-                } else {
-                    document.getElementById("cover-holder").style.backgroundImage = "url(" + canvas
-                        .toDataURL() + ")";
-                }
-
-                $alert.removeClass("alert-success alert-warning");
-                canvas.toBlob(function (blob) {
-                    var formData = new FormData();
-                    var FileSize = blob.size / 1024 / 1024; // Size of uploaded file
-                    if (FileSize <= 1) {
-                        // Show progress bar if file has required size
-                        $progress.show();
-                    }
-
-                    formData.append("image", blobToFile(blob, params[0] + ".jpg"), params[0] +
-                        ".jpg");
-                    $.ajax(upload_url, {
-                        method: "POST",
-                        data: formData,
-                        processData: false,
-                        contentType: false,
-                        headers: {
-                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                        },
-
-                        xhr: function () {
-                            var xhr = new XMLHttpRequest();
-
-                            xhr.upload.onprogress = function (e) {
-                                var percent = "0";
-                                var percentage = "0%";
-
-                                if (e.lengthComputable) {
-                                    percent = Math.round((e.loaded / e.total) *
-                                        100);
-                                    percentage = percent + "%";
-                                    $progressBar.width(percentage).attr(
-                                        "aria-valuenow",
-                                        percent).text(percentage);
-                                }
-                            };
-
-                            return xhr;
-                        },
-
-                        success: function (res) {
-                            if (res.success == false) {
-                                let message = res.message.image[0];
-                                $alert.show().addClass("alert-danger").text(message);
-                                $crop.addClass("d-none");
-                                $change.removeClass("d-none");
-                                // Reset cropper on error
-                                cropper.destroy();
-                                cropper = null;
-                                // Reset cropper on error
-                            } else {
-                                setTimeout(function () {
-                                    $progress.hide();
-                                    $modal.modal("hide");
-                                }, 2000);
-                            }
-                        },
-
-                        error: function (res) {
-                            avatar.src = initialAvatarURL;
-                            console.log(res.responseJSON);
-                        }
-
-                        // complete: function () {
-                        //     $progress.hide();
-                        //     setTimeout(function () {
-                        //         $modal.modal('hide');
-                        //     }, 2000);
-                        // },
-                    });
-                });
-            }
-        });
-    }
-
-    function blobToFile(theBlob, fileName) {
-        //A Blob() is almost a File() - it's just missing the two properties below which we will add
-        theBlob.lastModifiedDate = new Date();
-        theBlob.name = fileName;
-        return theBlob;
-    }
-
-</script>
-@endpush
