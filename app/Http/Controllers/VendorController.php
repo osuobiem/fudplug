@@ -181,7 +181,7 @@ class VendorController extends Controller
             $states = State::get();
 
             // Fetch Vendor Location Data
-            $area_id = Auth::user()->area_id;
+            $area_id = Auth::user('vendor')->area_id;
             $vendor_location = State::join('areas', 'areas.state_id', '=', 'states.id')
                 ->select(['areas.name AS area', 'areas.id AS area_id', 'states.name AS state', 'states.id AS state_id'])
                 ->where('areas.id', $area_id)->first();
@@ -190,7 +190,7 @@ class VendorController extends Controller
             $areas = Area::where('state_id', $vendor_location->state_id)->get();
 
             // Social Media Links
-            $social_handles = json_decode(Auth::user()->social_handles);
+            $social_handles = json_decode(Auth::user('vendor')->social_handles);
 
             return view('vendor.profile', compact('vendor_location', 'states', 'areas', 'social_handles'));
         } catch (\Throwable $th) {
@@ -241,9 +241,9 @@ class VendorController extends Controller
         // Make and return validation rules
         return Validator::make($request->all(), [
             'business_name' => 'required|max:25',
-            'username' => ['required', 'max:15', Rule::unique('vendors')->ignore(Auth::user()->id), 'unique:users'],
-            'email' => ['required', 'email', Rule::unique('vendors')->ignore(Auth::user()->id), 'unique:users'], // email:rfc,dns should be used in production
-            'phone_number' => ['required', 'numeric', 'digits_between:5,11', Rule::unique('vendors')->ignore(Auth::user()->id), 'unique:users,phone_number'],
+            'username' => ['required', 'max:15', Rule::unique('vendors')->ignore(Auth::user('vendor')->id), 'unique:users'],
+            'email' => ['required', 'email', Rule::unique('vendors')->ignore(Auth::user('vendor')->id), 'unique:users'], // email:rfc,dns should be used in production
+            'phone_number' => ['required', 'numeric', 'digits_between:5,11', Rule::unique('vendors')->ignore(Auth::user('vendor')->id), 'unique:users,phone_number'],
             'address' => 'required',
             'about' => 'required|max:1000',
             'instagram' => 'nullable|url',
@@ -272,7 +272,7 @@ class VendorController extends Controller
     private function update_store(Request $request)
     {
         // New vendor object
-        $vendor = Vendor::find(Auth::user()->id);
+        $vendor = Vendor::find(Auth::user('vendor')->id);
 
         // Assign vendor object properties
         $vendor->business_name = $request->business_name;
@@ -312,16 +312,16 @@ class VendorController extends Controller
             return response()->json(['success' => false, 'message' => $validate->errors('image')->messages()], 200);
         } else {
             try {
-                $vendor = Vendor::find(Auth::user()->id);
+                $vendor = Vendor::find(Auth::user('vendor')->id);
                 $filenameWithExt = $request->file('image')->getClientOriginalName();
                 //Get just filename
                 $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME);
                 // Get just ext
                 $extension = $request->file('image')->getClientOriginalExtension();
                 // Filename to store
-                $image = "ven_" . Auth::user()->id . '_' . time() . '.' . $extension;
+                $image = "ven_" . Auth::user('vendor')->id . '_' . time() . '.' . $extension;
                 // Previous Image
-                $prev_image = Auth::user()->profile_image;
+                $prev_image = Auth::user('vendor')->profile_image;
                 // Delete prev image
                 if ($prev_image != "placeholder.png") {
                     Storage::delete('/public/vendor/profile/' . $prev_image);
@@ -357,16 +357,16 @@ class VendorController extends Controller
             return response()->json(['success' => false, 'message' => $validate->errors('image')->messages()], 200);
         } else {
             try {
-                $vendor = Vendor::find(Auth::user()->id);
+                $vendor = Vendor::find(Auth::user('vendor')->id);
                 $filenameWithExt = $request->file('image')->getClientOriginalName();
                 //Get just filename
                 $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME);
                 // Get just ext
                 $extension = $request->file('image')->getClientOriginalExtension();
                 // Filename to store
-                $image = "cover_" . Auth::user()->id . '_' . time() . '.' . $extension;
+                $image = "cover_" . Auth::user('vendor')->id . '_' . time() . '.' . $extension;
                 // Delete prev image
-                Storage::delete('/public/vendor/cover/' . Auth::user()->cover_image);
+                Storage::delete('/public/vendor/cover/' . Auth::user('vendor')->cover_image);
                 // Upload new Image
                 $request->file('image')->storeAs('public/vendor/cover', $image);
                 $vendor->cover_image = $image;
@@ -420,7 +420,7 @@ class VendorController extends Controller
                 'type' => "simple",
             ];
             $item = new Item($data);
-            $vendor = Vendor::find(Auth::user()->id);
+            $vendor = Vendor::find(Auth::user('vendor')->id);
             $vendor->item()->save($item);
         }
     }
@@ -439,7 +439,7 @@ class VendorController extends Controller
                 'type' => "advanced",
             ];
             $item = new Item($data);
-            $vendor = Vendor::find(Auth::user()->id);
+            $vendor = Vendor::find(Auth::user('vendor')->id);
             $vendor->item()->save($item);
         }
     }
@@ -458,7 +458,7 @@ class VendorController extends Controller
             // Get just ext
             $extension = $file->getClientOriginalExtension();
             // Filename to store
-            $image = $request->title[$key] . Auth::user()->id . '_' . time() . '.' . $extension;
+            $image = $request->title[$key] . Auth::user('vendor')->id . '_' . time() . '.' . $extension;
             // Upload new Image
             if ($file->storeAs('public/vendor/dish', $image)) {
                 return $image;
@@ -653,7 +653,7 @@ class VendorController extends Controller
     {
         try {
             if (!empty($dish_id)) {
-                $dish = Item::where(['vendor_id' => Auth::user()->id, 'id' => $dish_id])->first();
+                $dish = Item::where(['vendor_id' => Auth::user('vendor')->id, 'id' => $dish_id])->first();
                 $data = [];
                 if ($dish->type == "simple") {
                     $qty = json_decode($dish->quantity);
@@ -669,7 +669,7 @@ class VendorController extends Controller
                 return view('vendor.components.dish-view', $data);
             } else {
                 // Get All Vendor Dishes
-                $dish_data = Item::where('vendor_id', Auth::user()->id);
+                $dish_data = Item::where('vendor_id', Auth::user('vendor')->id);
 
                 if ($dish_data->count() > 0) {
                     // Set Dish Parameters
@@ -677,7 +677,7 @@ class VendorController extends Controller
                     $dishes = $dish_data->get();
 
                     // Fetch the Menu Item
-                    $menu_data = Menu::where('vendor_id', Auth::user()->id)->first("items");
+                    $menu_data = Menu::where('vendor_id', Auth::user('vendor')->id)->first("items");
                     if (!empty($menu_data)) {
                         $menu = json_decode($menu_data);
 
@@ -802,7 +802,7 @@ class VendorController extends Controller
             // Get just ext
             $extension = $file->getClientOriginalExtension();
             // Filename to store
-            $image = $request->title . Auth::user()->id . '_' . time() . '.' . $extension;
+            $image = $request->title . Auth::user('vendor')->id . '_' . time() . '.' . $extension;
             // Upload new Image
             if ($file->storeAs('public/vendor/dish', $image)) {
                 return $image;
@@ -823,11 +823,11 @@ class VendorController extends Controller
     {
         try {
             // Fetch Vendor Dishes
-            $dishes = Item::where('vendor_id', Auth::user()->id)->get();
+            $dishes = Item::where('vendor_id', Auth::user('vendor')->id)->get();
 
             if (!empty($dishes)) {
                 // Fetch the Menu Item
-                $menu = Menu::where('vendor_id', Auth::user()->id)->first("items");
+                $menu = Menu::where('vendor_id', Auth::user('vendor')->id)->first("items");
                 if (!empty($menu)) {
                     $menu = json_decode($menu);
 
@@ -869,7 +869,7 @@ class VendorController extends Controller
     {
         try {
             $items = ['item' => $request->has('item') ? $request->item : null];
-            Menu::updateOrCreate(['vendor_id' => Auth::user()->id], ['items' => json_encode($items)]);
+            Menu::updateOrCreate(['vendor_id' => Auth::user('vendor')->id], ['items' => json_encode($items)]);
             return response()->json(['success' => true, 'message' => "Menu Updated Successfully"], 200);
         } catch (\Throwable $th) {
             Log::error($th);
@@ -884,7 +884,7 @@ class VendorController extends Controller
     public function dish_delete(Request $request, $dish_id)
     {
         try {
-            $dish = Item::where(['vendor_id' => Auth::user()->id, 'id' => $dish_id])->first();
+            $dish = Item::where(['vendor_id' => Auth::user('vendor')->id, 'id' => $dish_id])->first();
             return view('vendor.components.dish-delete', compact('dish'));
         } catch (\Throwable $th) {
             Log::error($th);

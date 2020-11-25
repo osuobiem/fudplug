@@ -145,7 +145,7 @@ class AuthController extends Controller
 
         // Vendor ?
         if (Auth::check()) {
-            $vendor = Auth::user();
+            $vendor = Auth::user('vendor');
             $vendor->area_id = $area_id;
 
             // Try vendor save or catch error if any

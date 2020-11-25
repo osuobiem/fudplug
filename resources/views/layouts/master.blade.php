@@ -38,7 +38,7 @@
 <body>
 
     {{-- Check for session availablity --}}
-    @if(!Auth::guest())
+    @if(!Auth::guard('vendor')->guest())
     @include('vendor.components.header')
 
     @elseif(!Auth::guard('user')->guest())
@@ -54,7 +54,7 @@
         <div class="row main-section">
 
             <!-- Left Sidebar -->
-            @if(!Auth::guest())
+            @if(!Auth::guard('vendor')->guest())
             @include('vendor.components.left-side')
 
             @elseif(!Auth::guard('user')->guest())
@@ -104,7 +104,7 @@
             </main>
 
             {{--Right Sidebar Vendor--}}
-            @if(!Auth::guest())
+            @if(!Auth::guard('vendor')->guest())
             <aside class="col col-lg-3 d-none d-lg-block side-section side-section-r right-side-large text-center">
                 <div class="justify-content-center text-center w-100 pb-2 box shadow-sm border rounded bg-white p-2"
                     id="right-side-spinner" style="display: none;">
@@ -152,7 +152,7 @@
 
     {{-- Location onboading --}}
     <button class="d-none" id="launchOnboarding" data-toggle="modal" data-target="#boardModal"></button>
-    @if(!Auth::guest())
+    @if(!Auth::guard('vendor')->guest())
 
     {{-- Floating Post Buttons --}}
     <button class="btn btn-primary floating-post-btn d-none post-modal-init animate__animated">
@@ -165,7 +165,7 @@
     </button>
 
     {{-- Check if vendor area is set --}}
-    @if(!Auth::user()->area)
+    @if(!Auth::user('vendor')->area)
     @include('components.onboarding')
     <script>
         $(document).ready(function () {
@@ -210,13 +210,13 @@
     <script src="{{ url('assets/js/uikit-icons.min.js') }}"></script>
 
     {{-- Check for session availablity --}}
-    @if(!Auth::guest() || !Auth::guard('user')->guest())
+    @if(!Auth::guard('vendor')->guest() || !Auth::guard('user')->guest())
     <script src="{{ url('assets/js/logged-in.js') }}" server="{{ url('') }}"></script>
 
     <!-- Socket.IO -->
     <script src="{{ url('assets/js/socket.io/socket.io.min.js') }}"></script>
     <script src="{{ url('assets/js/socket.io.js') }}"></script>
-    @php $logged_in = Auth::guest() ? Auth::guard('user')->user() : Auth::user(); @endphp
+    @php $logged_in = Auth::guard('vendor')->guest() ? Auth::guard('user')->user() : Auth::user('vendor'); @endphp
     <script>
         $(document).ready(function () {
             initIO(`{{ env('SOCKET_SERVER') }}`, `{{ $logged_in->username }}`, `{{ $logged_in->area_id }}`)

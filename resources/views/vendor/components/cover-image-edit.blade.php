@@ -11,7 +11,7 @@
             <div class="modal-body">
                 <div class="img-container">
                     <img id="cover-image" class="img-edit img-responsive"
-                        src="{{ Storage::url('vendor/cover/'.Auth::user()->cover_image) }}">
+                        src="{{ Storage::url('vendor/cover/'.Auth::user('vendor')->cover_image) }}">
                 </div>
                 <div class="progress" style="display: none;">
                     <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar"

@@ -30,7 +30,7 @@
                                 </label>
                                 <div class="form-group">
                                     <input type="text" class="form-control" name="business_name"
-                                        value="{{Auth::user()->business_name}}" placeholder="Enter your business name"
+                                        value="{{Auth::user('vendor')->business_name}}" placeholder="Enter your business name"
                                         aria-label="Enter your business name" required="" aria-describedby="nameLabel"
                                         data-msg="Please enter your business name." data-error-class="u-has-error"
                                         data-success-class="u-has-success">
@@ -51,7 +51,7 @@
                                 </label>
                                 <div class="form-group">
                                     <input type="email" class="form-control" name="email"
-                                        value="{{Auth::user()->email}}" placeholder="Enter your email address"
+                                        value="{{Auth::user('vendor')->email}}" placeholder="Enter your email address"
                                         aria-label="Enter your email address" required="" aria-describedby="emailLabel"
                                         data-msg="Please enter a valid email address." data-error-class="u-has-error"
                                         data-success-class="u-has-success">
@@ -73,7 +73,7 @@
                                 </label>
                                 <div class="form-group">
                                     <input type="text" class="form-control" name="username"
-                                        value="{{Auth::user()->username}}" placeholder="Enter your username"
+                                        value="{{Auth::user('vendor')->username}}" placeholder="Enter your username"
                                         aria-label="Enter your username" required="" aria-describedby="usernameLabel"
                                         data-msg="Please enter your username." data-error-class="u-has-error"
                                         data-success-class="u-has-success">
@@ -91,7 +91,7 @@
                                 </label>
                                 <div cfreachlass="form-group">
                                     <input class="form-control" type="tel" name="phone_number"
-                                        value="{{Auth::user()->phone_number}}" placeholder="Enter your phone number"
+                                        value="{{Auth::user('vendor')->phone_number}}" placeholder="Enter your phone number"
                                         aria-label="Enter your phone number" required=""
                                         aria-describedby="phoneNumberLabel" data-msg="Please enter a valid phone number"
                                         data-error-class="u-has-error" data-success-class="u-has-success">
@@ -213,7 +213,7 @@
                             <span class="text-danger">*</span>
                             <div class="position-relative">
                                 <textarea class="form-control" rows="4" name="address" placeholder="Enter business info"
-                                    required>{{Auth::user()->address}}</textarea>
+                                    required>{{Auth::user('vendor')->address}}</textarea>
                             </div>
                             <small class="text-danger error-message" id="about"></small>
                         </div>
@@ -224,7 +224,7 @@
                             <span class="text-danger">*</span>
                             <div class="position-relative">
                                 <textarea class="form-control" rows="4" name="about" placeholder="Enter business info"
-                                    required>{{Auth::user()->about_business}}</textarea>
+                                    required>{{Auth::user('vendor')->about_business}}</textarea>
                             </div>
                             <small class="text-danger error-message" id="about"></small>
                         </div>

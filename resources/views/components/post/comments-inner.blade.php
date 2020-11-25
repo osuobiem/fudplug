@@ -39,8 +39,8 @@ $id = '';
 if(!Auth::guard('user')->guest() && $comment->commentor_type == 'user') {
   $id = Auth::guard('user')->user()->id;
 }
-elseif(!Auth::guest() && $comment->commentor_type == 'vendor') {
-  $id = Auth::user()->id;
+elseif(!Auth::guard('vendor')->guest() && $comment->commentor_type == 'vendor') {
+  $id = Auth::user('vendor')->id;
 }
 @endphp
 

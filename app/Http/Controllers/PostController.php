@@ -212,7 +212,7 @@ class PostController extends Controller
     public function get(Request $request)
     {
         // Vendor / User?
-        if (Auth::guest() && Auth::guard('user')->guest()) {
+        if (Auth::guard('vendor')->guest() && Auth::guard('user')->guest()) {
             $posts = Post::orderBy('created_at', 'desc')->take(15)->get();
 
             return view('components.post.index', ['posts' => $posts]);
@@ -237,7 +237,7 @@ class PostController extends Controller
     public function like(Request $request, $post_id)
     {
         // Check Login
-        if (Auth::guest() && Auth::guard('user')->guest()) {
+        if (Auth::guard('vendor')->guest() && Auth::guard('user')->guest()) {
             return response()->json([
                 "success" => false,
                 "message" => "You're not logged in"
@@ -247,8 +247,8 @@ class PostController extends Controller
         $post = Post::findOrFail($post_id);
 
         // User or Vendor?
-        $liker = Auth::guest() ? $request->user('user') : $request->user();
-        $liker_type = Auth::guest() ? 'user' : 'vendor';
+        $liker = Auth::guard('vendor')->guest() ? $request->user('user') : $request->user();
+        $liker_type = Auth::guard('vendor')->guest() ? 'user' : 'vendor';
 
         // Check for duplication
         $liked_before = Like::where('post_id', $post->id)->where('liker_type', $liker_type)->where('liker_id', $liker->id)->count();
@@ -301,7 +301,7 @@ class PostController extends Controller
     public function unlike(Request $request, $post_id)
     {
         // Check Login
-        if (Auth::guest() && Auth::guard('user')->guest()) {
+        if (Auth::guard('vendor')->guest() && Auth::guard('user')->guest()) {
             return response()->json([
                 "success" => false,
                 "message" => "You're not logged in"
@@ -311,8 +311,8 @@ class PostController extends Controller
         $post = Post::findOrFail($post_id);
 
         // User or Vendor?
-        $liker = Auth::guest() ? $request->user('user') : $request->user();
-        $liker_type = Auth::guest() ? 'user' : 'vendor';
+        $liker = Auth::guard('vendor')->guest() ? $request->user('user') : $request->user();
+        $liker_type = Auth::guard('vendor')->guest() ? 'user' : 'vendor';
 
         $like = Like::where('post_id', $post->id)->where('liker_type', $liker_type)->where('liker_id', $liker->id)->first();
 

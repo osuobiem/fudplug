@@ -4,7 +4,7 @@
 
 <style>
     #cover-holder {
-        background-image: url("{{ Storage::url('vendor/cover/'.Auth::user()->cover_image) }}");
+        background-image: url("{{ Storage::url('vendor/cover/'.Auth::user('vendor')->cover_image) }}");
     }
 
 </style>
@@ -13,7 +13,7 @@
 
     <div id="cover-holder">
         <!-- Cover image holder -->
-        <img id="cover" src="{{ Storage::url('vendor/cover/'.Auth::user()->cover_image) }}" class="d-none">
+        <img id="cover" src="{{ Storage::url('vendor/cover/'.Auth::user('vendor')->cover_image) }}" class="d-none">
         <!-- Cover image file input -->
         <input type="file" class="sr-only" id="cover-input" name="cover-image" accept="image/*">
 
@@ -34,20 +34,20 @@
         </div>
 
         <div class="py-4 px-3 border-bottom text-center">
-            <img id="avatar" src="{{ Storage::url('vendor/profile/'.Auth::user()->profile_image) }}"
+            <img id="avatar" src="{{ Storage::url('vendor/profile/'.Auth::user('vendor')->profile_image) }}"
                 class="mt-2 img-fluid rounded-circle col-md-3" alt="Responsive image">
             <input type="file" class="sr-only" id="input" name="image" accept="image/*">
             <br />
 
-            <h5 class="font-weight-bold text-white mb-1 mt-4">{{ Auth::user()->business_name }}</h5>
-            <p class="mb-0 text-white">@<b>{{ Auth::user()->username }}</b></p>
+            <h5 class="font-weight-bold text-white mb-1 mt-4">{{ Auth::user('vendor')->business_name }}</h5>
+            <p class="mb-0 text-white">@<b>{{ Auth::user('vendor')->username }}</b></p>
         </div>
     </div>
     <div class="text-center">
         <div class="row">
             <div class="col-6 border-right p-2">
                 <h6 class="font-weight-bold text-dark mb-1">Joined</h6>
-                <p class="mb-0 text-black-50 small">{{ date("d M, Y", strtotime(Auth::user()->created_at)) }}
+                <p class="mb-0 text-black-50 small">{{ date("d M, Y", strtotime(Auth::user('vendor')->created_at)) }}
                 </p>
             </div>
             <div class="col-6 p-2">
@@ -93,15 +93,15 @@
                         <tbody>
                             <tr class="border-bottom">
                                 <th class="p-3">Email</th>
-                                <td class="p-3">{{ Auth::user()->email }}</td>
+                                <td class="p-3">{{ Auth::user('vendor')->email }}</td>
                             </tr>
                             <tr class="border-bottom">
                                 <th class="p-3">Phone</th>
-                                <td class="p-3">{{ Auth::user()->phone_number }}</td>
+                                <td class="p-3">{{ Auth::user('vendor')->phone_number }}</td>
                             </tr>
                             <tr class="border-bottom">
                                 <th class="p-3">Address</th>
-                                <td class="p-3">{{ Auth::user()->address }}</td>
+                                <td class="p-3">{{ Auth::user('vendor')->address }}</td>
                             </tr>
                             <tr class="border-bottom">
                                 <th class="p-3">Media Handles</th>
@@ -141,7 +141,7 @@
                             </tr>
                             <tr class="border-bottom">
                                 <th class="p-3">About</th>
-                                <td class="p-3">{{ Auth::user()->about_business }}</td>
+                                <td class="p-3">{{ Auth::user('vendor')->about_business }}</td>
                             </tr>
                         </tbody>
                     </table>
@@ -155,7 +155,7 @@
                     <h6 class="m-0">About</h6>
                 </div>
                 <div class="box-body p-3">
-                    <p>{{ Auth::user()->about_business }}</p>
+                    <p>{{ Auth::user('vendor')->about_business }}</p>
                 </div> -->
                 <div class="alert alert-warning">
                     Coming soon

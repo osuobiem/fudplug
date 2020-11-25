@@ -11,7 +11,7 @@
             <div class="modal-body">
                 <div class="img-container">
                     <img id="image" class="img-edit"
-                        src="{{ Storage::url('vendor/profile/'.Auth::user()->profile_image) }}">
+                        src="{{ Storage::url('vendor/profile/'.Auth::user('vendor')->profile_image) }}">
                 </div>
                 <div class="progress" style="display: none;">
                     <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar"

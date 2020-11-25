@@ -62,7 +62,7 @@ class CommentController extends Controller
         $post = Post::findOrFail($post_id);
 
         // Get commentor
-        if (!Auth::guest()) {
+        if (!Auth::guard('vendor')->guest()) {
             $commentor = $request->user();
             $commentor_id = $commentor->id;
             $commentor_type = 'vendor';
@@ -144,7 +144,7 @@ class CommentController extends Controller
         $comment = Comment::findOrFail($id);
 
         // Get commentor
-        if (Auth::guest() && Auth::guard('user')->guest()) {
+        if (Auth::guard('vendor')->guest() && Auth::guard('user')->guest()) {
             return response()->json([
                 'success' => false,
                 'message' => "You're not logged in"
