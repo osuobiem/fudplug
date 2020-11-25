@@ -60,11 +60,11 @@
 						<a class="nav-link dropdown-toggle pr-0 u-link" href="#" role="button" data-toggle="dropdown"
 							aria-haspopup="true" aria-expanded="false">
 							<p class="m-auto d-none d-md-block bright-ic" style="font-size: medium;">
-								{{ strlen(Auth::user()->business_name) > 20 ? substr(Auth::user()->business_name, 0, 15).'...' : Auth::user()->business_name }}
+								{{ strlen(Auth::user('vendor')->business_name) > 20 ? substr(Auth::user('vendor')->business_name, 0, 15).'...' : Auth::user('vendor')->business_name }}
 							</p>
 							&nbsp; &nbsp;
 							<img class="img-profile rounded-circle"
-								src="{{ Storage::url('vendor/profile/'.Auth::user()->profile_image) }}">
+								src="{{ Storage::url('vendor/profile/'.Auth::user('vendor')->profile_image) }}">
 							<i class="feather-chevron-down"></i>
 						</a>
 						<!-- Dropdown - User Information -->

@@ -29,7 +29,7 @@
 				<ul class="navbar-nav ml-auto d-flex align-items-center">
 
 					<!-- Nav Item - User Information -->
-					@if(Auth::guest())
+					@if(Auth::guard('vendor')->guest())
 					<li class="nav-item nav-link ml-1 p-0">
 						<a class="btn btn-primary text-light hover-lift" id="login-btn-top" href="#loginModal" data-toggle="modal">
 							<strong>

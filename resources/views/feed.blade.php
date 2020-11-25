@@ -2,7 +2,7 @@
 
 @section('content')
 
-@if(!Auth::guest())
+@if(!Auth::guard('vendor')->guest())
 @include('vendor.components.post-modal')
 @endif
 

@@ -25,8 +25,8 @@ function format_time($time) {
 }
 
 $id = '';
-if(!Auth::guest()) {
-  $id = Auth::user()->id;
+if(!Auth::guard('vendor')->guest()) {
+  $id = Auth::user('vendor')->id;
 }
 @endphp
 
@@ -43,7 +43,7 @@ if(!Auth::guest()) {
     <span class="ml-auto small">{{ format_time($post->created_at) }}</span>
 
     {{-- Post Dropdown --}}
-    @if(!Auth::guest() || !Auth::guard('user')->guest())
+    @if(!Auth::guard('vendor')->guest() || !Auth::guard('user')->guest())
       <i class="la la-ellipsis-v la-2x icon-hover bright-ic ml-2 p-0" data-toggle="dropdown">
         <div class="dropdown-menu dropdown-menu-right shadow">
           @if($id == $post->vendor_id)
@@ -103,9 +103,9 @@ if(!Auth::guest()) {
   @php
   $is_liker = false;
 
-  if(!Auth::guest() || !Auth::guard('user')->guest()) {
-    $liker_type = Auth::guest() ? 'user' : 'vendor';
-    $liker = Auth::guest() ? Auth::guard('user')->user() : Auth::user();
+  if(!Auth::guard('vendor')->guest() || !Auth::guard('user')->guest()) {
+    $liker_type = Auth::guard('vendor')->guest() ? 'user' : 'vendor';
+    $liker = Auth::guard('vendor')->guest() ? Auth::guard('user')->user() : Auth::user('vendor');
 
     $is_liker = $post->like()->where('liker_id', $liker->id)->where('liker_type', $liker_type)->count();
 
