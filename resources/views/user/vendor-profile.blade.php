@@ -69,13 +69,9 @@
                         <a class="nav-link" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home"
                             aria-selected="false">Feed</a>
                     </li>
-                    <li class="nav-item d-lg-none">
-                        <a class="nav-link" id="home-tab" data-toggle="tab" href="#order" role="tab"
-                            aria-controls="home" aria-selected="false">Orders</a>
-                    </li>
-                    <li class="nav-item d-lg-none">
+                    <li class="nav-item">
                         <a class="nav-link" id="home-tab" data-toggle="tab" href="#menu-dish" role="tab"
-                            aria-controls="home" aria-selected="false">Menu/Dishes</a>
+                            aria-controls="home" aria-selected="false">Menu</a>
                     </li>
                 </ul>
             </div>
@@ -164,90 +160,62 @@
             </div>
         </div>
 
+        <div class="tab-pane fade" id="menu-dish" role="tabpanel" aria-labelledby="menu-dish-tab">
+            <div class="box shadow-sm border rounded bg-white mb-3 p-3">
+                <div class="box-body p-3 overflow-auto generic-scrollbar" style="height: 300px;">
+                    @if(!empty($vendor_menu))
+                    @foreach($vendor_menu as $menu_dish)
+                    <div class="box shadow-sm mb-3 rounded bg-white text-center overflow-hidden">
+                        <div class="float-left col-6">
+                            <img src="{{Storage::url('vendor/dish/'.$menu_dish->image)}}" class="img-fluid"
+                                alt="Responsive image">
+                        </div>
+                        <div class="float-right col-6">
+                            <div class="p-3 border-bottom">
+                                <h6 class="font-weight-bold text-dark">{{$menu_dish->title}}</h6>
+                                <p class="mb-0 text-muted">Looking for food?</p>
+                            </div>
+                            <div class="p-3">
+                                <button type="button" onclick="viewDish('{{$menu_dish->id}}')"
+                                    class="btn btn-sm btn-outline-danger btn-block pl-4 pr-4"> View </button>
+                            </div>
+                        </div>
+                    </div>
 
-        <div class="tab-pane fade d-lg-none" id="order" role="tabpanel" aria-labelledby="order-tab">
 
-            <div class="box shadow-sm border rounded bg-white mb-3">
-                <div class="box-title border-bottom p-3">
-                    <h6 class="m-0">Orders</h6>
-                </div>
-                <div class="box-body p-3 h-100 overflow-auto">
-                    <div class="d-flex align-items-center osahan-post-header mb-3 people-list">
-                        <div class="dropdown-list-image mr-3">
-                            <img class="rounded-circle" src="{{ url('assets/img/p4.png') }}" alt="">
-                            <div class="status-indicator bg-success"></div>
-                        </div>
-                        <div class="font-weight-bold mr-2">
-                            <div class="text-truncate">Sophia Lee</div>
-                            <div class="small text-gray-500">@Harvard
-                            </div>
-                        </div>
-                        <span class="ml-auto"><button type="button" class="btn btn-outline-danger btn-sm">View</button>
-                        </span>
+
+
+
+                    <!-- <div class="d-flex align-items-center osahan-post-header mb-3 people-list">
+                    <div class="dropdown-list-image mr-3">
+                        <img class="rounded-circle" src="{{Storage::url('vendor/dish/'.$menu_dish->image)}}" alt="">
+
                     </div>
-                    <div class="d-flex align-items-center osahan-post-header mb-3 people-list">
-                        <div class="dropdown-list-image mr-3">
-                            <img class="rounded-circle" src="{{ url('assets/img/p9.png') }}" alt="">
-                            <div class="status-indicator bg-success"></div>
+                    <div class="font-weight-bold mr-2">
+                        <div class="text-truncate">
+                            {{$menu_dish->title}}
                         </div>
-                        <div class="font-weight-bold mr-2">
-                            <div class="text-truncate">John Doe</div>
-                            <div class="small text-gray-500">Traveler
-                            </div>
-                        </div>
-                        <span class="ml-auto"><button type="button" class="btn btn-outline-danger btn-sm">View</button>
-                        </span>
                     </div>
-                    <div class="d-flex align-items-center osahan-post-header mb-3 people-list">
-                        <div class="dropdown-list-image mr-3">
-                            <img class="rounded-circle" src="{{ url('assets/img/p10.png') }}" alt="">
-                            <div class="status-indicator bg-success"></div>
+                    <span title="add to today's menu" class="ml-auto">
+                        <button type="button" class="btn btn-outline-danger btn-sm text-nowrap"
+                            onclick="viewDish('{{$menu_dish->id}}')"><i class="feather-eye"></i>
+                            View</button>
+                         <div class="custom-control custom-switch pull-left">
+                            <input type="checkbox" class="custom-control-input" id="customSwitch1">
+                            <label class="custom-control-label" for="customSwitch1"></label>
                         </div>
-                        <div class="font-weight-bold mr-2">
-                            <div class="text-truncate">Julia Cox</div>
-                            <div class="small text-gray-500">Art Designer
-                            </div>
-                        </div>
-                        <span class="ml-auto"><button type="button" class="btn btn-outline-danger btn-sm">View</button>
-                        </span>
+                    </span>
+                </div> -->
+                    @endforeach
+                    @else
+                    <div class="bg-light text-center" style="height:inherit; padding-top: 7rem;">
+                        <i class="las la-info" style="font-size:xx-large;"></i><br>
+                        <small>Empty Content</small>
                     </div>
-                    <div class="d-flex align-items-center osahan-post-header mb-3 people-list">
-                        <div class="dropdown-list-image mr-3">
-                            <img class="rounded-circle" src="{{ url('assets/img/p11.png') }}" alt="">
-                            <div class="status-indicator bg-success"></div>
-                        </div>
-                        <div class="font-weight-bold mr-2">
-                            <div class="text-truncate">Robert Cook</div>
-                            <div class="small text-gray-500">@Photography
-                            </div>
-                        </div>
-                        <span class="ml-auto"><button type="button" class="btn btn-outline-danger btn-sm">View</button>
-                        </span>
-                    </div>
-                    <div class="d-flex align-items-center osahan-post-header people-list">
-                        <div class="dropdown-list-image mr-3">
-                            <img class="rounded-circle" src="{{ url('assets/img/p12.png') }}" alt="">
-                            <div class="status-indicator bg-success"></div>
-                        </div>
-                        <div class="font-weight-bold mr-2">
-                            <div class="text-truncate">Richard Bell</div>
-                            <div class="small text-gray-500">@Envato
-                            </div>
-                        </div>
-                        <span class="ml-auto"><button type="button" class="btn btn-outline-danger btn-sm">View</button>
-                        </span>
-                    </div>
-                </div>
-                <div class="box-footer p-2 border-top">
-                    <button type="button" class="btn btn-primary btn-block"> View all </button>
+                    @endif
+
                 </div>
             </div>
-
-        </div>
-
-        <div class="tab-pane fade d-lg-none right-side-small" id="menu-dish" role="tabpanel"
-            aria-labelledby="menu-dish-tab">
-
         </div>
     </div>
 

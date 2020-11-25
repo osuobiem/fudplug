@@ -229,11 +229,11 @@
 
 
     {{-- Execute for Different Users --}}
-    @if(Auth::check())
+    @if(!Auth::guard('vendor')->guest())
     <!-- Vendor Scipts -->
     <script src="{{ url('assets/js/vendor.js') }}" server="{{ url('') }}"></script>
     <!-- Vendor Scipts -->
-    @elseif(Auth::guard('user')->check())
+    @elseif(!Auth::guard('user')->guest())
     <!-- USER SCRIPTS -->
     <script src="{{ url('assets/js/user.js') }}" server="{{ url('') }}"></script>
     <!-- USER SCRIPTS -->

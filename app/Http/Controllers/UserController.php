@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Area;
+use App\Item;
+use App\Menu;
 use App\Rules\MatchOldPassword;
 use App\State;
 use App\User;
@@ -541,6 +543,9 @@ class UserController extends Controller
             // Get States Data
             $states = State::get();
 
+            // Get Vendor Menu
+            $vendor_menu = $this->vendor_menu($vendor_id)['menu_dishes'];
+
             // Vendor Details
             $vendor = Vendor::where('id', $vendor_id)->first();
 
@@ -556,9 +561,42 @@ class UserController extends Controller
             // Social Media Links
             $social_handles = json_decode($vendor->social_handles);
 
-            return view('user.vendor-profile', compact('vendor', 'vendor_location', 'states', 'areas', 'social_handles'));
+            return view('user.vendor-profile', compact('vendor', 'vendor_location', 'states', 'areas', 'social_handles', 'vendor_menu'));
         } catch (\Throwable $th) {
             Log::error($th);
         }
+    }
+
+    /**
+     * Fetch Vendor Menu
+     * @return Array
+     */
+    public function vendor_menu($vendor)
+    {
+        // Fetch the Menu Item
+        $menu = Menu::where('vendor_id', $vendor)->first("items");
+        if (!empty($menu)) {
+            $menu = json_decode($menu);
+
+            // Get the Array of Dish IDs
+            $menu_items = json_decode($menu->items);
+            $menu_items = $menu_items->item;
+
+            if (!empty($menu)) {
+                // Fetch Dishes for Menu
+                $menu_data = Item::select("*")
+                    ->whereIn('id', $menu_items);
+                $menu_count = $menu_data->count();
+                $menu_dishes = $menu_data->get();
+            } else {
+                $menu_count = 0;
+                $menu_dishes = null;
+            }
+        } else {
+            $menu_items = null;
+            $menu_dishes = null;
+        }
+
+        return compact('menu_count', 'menu_items', 'menu_dishes');
     }
 }
