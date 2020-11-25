@@ -142,7 +142,6 @@ Route::group(['prefix' => 'comment'], function () {
 });
 // -------------
 
-
 // SOCKET ROUTES
 Route::group(['prefix' => 'socket'], function () {
     // Get Comments

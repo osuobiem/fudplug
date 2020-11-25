@@ -221,6 +221,7 @@
         $(document).ready(function () {
             initIO(`{{ env('SOCKET_SERVER') }}`, `{{ $logged_in->username }}`, `{{ $logged_in->area_id }}`)
         });
+
     </script>
     @else
     <script src="{{ url('assets/js/not-logged-in.js') }}"></script>
