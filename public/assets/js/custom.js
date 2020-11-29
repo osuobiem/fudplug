@@ -1,3 +1,11 @@
+$(document).ready(function () {
+    $('#comments-holder').scroll(() => {
+        if(comments_holder.scrollHeight - comments_holder.scrollTop <= 420) {
+            $('#see-n-comms-btn').addClass('d-none');
+        }
+    })
+});
+
 // Fill Picked Image in Div
 function fillImage(input, fillId) {
     let img = document.getElementById(fillId);
@@ -282,3 +290,9 @@ function closeComments() {
 $(".comments-inner").click(() => {
     event.stopPropagation();
 });
+
+// Scroll To Comments Bottom
+function scrollToNewComments() {
+    comments_holder.scrollTop = comments_holder.scrollHeight;
+    $('#see-n-comms-btn').addClass('d-none')
+}

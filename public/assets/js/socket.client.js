@@ -58,7 +58,7 @@ function initIO(server, username, area) {
                 comments_holder.scrollTop = comments_holder.scrollHeight;
             }
             else {
-                
+                $('#see-n-comms-btn').removeClass('d-none');
             }
 
             // Clear Textarea

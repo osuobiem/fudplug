@@ -215,7 +215,7 @@
 
     <!-- Socket.IO -->
     <script src="{{ url('assets/js/socket.io/socket.io.min.js') }}"></script>
-    <script src="{{ url('assets/js/socket.io.js') }}"></script>
+    <script src="{{ url('assets/js/socket.client.js') }}"></script>
     @php $logged_in = Auth::guard('vendor')->guest() ? Auth::guard('user')->user() : Auth::user('vendor'); @endphp
     <script>
         $(document).ready(function () {
