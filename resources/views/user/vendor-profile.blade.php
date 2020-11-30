@@ -162,62 +162,87 @@
 
         <div class="tab-pane fade" id="menu-dish" role="tabpanel" aria-labelledby="menu-dish-tab">
             <div class="box shadow-sm border rounded bg-white mb-3 p-3">
-                <div class="box-body p-3 overflow-auto generic-scrollbar" style="height: 300px;">
+                <div class="box-body row p-3 overflow-auto generic-scrollbar" style="height: 300px;">
                     @if(!empty($vendor_menu))
                     @foreach($vendor_menu as $menu_dish)
-                    <div class="box shadow-sm mb-3 rounded bg-white text-center overflow-hidden">
+
+                    <div class="col-md-6">
+                        <div class="border shadow-sm border rounded bg-white job-item-2 p-3 mb-3">
+                            <div class="media">
+                                <div class="u-avatar mr-3">
+                                    <img class="img-fluid rounded-circle"
+                                        src="{{Storage::url('vendor/dish/'.$menu_dish->image)}}"
+                                        alt="Image Description">
+                                </div>
+                                <div class="media-body">
+                                    <div class="mb-3">
+                                        <h6 class="font-weight-bold mb-0"><a class="text-dark"
+                                                href="job-profile.html">{{$menu_dish->title}}</a></h6>
+                                        <a class="d-inline-block small pt-1" href="job-profile.html">
+                                            <span class="text-warning">
+                                                <span class="feather-star"></span>
+                                                <span class="feather-star"></span>
+                                                <span class="feather-star"></span>
+                                                <span class="feather-star text-gray-500"></span>
+                                                <span class="feather-star text-gray-500"></span>
+                                            </span>
+                                            <span class="text-dark font-weight-bold ml-2">3.74</span>
+                                            <span class="text-muted">(567 reviews)</span>
+                                        </a>
+                                    </div>
+                                    <div class="d-flex align-items-center">
+                                        <div class="border-right pr-3 mr-3">
+                                            <a class="text-secondary small" href="job-profile.html">Bulk Order</a>
+                                        </div>
+                                        <a class="small" onclick="loadRegOrderModal('{{$menu_dish->id}}')">Regular
+                                            Order</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+
+                    {{-- <div class="box h-50 shadow-sm mb-3 rounded bg-white text-center overflow-hidden">
                         <div class="float-left col-6">
                             <img src="{{Storage::url('vendor/dish/'.$menu_dish->image)}}" class="img-fluid"
-                                alt="Responsive image">
-                        </div>
-                        <div class="float-right col-6">
-                            <div class="p-3 border-bottom">
-                                <h6 class="font-weight-bold text-dark">{{$menu_dish->title}}</h6>
-                                <p class="mb-0 text-muted">Looking for food?</p>
-                            </div>
-                            <div class="p-3">
-                                <button type="button" onclick="viewDish('{{$menu_dish->id}}')"
-                                    class="btn btn-sm btn-outline-danger btn-block pl-4 pr-4"> View </button>
-                            </div>
-                        </div>
-                    </div>
-
-
-
-
-
-                    <!-- <div class="d-flex align-items-center osahan-post-header mb-3 people-list">
-                    <div class="dropdown-list-image mr-3">
-                        <img class="rounded-circle" src="{{Storage::url('vendor/dish/'.$menu_dish->image)}}" alt="">
-
-                    </div>
-                    <div class="font-weight-bold mr-2">
-                        <div class="text-truncate">
-                            {{$menu_dish->title}}
-                        </div>
-                    </div>
-                    <span title="add to today's menu" class="ml-auto">
-                        <button type="button" class="btn btn-outline-danger btn-sm text-nowrap"
-                            onclick="viewDish('{{$menu_dish->id}}')"><i class="feather-eye"></i>
-                            View</button>
-                         <div class="custom-control custom-switch pull-left">
-                            <input type="checkbox" class="custom-control-input" id="customSwitch1">
-                            <label class="custom-control-label" for="customSwitch1"></label>
-                        </div>
-                    </span>
-                </div> -->
-                    @endforeach
-                    @else
-                    <div class="bg-light text-center" style="height:inherit; padding-top: 7rem;">
-                        <i class="las la-info" style="font-size:xx-large;"></i><br>
-                        <small>Empty Content</small>
-                    </div>
-                    @endif
-
+                    alt="Responsive image">
                 </div>
+                <div class="float-right col-6">
+                    <div class="p-3">
+                        <h6 class="font-weight-bold text-dark float-left">{{$menu_dish->title}}</h6>
+                        <!-- <p class="mb-0 text-muted">Looking for food?</p> -->
+                    </div>
+                    <div class="border-top mt-3 float-left">
+                        <span class="mb-0 text-muted">
+                            50
+                        </span>
+                    </div>
+                    <div class="float-right border-top mt-3">
+                        <span class="mb-0 text-muted border-left">
+                            100
+                        </span>
+                    </div>
+                    <div class="p-3">
+                        <button type="button" onclick="viewDish('{{$menu_dish->id}}')"
+                            class="btn btn-sm btn-outline-danger btn-block pl-4 pr-4"> View </button>
+                    </div>
+                </div>
+            </div> --}}
+            @endforeach
+            @else
+            <div class="bg-light text-center" style="height:inherit; padding-top: 7rem;">
+                <i class="las la-info" style="font-size:xx-large;"></i><br>
+                <small>Empty Content</small>
             </div>
+            @endif
+
         </div>
     </div>
+</div>
+</div>
 
 </div>
 @endsection

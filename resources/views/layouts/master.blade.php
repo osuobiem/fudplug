@@ -81,6 +81,8 @@
             <main class="col col-md-10 col-lg-6" id="main-content">
                 @yield('content')
 
+                <!-- ********************** VENDOR COMPONENTS ******************* -->
+
                 {{-- Dish Addition Modal--}}
                 @include('vendor.components.dish-add')
 
@@ -101,6 +103,16 @@
 
                 </div>
                 <!-- Menu Update Modal Holder -->
+
+                <!-- ********************* VENDOR COMPONENTS *********************** -->
+
+
+
+                <!-- ********************* USER COMPONENTS ************************* -->
+                <div id="regular-order-container">
+
+                </div>
+                <!-- ********************* USER COMPONENTS ************************* -->
             </main>
 
             {{--Right Sidebar Vendor--}}

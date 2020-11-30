@@ -106,6 +106,8 @@ Route::group(['prefix' => 'user'], function () {
         Route::get('all-vendors', 'UserController@all_vendors');
         // Vendor Profile Page
         Route::get('vendor-profile/{vendor_id}', 'UserController@vendor_profile');
+        // Order Details
+        Route::get('order-details/{dish_id}', 'UserController@order_details');
     });
 });
 // -------------

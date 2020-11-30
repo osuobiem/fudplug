@@ -63,6 +63,21 @@ function loadEditModal() {
     });
 }
 
+// Load Regular Order Modal
+function loadRegOrderModal(dishId) {
+    // spin('user-right-side');
+    // Populate regular-order modalcontainer
+    let getUrl = `${server}/user/order-details`;
+    getUrl += '/' + dishId;
+
+    goGet(getUrl).then((res) => {
+        $("#regular-order-container").html(res);
+        $("#regular-order-modal").modal('show');
+    }).catch((err) => {
+        //spin('user-right-side');
+    });
+}
+
 // Load User Left Side (Nearby Vendors)
 function loadUserLeft() {
     spin('user-left-side');

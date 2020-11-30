@@ -903,6 +903,10 @@ a:visited {
         height: 15px;
         width: 15px;
     }
+
+    .order-img {
+        height: 230px;
+    }
 }
 
 @media (min-width: 992px) {
@@ -1306,6 +1310,10 @@ a:visited {
 
     #see-n-comms-btn {
         left: 38%;
+    }
+
+    .order-img {
+        height: 410px;
     }
 }
 

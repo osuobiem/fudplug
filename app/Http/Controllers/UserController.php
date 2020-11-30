@@ -564,6 +564,7 @@ class UserController extends Controller
             return view('user.vendor-profile', compact('vendor', 'vendor_location', 'states', 'areas', 'social_handles', 'vendor_menu'));
         } catch (\Throwable $th) {
             Log::error($th);
+            dd($th);
         }
     }
 
@@ -593,10 +594,36 @@ class UserController extends Controller
                 $menu_dishes = null;
             }
         } else {
-            $menu_items = null;
+            $menu_count = 0;
             $menu_dishes = null;
         }
 
-        return compact('menu_count', 'menu_items', 'menu_dishes');
+        return compact('menu_count', 'menu_dishes');
+    }
+
+    /**
+     * Get Vendor Dishes
+     * @return object Laravel View Instance
+     */
+    public function order_details(Request $request, $dish_id)
+    {
+        try {
+            $dish = Item::where(['id' => $dish_id])->first();
+            $data = [];
+            if ($dish->type == "simple") {
+                $qty = json_decode($dish->quantity);
+                $data['dish'] = $dish;
+                $data['price'] = $qty->price;
+                $data['quantity'] = $qty->quantity;
+            } else {
+                $qty = $dish->quantity = json_decode($dish->quantity);
+                $data['dish'] = $dish;
+                $data['regular_qty'] = json_decode($qty->regular);
+                $data['bulk_qty'] = json_decode($qty->bulk);
+            }
+            return view('user.components.regular-order', $data);
+        } catch (\Throwable $th) {
+            Log::error($th);
+        }
     }
 }
