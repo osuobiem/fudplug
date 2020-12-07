@@ -626,4 +626,18 @@ class UserController extends Controller
             Log::error($th);
         }
     }
+
+    /**
+     * Process User Order Placing
+     * @return String
+     */
+    public function place_order(Request $request, $vendor_id)
+    {
+        try {
+            return response()->json(['success' => true, 'message' => 'Order placed successfully', 'request' => $request->all()], 200);
+        } catch (\Throwable $th) {
+            Log::error($th);
+            return response()->json(['success' => false, 'message' => $th->getMessage()], 500);
+        }
+    }
 }

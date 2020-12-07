@@ -108,6 +108,8 @@ Route::group(['prefix' => 'user'], function () {
         Route::get('vendor-profile/{vendor_id}', 'UserController@vendor_profile');
         // Order Details
         Route::get('order-details/{dish_id}', 'UserController@order_details');
+        // Place Order
+        Route::post('place-order/{vendor_id}', 'UserController@place_order');
     });
 });
 // -------------

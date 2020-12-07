@@ -42,167 +42,183 @@
                             src="{{Storage::url('vendor/dish/'.$dish->image)}}">
                     </div>
                     <div class="col-md-5">
-                        @if($dish->type == "simple")
-                        <div id="basics">
+                        <form id="order-form">
+                            @csrf
+                            @if($dish->type == "simple")
+                            <div id="basics">
 
-                            <div class="mb-5 pt-3 text-lg-left text-center">
-                                <div class="float-left">
-                                    <h4 class="font-weight-semi-bold">{{ucfirst($dish->title)}} </h4>
-                                </div>
-                            </div>
-
-                            <div id="basicsAccordion">
-                                <div class="box shadow-sm border rounded bg-white mb-2">
-                                    <div id="basicsHeadingOne">
-                                        <h5 class="mb-0">
-                                            <button
-                                                class="shadow-none btn btn-block d-flex justify-content-between card-btn p-3 collapsed font-weight-bold"
-                                                data-toggle="" data-target="#basicsCollapseOne" aria-expanded="false"
-                                                aria-controls="basicsCollapseOne">
-                                                Regular Quantity
-                                            </button>
-                                        </h5>
+                                <div class="mb-5 pt-3 text-lg-left text-center">
+                                    <div class="float-left">
+                                        <h4 class="font-weight-semi-bold">{{ucfirst($dish->title)}} </h4>
                                     </div>
-                                    <div id="basicsCollapseOne" class="collapse show" aria-labelledby="basicsHeadingOne"
-                                        data-parent="#basicsAccordion" style="">
-                                        <div class="card-body border-top p-2 text-muted" style="font-size: large;">
-                                            <ul id="price-type" id="item" class="list-group box-body generic-scrollbar"
-                                                style="max-height: 250px; overflow: auto;">
-                                                <li class="list-group-item pt-0">
-                                                    <div class="float-left col-4">
-                                                        <small>Price</small>
-                                                        <p class="mt-0">
-                                                            <span class="float-left text-danger"
-                                                                style="font-size: larger;">
-                                                                ₦{{$price}}</span>
-                                                            <!-- <span class="badge badge-secondary float-right">
+                                </div>
+
+                                <div id="basicsAccordion">
+                                    <div class="box shadow-sm border rounded bg-white mb-2">
+                                        <div id="basicsHeadingOne">
+                                            <h5 class="mb-0">
+                                                <button
+                                                    class="shadow-none btn btn-block d-flex justify-content-between card-btn p-3 collapsed font-weight-bold"
+                                                    data-toggle="" data-target="#basicsCollapseOne"
+                                                    aria-expanded="false" aria-controls="basicsCollapseOne">
+                                                    Regular Quantity
+                                                </button>
+                                            </h5>
+                                        </div>
+                                        <div id="basicsCollapseOne" class="collapse show"
+                                            aria-labelledby="basicsHeadingOne" data-parent="#basicsAccordion" style="">
+                                            <div class="card-body border-top p-2 text-muted" style="font-size: large;">
+                                                <ul id="price-type" id="item"
+                                                    class="list-group box-body generic-scrollbar"
+                                                    style="max-height: 250px; overflow: auto;">
+                                                    <li class="list-group-item pt-0">
+                                                        <div class="float-left col-4">
+                                                            <small>Price</small>
+                                                            <p class="mt-0">
+                                                                <span class="float-left text-danger"
+                                                                    style="font-size: larger;">
+                                                                    ₦{{$price}}</span>
+                                                                <!-- <span class="badge badge-secondary float-right">
                                                                 {{$quantity}} left</span> -->
-                                                        </p>
-                                                    </div>
-                                                    <div class="float-right col-7 offset-1 mt-4">
-                                                        <div class="input-group qty-field">
-                                                            <span class="input-group-btn">
-                                                                <button onclick="clicked(event, this);"
-                                                                    type="button bordered"
-                                                                    class="btn btn-sm btn-secondary btn-number rounded-right-0"
-                                                                    disabled="disabled" data-type="minus">
-                                                                    <span class="la la-minus"></span>
-                                                                </button>
-                                                            </span>
-                                                            <input type="text" onkeydown="keydown(event)"
-                                                                onchange="change(event, this)"
-                                                                onfocus="focusin(event, this)"
-                                                                class="form-control rounded-left-0 rounded-right-0 form-control-sm qty-input"
-                                                                value="0" min="0" max="10">
-                                                            <span class="input-group-btn">
-                                                                <button onclick="clicked(event, this);" type="button"
-                                                                    class="btn btn-sm btn-secondary btn-number rounded-left-0"
-                                                                    data-type="plus">
-                                                                    <span class="la la-plus"></span>
-                                                                </button>
-                                                            </span>
+                                                            </p>
+                                                            <input name="order_detail[]" type="hidden"
+                                                                value="['{{$dish->title}}', '{{$price}}', '']" disabled>
                                                         </div>
-                                                    </div>
-                                                </li>
-                                            </ul>
+                                                        <div class="float-right col-7 offset-1 mt-4">
+                                                            <div class="input-group qty-field">
+                                                                <span class="input-group-btn">
+                                                                    <button onclick="clicked(event, this);"
+                                                                        type="button bordered"
+                                                                        class="btn btn-sm btn-secondary btn-number rounded-right-0"
+                                                                        disabled="disabled" data-type="minus">
+                                                                        <span class="la la-minus"></span>
+                                                                    </button>
+                                                                </span>
+                                                                <input type="text" name="order_quantity[]"
+                                                                    onkeydown="keydown(event)"
+                                                                    onchange="change(event, this)"
+                                                                    onfocus="focusin(event, this)"
+                                                                    class="form-control rounded-left-0 rounded-right-0 form-control-sm qty-input"
+                                                                    value="0" min="0" max="{{$quantity}}">
+                                                                <span class="input-group-btn">
+                                                                    <button onclick="clicked(event, this);"
+                                                                        type="button"
+                                                                        class="btn btn-sm btn-secondary btn-number rounded-left-0"
+                                                                        data-type="plus">
+                                                                        <span class="la la-plus"></span>
+                                                                    </button>
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                    </li>
+                                                </ul>
+                                            </div>
                                         </div>
                                     </div>
+
                                 </div>
 
                             </div>
 
-                        </div>
+                            @else
+                            <div id="basics">
 
-                        @else
-                        <div id="basics">
-
-                            <div class="mb-5 pt-3 text-lg-left text-center">
-                                <div class="float-left">
-                                    <h4 class="font-weight-semi-bold">{{ucfirst($dish->title)}} </h4>
-                                </div>
-                            </div>
-                            <div id="basicsAccordion">
-
-                                <div class="box shadow-sm border rounded bg-white mb-2">
-                                    <div id="basicsHeadingOne">
-                                        <h5 class="mb-0">
-                                            <button
-                                                class="shadow-none btn btn-block d-flex justify-content-between card-btn p-3 collapsed font-weight-bold"
-                                                data-toggle="collapse" data-target="#basicsCollapseOne"
-                                                aria-expanded="false" aria-controls="basicsCollapseOne">
-                                                Regular Quantity
-                                                <span class="card-btn-arrow">
-                                                    <span class="la la-chevron-down"></span>
-                                                </span>
-                                            </button>
-                                        </h5>
+                                <div class="mb-5 pt-3 text-lg-left text-center">
+                                    <div class="float-left">
+                                        <h4 class="font-weight-semi-bold">{{ucfirst($dish->title)}} </h4>
                                     </div>
-                                    <div id="basicsCollapseOne" class="collapse show" aria-labelledby="basicsHeadingOne"
-                                        data-parent="#basicsAccordion" style="">
-                                        <div class="card-body border-top p-2 text-muted" style="font-size: large;">
-                                            <ul id="price-type" class="list-group box-body generic-scrollbar"
-                                                style="max-height: 250px; overflow: auto;">
-                                                @php
-                                                $i = 1;
-                                                @endphp
-                                                @foreach($regular_qty as $qty)
-                                                <li id="price-type" class="list-group-item pt-0 col">
-                                                    <div class="float-left col-4">
-                                                        <small>{{$qty->title}}</small>
-                                                        <p class="mt-0">
-                                                            <span class="float-left text-danger"
-                                                                style="font-size: larger;">
-                                                                ₦{{$qty->price}}</span>
-                                                            <!-- {{$qty->quantity}} left -->
-                                                        </p>
-                                                    </div>
-                                                    <div class="float-right col-7 offset-1 mt-4">
-                                                        <div class="input-group qty-field">
-                                                            <span class="input-group-btn">
-                                                                <button onclick="clicked(event, this);"
-                                                                    type="button bordered"
-                                                                    class="btn btn-sm btn-secondary btn-number rounded-right-0"
-                                                                    disabled="disabled" data-type="minus"
-                                                                    data-field="quant[{{$i}}]">
-                                                                    <span class="la la-minus"></span>
-                                                                </button>
-                                                            </span>
-                                                            <input type="text" onkeydown="keydown(event)"
-                                                                onchange="change(event, this)"
-                                                                onfocus="focusin(event, this)" name="quant[{{$i}}]"
-                                                                class="form-control rounded-left-0 rounded-right-0 form-control-sm qty-input"
-                                                                value="0" min="0" max="10">
-                                                            <span class="input-group-btn">
-                                                                <button onclick="clicked(event, this);" type="button"
-                                                                    class="btn btn-sm btn-secondary btn-number rounded-left-0"
-                                                                    data-type="plus" data-field="quant[{{$i}}]">
-                                                                    <span class="la la-plus"></span>
-                                                                </button>
-                                                            </span>
+                                </div>
+                                <div id="basicsAccordion">
+
+                                    <div class="box shadow-sm border rounded bg-white mb-2">
+                                        <div id="basicsHeadingOne">
+                                            <h5 class="mb-0">
+                                                <button
+                                                    class="shadow-none btn btn-block d-flex justify-content-between card-btn p-3 collapsed font-weight-bold"
+                                                    data-toggle="collapse" data-target="#basicsCollapseOne"
+                                                    aria-expanded="false" aria-controls="basicsCollapseOne">
+                                                    Regular Quantity
+                                                    <span class="card-btn-arrow">
+                                                        <span class="la la-chevron-down"></span>
+                                                    </span>
+                                                </button>
+                                            </h5>
+                                        </div>
+                                        <div id="basicsCollapseOne" class="collapse show"
+                                            aria-labelledby="basicsHeadingOne" data-parent="#basicsAccordion" style="">
+                                            <div class="card-body border-top p-2 text-muted" style="font-size: large;">
+
+                                                <ul id="price-type" class="list-group box-body generic-scrollbar"
+                                                    style="max-height: 250px; overflow: auto;">
+                                                    @php
+                                                    $i = 1;
+                                                    @endphp
+                                                    @foreach($regular_qty as $qty)
+                                                    <li id="price-type" class="list-group-item pt-0 col">
+                                                        <div class="float-left col-4">
+                                                            <small>{{$qty->title}}</small>
+                                                            <p class="mt-0">
+                                                                <span class="float-left text-danger"
+                                                                    style="font-size: larger;">
+                                                                    ₦{{$qty->price}}</span>
+                                                                <!-- {{$qty->quantity}} left -->
+                                                            </p>
+                                                            <input name="order_detail[]" type="hidden"
+                                                                value="['{{$dish->title}}', '{{$qty->price}}', '{{$qty->title}}']"
+                                                                disabled>
                                                         </div>
-                                                    </div>
-                                                </li>
-                                                @php
-                                                $i++;
-                                                @endphp
-                                                @endforeach
-                                            </ul>
+                                                        <div class="float-right col-7 offset-1 mt-4">
+                                                            <div class="input-group qty-field">
+                                                                <span class="input-group-btn">
+                                                                    <button onclick="clicked(event, this);"
+                                                                        type="button bordered"
+                                                                        class="btn btn-sm btn-secondary btn-number rounded-right-0"
+                                                                        disabled="disabled" data-type="minus">
+                                                                        <span class="la la-minus"></span>
+                                                                    </button>
+                                                                </span>
+                                                                <input type="text" onkeydown="keydown(event)"
+                                                                    onchange="change(event, this)"
+                                                                    onfocus="focusin(event, this)"
+                                                                    name="order_quantity[]"
+                                                                    class="form-control rounded-left-0 rounded-right-0 form-control-sm qty-input"
+                                                                    value="0" min="0" max="{{$qty->quantity}}" disabled>
+                                                                <span class="input-group-btn">
+                                                                    <button onclick="clicked(event, this);"
+                                                                        type="button"
+                                                                        class="btn btn-sm btn-secondary btn-number rounded-left-0"
+                                                                        data-type="plus">
+                                                                        <span class="la la-plus"></span>
+                                                                    </button>
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                    </li>
+                                                    @php
+                                                    $i++;
+                                                    @endphp
+                                                    @endforeach
+                                                </ul>
+
+                                            </div>
                                         </div>
                                     </div>
+
                                 </div>
 
                             </div>
-
-                        </div>
-                        @endif
-                        <div class="row">
-                            <div class="col-md-12 mt-xs-2">
-                                <button type="submit" class="btn btn-sm btn-primary btn-block" data-attach-loading="">
-                                    PLACE ORDER <span id="final-price" class="float-right"
-                                        data-item-subtotal="">₦0.00</span>
-                                </button>
+                            @endif
+                            <div class="row">
+                                <div class="col-md-12 mt-xs-2">
+                                    <button type="submit" id="order-btn"
+                                        class="btn btn-sm btn-primary btn-block font-weight-bold"
+                                        data-attach-loading="true" disabled>
+                                        PLACE ORDER <span id="final-price" class="float-right"
+                                            data-item-subtotal="">₦0.00</span>
+                                    </button>
+                                </div>
                             </div>
-                        </div>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -213,7 +229,13 @@
 <span class="d-none" data-toggle="modal" href="#loginModal" id="login-pop"></span>
 
 <script>
-    // Quantity input script
+    /*********************************** Quantity input script **************************************/
+    $(document).ready(function () {
+        $("#order-form").submit(function (el) {
+            placeOrder(el, '{{$dish->vendor_id}}');
+        });
+    });
+
     function clicked(e, element) {
         e.preventDefault();
         fieldName = $(element).attr('data-field');
@@ -254,7 +276,11 @@
         maxValue = parseInt($(element).attr('max'));
         valueCurrent = parseInt($(element).val());
 
+        // Compute total amount and bind to order button. Also disable and enable order button
         bindQtyPrice(element);
+
+        // Disable and enable details input field
+        handleDetailInput(element);
 
         name = $(element).attr('name');
         if (valueCurrent >= minValue) {
@@ -300,7 +326,7 @@
     }
     /****** Initiate price input field state ***************/
 
-
+    // Function to compute total amount and bind to order button. Also disable and enable order button
     function bindQtyPrice(element) {
         let index = $(element).parent().parent().parent().index();
         let price = Number($(element).parent().parent().prev().find('span').text().replace('₦', '').trim());
@@ -309,8 +335,50 @@
         prices[index] = finalTotal;
         finalTotal = prices.reduce((a, b) => a + b);
 
-        $("#final-price").text('₦' + String(finalTotal.toFixed(2)));
+        if (finalTotal < 1) {
+            $("#final-price").text('₦' + String(finalTotal.toFixed(2)));
+            $("#order-btn").attr('disabled', '');
+        } else {
+            $("#final-price").text('₦' + String(finalTotal.toFixed(2)));
+            $("#order-btn").removeAttr('disabled');
+        }
     }
-    // Quantity input script
+
+    // Function to disable and enable details input field
+    function handleDetailInput(element) {
+        valueCurrent = parseInt($(element).val());
+        if (valueCurrent < 1) {
+            $(element).parent().parent().prev().find('input').attr('disabled', '');
+        } else {
+            $(element).parent().parent().prev().find('input').removeAttr('disabled');
+        }
+    }
+
+    // Place order
+    function placeOrder(el, vendorId) {
+        el.preventDefault()
+
+        // spin('profile')
+        offError('pr-update-error')
+
+        let url = `{{url('user/place-order')}}`;
+        url += '/' + vendorId;
+        let data = new FormData(el.target)
+
+        goPost(url, data)
+            .then(res => {
+                // spin('profile')
+
+                if (handleFormRes(res)) {
+                    showAlert(true, res.message);
+                }
+            })
+            .catch(err => {
+                // spin('profile');
+                handleFormRes(err, 'pr-update-error');
+            })
+    }
+
+    /*********************************** Quantity input script **************************************/
 
 </script>
