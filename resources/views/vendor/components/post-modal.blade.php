@@ -10,7 +10,7 @@
     </ul>
     <div class="tab-content" id="myTabContent">
       <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
-        <div class="p-3 pt-2 d-flex align-items-center w-100" href="#">
+        <div class="p-3 pt-2 d-flex align-items-center w-100" href="#1">
           <div class="post-textarea-cont-2 w-100">
             <textarea placeholder="Post something delicious..." id="dummy-post-area" disabled class="form-control border-0 p-0 shadow-none"
               rows="2"></textarea>
@@ -39,7 +39,7 @@
       <!-- Post Text -->
       <div class="tab-content" id="myTabContent">
         <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
-          <div class="p-3 pt-2 d-flex align-items-center w-100" href="#">
+          <div class="p-3 pt-2 d-flex align-items-center w-100" href="#1">
             <div class="post-textarea-cont w-100">
               <textarea placeholder="Post something delicious..."
                 class="form-control border-0 p-0 shadow-none post-input" required name="content" rows="5"
@@ -73,8 +73,8 @@
       <!-- Post Modal Foot -->
       <div class="border-top p-3 d-flex align-items-center">
         <div class="mr-auto" id="media-input-div">
-          <a href="#" id="pick-image" class="post-ico"><i class="la la-camera-retro la-2x p-1 icon-hover"></i></a>
-          <a href="#" id="pick-video" class="ml-2 post-ico"><i class="la la-video la-2x p-1 icon-hover"></i></a>
+          <a href="#1" id="pick-image" class="post-ico"><i class="la la-camera-retro la-2x p-1 icon-hover"></i></a>
+          <a href="#1" id="pick-video" class="ml-2 post-ico"><i class="la la-video la-2x p-1 icon-hover"></i></a>
         </div>
         <button type="button" class="btn btn-outline-danger px-5 btn-lg ml-auto" onclick="submitPost()" type="submit"
           id="post-btn">

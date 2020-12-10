@@ -250,42 +250,6 @@ function launchLight(a) {
     document.getElementById("light-" + a).click();
 }
 
-
-// Spy for open comment modal
-commentModalOpen = false;
-
-// Open Comments Modal
-function openComments(post_id) {
-    $("body").addClass("modal-open");
-    $(".comments-container").removeClass("d-none");
-
-    $(".comments-inner").addClass("animate__fadeInUp");
-    $(".comments-container").addClass("animate__fadeIn");
-
-    $(".comments-inner").removeClass("animate__fadeOutDown");
-    $(".comments-container").removeClass("animate__fadeOut");
-
-    commentModalOpen = true;
-
-    fetchComments(post_id);
-}
-
-// Close Comments Modal
-function closeComments() {
-    $("body").removeClass("modal-open");
-    $(".comments-inner").removeClass("animate__fadeInUp");
-    $(".comments-container").removeClass("animate__fadeIn");
-
-    $(".comments-inner").addClass("animate__fadeOutDown");
-    $(".comments-container").addClass("animate__fadeOut");
-
-    commentModalOpen = false;
-
-    setTimeout(() => {
-        $(".comments-container").addClass("d-none");
-    }, 500);
-}
-
 // Stop Comments Inner Event Propagation
 $(".comments-inner").click(() => {
     event.stopPropagation();

@@ -54,10 +54,11 @@ function initIO(server, username, area) {
 
             // Scroll to bottom
             comments_holder = document.getElementById("comments-holder");
+
             if(comments_holder.scrollHeight - comments_holder.scrollTop == 410) {
                 comments_holder.scrollTop = comments_holder.scrollHeight;
             }
-            else {
+            else if(comments_holder.scrollHeight - comments_holder.clientHeight > 75) {
                 $('#see-n-comms-btn').removeClass('d-none');
             }
 
@@ -68,5 +69,10 @@ function initIO(server, username, area) {
                     : null;
             });
         }
+    })
+
+    // Listen for comment deletion
+    socket.on("delete-comment", (data) => {
+        
     })
 }

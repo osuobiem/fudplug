@@ -71,6 +71,41 @@ function doUnlike(likeCount, likon, post_id, change = false) {
     $($(likon).siblings()[0]).text(" " + likeCount);
 }
 
+// Spy for open comment modal
+commentModalOpen = false;
+
+// Open Comments Modal
+function openComments(post_id) {
+    $("body").addClass("modal-open");
+    $(".comments-container").removeClass("d-none");
+
+    $(".comments-inner").addClass("animate__fadeInUp");
+    $(".comments-container").addClass("animate__fadeIn");
+
+    $(".comments-inner").removeClass("animate__fadeOutDown");
+    $(".comments-container").removeClass("animate__fadeOut");
+
+    commentModalOpen = true;
+
+    fetchComments(post_id);
+}
+
+// Close Comments Modal
+function closeComments() {
+    $("body").removeClass("modal-open");
+    $(".comments-inner").removeClass("animate__fadeInUp");
+    $(".comments-container").removeClass("animate__fadeIn");
+
+    $(".comments-inner").addClass("animate__fadeOutDown");
+    $(".comments-container").addClass("animate__fadeOut");
+
+    commentModalOpen = false;
+
+    setTimeout(() => {
+        $(".comments-container").addClass("d-none");
+    }, 500);
+}
+
 // Delete Comment
 function deleteComment(id) {
     swal({
@@ -82,32 +117,32 @@ function deleteComment(id) {
             doDelete();
         }
     });
+}
 
-    // Process Comment Delete
-    function doDelete() {
-        url = `${server}/comment/delete/${id}`;
-        goGet(url)
-            .then((res) => {
-                if (res.success) {
-                    popComment();
-                    showAlert(true, res.message);
-                } else {
-                    showAlert(false, res.message);
-                }
-            })
-            .catch((err) => {
-                showAlert(false, "Oops! Something's not right. Try Again");
-            });
-    }
+// Process Comment Delete
+function doDelete() {
+    url = `${server}/comment/delete/${id}`;
+    goGet(url)
+        .then((res) => {
+            if (res.success) {
+                popComment();
+                showAlert(true, res.message);
+            } else {
+                showAlert(false, res.message);
+            }
+        })
+        .catch((err) => {
+            showAlert(false, "Oops! Something's not right. Try Again");
+        });
+}
 
-    // Remove comment from container
-    function popComment() {
-        $("#comment__" + id).addClass("animate__animated animate__fadeOutDown");
+// Remove comment from container
+function popComment() {
+    $("#comment__" + id).addClass("animate__animated animate__fadeOutDown");
 
-        setTimeout(() => {
-            $("#comment__" + id).remove();
-        }, 1000);
-    }
+    setTimeout(() => {
+        $("#comment__" + id).remove();
+    }, 1000);
 }
 
 // Scroll to top
