@@ -61,7 +61,10 @@ function initIO(server, username, area) {
             else if(comments_holder.scrollHeight - comments_holder.clientHeight > 75) {
                 $('#see-n-comms-btn').removeClass('d-none');
             }
+        }
 
+        // Clear text area after new comment has been pushed to container
+        if(data.commentor == socket.id) {
             // Clear Textarea
             [...$(".emojionearea-editor")].forEach((el) => {
                 $(el).attr("placeholder") == "What do you think?..."
