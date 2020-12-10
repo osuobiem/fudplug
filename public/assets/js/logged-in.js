@@ -117,18 +117,18 @@ function deleteComment(id) {
         dangerMode: true,
     }).then((willDelete) => {
         if (willDelete) {
-            doDelete();
+            doDelete(id);
         }
     });
 }
 
 // Process Comment Delete
-function doDelete() {
+function doDelete(id) {
     url = `${server}/comment/delete/${id}`;
     goGet(url)
         .then((res) => {
             if (res.success) {
-                popComment();
+                popComment(id);
                 showAlert(true, res.message);
             } else {
                 showAlert(false, res.message);
@@ -140,7 +140,7 @@ function doDelete() {
 }
 
 // Remove comment from container
-function popComment() {
+function popComment(id) {
     $("#comment__" + id).addClass("animate__animated animate__fadeOutDown");
 
     setTimeout(() => {

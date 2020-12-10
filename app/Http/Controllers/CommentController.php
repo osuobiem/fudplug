@@ -139,13 +139,17 @@ class CommentController extends Controller
      * @param int $id Comment ID
      * @return json
      */
-    public function delete($id)
+    public function delete(Request $request, $id)
     {
         // Get Comment
         $comment = Comment::findOrFail($id);
 
         // Get commentor
-        if (Auth::guard('vendor')->guest() && Auth::guard('user')->guest()) {
+        if (!Auth::guard('vendor')->guest()) {
+            $commentor = $request->user();
+        } elseif (!Auth::guard('user')->guest()) {
+            $commentor = $request->user('user');
+        } else {
             return response()->json([
                 'success' => false,
                 'message' => "You're not logged in"
@@ -166,6 +170,14 @@ class CommentController extends Controller
             Http::post(env('SOCKET_SERVER') . '/send-comments-count', [
                 "post_id" => $post->id,
                 "comments_count" => $post->comments,
+                "area" => $post->vendor->area_id
+            ]);
+
+            // Send Notification
+            Http::post(env('SOCKET_SERVER') . '/delete-comment', [
+                "comment_id" => $comment->id,
+                "post_id" => $post->id,
+                "commentor_socket" => SocketData::where('username', $commentor->username)->first()->socket_id,
                 "area" => $post->vendor->area_id
             ]);
 

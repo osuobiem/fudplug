@@ -73,6 +73,8 @@ function initIO(server, username, area) {
 
     // Listen for comment deletion
     socket.on("delete-comment", (data) => {
-        
+        if (data.area == area && commentModalOpen && data.commentor != socket.id && data.postId == openCommentsPost) {
+            popComment(data.commentId)
+        }
     })
 }
