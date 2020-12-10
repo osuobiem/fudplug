@@ -73,6 +73,7 @@ function doUnlike(likeCount, likon, post_id, change = false) {
 
 // Spy for open comment modal
 commentModalOpen = false;
+openCommentsPost = null;
 
 // Open Comments Modal
 function openComments(post_id) {
@@ -86,6 +87,7 @@ function openComments(post_id) {
     $(".comments-container").removeClass("animate__fadeOut");
 
     commentModalOpen = true;
+    openCommentsPost = post_id
 
     fetchComments(post_id);
 }
@@ -100,6 +102,7 @@ function closeComments() {
     $(".comments-container").addClass("animate__fadeOut");
 
     commentModalOpen = false;
+    openCommentsPost = null
 
     setTimeout(() => {
         $(".comments-container").addClass("d-none");

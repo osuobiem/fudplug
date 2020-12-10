@@ -103,6 +103,7 @@ class CommentController extends Controller
             // Send Notification
             Http::post(env('SOCKET_SERVER') . '/send-new-comment', [
                 "new_comment" => view('components/post/comment-new', ['comment' => $comment])->render(),
+                "post_id" => $post->id,
                 "commentor_socket" => SocketData::where('username', $commentor->username)->first()->socket_id,
                 "area" => $post->vendor->area_id
             ]);

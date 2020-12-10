@@ -46,7 +46,7 @@ function initIO(server, username, area) {
 
     // Listen for new comment event
     socket.on("new-comment", (data) => {
-        if (data.area == area && commentModalOpen && data.commentor != socket.id) {
+        if (data.area == area && commentModalOpen && data.commentor != socket.id && data.postId == openCommentsPost) {
             // Append new comment
             $("#no-comment").html() === undefined
                 ? $("#comments-holder").append($.parseHTML(data.newComment))
