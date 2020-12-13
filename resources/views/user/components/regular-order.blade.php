@@ -46,10 +46,9 @@
                             @csrf
                             @if($dish->type == "simple")
                             <div id="basics">
-
                                 <div class="mb-5 pt-3 text-lg-left text-center">
                                     <div class="float-left">
-                                        <h4 class="font-weight-semi-bold">{{ucfirst($dish->title)}} </h4>
+                                        <h4 class="font-weight-semi-bold"> {{ucfirst($dish->title)}} </h4>
                                     </div>
                                 </div>
 
@@ -99,7 +98,7 @@
                                                                     onchange="change(event, this)"
                                                                     onfocus="focusin(event, this)"
                                                                     class="form-control rounded-left-0 rounded-right-0 form-control-sm qty-input"
-                                                                    value="0" min="0" max="{{$quantity}}">
+                                                                    value="0" min="0" max="{{$quantity}}" disabled>
                                                                 <span class="input-group-btn">
                                                                     <button onclick="clicked(event, this);"
                                                                         type="button"
@@ -153,7 +152,7 @@
                                                     @php
                                                     $i = 1;
                                                     @endphp
-                                                    @foreach($regular_qty as $qty)
+                                                    @foreach($regular_qty as $key=>$qty)
                                                     <li id="price-type" class="list-group-item pt-0 col">
                                                         <div class="float-left col-4">
                                                             <small>{{$qty->title}}</small>
@@ -164,8 +163,7 @@
                                                                 <!-- {{$qty->quantity}} left -->
                                                             </p>
                                                             <input name="order_detail[]" type="hidden"
-                                                                value="['{{$dish->title}}', '{{$qty->price}}', '{{$qty->title}}']"
-                                                                disabled>
+                                                                value="['regular','{{$key}}']" disabled>
                                                         </div>
                                                         <div class="float-right col-7 offset-1 mt-4">
                                                             <div class="input-group qty-field">
@@ -182,7 +180,7 @@
                                                                     onfocus="focusin(event, this)"
                                                                     name="order_quantity[]"
                                                                     class="form-control rounded-left-0 rounded-right-0 form-control-sm qty-input"
-                                                                    value="0" min="0" max="{{$qty->quantity}}" disabled>
+                                                                    value="0" min="0" max="{{$qty->quantity}}">
                                                                 <span class="input-group-btn">
                                                                     <button onclick="clicked(event, this);"
                                                                         type="button"
@@ -213,7 +211,7 @@
                                     <button type="submit" id="order-btn"
                                         class="btn btn-sm btn-primary btn-block font-weight-bold"
                                         data-attach-loading="true" disabled>
-                                        PLACE ORDER <span id="final-price" class="float-right"
+                                        Add to basket <span id="final-price" class="float-right"
                                             data-item-subtotal="">₦0.00</span>
                                     </button>
                                 </div>
@@ -232,7 +230,7 @@
     /*********************************** Quantity input script **************************************/
     $(document).ready(function () {
         $("#order-form").submit(function (el) {
-            placeOrder(el, '{{$dish->vendor_id}}');
+            addToBasket(el, '{{$dish->vendor_id}}');
         });
     });
 
@@ -290,6 +288,7 @@
             alert('Sorry, the minimum value was reached');
             $(element).val($(element).data('oldValue'));
         }
+
 
         if (valueCurrent <= maxValue) {
             // $(".btn-number[data-type='plus'][data-field='" + name + "']").removeAttr('disabled')
@@ -349,13 +348,15 @@
         valueCurrent = parseInt($(element).val());
         if (valueCurrent < 1) {
             $(element).parent().parent().prev().find('input').attr('disabled', '');
+            $(element).attr('disabled', '');
         } else {
             $(element).parent().parent().prev().find('input').removeAttr('disabled');
+            $(element).removeAttr('disabled');
         }
     }
 
     // Place order
-    function placeOrder(el, vendorId) {
+    function addToBasket(el, vendorId) {
         el.preventDefault()
 
         // spin('profile')
@@ -363,7 +364,11 @@
 
         let url = `{{url('user/place-order')}}`;
         url += '/' + vendorId;
-        let data = new FormData(el.target)
+        let data = new FormData(el.target);
+        data.append('vendor_id', '{{$dish->vendor_id}}');
+        data.append('item_id', '{{$dish->id}}');
+        data.append('order_type', '{{$dish->type}}');
+
 
         goPost(url, data)
             .then(res => {
@@ -378,6 +383,8 @@
                 handleFormRes(err, 'pr-update-error');
             })
     }
+
+
 
     /*********************************** Quantity input script **************************************/
 
