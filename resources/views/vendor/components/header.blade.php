@@ -3,13 +3,15 @@
 	<div class="col-3 col-md-4 col-lg-3 p-0">
 		<nav class="navbar navbar-expand navbar-light bg-light osahan-nav-top p-1 h-80" id="lt-h">
 			<div class="container">
-				<a class="navbar-brand mr-2" href="{{ url('') }}"><img id="logo" src="{{ url('assets/img/logo.svg') }}" alt="">
+				<a class="navbar-brand mr-2" href="{{ url('') }}"><img id="logo" src="{{ url('assets/img/logo.svg') }}"
+						alt="">
 				</a>
 			</div>
 		</nav>
 	</div>
 	<div class="col-6 col-md-4 col-lg-6 p-0">
-		<nav class="navbar navbar-expand navbar-light bg-light osahan-nav-top p-1 h-80 justify-content-center" id="mt-h">
+		<nav class="navbar navbar-expand navbar-light bg-light osahan-nav-top p-1 h-80 justify-content-center"
+			id="mt-h">
 			<!-- <form class="form-inline mr-auto my-2 my-md-0 mw-100">
 				<div class="input-group">
 					<input type="text" class="form-control " placeholder="Search fudplug" aria-label="Search"
@@ -50,9 +52,15 @@
 								Notifications
 							</h6>
 							<div class="dropdown-divider"></div>
-							<div id="h-noti-cont" class="p-2 text-center">
-								<p>No Notifications yet!</p>
+
+							<div id="notification-container">
+								<div class="justify-content-center text-center w-100 p-2">
+									<div class="spinner-border spinner-border-sm btn-pr p-2" role="status">
+									  <span class="sr-only">Loading...</span>
+									</div>
+								  </div>
 							</div>
+
 						</div>
 					</li>
 
@@ -69,9 +77,11 @@
 						</a>
 						<!-- Dropdown - User Information -->
 						<div class="dropdown-menu dropdown-menu-right shadow">
-							<a class="dropdown-item" href="{{ url('vendor/profile') }}"><i class="la la-store-alt la-lg mr-1"></i>
+							<a class="dropdown-item" href="{{ url('vendor/profile') }}"><i
+									class="la la-store-alt la-lg mr-1"></i>
 								Profile</a>
-							<a class="dropdown-item" href="{{ url('vendor/logout') }}"><i class="la la-sign-out la-lg mr-1"></i>
+							<a class="dropdown-item" href="{{ url('vendor/logout') }}"><i
+									class="la la-sign-out la-lg mr-1"></i>
 								Logout</a>
 						</div>
 					</li>

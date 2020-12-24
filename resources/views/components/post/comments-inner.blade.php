@@ -47,7 +47,7 @@ elseif(!Auth::guard('vendor')->guest() && $comment->commentor_type == 'vendor') 
 <div class="comment-main {{ $id == $comment->commentor_id ? 'c-right' : 'c-left'}}" id="comment__{{ $comment->id }}">
   <div class="comment row">
 
-    <div class="col-2 col-md-1 pr-1">
+    <div class="col-2 col-md-1 pr-1 pt-1">
       <div class="comments-img"
         style="background-image: url('{{ Storage::url($comment->commentor_type.'/profile/'.$comment->{$comment->commentor_type}->profile_image) }}')">
       </div>

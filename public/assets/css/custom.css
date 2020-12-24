@@ -1328,3 +1328,19 @@ a:visited {
         left: 38%;
     }
 }
+
+.notification-card-u {
+    padding: 5px 10px;
+    box-shadow: 0 0 10px 2px #e44d3a2e;
+    margin: 10px;
+    border-radius: 5px;
+    font-size: 12px;
+}
+
+.notification-card-r {
+    padding: 5px 10px;
+    box-shadow: 0 0 10px 2px #08080814;
+    margin: 10px;
+    border-radius: 5px;
+    font-size: 12px;
+}
