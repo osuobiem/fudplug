@@ -276,7 +276,7 @@ class PostController extends Controller
             $notification->owner_id = $post->vendor_id;
             $notification->post_id = $post->id;
             $notification->status = 0;
-            $notification->content = "$liker_type-$liker->id//content//likes your post: \"" . substr($post->content, 0, 35) . '...\"';
+            $notification->content = "$liker_type-$liker->id//content//likes your post";
         }
 
         try {

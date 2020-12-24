@@ -96,7 +96,7 @@ class CommentController extends Controller
             $notification->owner_id = $post->vendor_id;
             $notification->post_id = $post->id;
             $notification->status = 0;
-            $notification->content = "$commentor_type-$commentor->id//content//commented on your post: \"" . substr($post->content, 0, 35) . '..."';
+            $notification->content = "$commentor_type-$commentor->id//content//commented on your post";
         }
 
         // Try Save

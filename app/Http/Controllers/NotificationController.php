@@ -45,7 +45,7 @@ class NotificationController extends Controller
                 $name = $initiator->business_name;
             }
 
-            $notification->content = '<strong>'.$name.'</strong> '.$content_data[1];
+            $notification->content = '<strong>'.$name.'</strong> '.$content_data[1].': "'.substr($notification->post->content, 0, 40).'..."';
             $notification->photo = Storage::url($initiator_data[0].'/profile/'.$initiator->profile_image);
         }
 
