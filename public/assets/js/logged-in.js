@@ -1,6 +1,10 @@
 // Grab server url from script tag
 server = document.currentScript.getAttribute("server");
 
+$(document).ready(function () {
+    getNotifications()
+});
+
 // Like/Unlike a post
 function likePost(post_id, likon) {
     // Animate Like
@@ -154,4 +158,14 @@ function scrollToTop() {
     document.documentElement.scrollTop = 0;
 
     $("#see-l-posts-btn").addClass("d-none");
+}
+
+// Get notifications
+function getNotifications() {
+    let url = `${server}/notification/get`
+
+    goGet(url)
+    .then(res => {
+        $('#notification-container').html(res)
+    })
 }

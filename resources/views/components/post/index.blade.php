@@ -1,31 +1,33 @@
-@if(count($posts))
-
 {{-- Format Time/Date --}}
 @php
-function format_time($time) {
-  $time = strtotime($time);
-  $t_diff = time() - $time;
-  $res = "";
+if (!function_exists('format_time')) {
+  function format_time($time) {
+    $time = strtotime($time);
+    $t_diff = time() - $time;
+    $res = "";
 
-  if($t_diff >= 1 && $t_diff < 60) {
-    $res = $t_diff == 0 ? 'now' : $t_diff."s ago";
-  }
-  elseif($t_diff >= 60 && $t_diff < 3600) {
-    $res = (int)($t_diff/60)."m ago";
-  }
-  elseif($t_diff >= 3600 && $t_diff < 86399) {
-    $res = (int)($t_diff/3600)."h ago";
-  }
-  elseif($t_diff >= 86400 && $t_diff < 604799) {
-    $res = (int)($t_diff/86400)."d ago";
-  }
-  else {
-    $res = date("y") == date("y", $time) ? date("d M", $time) : date("d M y", $time);
-  }
+    if($t_diff >= 1 && $t_diff < 60) {
+        $res = $t_diff == 0 ? 'now' : $t_diff."s ago";
+    }
+    elseif($t_diff >= 60 && $t_diff < 3600) {
+        $res = (int)($t_diff/60)."m ago";
+    }
+    elseif($t_diff >= 3600 && $t_diff < 86399) {
+        $res = (int)($t_diff/3600)."h ago";
+    }
+    elseif($t_diff >= 86400 && $t_diff < 604799) {
+        $res = (int)($t_diff/86400)."d ago";
+    }
+    else {
+        $res = date("y") == date("y", $time) ? date("d M", $time) : date("d M y", $time);
+    }
 
-  return $res;
+    return $res;
+  }
 }
 @endphp
+
+@if(count($posts))
 
 @foreach ($posts as $post)
 @php

@@ -1,31 +1,31 @@
 {{-- Format Time/Date --}}
 @php
-function ftime($time) {
-  $time = strtotime($time);
-  $t_diff = time() - $time;
-  $res = "";
+if (!function_exists('format_time')) {
+  function format_time($time) {
+    $time = strtotime($time);
+    $t_diff = time() - $time;
+    $res = "";
 
-  if($t_diff < 60) {
-    $res = $t_diff == 0 ? 'now' : $t_diff."s ago";
-  }
-  elseif($t_diff >= 60 && $t_diff < 3600) {
-    $res = (int)($t_diff/60)."m ago";
-  }
-  elseif($t_diff >= 3600 && $t_diff < 86399) {
-    $res = (int)($t_diff/3600)."h ago";
-  }
-  elseif($t_diff >= 86400 && $t_diff < 604799) {
-    $res = (int)($t_diff/86400)."d ago";
-  }
-  else {
-    $res = date("y") == date("y", $time) ? date("d M", $time) : date("d M y", $time);
-  }
+    if($t_diff >= 1 && $t_diff < 60) {
+        $res = $t_diff == 0 ? 'now' : $t_diff."s ago";
+    }
+    elseif($t_diff >= 60 && $t_diff < 3600) {
+        $res = (int)($t_diff/60)."m ago";
+    }
+    elseif($t_diff >= 3600 && $t_diff < 86399) {
+        $res = (int)($t_diff/3600)."h ago";
+    }
+    elseif($t_diff >= 86400 && $t_diff < 604799) {
+        $res = (int)($t_diff/86400)."d ago";
+    }
+    else {
+        $res = date("y") == date("y", $time) ? date("d M", $time) : date("d M y", $time);
+    }
 
-  return $res;
+    return $res;
+  }
 }
-@endphp
 
-@php
 $id = '';
 if(!Auth::guard('user')->guest() && $comment->commentor_type == 'user') {
   $id = Auth::guard('user')->user()->id;
@@ -58,7 +58,7 @@ elseif(!Auth::guard('vendor')->guest() && $comment->commentor_type == 'vendor') 
           @if($id == $comment->commentor_id)
             <i class="la la-trash la-lg text-danger comment-x-ico" onclick="deleteComment('{{ $comment->id }}')" title="Delete Comment"></i>
           @endif
-          {{ ftime($comment->created_at) }}
+          {{ format_time($comment->created_at) }}
         </span>
         
       </div>

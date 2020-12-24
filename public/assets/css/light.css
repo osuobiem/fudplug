@@ -314,6 +314,21 @@ body::-webkit-scrollbar-thumb {
     border-radius: 6px;
 }
 
+
+#notification-container::-webkit-scrollbar {
+    width: 5px;
+}
+
+#notification-container::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+#notification-container::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.219);
+    border-radius: 6px;
+}
+
+
 .emojionearea-editor::-webkit-scrollbar {
     width: 5px;
 }

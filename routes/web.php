@@ -145,7 +145,14 @@ Route::group(['prefix' => 'comment'], function () {
 
 // SOCKET ROUTES
 Route::group(['prefix' => 'socket'], function () {
-    // Get Comments
+    // Save new socket_id
     Route::get('save-id/{username}/{socket_id}', 'SocketController@save_id');
+});
+// -------------
+
+// NOTIFICATION ROUTES
+Route::group(['prefix' => 'notification'], function () {
+    // Get Notifications
+    Route::get('get', 'NotificationController@get');
 });
 // -------------

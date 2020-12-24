@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Like;
 use App\Media;
+use App\Notification;
 use App\Post;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
@@ -268,9 +269,21 @@ class PostController extends Controller
         // Update post like count
         $post->likes += 1;
 
+        if (!($liker->id == $post->vendor_id && $liker_type == 'vendor')) {
+            // Create notification
+            $notification = new Notification();
+            $notification->notice_type = 'like';
+            $notification->owner_id = $post->vendor_id;
+            $notification->post_id = $post->id;
+            $notification->status = 0;
+            $notification->content = "$liker_type-$liker->id//content//likes your post: \"" . substr($post->content, 0, 35) . '...\"';
+        }
+
         try {
             $like->save();
             $post->save();
+
+            !($liker->id == $post->vendor_id && $liker_type == 'vendor') ? $notification->save() : null;
 
             // Send Notification
             Http::post(env('SOCKET_SERVER') . '/send-likes-count', [
