@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Comment;
+use App\Notification;
 use App\Post;
 use App\SocketData;
 use Illuminate\Http\Request;
@@ -88,10 +89,22 @@ class CommentController extends Controller
         // Increase post comments count
         $post->comments++;
 
+        if (!($commentor->id == $post->vendor_id && $commentor_type == 'vendor')) {
+            // Create notification
+            $notification = new Notification();
+            $notification->notice_type = 'comment';
+            $notification->owner_id = $post->vendor_id;
+            $notification->post_id = $post->id;
+            $notification->status = 0;
+            $notification->content = "$commentor_type-$commentor->id//content//commented on your post: \"" . substr($post->content, 0, 35) . '..."';
+        }
+
         // Try Save
         try {
             $comment->save();
             $post->save();
+
+            (!($commentor->id == $post->vendor_id && $commentor_type == 'vendor')) ? $notification->save() : null;
 
             // Send Notification
             Http::post(env('SOCKET_SERVER') . '/send-comments-count', [
