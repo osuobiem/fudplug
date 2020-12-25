@@ -1,14 +1,14 @@
 <!-- Header -->
 <div class="row m-0 head-section">
-	<div class="col-3 col-md-4 col-lg-3 p-0">
+	<div class="col-8 col-md-4 col-lg-3 p-0">
 		<nav class="navbar navbar-expand navbar-light bg-light osahan-nav-top p-1 h-80" id="lt-h">
 			<div class="container">
-				<a class="navbar-brand mr-2" href="index.html"><img id="logo" src="{{ url('assets/img/logo.svg') }}" alt="">
-				</a>
+				<a class="navbar-brand mr-2" href="{{ url('') }}"><img id="logo" src="{{ url('assets/img/logo.png') }}"
+					alt="">
 			</div>
 		</nav>
 	</div>
-	<div class="col-6 col-md-4 col-lg-6 p-0">
+	<div class="col-1 col-md-4 col-lg-6 p-0">
 		<nav class="navbar navbar-expand navbar-light bg-light osahan-nav-top p-1 h-80 justify-content-center" id="mt-h">
 			<form class="form-inline mr-auto my-2 my-md-0 mw-100">
 				<div class="input-group">
