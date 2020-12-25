@@ -80,4 +80,13 @@ function initIO(server, username, area) {
             popComment(data.commentId)
         }
     })
+
+    // Listen for new notification
+    socket.on("notify", (data) => {
+        if (data.owner == socket.id) {
+            ncounter = parseInt($('#noti-dot').text())
+            $('#notification-container').prepend(data.content)
+            $('#noti-dot').text(ncounter+1)
+        }
+    })
 }
