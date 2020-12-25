@@ -54,7 +54,7 @@
 							</h6>
 							<div class="dropdown-divider"></div>
 
-							<div id="notification-container">
+							<div id="notification-container" onscroll="getMoreNotifications()">
 								<div class="justify-content-center text-center w-100 p-2">
 									<div class="spinner-border spinner-border-sm btn-pr p-2" role="status">
 									  <span class="sr-only">Loading...</span>
@@ -101,6 +101,9 @@
 <div class="alert alert-success text-center fud-alert animate__animated animate__fadeIn d-none" role="alert"
 	id="alert-success">
 </div>
+
+<!-- Notification pagination holder -->
+<span class="d-none" id="noti-from">0</span>
 
 @push('scripts')
 	<script>

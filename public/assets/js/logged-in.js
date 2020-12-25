@@ -161,11 +161,21 @@ function scrollToTop() {
 }
 
 // Get notifications
-function getNotifications() {
-    let url = `${server}/notification/get`
+function getNotifications(from = 0) {
+    let url = `${server}/notification/get/${from}`
 
     goGet(url)
     .then(res => {
-        $('#notification-container').html(res)
+        if(res.length > 0) {
+            from == 0 ? $('#notification-container').html(res) : $('#notification-container').append(res)
+        }
     })
+}
+
+// Get more notifications
+function getMoreNotifications() {
+    if(spyBottom('notification-container', 300)) {
+        from = $('#noti-from').text()
+        getNotifications(from)
+    }
 }

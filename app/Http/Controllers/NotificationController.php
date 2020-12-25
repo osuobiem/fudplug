@@ -13,9 +13,12 @@ class NotificationController extends Controller
 {
     /**
      * Get notifications
+     * @param int $from Pagination Id
+     * 
      * @return json
      */
-    public function get(Request $request) {
+    public function get(Request $request, $from = 0)
+    {
         // Get owner
         if (!Auth::guard('vendor')->guest()) {
             $owner = $request->user();
@@ -28,27 +31,38 @@ class NotificationController extends Controller
             ]);
         }
 
-        $notifications = Notification::where('owner_id', $owner->id)->orderBy('created_at', 'desc')->get();
+        // Check if this is the first fetch
+        $notifications = $from == 0
+            ? Notification::where('owner_id', $owner->id)->orderBy('created_at', 'desc')->take(10)->get()
+            : Notification::where('owner_id', $owner->id)->where('id', '<', $from)->orderBy('created_at', 'desc')->take(10)->get();
         
-        foreach($notifications as $notification) {
+        if($from != 0 && count($notifications) == 0) {
+            return "";
+        }
+        // Check for pagination
+        $fr = count($notifications) > 0 ? $notifications[count($notifications)-1]->id : 0;
+
+        foreach ($notifications as $notification) {
             // Build notification content
             $content_data = explode('//content//', $notification->content);
-            
+
             $initiator_data = explode('-', $content_data[0]);
 
-            if($initiator_data[0] == 'user') {
+            if ($initiator_data[0] == 'user') {
                 $initiator = User::find($initiator_data[1]);
-                $name = strlen($initiator->name) > 0 ? $initiator->name : '@'.$initiator->username;
-            }
-            else {
+                $name = strlen($initiator->name) > 0 ? $initiator->name : '@' . $initiator->username;
+            } else {
                 $initiator = Vendor::find($initiator_data[1]);
                 $name = $initiator->business_name;
             }
 
-            $notification->content = '<strong>'.$name.'</strong> '.$content_data[1].': "'.substr($notification->post->content, 0, 40).'..."';
-            $notification->photo = Storage::url($initiator_data[0].'/profile/'.$initiator->profile_image);
+            $notification->content = '<strong>' . $name . '</strong> ' . $content_data[1] . ': "' . substr($notification->post->content, 0, 40) . '..."';
+            $notification->photo = Storage::url($initiator_data[0] . '/profile/' . $initiator->profile_image);
         }
 
-        return view('components.notification', ['notifications' => $notifications]);
+        return view('components.notification', [
+            'notifications' => $notifications,
+            'from' => $fr
+        ]);
     }
 }

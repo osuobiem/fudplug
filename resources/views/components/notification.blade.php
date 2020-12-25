@@ -47,6 +47,10 @@ return $res;
             </div>
         </div>
     @endforeach
+
+    <script>
+        $('#noti-from').text('{{ $from }}')
+    </script>
 @else
     <div id="h-noti-cont" class="p-2 text-center">
         <p>No Notifications yet!</p>

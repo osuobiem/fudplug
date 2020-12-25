@@ -260,3 +260,9 @@ function scrollToNewComments() {
     comments_holder.scrollTop = comments_holder.scrollHeight;
     $('#see-n-comms-btn').addClass('d-none')
 }
+
+// Bottom Scroll Spy
+function spyBottom(elId, diff) {
+    el = document.getElementById(elId)
+    return (el.scrollHeight - el.scrollTop == diff);
+}

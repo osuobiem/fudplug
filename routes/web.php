@@ -153,6 +153,6 @@ Route::group(['prefix' => 'socket'], function () {
 // NOTIFICATION ROUTES
 Route::group(['prefix' => 'notification'], function () {
     // Get Notifications
-    Route::get('get', 'NotificationController@get');
+    Route::get('get/{from?}', 'NotificationController@get');
 });
 // -------------
