@@ -1349,3 +1349,15 @@ a:visited {
     height: 300px;
     overflow: auto;
 }
+
+#noti-dot {
+    color: #ffffff !important;
+    background: red;
+    padding: 0px 5px;
+    border-radius: 25px;
+    position: absolute;
+    left: 28px;
+    top: 12px;
+    font-weight: 800;
+    border: solid .5px #000000;
+}

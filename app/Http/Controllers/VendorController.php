@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Area;
 use App\Item;
 use App\Menu;
+use App\Notification;
 use App\State;
 use App\User;
 use App\Vendor;
@@ -192,7 +193,9 @@ class VendorController extends Controller
             // Social Media Links
             $social_handles = json_decode(Auth::user('vendor')->social_handles);
 
-            return view('vendor.profile', compact('vendor_location', 'states', 'areas', 'social_handles'));
+            $ncount = Notification::where('owner_id', Auth::user('vendor')->id)->where('status', 0)->count();
+
+            return view('vendor.profile', compact('vendor_location', 'states', 'areas', 'social_handles', 'ncount'));
         } catch (\Throwable $th) {
             Log::error($th);
         }

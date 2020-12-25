@@ -46,6 +46,7 @@
 							aria-haspopup="true" aria-expanded="false">
 							<span class="noti-pin d-none"></span>
 							<i class="la la-bell la-2x icon-hover bright-ic"></i>
+							<small id="noti-dot" class="d-none"></small>
 						</a>
 						<div class="dropdown-menu dropdown-menu-right shadow noti-drop">
 							<h6 class="dropdown-header text-center">
@@ -100,5 +101,12 @@
 <div class="alert alert-success text-center fud-alert animate__animated animate__fadeIn d-none" role="alert"
 	id="alert-success">
 </div>
+
+@push('scripts')
+	<script>
+	$('#noti-dot').text('{{ $ncount }}')
+	$('#noti-dot').removeClass('d-none');
+	</script>
+@endpush
 
 @include('vendor.components.mobile-bottom-menu')
