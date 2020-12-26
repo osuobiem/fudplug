@@ -25,20 +25,14 @@
     }
 @endphp
 
-<div class="notification-card-u row">
     <div class="col-1 p-0 pt-1">
         <div class="comments-img"
             style="background-image: url('{{ $notification->photo }}')">
         </div>
     </div>
-    <div class="col-10">
+    <div class="col-11">
         {!! html_entity_decode($notification->content) !!}
-    </div>
-    <div class="col-1">
-        <i class="la la-check icon-hover bright-ic ml-2 p-0 m-a-r" onclick="markAsRead('{{ $notification->id }}', this)" title="Mark as read">
-        </i>
     </div>
     <div class="col-12 p-0 text-right">
         <small style="font-size: 10px;">{{ format_time($notification->created_at) }}</small>
     </div>
-</div>

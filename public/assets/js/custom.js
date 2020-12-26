@@ -1,4 +1,9 @@
 $(document).ready(function () {
+    $('.dropdown-menu').click(e => {
+        e.stopPropagation()
+    })
+
+
     $('#comments-holder').scroll(() => {
         if(comments_holder.scrollHeight - comments_holder.scrollTop <= 420) {
             $('#see-n-comms-btn').addClass('d-none');

@@ -1331,10 +1331,11 @@ a:visited {
 
 .notification-card-u {
     padding: 5px 10px;
-    box-shadow: 0 0 10px 2px #e44d3a2e;
+    box-shadow: 0 0 10px 2px #08080814;
     margin: 10px;
     border-radius: 5px;
     font-size: 12px;
+    background: #ff1c0024;
 }
 
 .notification-card-r {
@@ -1360,4 +1361,20 @@ a:visited {
     top: 12px;
     font-weight: 800;
     border: solid .5px #000000;
+}
+
+
+.m-a-r:hover {
+    cursor: pointer;
+    background: rgb(16, 212, 16) !important;
+    color: #fff;
+}
+
+#m-a-a-r>small {
+    font-weight: 500;
+    color: var(--i-primary) !important;
+}
+
+#m-a-a-r>small:hover {
+    cursor: pointer;
 }

@@ -46,12 +46,15 @@
 							aria-haspopup="true" aria-expanded="false">
 							<span class="noti-pin d-none"></span>
 							<i class="la la-bell la-2x icon-hover bright-ic"></i>
-							<small id="noti-dot" class="d-none"></small>
+							<small id="noti-dot" class="d-none">0</small>
 						</a>
 						<div class="dropdown-menu dropdown-menu-right shadow noti-drop">
 							<h6 class="dropdown-header text-center">
 								Notifications
 							</h6>
+							<div id="m-a-a-r" class="text-center d-none" title="Mark all as read">
+								<small onclick="markAllAsRead()">Mark all as read</small>
+							</div>
 							<div class="dropdown-divider"></div>
 
 							<div id="notification-container" onscroll="getMoreNotifications()">
@@ -105,11 +108,13 @@
 <!-- Notification pagination holder -->
 <span class="d-none" id="noti-from">0</span>
 
-@push('scripts')
-	<script>
-	$('#noti-dot').text('{{ $ncount }}')
-	$('#noti-dot').removeClass('d-none');
-	</script>
-@endpush
+@if($ncount > 0)
+	@push('scripts')
+		<script>
+			$('#noti-dot').text('{{ $ncount }}')
+			$('#noti-dot').removeClass('d-none');
+		</script>
+	@endpush
+@endif
 
 @include('vendor.components.mobile-bottom-menu')

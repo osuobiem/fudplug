@@ -38,9 +38,12 @@ return $res;
             </div>
             @if($notification->status == 0)
             <div class="col-1">
-                <i class="la la-check icon-hover bright-ic ml-2 p-0" title="Mark as read">
+                <i class="la la-check icon-hover bright-ic ml-2 p-0 m-a-r" onclick="markAsRead('{{ $notification->id }}', this)" title="Mark as read">
                 </i>
             </div>
+            <script>
+                $('#m-a-a-r').removeClass('d-none')
+            </script>
             @endif
             <div class="col-12 p-0 text-right">
                 <small style="font-size: 10px;">{{ format_time($notification->created_at) }}</small>

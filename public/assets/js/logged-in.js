@@ -180,3 +180,35 @@ function getMoreNotifications() {
         getNotifications(from)
     }
 }
+
+// Mark notification as read
+function markAsRead(id, el) {
+    let url = `${server}/notification/mark-as-read/${id}`
+
+    goGet(url)
+    .then(res => {
+        $(el).parent().parent().removeClass('notification-card-u')
+        $(el).parent().parent().addClass('notification-card-r')
+
+        $(el).parent().parent().html(res)
+    })
+}
+
+// Mark all notifications as read
+function markAllAsRead() {
+    let url = `${server}/notification/mark-as-read`
+
+    goGet(url)
+    .then(res => {
+        [...$('.notification-card-u')].forEach(el => {
+            $(el).removeClass('notification-card-u')
+            $(el).addClass('notification-card-r')
+
+            $($(el).children()[1]).removeClass('col-10')
+            $($(el).children()[1]).addClass('col-11')
+
+            $($(el).children()[2]).remove()
+        })
+        $('#m-a-a-r').addClass('d-none')
+    })
+}
