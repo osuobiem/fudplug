@@ -19,16 +19,14 @@ class CreateVendorsTable extends Migration
             $table->string('username')->unique();
             $table->string('email')->unique();
             $table->string('phone_number')->unique();
-            $table->string('address')->nullable(); // Remove This After Rolling Back Migrations
-            // Use This After Rolling Back Migrations
-            //$table->text('address')->nullable();
-            // Use This After Rolling Back Migrations
+            $table->text('address')->nullable();
             $table->json('social_handles')->nullable();
             $table->text('about_business')->nullable();
             $table->foreignId('area_id')->nullable()->constrained()->onDelete('cascade')->onUpdate('no action');
             $table->string('profile_image')->default('placeholder.png');
             $table->string('cover_image')->default('cover_placeholder.jpg');
             $table->string('password');
+            $table->json('other_details')->nullable();
             $table->rememberToken();
 
             $table->softDeletes();

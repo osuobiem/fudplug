@@ -138,4 +138,43 @@ class NotificationController extends Controller
             }
         }
     }
+
+    /**
+     * Clear nviewed (Notifications count viewed)
+     * @return json
+     */
+    public function clear_nviewed(Request $request)
+    {
+        // Get user/vendor
+        if (!Auth::guard('vendor')->guest()) {
+            $owner = $request->user();
+        } elseif (!Auth::guard('user')->guest()) {
+            $owner = $request->user('user');
+        }
+
+        $other_details = json_decode($owner->other_details, true);
+        if (isset($other_details['nviewed'])) {
+            $other_details['nviewed'] = 0;
+        } else {
+            $other_details['nviewed'] = 0;
+        }
+        $owner->other_details = json_encode($other_details);
+
+        // Try Save
+        try {
+            $owner->save();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'NViewed Cleared'
+            ]);
+        } catch (\Throwable $th) {
+            Log::error($th);
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Internal Server Error'
+            ], 500);
+        }
+    }
 }

@@ -45,7 +45,7 @@
 						<a class="nav-link dropdown-toggle pr-0 h-link" href="#" role="button" data-toggle="dropdown"
 							aria-haspopup="true" aria-expanded="false">
 							<span class="noti-pin d-none"></span>
-							<i class="la la-bell la-2x icon-hover bright-ic"></i>
+							<i class="la la-bell la-2x icon-hover bright-ic" onclick="clearNViewed()"></i>
 							<small id="noti-dot" class="d-none">0</small>
 						</a>
 						<div class="dropdown-menu dropdown-menu-right shadow noti-drop">
@@ -107,11 +107,11 @@
 
 <!-- Notification pagination holder -->
 <span class="d-none" id="noti-from">0</span>
-
-@if($ncount > 0)
+@php $other_details = json_decode(Auth::user('vendor')->other_details, true); @endphp
+@if(isset($other_details['nviewed']) && $other_details['nviewed'] > 0)
 	@push('scripts')
 		<script>
-			$('#noti-dot').text('{{ $ncount }}')
+			$('#noti-dot').text(`{{ $other_details['nviewed'] }}`)
 			$('#noti-dot').removeClass('d-none');
 		</script>
 	@endpush

@@ -131,6 +131,16 @@ class CommentController extends Controller
                     "owner_socket" => SocketData::where('username', $post->vendor->username)->first()->socket_id,
                     "content" => view('components.notification-s', ['notification' => $notification])->render()
                 ]);
+
+                // Update nviewed
+                $other_details = json_decode($post->vendor->other_details, true);
+                if (isset($other_details['nviewed'])) {
+                    $other_details['nviewed'] += 1;
+                } else {
+                    $other_details['nviewed'] = 1;
+                }
+                $post->vendor->other_details = json_encode($other_details);
+                $post->vendor->save();
             }
 
             // Send Notification

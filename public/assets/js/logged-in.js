@@ -212,3 +212,16 @@ function markAllAsRead() {
         $('#m-a-a-r').addClass('d-none')
     })
 }
+
+// Clear NViewed
+function clearNViewed() {
+    let url = `${server}/notification/clear-nviewed`
+
+    goGet(url)
+    .then(res => {
+        setTimeout(() => {
+            $('#noti-dot').text(0)
+            $('#noti-dot').addClass('d-none')
+        }, 2500)
+    })
+}

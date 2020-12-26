@@ -17,9 +17,7 @@ class CreateUsersTable extends Migration
             $table->id();
             $table->string('name');
             $table->string('phone_number')->unique();
-            // Please Use This After Rolling Back Migration To Add Address Field On User Table
-            //$table->text('address')->nullable();
-            // Please Use This After Rolling Back Migration To Add Address Field On User Table
+            $table->text('address')->nullable();
             $table->string('email')->unique();
             $table->string('username')->unique();
             $table->string('profile_image')->default('placeholder.png');
@@ -27,6 +25,7 @@ class CreateUsersTable extends Migration
             $table->foreignId('area_id')->nullable()->constrained()->onDelete('cascade')->onUpdate('no action');
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->json('other_details')->nullable();
             $table->rememberToken();
 
             $table->softDeletes();

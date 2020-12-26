@@ -157,5 +157,8 @@ Route::group(['prefix' => 'notification'], function () {
 
     // Mark as read
     Route::get('mark-as-read/{id?}', 'NotificationController@mark_as_read');
+
+    // Clear nviewed
+    Route::get('clear-nviewed', 'NotificationController@clear_nviewed');
 });
 // -------------
