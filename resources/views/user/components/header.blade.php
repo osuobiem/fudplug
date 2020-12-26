@@ -4,13 +4,15 @@
 		<nav class="navbar navbar-expand navbar-light bg-light osahan-nav-top p-1 h-80" id="lt-h">
 			<div class="container">
 				<a class="navbar-brand mr-2" href="{{ url('') }}"><img id="logo" src="{{ url('assets/img/logo.png') }}"
-					alt="">
+						alt="">
+				</a>
 			</div>
 		</nav>
 	</div>
 	<div class="col-1 col-md-4 col-lg-6 p-0">
-		<nav class="navbar navbar-expand navbar-light bg-light osahan-nav-top p-1 h-80 justify-content-center" id="mt-h">
-			<form class="form-inline mr-auto my-2 my-md-0 mw-100">
+		<nav class="navbar navbar-expand navbar-light bg-light osahan-nav-top p-1 h-80 justify-content-center"
+			id="mt-h">
+			<!-- <form class="form-inline mr-auto my-2 my-md-0 mw-100">
 				<div class="input-group">
 					<input type="text" class="form-control " placeholder="Search fudplug" aria-label="Search"
 						aria-describedby="basic-addon2">
@@ -20,7 +22,7 @@
 						</button>
 					</div>
 				</div>
-			</form>
+			</form> -->
 		</nav>
 	</div>
 	<div class="col-3 col-md-4 col-lg-3 p-0">

@@ -1,5 +1,6 @@
 // Grab server url from script tag
 server = document.currentScript.getAttribute("server");
+notiSound = new Audio(`${server}/assets/ding.mp3`)
 
 $(document).ready(function () {
     getNotifications()

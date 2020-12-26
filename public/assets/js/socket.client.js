@@ -87,6 +87,8 @@ function initIO(server, username, area) {
             ncounter = parseInt($('#noti-dot').text())
             $('#notification-container').prepend(data.content)
             $('#noti-dot').text(ncounter+1)
+
+            notiSound.play()
         }
     })
 }

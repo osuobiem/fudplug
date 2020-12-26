@@ -154,5 +154,8 @@ Route::group(['prefix' => 'socket'], function () {
 Route::group(['prefix' => 'notification'], function () {
     // Get Notifications
     Route::get('get/{from?}', 'NotificationController@get');
+
+    // Mark as read
+    Route::get('mark-as-read/{id?}', 'NotificationController@mark_as_read');
 });
 // -------------

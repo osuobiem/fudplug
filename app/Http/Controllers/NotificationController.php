@@ -7,6 +7,7 @@ use App\User;
 use App\Vendor;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
 class NotificationController extends Controller
@@ -64,5 +65,34 @@ class NotificationController extends Controller
             'notifications' => $notifications,
             'from' => $fr
         ]);
+    }
+
+    /**
+     * Mark as read
+     * @param int $id Notificaton Id
+     * @return json
+     */
+    public function mark_as_read($id = null) {
+        if($id) {
+            $notification = Notification::findOrFail($id);
+            $notification->status = 1;
+
+            // Try Save
+            try {
+                $notification->save();
+
+                return response()->json([
+                    'success' => true,
+                    'message' => 'MAR Successful'
+                ]);
+            } catch (\Throwable $th) {
+                Log::error($th);
+
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Internal Server Error'
+                ], 500);
+            }
+        }
     }
 }
