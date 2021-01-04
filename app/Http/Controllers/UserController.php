@@ -634,7 +634,15 @@ class UserController extends Controller
     public function place_order(Request $request, $vendor_id)
     {
         try {
-            return response()->json(['success' => true, 'message' => 'Order placed successfully', 'request' => $request->all()], 200);
+            $order_detail = $request->order_detail;
+            $order_quantity = $request->order_quantity;
+
+            foreach ($order_detail as $key => $val) {
+                $val = json_encode($val);
+                $order_detail[$key] = array_push([1, 2], $order_quantity[$key]);
+            }
+
+            return response()->json(['success' => true, 'message' => 'Order placed successfully', 'request' => $order_detail], 200);
         } catch (\Throwable $th) {
             Log::error($th);
             return response()->json(['success' => false, 'message' => $th->getMessage()], 500);
