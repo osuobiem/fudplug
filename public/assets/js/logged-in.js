@@ -222,6 +222,6 @@ function clearNViewed() {
         setTimeout(() => {
             $('#noti-dot').text(0)
             $('#noti-dot').addClass('d-none')
-        }, 2500)
+        }, 1500)
     })
 }
