@@ -16,7 +16,9 @@ class CreateNotificationsTable extends Migration
         Schema::create('notifications', function (Blueprint $table) {
             $table->id();
             $table->enum('notice_type', ['like', 'comment']);
-            $table->text('notices');
+            $table->text('content');
+            $table->foreignId('post_id')->constrained()->onUpdate('no action')->onDelete('cascade');
+            $table->integer('owner_id');
             $table->integer('status');
 
             $table->softDeletes();

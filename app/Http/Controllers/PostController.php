@@ -4,7 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Like;
 use App\Media;
+use App\Notification;
 use App\Post;
+use App\SocketData;
+use App\User;
+use App\Vendor;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -268,9 +272,55 @@ class PostController extends Controller
         // Update post like count
         $post->likes += 1;
 
+        if (!($liker->id == $post->vendor_id && $liker_type == 'vendor')) {
+            // Create notification
+            $notification = new Notification();
+            $notification->notice_type = 'like';
+            $notification->owner_id = $post->vendor_id;
+            $notification->post_id = $post->id;
+            $notification->status = 0;
+            $notification->content = "$liker_type-$liker->id//content//likes your post";
+        }
+
         try {
             $like->save();
             $post->save();
+
+            if (!($liker->id == $post->vendor_id && $liker_type == 'vendor')) {
+                $notification->save();
+
+                // Build notification content
+                $content_data = explode('//content//', $notification->content);
+
+                $initiator_data = explode('-', $content_data[0]);
+
+                if ($initiator_data[0] == 'user') {
+                    $initiator = User::find($initiator_data[1]);
+                    $name = strlen($initiator->name) > 0 ? $initiator->name : '@' . $initiator->username;
+                } else {
+                    $initiator = Vendor::find($initiator_data[1]);
+                    $name = $initiator->business_name;
+                }
+
+                $notification->content = '<strong>' . $name . '</strong> ' . $content_data[1] . ': "' . substr($notification->post->content, 0, 40) . '..."';
+                $notification->photo = Storage::url($initiator_data[0] . '/profile/' . $initiator->profile_image);
+
+                // Send Notification
+                Http::post(env('SOCKET_SERVER') . '/notify', [
+                    "owner_socket" => SocketData::where('username', $post->vendor->username)->first()->socket_id,
+                    "content" => view('components.notification-s', ['notification' => $notification])->render()
+                ]);
+
+                // Update nviewed
+                $other_details = json_decode($post->vendor->other_details, true);
+                if (isset($other_details['nviewed'])) {
+                    $other_details['nviewed'] += 1;
+                } else {
+                    $other_details['nviewed'] = 1;
+                }
+                $post->vendor->other_details = json_encode($other_details);
+                $post->vendor->save();
+            }
 
             // Send Notification
             Http::post(env('SOCKET_SERVER') . '/send-likes-count', [

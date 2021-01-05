@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Area;
 use App\Item;
 use App\Menu;
+use App\Notification;
 use App\State;
 use App\User;
 use App\Vendor;

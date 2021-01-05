@@ -3,12 +3,16 @@
 namespace App\Http\Controllers;
 
 use App\Comment;
+use App\Notification;
 use App\Post;
 use App\SocketData;
+use App\User;
+use App\Vendor;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
 class CommentController extends Controller
@@ -88,10 +92,56 @@ class CommentController extends Controller
         // Increase post comments count
         $post->comments++;
 
+        if (!($commentor->id == $post->vendor_id && $commentor_type == 'vendor')) {
+            // Create notification
+            $notification = new Notification();
+            $notification->notice_type = 'comment';
+            $notification->owner_id = $post->vendor_id;
+            $notification->post_id = $post->id;
+            $notification->status = 0;
+            $notification->content = "$commentor_type-$commentor->id//content//commented on your post";
+        }
+
         // Try Save
         try {
             $comment->save();
             $post->save();
+
+            if(!($commentor->id == $post->vendor_id && $commentor_type == 'vendor')) {
+                $notification->save();
+
+                // Build notification content
+                $content_data = explode('//content//', $notification->content);
+
+                $initiator_data = explode('-', $content_data[0]);
+
+                if ($initiator_data[0] == 'user') {
+                    $initiator = User::find($initiator_data[1]);
+                    $name = strlen($initiator->name) > 0 ? $initiator->name : '@' . $initiator->username;
+                } else {
+                    $initiator = Vendor::find($initiator_data[1]);
+                    $name = $initiator->business_name;
+                }
+
+                $notification->content = '<strong>' . $name . '</strong> ' . $content_data[1] . ': "' . substr($notification->post->content, 0, 40) . '..."';
+                $notification->photo = Storage::url($initiator_data[0] . '/profile/' . $initiator->profile_image);
+
+                // Send Notification
+                Http::post(env('SOCKET_SERVER') . '/notify', [
+                    "owner_socket" => SocketData::where('username', $post->vendor->username)->first()->socket_id,
+                    "content" => view('components.notification-s', ['notification' => $notification])->render()
+                ]);
+
+                // Update nviewed
+                $other_details = json_decode($post->vendor->other_details, true);
+                if (isset($other_details['nviewed'])) {
+                    $other_details['nviewed'] += 1;
+                } else {
+                    $other_details['nviewed'] = 1;
+                }
+                $post->vendor->other_details = json_encode($other_details);
+                $post->vendor->save();
+            }
 
             // Send Notification
             Http::post(env('SOCKET_SERVER') . '/send-comments-count', [
@@ -103,6 +153,7 @@ class CommentController extends Controller
             // Send Notification
             Http::post(env('SOCKET_SERVER') . '/send-new-comment', [
                 "new_comment" => view('components/post/comment-new', ['comment' => $comment])->render(),
+                "post_id" => $post->id,
                 "commentor_socket" => SocketData::where('username', $commentor->username)->first()->socket_id,
                 "area" => $post->vendor->area_id
             ]);
@@ -138,13 +189,17 @@ class CommentController extends Controller
      * @param int $id Comment ID
      * @return json
      */
-    public function delete($id)
+    public function delete(Request $request, $id)
     {
         // Get Comment
         $comment = Comment::findOrFail($id);
 
         // Get commentor
-        if (Auth::guard('vendor')->guest() && Auth::guard('user')->guest()) {
+        if (!Auth::guard('vendor')->guest()) {
+            $commentor = $request->user();
+        } elseif (!Auth::guard('user')->guest()) {
+            $commentor = $request->user('user');
+        } else {
             return response()->json([
                 'success' => false,
                 'message' => "You're not logged in"
@@ -165,6 +220,14 @@ class CommentController extends Controller
             Http::post(env('SOCKET_SERVER') . '/send-comments-count', [
                 "post_id" => $post->id,
                 "comments_count" => $post->comments,
+                "area" => $post->vendor->area_id
+            ]);
+
+            // Send Notification
+            Http::post(env('SOCKET_SERVER') . '/delete-comment', [
+                "comment_id" => $comment->id,
+                "post_id" => $post->id,
+                "commentor_socket" => SocketData::where('username', $commentor->username)->first()->socket_id,
                 "area" => $post->vendor->area_id
             ]);
 

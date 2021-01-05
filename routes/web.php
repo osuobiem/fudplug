@@ -150,7 +150,20 @@ Route::group(['prefix' => 'comment'], function () {
 
 // SOCKET ROUTES
 Route::group(['prefix' => 'socket'], function () {
-    // Get Comments
+    // Save new socket_id
     Route::get('save-id/{username}/{socket_id}', 'SocketController@save_id');
+});
+// -------------
+
+// NOTIFICATION ROUTES
+Route::group(['prefix' => 'notification'], function () {
+    // Get Notifications
+    Route::get('get/{from?}', 'NotificationController@get');
+
+    // Mark as read
+    Route::get('mark-as-read/{id?}', 'NotificationController@mark_as_read');
+
+    // Clear nviewed
+    Route::get('clear-nviewed', 'NotificationController@clear_nviewed');
 });
 // -------------

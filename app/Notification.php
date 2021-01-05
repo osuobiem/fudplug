@@ -8,7 +8,7 @@ class Notification extends Model
 {
     public function vendor()
     {
-        return $this->belongsTo('App\Vendor');
+        return $this->belongsTo('App\Vendor', 'owner_id', 'id');
     }
 
     public function post()
@@ -18,17 +18,7 @@ class Notification extends Model
 
     public function user()
     {
-        return $this->belongsTo('App\User');
-    }
-
-    public function comment()
-    {
-        return $this->belongsTo('App\Comment');
-    }
-
-    public function like()
-    {
-        return $this->belongsTo('App\Like');
+        return $this->belongsTo('App\User', 'owner_id', 'id');
     }
     //
 }

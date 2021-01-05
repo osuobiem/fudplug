@@ -1,5 +1,10 @@
 // Grab server url from script tag
 server = document.currentScript.getAttribute("server");
+notiSound = new Audio(`${server}/assets/ding.mp3`)
+
+$(document).ready(function () {
+    getNotifications()
+});
 
 // Like/Unlike a post
 function likePost(post_id, likon) {
@@ -71,6 +76,44 @@ function doUnlike(likeCount, likon, post_id, change = false) {
     $($(likon).siblings()[0]).text(" " + likeCount);
 }
 
+// Spy for open comment modal
+commentModalOpen = false;
+openCommentsPost = null;
+
+// Open Comments Modal
+function openComments(post_id) {
+    $("body").addClass("modal-open");
+    $(".comments-container").removeClass("d-none");
+
+    $(".comments-inner").addClass("animate__fadeInUp");
+    $(".comments-container").addClass("animate__fadeIn");
+
+    $(".comments-inner").removeClass("animate__fadeOutDown");
+    $(".comments-container").removeClass("animate__fadeOut");
+
+    commentModalOpen = true;
+    openCommentsPost = post_id
+
+    fetchComments(post_id);
+}
+
+// Close Comments Modal
+function closeComments() {
+    $("body").removeClass("modal-open");
+    $(".comments-inner").removeClass("animate__fadeInUp");
+    $(".comments-container").removeClass("animate__fadeIn");
+
+    $(".comments-inner").addClass("animate__fadeOutDown");
+    $(".comments-container").addClass("animate__fadeOut");
+
+    commentModalOpen = false;
+    openCommentsPost = null
+
+    setTimeout(() => {
+        $(".comments-container").addClass("d-none");
+    }, 500);
+}
+
 // Delete Comment
 function deleteComment(id) {
     swal({
@@ -79,35 +122,35 @@ function deleteComment(id) {
         dangerMode: true,
     }).then((willDelete) => {
         if (willDelete) {
-            doDelete();
+            doDelete(id);
         }
     });
+}
 
-    // Process Comment Delete
-    function doDelete() {
-        url = `${server}/comment/delete/${id}`;
-        goGet(url)
-            .then((res) => {
-                if (res.success) {
-                    popComment();
-                    showAlert(true, res.message);
-                } else {
-                    showAlert(false, res.message);
-                }
-            })
-            .catch((err) => {
-                showAlert(false, "Oops! Something's not right. Try Again");
-            });
-    }
+// Process Comment Delete
+function doDelete(id) {
+    url = `${server}/comment/delete/${id}`;
+    goGet(url)
+        .then((res) => {
+            if (res.success) {
+                popComment(id);
+                showAlert(true, res.message);
+            } else {
+                showAlert(false, res.message);
+            }
+        })
+        .catch((err) => {
+            showAlert(false, "Oops! Something's not right. Try Again");
+        });
+}
 
-    // Remove comment from container
-    function popComment() {
-        $("#comment__" + id).addClass("animate__animated animate__fadeOutDown");
+// Remove comment from container
+function popComment(id) {
+    $("#comment__" + id).addClass("animate__animated animate__fadeOutDown");
 
-        setTimeout(() => {
-            $("#comment__" + id).remove();
-        }, 1000);
-    }
+    setTimeout(() => {
+        $("#comment__" + id).remove();
+    }, 1000);
 }
 
 // Scroll to top
@@ -116,4 +159,69 @@ function scrollToTop() {
     document.documentElement.scrollTop = 0;
 
     $("#see-l-posts-btn").addClass("d-none");
+}
+
+// Get notifications
+function getNotifications(from = 0) {
+    let url = `${server}/notification/get/${from}`
+
+    goGet(url)
+    .then(res => {
+        if(res.length > 0) {
+            from == 0 ? $('#notification-container').html(res) : $('#notification-container').append(res)
+        }
+    })
+}
+
+// Get more notifications
+function getMoreNotifications() {
+    if(spyBottom('notification-container', 300)) {
+        from = $('#noti-from').text()
+        getNotifications(from)
+    }
+}
+
+// Mark notification as read
+function markAsRead(id, el) {
+    let url = `${server}/notification/mark-as-read/${id}`
+
+    goGet(url)
+    .then(res => {
+        $(el).parent().parent().removeClass('notification-card-u')
+        $(el).parent().parent().addClass('notification-card-r')
+
+        $(el).parent().parent().html(res)
+    })
+}
+
+// Mark all notifications as read
+function markAllAsRead() {
+    let url = `${server}/notification/mark-as-read`
+
+    goGet(url)
+    .then(res => {
+        [...$('.notification-card-u')].forEach(el => {
+            $(el).removeClass('notification-card-u')
+            $(el).addClass('notification-card-r')
+
+            $($(el).children()[1]).removeClass('col-10')
+            $($(el).children()[1]).addClass('col-11')
+
+            $($(el).children()[2]).remove()
+        })
+        $('#m-a-a-r').addClass('d-none')
+    })
+}
+
+// Clear NViewed
+function clearNViewed() {
+    let url = `${server}/notification/clear-nviewed`
+
+    goGet(url)
+    .then(res => {
+        setTimeout(() => {
+            $('#noti-dot').text(0)
+            $('#noti-dot').addClass('d-none')
+        }, 1500)
+    })
 }

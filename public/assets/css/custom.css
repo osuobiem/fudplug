@@ -1336,3 +1336,88 @@ a:visited {
         left: 38%;
     }
 }
+
+.notification-card-u {
+    padding: 5px 10px;
+    box-shadow: 0 0 10px 2px #08080814;
+    margin: 10px;
+    border-radius: 5px;
+    font-size: 12px;
+    background: #ff1c0024;
+}
+
+.notification-card-r {
+    padding: 5px 10px;
+    box-shadow: 0 0 10px 2px #08080814;
+    margin: 10px;
+    border-radius: 5px;
+    font-size: 12px;
+}
+
+#notification-container {
+    height: 300px;
+    overflow: auto;
+}
+
+#noti-dot {
+    color: #ffffff !important;
+    background: red;
+    padding: 0px 5px;
+    border-radius: 25px;
+    position: absolute;
+    left: 28px;
+    top: 12px;
+    font-weight: 800;
+    border: solid .5px #000000;
+}
+
+
+.m-a-r:hover {
+    cursor: pointer;
+    background: rgb(16, 212, 16) !important;
+    color: #fff;
+}
+
+#m-a-a-r>small {
+    font-weight: 500;
+    color: var(--i-primary) !important;
+}
+
+#m-a-a-r>small:hover {
+    cursor: pointer;
+}
+
+.notification-container {
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    background: #000000b6;
+    z-index: 3000;
+    top: 0;
+    left: 0;
+    overflow: auto;
+}
+
+.notification-inner {
+    background: #fff;
+    height: 90%;
+    width: 100%;
+    position: inherit;
+    bottom: 0;
+    border-top-right-radius: 15px;
+    border-top-left-radius: 15px;
+}
+
+@media (min-width: 768px) {
+    .notification-inner {
+        width: 80%;
+        margin: 0 10%
+    }
+}
+
+@media (min-width: 992px) {
+    .comments-inner {
+        width: 48%;
+        margin: 0 26%
+    }
+}
