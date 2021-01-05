@@ -7,9 +7,6 @@ $(document).ready(function () {
 
     // Load The Left Side when Document is Ready
     loadUserLeft();
-
-    // // Load "All Vendors" Modal When Document Is Ready
-    // allVendors();
 });
 
 // Load User Right Side (User Profile) For Mobile
@@ -63,6 +60,21 @@ function loadEditModal() {
     });
 }
 
+// Load Regular Order Modal
+function loadRegOrderModal(dishId) {
+    // spin('user-right-side');
+    // Populate regular-order modalcontainer
+    let getUrl = `${server}/user/order-details`;
+    getUrl += '/' + dishId;
+
+    goGet(getUrl).then((res) => {
+        $("#regular-order-container").html(res);
+        $("#regular-order-modal").modal('show');
+    }).catch((err) => {
+        //spin('user-right-side');
+    });
+}
+
 // Load User Left Side (Nearby Vendors)
 function loadUserLeft() {
     spin('user-left-side');
@@ -75,16 +87,3 @@ function loadUserLeft() {
         spin('user-left-side');
     });
 }
-
-
-// Load "All Vendors" Modal
-// function allVendors() {
-
-//     let getUrl = `${server}/user/all-vendors`;
-
-//     goGet(getUrl).then((res) => {
-//         $("#all-vendors").html(res);
-//     }).catch((err) => {
-//         //spin('user-left-side');
-//     });
-// }

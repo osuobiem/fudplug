@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Area;
+use App\Item;
+use App\Menu;
 use App\Rules\MatchOldPassword;
 use App\State;
 use App\User;
@@ -541,6 +543,9 @@ class UserController extends Controller
             // Get States Data
             $states = State::get();
 
+            // Get Vendor Menu
+            $vendor_menu = $this->vendor_menu($vendor_id)['menu_dishes'];
+
             // Vendor Details
             $vendor = Vendor::where('id', $vendor_id)->first();
 
@@ -556,9 +561,83 @@ class UserController extends Controller
             // Social Media Links
             $social_handles = json_decode($vendor->social_handles);
 
-            return view('user.vendor-profile', compact('vendor', 'vendor_location', 'states', 'areas', 'social_handles'));
+            return view('user.vendor-profile', compact('vendor', 'vendor_location', 'states', 'areas', 'social_handles', 'vendor_menu'));
         } catch (\Throwable $th) {
             Log::error($th);
+            dd($th);
+        }
+    }
+
+    /**
+     * Fetch Vendor Menu
+     * @return Array
+     */
+    public function vendor_menu($vendor)
+    {
+        // Fetch the Menu Item
+        $menu = Menu::where('vendor_id', $vendor)->first("items");
+        if (!empty($menu)) {
+            $menu = json_decode($menu);
+
+            // Get the Array of Dish IDs
+            $menu_items = json_decode($menu->items);
+            $menu_items = $menu_items->item;
+
+            if (!empty($menu)) {
+                // Fetch Dishes for Menu
+                $menu_data = Item::select("*")
+                    ->whereIn('id', $menu_items);
+                $menu_count = $menu_data->count();
+                $menu_dishes = $menu_data->get();
+            } else {
+                $menu_count = 0;
+                $menu_dishes = null;
+            }
+        } else {
+            $menu_count = 0;
+            $menu_dishes = null;
+        }
+
+        return compact('menu_count', 'menu_dishes');
+    }
+
+    /**
+     * Get Vendor Dishes
+     * @return object Laravel View Instance
+     */
+    public function order_details(Request $request, $dish_id)
+    {
+        try {
+            $dish = Item::where(['id' => $dish_id])->first();
+            $data = [];
+            if ($dish->type == "simple") {
+                $qty = json_decode($dish->quantity);
+                $data['dish'] = $dish;
+                $data['price'] = $qty->price;
+                $data['quantity'] = $qty->quantity;
+            } else {
+                $qty = $dish->quantity = json_decode($dish->quantity);
+                $data['dish'] = $dish;
+                $data['regular_qty'] = json_decode($qty->regular);
+                $data['bulk_qty'] = json_decode($qty->bulk);
+            }
+            return view('user.components.regular-order', $data);
+        } catch (\Throwable $th) {
+            Log::error($th);
+        }
+    }
+
+    /**
+     * Process User Order Placing
+     * @return String
+     */
+    public function place_order(Request $request, $vendor_id)
+    {
+        try {
+            return response()->json(['success' => true, 'message' => 'Order placed successfully', 'request' => $request->all()], 200);
+        } catch (\Throwable $th) {
+            Log::error($th);
+            return response()->json(['success' => false, 'message' => $th->getMessage()], 500);
         }
     }
 }

@@ -107,6 +107,8 @@
             <main class="col col-md-10 col-lg-6" id="main-content">
                 @yield('content')
 
+                <!-- ********************** VENDOR COMPONENTS ******************* -->
+
                 {{-- Dish Addition Modal--}}
                 @include('vendor.components.dish-add')
 
@@ -127,6 +129,16 @@
 
                 </div>
                 <!-- Menu Update Modal Holder -->
+
+                <!-- ********************* VENDOR COMPONENTS *********************** -->
+
+
+
+                <!-- ********************* USER COMPONENTS ************************* -->
+                <div id="regular-order-container">
+
+                </div>
+                <!-- ********************* USER COMPONENTS ************************* -->
             </main>
 
             {{--Right Sidebar Vendor--}}
@@ -245,8 +257,9 @@
     @php $logged_in = Auth::guard('vendor')->guest() ? Auth::guard('user')->user() : Auth::user('vendor'); @endphp
     <script>
         $(document).ready(function () {
-            initIO(`{{ env('SOCKET_SERVER') }}`, `{{ $logged_in->username }}`, `{{ $logged_in->area_id }}`)
+            // initIO(`{{ env('SOCKET_SERVER') }}`, `{{ $logged_in->username }}`, `{{ $logged_in->area_id }}`)
         });
+
     </script>
     @else
     <script src="{{ url('assets/js/not-logged-in.js') }}"></script>
@@ -254,11 +267,11 @@
 
 
     {{-- Execute for Different Users --}}
-    @if(Auth::check())
+    @if(!Auth::guard('vendor')->guest())
     <!-- Vendor Scipts -->
     <script src="{{ url('assets/js/vendor.js') }}" server="{{ url('') }}"></script>
     <!-- Vendor Scipts -->
-    @elseif(Auth::guard('user')->check())
+    @elseif(!Auth::guard('user')->guest())
     <!-- USER SCRIPTS -->
     <script src="{{ url('assets/js/user.js') }}" server="{{ url('') }}"></script>
     <!-- USER SCRIPTS -->

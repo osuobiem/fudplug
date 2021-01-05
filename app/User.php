@@ -60,4 +60,9 @@ class User extends Authenticatable
     {
         return $this->hasMany('App\Like');
     }
+
+    public function baskets()
+    {
+        return $this->hasMany('App\Basket');
+    }
 }
