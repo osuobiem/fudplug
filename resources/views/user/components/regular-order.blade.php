@@ -56,7 +56,7 @@
                                     <div class="box shadow-sm border rounded bg-white mb-2">
                                         <div id="basicsHeadingOne">
                                             <h5 class="mb-0">
-                                                <button
+                                                <button type="button"
                                                     class="shadow-none btn btn-block d-flex justify-content-between card-btn p-3 collapsed font-weight-bold"
                                                     data-toggle="" data-target="#basicsCollapseOne"
                                                     aria-expanded="false" aria-controls="basicsCollapseOne">
@@ -80,8 +80,8 @@
                                                                 <!-- <span class="badge badge-secondary float-right">
                                                                 {{$quantity}} left</span> -->
                                                             </p>
-                                                            <input name="order_detail[]" type="hidden"
-                                                                value="['{{$dish->title}}', '{{$price}}', '']" disabled>
+                                                            <input name="order_detail[]" type="hidden" value=""
+                                                                disabled>
                                                         </div>
                                                         <div class="float-right col-7 offset-1 mt-4">
                                                             <div class="input-group qty-field">
@@ -132,7 +132,7 @@
                                     <div class="box shadow-sm border rounded bg-white mb-2">
                                         <div id="basicsHeadingOne">
                                             <h5 class="mb-0">
-                                                <button
+                                                <button type="button"
                                                     class="shadow-none btn btn-block d-flex justify-content-between card-btn p-3 collapsed font-weight-bold"
                                                     data-toggle="collapse" data-target="#basicsCollapseOne"
                                                     aria-expanded="false" aria-controls="basicsCollapseOne">

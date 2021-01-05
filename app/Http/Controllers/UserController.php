@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Area;
+use App\Basket;
 use App\Item;
 use App\Menu;
 use App\Rules\MatchOldPassword;
@@ -628,24 +629,59 @@ class UserController extends Controller
     }
 
     /**
-     * Process User Order Placing
+     * Add items to basket
+     * @param Request $request
      * @return String
      */
-    public function place_order(Request $request, $vendor_id)
+    public function add_to_basket(Request $request)
     {
         try {
-            $order_detail = $request->order_detail;
-            $order_quantity = $request->order_quantity;
+            $basket = new Basket();
+            $basket->user_id = Auth::guard('user')->user()->id;
+            $basket->vendor_id = $request->vendor_id;
+            $basket->item_id = $request->item_id;
+            $basket->order_type = $request->order_type;
+            $basket->order_detail = json_encode($this->fix_details($request));
+            $basket->save();
 
-            foreach ($order_detail as $key => $val) {
-                $val = json_encode($val);
-                $order_detail[$key] = array_push([1, 2], $order_quantity[$key]);
-            }
-
-            return response()->json(['success' => true, 'message' => 'Order placed successfully', 'request' => $order_detail], 200);
+            return response()->json(['success' => true, 'message' => 'Item added to basket', 'output' => $request->order_type], 200);
         } catch (\Throwable $th) {
             Log::error($th);
             return response()->json(['success' => false, 'message' => $th->getMessage()], 500);
         }
+    }
+
+    /**
+     * Construct order details based on order type
+     * @param Request $request
+     * @return Array $order_detail
+     */
+    public function fix_details(Request $request)
+    {
+        $order_detail = $request->order_detail;
+        $order_quantity = $request->order_quantity;
+
+        if ($request->order_type == "simple") {
+            $order_detail[0] = $order_quantity[0];
+        } else {
+            foreach ($order_detail as $key => $val) {
+                $val = $this->to_array($val);
+                if ($val[0] == "regular") {
+                    $val[2] = $order_quantity[$key];
+                }
+                $order_detail[$key] = $val;
+            }
+        }
+
+        return $order_detail;
+    }
+
+    public function to_array($str)
+    {
+        $str = substr($str, 1, strlen($str));
+        $str = substr($str, 0, strlen($str) - 1);
+        $str = str_replace("'", "", $str);
+
+        return explode(',', $str);
     }
 }
