@@ -1421,3 +1421,15 @@ a:visited {
         margin: 0 26%
     }
 }
+
+#mob-noti-dot {
+    color: #ffffff !important;
+    background: red;
+    padding: 0px 5px;
+    border-radius: 25px;
+    position: absolute;
+    left: 48%;
+    top: 6px;
+    font-weight: 800;
+    border: solid .5px #000000;
+}
