@@ -109,7 +109,9 @@ Route::group(['prefix' => 'user'], function () {
         // Order Details
         Route::get('order-details/{dish_id}', 'UserController@order_details');
         // Add to basket
-        Rouute::post('add-to-basket', 'UserController@add_to_basket')
+        Route::post('add-to-basket', 'UserController@add_to_basket');
+        // Get user basket data
+        Route::get('get-basket', 'UserController@get_basket');
         // Place Order
         Route::post('place-order/{vendor_id}', 'UserController@place_order');
     });

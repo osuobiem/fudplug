@@ -1371,6 +1371,18 @@ a:visited {
     border: solid .5px #000000;
 }
 
+#basket-noti-dot{
+    color: #ffffff !important;
+    background: red;
+    padding: 0px 5px;
+    border-radius: 25px;
+    position: absolute;
+    left: 28px;
+    top: 12px;
+    font-weight: 800;
+    border: solid .5px #000000;
+}
+
 
 .m-a-r:hover {
     cursor: pointer;
@@ -1420,4 +1432,43 @@ a:visited {
         width: 48%;
         margin: 0 26%
     }
+}
+
+#basics {
+    height: 379px !important;
+}
+
+@media(max-width: 767px) {
+    #basics {
+        height: 290px !important;
+    }
+
+    .mt-xs-2 {
+        margin-top: 8px;
+    }
+}
+
+@media(min-width: 1024px) {
+    .qty-field {}
+}
+
+.qty-btn{
+    font-size: 9px;
+}
+
+.basket-price-small{
+    margin-left: -64px;
+}
+
+.basket-small{
+    margin-left: -46px;
+}
+
+.qty-input {
+    height: 23px;
+    margin-top: 3px;
+}
+
+.bskt-del-btn{
+    font-size: 26px;
 }

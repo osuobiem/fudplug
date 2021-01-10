@@ -610,17 +610,43 @@ class UserController extends Controller
     {
         try {
             $dish = Item::where(['id' => $dish_id])->first();
+
             $data = [];
             if ($dish->type == "simple") {
+                // Get basket items (simple)
+                $simple_basket = Basket::where([['user_id', '=', Auth::guard('user')->user()->id], ['order_type', '=', 'simple']])->get();
+                $simple_items = [];
+                if (!empty($simple_basket)) {
+                    foreach ($simple_basket as $key => $val) {
+                        $simple_items[$key] = $val->item_id;
+                    }
+                }
+
                 $qty = json_decode($dish->quantity);
                 $data['dish'] = $dish;
                 $data['price'] = $qty->price;
                 $data['quantity'] = $qty->quantity;
+                $data['basket_items'] = $simple_items;
             } else {
+                // Get basket items (simple)
+                $advanced_basket = Basket::where([['user_id', '=', Auth::guard('user')->user()->id], ['order_type', '=', 'advanced']])->get();
+                $advanced_items = [];
+                if (!empty($advanced_basket)) {
+                    foreach ($advanced_basket as $key => $val) {
+                        $basket_item = json_decode($val->order_detail);
+                        $items = [];
+                        foreach ($basket_item as $inner_key => $inner_val) {
+                            $items[$inner_key] = $inner_val[1];
+                        }
+                        $advanced_items['item' . $val->item_id] = $items;
+                    }
+                }
+
                 $qty = $dish->quantity = json_decode($dish->quantity);
                 $data['dish'] = $dish;
                 $data['regular_qty'] = json_decode($qty->regular);
                 $data['bulk_qty'] = json_decode($qty->bulk);
+                $data['basket_items'] = $advanced_items;
             }
             return view('user.components.regular-order', $data);
         } catch (\Throwable $th) {
@@ -636,15 +662,51 @@ class UserController extends Controller
     public function add_to_basket(Request $request)
     {
         try {
-            $basket = new Basket();
-            $basket->user_id = Auth::guard('user')->user()->id;
-            $basket->vendor_id = $request->vendor_id;
-            $basket->item_id = $request->item_id;
-            $basket->order_type = $request->order_type;
-            $basket->order_detail = json_encode($this->fix_details($request));
-            $basket->save();
+            // Check if the dish already exists
+            $dish = Basket::where([['item_id', '=', $request->item_id], ['user_id', '=', Auth::guard('user')->user()->id]]);
+            if ($dish->count() > 0) {
+                // Append new order details
+                $basket_item = Basket::find($dish->first()->id);
+                $detail = json_decode($basket_item->order_detail);
+                $basket_item->order_detail = json_encode(array_merge($detail, $this->fix_details($request)));
+                $basket_item->save();
+            } else {
+                $basket = new Basket();
+                $basket->user_id = Auth::guard('user')->user()->id;
+                $basket->vendor_id = $request->vendor_id;
+                $basket->item_id = $request->item_id;
+                $basket->order_type = $request->order_type;
+                $basket->order_detail = json_encode($this->fix_details($request));
+                $basket->save();
+            }
 
             return response()->json(['success' => true, 'message' => 'Item added to basket', 'output' => $request->order_type], 200);
+        } catch (\Throwable $th) {
+            Log::error($th);
+            return response()->json(['success' => false, 'message' => $th->getMessage()], 500);
+        }
+    }
+
+    /**
+     * Get user basket items
+     * @param Request $request
+     * @return String
+     */
+    public function get_basket(Request $request)
+    {
+        try {
+            $basket = Item::join('baskets', 'baskets.item_id', '=', 'items.id')
+                ->select(['items.title', 'items.quantity', 'items.image', 'baskets.order_type', 'baskets.order_detail'])
+                ->where('baskets.user_id', Auth::guard('user')->user()->id);
+
+            $basket_count = $basket->count();
+            $basket_items = $basket->get();
+
+            // dd($basket_items);
+
+            $basket_view = view('user.components.basket', compact('basket_items'))->render();
+
+            return response()->json(['success' => true, 'basket_view' => $basket_view, 'basket_count' => $basket_count], 200);
         } catch (\Throwable $th) {
             Log::error($th);
             return response()->json(['success' => false, 'message' => $th->getMessage()], 500);
