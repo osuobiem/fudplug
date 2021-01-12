@@ -53,7 +53,8 @@
                                         <input name="order_detail[]" type="hidden" value="" disabled>
                                     </div>
                                     <div class="float-right col-2">
-                                        <a href="javascript:void(0)" title="delete">
+                                        <a href="javascript:void(0)" title="delete"
+                                            onclick="deleteCartItem('{{$dish->id}}', '{{$dish->order_type}}')">
                                             <i class="las la-trash-alt mt-4 bskt-del-btn"></i>
                                         </a>
                                     </div>
@@ -118,15 +119,6 @@
                                     </div>
                                 </div>
                             </a>
-                            <!-- <button type="button"
-                                class="shadow-none btn btn-block d-flex justify-content-between card-btn p-3 collapsed font-weight-bold"
-                                data-toggle="collapse" data-target="#basicsCollapseOne" aria-expanded="false"
-                                aria-controls="basicsCollapseOne">
-                                Regular Quantity
-                                <span class="card-btn-arrow">
-                                    <span class="la la-chevron-down"></span>
-                                </span>
-                            </button> -->
                         </h5>
                     </div>
                     <div id="basicsCollapseOne" class="collapse @if($dish_key < 1): show @endif"
@@ -157,7 +149,8 @@
                                             disabled>
                                     </div>
                                     <div class="float-right col-2">
-                                        <a href="javascript:void(0)">
+                                        <a href="javascript:void(0)"
+                                            onclick="deleteCartItem('{{$dish->id}}', '{{$dish->order_type}}', '{{$key}}')">
                                             <i class="las la-trash-alt mt-4 bskt-del-btn"></i>
                                         </a>
                                     </div>

@@ -112,8 +112,8 @@ Route::group(['prefix' => 'user'], function () {
         Route::post('add-to-basket', 'UserController@add_to_basket');
         // Get user basket data
         Route::get('get-basket', 'UserController@get_basket');
-        // Place Order
-        Route::post('place-order/{vendor_id}', 'UserController@place_order');
+        // Remove from basket
+        Route::post('delete-basket', 'UserController@delete_basket');
     });
 });
 // -------------

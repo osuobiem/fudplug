@@ -1,6 +1,9 @@
 // Grab server url from script tag
 server = document.currentScript.getAttribute("server");
 
+// CSRF Token
+_token = document.currentScript.getAttribute("token").trim();
+
 $(document).ready(function () {
     // Load The Right Side when Document is Ready
     loadUserRight();
@@ -94,6 +97,7 @@ function loadUserLeft() {
     });
 }
 
+/*********************************** Basket script */
 // Load user basket
 function getBasket() {
     let getUrl = `${server}/user/get-basket`;
@@ -121,6 +125,36 @@ function hideAccordion() {
     $('.collapse-hide').collapse('hide');
 }
 
+function deleteCartItem(basketId, orderType, itemPosition = null) {
+    let url = `${server}/user/delete-basket`;
+    let formData = new FormData();
+
+    if (orderType == "simple") {
+        formData.append('_token', _token);
+        formData.append('basket_id', basketId);
+        formData.append('order_type', orderType);
+    } else {
+        formData.append('_token', _token);
+        formData.append('basket_id', basketId);
+        formData.append('order_type', orderType);
+        formData.append('item_position', itemPosition);
+    }
+
+    goPost(url, formData)
+        .then(res => {
+
+            if (handleFormRes(res)) {
+                showAlert(true, res.message);
+
+                // Load user basket details
+                getBasket();
+            }
+        })
+        .catch(err => {
+            console.error(err);
+        })
+}
+/*********************************** Basket script */
 
 
 

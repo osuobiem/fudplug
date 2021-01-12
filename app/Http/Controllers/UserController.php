@@ -378,7 +378,7 @@ class UserController extends Controller
             return view('user.components.left-side', compact('vendors'));
         } catch (\Throwable $th) {
             Log::error($th);
-            return response()->json(['success' => false, 'status' => 500, 'message' => $th->getMessage()]);
+            return response()->json(['success' => false, 'status' => 500, 'message' => "Oops! Something went wrong. Try Again!"]);
         }
     }
 
@@ -428,7 +428,7 @@ class UserController extends Controller
             }
         } catch (\Throwable $th) {
             Log::error($th);
-            return response()->json(['success' => false, 'status' => 500, 'message' => $th->getMessage()]);
+            return response()->json(['success' => false, 'status' => 500, 'message' => "Oops! Something went wrong. Try Again!"]);
         }
     }
 
@@ -458,7 +458,7 @@ class UserController extends Controller
             return $vendors;
         } catch (\Throwable $th) {
             Log::error($th);
-            return response()->json(['success' => false, 'status' => 500, 'message' => $th->getMessage()]);
+            return response()->json(['success' => false, 'status' => 500, 'message' => "Oops! Something went wrong. Try Again!"]);
         }
     }
 
@@ -481,7 +481,7 @@ class UserController extends Controller
             return $vendors;
         } catch (\Throwable $th) {
             Log::error($th);
-            return response()->json(['success' => false, 'status' => 500, 'message' => $th->getMessage()]);
+            return response()->json(['success' => false, 'status' => 500, 'message' => "Oops! Something went wrong. Try Again!"]);
         }
     }
 
@@ -565,7 +565,6 @@ class UserController extends Controller
             return view('user.vendor-profile', compact('vendor', 'vendor_location', 'states', 'areas', 'social_handles', 'vendor_menu'));
         } catch (\Throwable $th) {
             Log::error($th);
-            dd($th);
         }
     }
 
@@ -683,7 +682,7 @@ class UserController extends Controller
             return response()->json(['success' => true, 'message' => 'Item added to basket', 'output' => $request->order_type], 200);
         } catch (\Throwable $th) {
             Log::error($th);
-            return response()->json(['success' => false, 'message' => $th->getMessage()], 500);
+            return response()->json(['success' => false, 'message' => "Oops! Something went wrong. Try Again!"], 500);
         }
     }
 
@@ -696,7 +695,7 @@ class UserController extends Controller
     {
         try {
             $basket = Item::join('baskets', 'baskets.item_id', '=', 'items.id')
-                ->select(['items.title', 'items.quantity', 'items.image', 'baskets.order_type', 'baskets.order_detail'])
+                ->select(['items.title', 'items.quantity', 'items.image', 'baskets.id', 'baskets.order_type', 'baskets.order_detail'])
                 ->where('baskets.user_id', Auth::guard('user')->user()->id);
 
             $basket_count = $basket->count();
@@ -709,7 +708,7 @@ class UserController extends Controller
             return response()->json(['success' => true, 'basket_view' => $basket_view, 'basket_count' => $basket_count], 200);
         } catch (\Throwable $th) {
             Log::error($th);
-            return response()->json(['success' => false, 'message' => $th->getMessage()], 500);
+            return response()->json(['success' => false, 'message' => "Oops! Something went wrong. Try Again!"], 500);
         }
     }
 
@@ -745,5 +744,33 @@ class UserController extends Controller
         $str = str_replace("'", "", $str);
 
         return explode(',', $str);
+    }
+
+    /**
+     * Remove item from basket
+     * @param Request $request
+     * @return Json $response
+     */
+    public function delete_basket(Request $request)
+    {
+        try {
+            if ($request->order_type == "simple") {
+                Basket::where([['id', '=', $request->basket_id], ['user_id', '=', Auth::guard('user')->user()->id]])->delete();
+            } else {
+                $basket_item = Basket::find($request->basket_id);
+                $order_detail = json_decode($basket_item->order_detail);
+                if (count($order_detail) > 1) {
+                    unset($order_detail[$request->item_position]);
+                    $basket_item->order_detail = json_encode(array_values($order_detail));
+                    $basket_item->save();
+                } else {
+                    Basket::where([['id', '=', $request->basket_id], ['user_id', '=', Auth::guard('user')->user()->id]])->delete();
+                }
+            }
+            return response()->json(['success' => true, 'message' => 'Item removed from basket'], 200);
+        } catch (\Throwable $th) {
+            Log::error($th);
+            return response()->json(['success' => false, 'message' => "Oops! Something went wrong. Try Again!"], 500);
+        }
     }
 }
