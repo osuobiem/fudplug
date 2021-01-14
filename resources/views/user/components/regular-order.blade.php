@@ -282,4 +282,128 @@
             })
     }
 
+    /*********************************** Quantity input script **************************************/
+    function clicked(e, element) {
+        e.preventDefault();
+        fieldName = $(element).attr('data-field');
+        type = $(element).attr('data-type');
+        var input = $(element).parent().parent().find('input');
+        var currentVal = parseInt(input.val());
+        if (!isNaN(currentVal)) {
+            if (type == 'minus') {
+
+                if (currentVal > input.attr('min')) {
+                    input.val(currentVal - 1).change();
+                }
+                if (parseInt(input.val()) == input.attr('min')) {
+                    $(element).attr('disabled', true);
+                }
+
+            } else if (type == 'plus') {
+
+                if (currentVal < input.attr('max')) {
+                    input.val(currentVal + 1).change();
+                }
+                if (parseInt(input.val()) == input.attr('max')) {
+                    $(element).attr('disabled', true);
+                }
+
+            }
+        } else {
+            input.val(0);
+        }
+    }
+
+    function focusin(e, element) {
+        $(element).data('oldValue', $(element).val());
+    }
+
+    function change(e, element) {
+        minValue = parseInt($(element).attr('min'));
+        maxValue = parseInt($(element).attr('max'));
+        valueCurrent = parseInt($(element).val());
+
+        // Compute total amount and bind to order button. Also disable and enable order button
+        bindQtyPrice(element);
+
+        // Disable and enable details input field
+        handleDetailInput(element);
+
+        name = $(element).attr('name');
+        if (valueCurrent >= minValue) {
+            // $(".btn-number[data-type='minus'][data-field='" + name + "']").removeAttr('disabled')
+            $(element).prev().find('button').removeAttr('disabled');
+        } else {
+            alert('Sorry, the minimum value was reached');
+            $(element).val($(element).data('oldValue'));
+            $(element).attr('disabled', '');
+        }
+
+
+        if (valueCurrent <= maxValue) {
+            // $(".btn-number[data-type='plus'][data-field='" + name + "']").removeAttr('disabled')
+            $(element).next().find('button').removeAttr('disabled');
+        } else {
+            alert('Sorry, the maximum value was reached');
+            $(element).val($(this).data('oldValue'));
+        }
+    }
+
+    function keydown(e) {
+        // Allow: backspace, delete, tab, escape, enter and .
+        if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 190]) !== -1 ||
+            // Allow: Ctrl+A
+            (e.keyCode == 65 && e.ctrlKey === true) ||
+            // Allow: home, end, left, right
+            (e.keyCode >= 35 && e.keyCode <= 39)) {
+            // let it happen, don't do anything
+            return;
+        }
+        // Ensure that it is a number and stop the keypress
+        if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode >
+                105)) {
+            e.preventDefault();
+        }
+    }
+
+
+    /****** Initiate price input field state ***************/
+    packCount = $("#price-type li").length;
+    prices = [];
+    for (let i = 0; i < packCount; i++) {
+        prices[i] = 0;
+    }
+    /****** Initiate price input field state ***************/
+
+    // Function to compute total amount and bind to order button. Also disable and enable order button
+    function bindQtyPrice(element) {
+        let index = $(element).parent().parent().parent().index();
+        let price = Number($(element).parent().parent().prev().find('span').text().replace('₦', '').trim());
+        let qty = $(element).val();
+        let finalTotal = (price * qty);
+        prices[index] = finalTotal;
+        finalTotal = prices.reduce((a, b) => a + b);
+
+        if (finalTotal < 1) {
+            $("#final-price").text('₦' + String(finalTotal.toFixed(2)));
+            $("#order-btn").attr('disabled', '');
+        } else {
+            $("#final-price").text('₦' + String(finalTotal.toFixed(2)));
+            $("#order-btn").removeAttr('disabled');
+        }
+    }
+
+    // Function to disable and enable details input field
+    function handleDetailInput(element) {
+        valueCurrent = parseInt($(element).val());
+        if (valueCurrent < 1) {
+            $(element).parent().parent().prev().find('input').attr('disabled', '');
+            $(element).attr('disabled', '');
+        } else {
+            $(element).parent().parent().prev().find('input').removeAttr('disabled');
+            $(element).removeAttr('disabled');
+        }
+    }
+    /*********************************** Quantity input script **************************************/
+
 </script>

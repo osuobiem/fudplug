@@ -773,4 +773,34 @@ class UserController extends Controller
             return response()->json(['success' => false, 'message' => "Oops! Something went wrong. Try Again!"], 500);
         }
     }
+
+    /**
+     * Update item in basket
+     * @param Request $request
+     * @return Json $response
+     */
+    public function update_basket(Request $request)
+    {
+        try {
+            if ($request->order_type == "simple") {
+                $basket_item = Basket::find($request->basket_id);
+                $order_detail = json_decode($basket_item->order_detail);
+                $order_detail[0] = $request->quantity;
+                $basket_item->order_detail = json_encode($order_detail);
+                $basket_item->save();
+            } else {
+                $basket_item = Basket::find($request->basket_id);
+                $order_detail = json_decode($basket_item->order_detail);
+                $detail_item = $order_detail[$request->item_position];
+                $detail_item[2] = $request->quantity;
+                $order_detail[$request->item_position] = $detail_item;
+                $basket_item->order_detail = json_encode($order_detail);
+                $basket_item->save();
+            }
+            return response()->json(['success' => true, 'message' => 'Item updated'], 200);
+        } catch (\Throwable $th) {
+            Log::error($th);
+            return response()->json(['success' => false, 'message' => "Oops! Something went wrong. Try Again!"], 500);
+        }
+    }
 }

@@ -1,6 +1,6 @@
 <div>
 
-    <form>
+    <form id="basket-form">
         @csrf
 
         @foreach($basket_items as $dish_key=>$dish)
@@ -36,7 +36,7 @@
                     <div id="basicsCollapseOne" class="collapse @if($dish_key < 1): show @endif"
                         aria-labelledby="basicsHeadingOne" data-parent="#basicsAccordion" style="">
                         <div class="card-body border-top p-2 text-muted" style="font-size: large;">
-                            <ul id="price-type" id="item" class="list-group box-body generic-scrollbar"
+                            <ul id="basket-price-type" id="item" class="list-group box-body generic-scrollbar"
                                 style="max-height: 250px; overflow: auto;">
                                 <li class="list-group-item pt-0">
                                     <div class="float-left col-4">
@@ -50,6 +50,7 @@
                                                 ₦{{$actual_detail['price']}}
                                             </span>
                                         </p>
+                                        <input name="basket_price[]" type="hidden" value="{{$actual_detail['price']}}">
                                         <input name="order_detail[]" type="hidden" value="" disabled>
                                     </div>
                                     <div class="float-right col-2">
@@ -63,12 +64,13 @@
                                             <span class="input-group-btn">
                                                 <button onclick="clicked(event, this);" type="button bordered"
                                                     class="btn btn-sm btn-secondary btn-number rounded-right-0 qty-btn"
-                                                    disabled="disabled" data-type="minus">
+                                                    data-type="minus">
                                                     <span class="la la-minus"></span>
                                                 </button>
                                             </span>
                                             <input type="text" name="order_quantity[]" onkeydown="keydown(event)"
-                                                onchange="change(event, this)" onfocus="focusin(event, this)"
+                                                onchange="change(event, this, '{{$dish->id}}', '{{$dish->order_type}}')"
+                                                onfocus="focusin(event, this)"
                                                 class="form-control rounded-left-0 rounded-right-0 form-control-sm qty-input"
                                                 value="{{$order_qty}}" min="0" max="{{$actual_detail['quantity']}}"
                                                 disabled>
@@ -125,7 +127,7 @@
                         aria-labelledby="basicsHeadingOne" data-parent="#basicsAccordion" style="">
                         <div class="card-body border-top p-2 text-muted" style="font-size: large;">
 
-                            <ul id="price-type" class="list-group box-body generic-scrollbar"
+                            <ul id="basket-price-type" class="list-group box-body generic-scrollbar"
                                 style="max-height: 250px; overflow: auto;">
                                 @php
                                 $i = 1;
@@ -145,6 +147,8 @@
                                             <span class="float-left text-danger" style="font-size: large;">
                                                 ₦{{$qty['price']}}</span>
                                         </p>
+                                        <input class="basket-price" name="basket_price[]" type="hidden"
+                                            value="{{$qty['price']}}">
                                         <input name="order_detail[]" type="hidden" value="['regular','{{$key}}']"
                                             disabled>
                                     </div>
@@ -159,11 +163,12 @@
                                             <span class="input-group-btn">
                                                 <button onclick="clicked(event, this);" type="button bordered"
                                                     class="btn btn-sm btn-secondary btn-number rounded-right-0 qty-btn"
-                                                    disabled="disabled" data-type="minus">
+                                                    data-type="minus">
                                                     <span class="la la-minus"></span>
                                                 </button>
                                             </span>
-                                            <input type="text" onkeydown="keydown(event)" onchange="change(event, this)"
+                                            <input type="text" onkeydown="keydown(event)"
+                                                onchange="change(event, this, '{{$dish->id}}', '{{$dish->order_type}}', '{{$key}}')"
                                                 onfocus="focusin(event, this)" name="order_quantity[]"
                                                 class="form-control rounded-left-0 rounded-right-0 form-control-sm qty-input"
                                                 value="{{$detail[2]}}" min="0" max="{{$qty['quantity']}}">
@@ -192,13 +197,19 @@
 </div>
 @endif
 @endforeach
-<!-- <div class="row">
-            <div class="col-md-12 mt-xs-2">
-                <button type="submit" id="order-btn" class="btn btn-sm btn-primary btn-block font-weight-bold"
-                    data-attach-loading="true" disabled>
-                    Add to basket <span id="final-price" class="float-right" data-item-subtotal="">₦0.00</span>
-                </button>
-            </div>
-        </div> -->
+<div class="row">
+    <div class="col-md-12 mt-xs-2">
+        <button type="submit" id="basket-order-btn" class="btn btn-sm btn-primary btn-block font-weight-bold"
+            data-attach-loading="true" disabled>
+            Place order <span id="basket-final-price" class="float-right" data-item-subtotal="">₦0.00</span>
+        </button>
+    </div>
+</div>
 </form>
 </div>
+@push('scripts')
+<script>
+    console.log("hello my");
+
+</script>
+@endpush

@@ -114,6 +114,8 @@ Route::group(['prefix' => 'user'], function () {
         Route::get('get-basket', 'UserController@get_basket');
         // Remove from basket
         Route::post('delete-basket', 'UserController@delete_basket');
+        // Update basket item quantity
+        Route::post('update-basket', 'UserController@update_basket');
     });
 });
 // -------------
