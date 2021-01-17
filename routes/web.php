@@ -116,6 +116,10 @@ Route::group(['prefix' => 'user'], function () {
         Route::post('delete-basket', 'UserController@delete_basket');
         // Update basket item quantity
         Route::post('update-basket', 'UserController@update_basket');
+        // Place order
+        Route::post('place-order', 'UserController@place_order');
+        // Get user orders
+        Route::get('get-order', 'UserController@get_order');
     });
 });
 // -------------
