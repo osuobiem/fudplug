@@ -854,7 +854,7 @@ class UserController extends Controller
     public function get_order(Request $request)
     {
         try {
-            $orders = Vendor::join('orders', 'orders.vendor_id', '=', 'vendors.id')->join('order_items', 'order_items.order_id', '=', 'orders.id')->join('items', 'items.id', '=', 'order_items.item_id')->select(DB::raw("GROUP_CONCAT(items.title) as title, GROUP_CONCAT(TO_BASE64(items.quantity)) AS quantity, GROUP_CONCAT(items.image) AS image, GROUP_CONCAT(order_items.id) AS order_id,GROUP_CONCAT(order_items.order_type) AS order_type, GROUP_CONCAT(TO_BASE64(order_items.order_detail)) AS order_detail, GROUP_CONCAT(DISTINCT vendors.business_name) AS vendor_name, GROUP_CONCAT(DISTINCT vendors.cover_image) AS vendor_image"))->where('orders.user_id', Auth::guard('user')->user()->id)->groupBy('orders.id')->get();
+            $orders = Vendor::join('orders', 'orders.vendor_id', '=', 'vendors.id')->join('order_items', 'order_items.order_id', '=', 'orders.id')->join('items', 'items.id', '=', 'order_items.item_id')->select("orders.id as order_id", "orders.status as order_status", DB::raw("GROUP_CONCAT(items.title) as title, GROUP_CONCAT(TO_BASE64(items.quantity)) AS quantity, GROUP_CONCAT(items.image) AS image,GROUP_CONCAT(order_items.order_type) AS order_type, GROUP_CONCAT(TO_BASE64(order_items.order_detail)) AS order_detail, GROUP_CONCAT(DISTINCT vendors.business_name) AS vendor_name, GROUP_CONCAT(DISTINCT vendors.cover_image) AS vendor_image"))->where('orders.user_id', Auth::guard('user')->user()->id)->groupBy('orders.id')->get();
 
             if (!empty($orders)) {
                 foreach ($orders as $order) {
@@ -871,9 +871,12 @@ class UserController extends Controller
                     }
                     $order->quantity = $quant_arr;
                     $order->order_detail = $ord_arr;
+                    // Fix order quantity & order details
+
+                    // Fix order status
+                    $order->order_status = $this->order_status($order->order_status);
 
                     $order->image = explode(',', $order->image);
-                    $order->order_id = explode(',', $order->order_id);
                     $order->order_type = explode(',', $order->order_type);
                 }
             } else {
@@ -887,5 +890,36 @@ class UserController extends Controller
             Log::error($th);
             return response()->json(['success' => false, 'message' => "Oops! Something went wrong. Try Again!"], 500);
         }
+    }
+
+    /**
+     * Convert order status to human readable format
+     * @param Integer $order_status
+     * @return String $status
+     */
+    public function order_status($order_status)
+    {
+        $status = array();
+
+        switch ($order_status) {
+            case 0:
+                $status['status'] = "Pending";
+                $status['colour'] = "badge-info";
+                break;
+            case 1:
+                $status['status'] = "Approved";
+                $status['colour'] = "badge-success";
+                break;
+            case -1:
+                $status['status'] = "Rejected";
+                $status['colour'] = "badge-warning";
+                break;
+            case -2:
+                $status['status'] = "Cancelled";
+                $status['colour'] = "badge-warning";
+                break;
+        }
+
+        return $status;
     }
 }

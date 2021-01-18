@@ -25,7 +25,10 @@
                                             alt="Image Description">
                                     </div>
                                     <div class="media-body mt-2">
-                                        {{$order->vendor_name}}
+                                        {{$order->vendor_name}}au
+
+                                        <span
+                                            class="badge {{$order->order_status['colour']}} ml-2">{{$order->order_status['status']}}</span>
                                     </div>
                                 </div>
                             </a>
@@ -101,6 +104,10 @@
                                 @endif
                                 @endforeach
                             </ul>
+                        </div>
+                        <div class="card-footer border-top p-0 text-muted">
+                            <a href="javascript:void(0);" class="btn btn-sm"><i class="las la-times"></i>&nbsp;Cancel
+                                order</a>
                         </div>
                     </div>
                 </div>
