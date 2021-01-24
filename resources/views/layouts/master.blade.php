@@ -261,8 +261,7 @@
                     <!-- Vendor Scipts -->
                     @elseif(!Auth::guard('user')->guest())
                     <!-- USER SCRIPTS -->
-                    <script src="{{ url('assets/js/user.js') }}" server="{{ url('') }}" token="{{ csrf_token() }}">
-                    </script>
+                    @include('user.user-script')
                     <!-- USER SCRIPTS -->
                     @endif
                     <!-- Add CSRF Token to Headers for Ajax Requests -->

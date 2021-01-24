@@ -99,6 +99,39 @@ function loadUserLeft() {
 }
 
 /*********************************** Basket script */
+// Place order
+function addToBasket(el, vendorId) {
+    el.preventDefault()
+
+    // spin('profile')
+    offError('pr-update-error')
+
+    let url = `{{url('user/add-to-basket')}}`;
+    let data = new FormData(el.target);
+    data.append('vendor_id', '{{$dish->vendor_id}}');
+    data.append('item_id', '{{$dish->id}}');
+    data.append('order_type', '{{$dish->type}}');
+
+
+    goPost(url, data)
+        .then(res => {
+            // spin('profile')
+
+            if (handleFormRes(res)) {
+                showAlert(true, res.message);
+                // Close modal
+                $("#regular-order-modal").modal('hide');
+                // Load user basket details
+                getBasket();
+            }
+        })
+        .catch(err => {
+            // spin('profile');
+            handleFormRes(err, 'pr-update-error');
+        })
+}
+
+
 // Load user basket
 function getBasket() {
     let getUrl = `${server}/user/get-basket`;
@@ -194,7 +227,7 @@ function updateCartItem(basketId, orderType, quantity, itemPosition = null) {
 }
 
 
-/******** Quantity input script for basket ******************/
+/******** Quantity input script ******************/
 function clicked(e, element) {
     e.preventDefault();
     fieldName = $(element).attr('data-field');
@@ -236,7 +269,7 @@ function change(e, element, basketId, orderType, itemPosition = null) {
     valueCurrent = parseInt($(element).val());
 
 
-    name = $(element).attr('name');
+    let name = $(element).attr('name');
     if (valueCurrent >= minValue) {
         // $(".btn-number[data-type='minus'][data-field='" + name + "']").removeAttr('disabled')
         $(element).prev().find('button').removeAttr('disabled');
@@ -255,7 +288,16 @@ function change(e, element, basketId, orderType, itemPosition = null) {
         $(element).val($(this).data('oldValue'));
     }
 
-    updateCartItem(basketId, orderType, valueCurrent, itemPosition)
+    // Check if regular order modal is open and execute these kines
+    if ($('#regular-order-modal').hasClass('show')) {
+        // Compute total amount and bind to order button. Also disable and enable order button
+        bindQtyPrice(element);
+
+        // Disable and enable details input field
+        handleDetailInput(element);
+    } else {
+        updateCartItem(basketId, orderType, valueCurrent, itemPosition);
+    }
 }
 
 function keydown(e) {
@@ -274,14 +316,17 @@ function keydown(e) {
         e.preventDefault();
     }
 }
-/******** Quantity input script for basket ******************/
+/******** Quantity input script ******************/
 
 
 
 
-/****** Add total price to order button on viewing basket ***************/
+/****** Basket specific script ***************/
 $("#basket-btn").click(function () {
     getBasketQtyPrice();
+
+    // Load user basket details
+    getBasket();
 });
 
 // Function to get the prices and quantities to be computed
@@ -319,7 +364,50 @@ function bindBasketQtyPrice(price, quantity) {
     $("#basket-order-btn").removeAttr('disabled');
 
 }
-/****** Add total price to order button  on viewing basket ***************/
+
+
+// Function to disable and enable details input field
+function handleBasketDetailInput(element) {
+    valueCurrent = parseInt($(element).val());
+    if (valueCurrent < 1) {
+        $(element).parent().parent().prev().find('input').attr('disabled', '');
+        $(element).attr('disabled', '');
+    } else {
+        $(element).parent().parent().prev().find('input').removeAttr('disabled');
+        $(element).removeAttr('disabled');
+    }
+}
+
+/*********************************** Basket specific script */
+
+
+
+
+/******************************* Regular order-specific script */
+// Initiate price input field state
+packCount = $("#price-type li").length;
+prices = [];
+for (let i = 0; i < packCount; i++) {
+    prices[i] = 0;
+}
+
+// Function to compute total amount and bind to order button. Also disable and enable order button
+function bindQtyPrice(element) {
+    let index = $(element).parent().parent().parent().index();
+    let price = Number($(element).parent().parent().prev().find('span').text().replace('₦', '').trim());
+    let qty = $(element).val();
+    let finalTotal = (price * qty);
+    prices[index] = finalTotal;
+    finalTotal = prices.reduce((a, b) => a + b);
+
+    if (finalTotal < 1) {
+        $("#final-price").text('₦' + String(finalTotal.toFixed(2)));
+        $("#order-btn").attr('disabled', '');
+    } else {
+        $("#final-price").text('₦' + String(finalTotal.toFixed(2)));
+        $("#order-btn").removeAttr('disabled');
+    }
+}
 
 // Function to disable and enable details input field
 function handleDetailInput(element) {
@@ -332,7 +420,4 @@ function handleDetailInput(element) {
         $(element).removeAttr('disabled');
     }
 }
-
-
-
-/*********************************** Basket script */
+/******************************* Regular order-specific script */

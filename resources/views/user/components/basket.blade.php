@@ -1,8 +1,5 @@
 <div>
-
-    <form id="basket-form">
-        @csrf
-
+    <div>
         @foreach($basket_items as $dish_key=>$dish)
         @if($dish->order_type == "simple")
         <div>
@@ -171,7 +168,7 @@
                                                 onchange="change(event, this, '{{$dish->id}}', '{{$dish->order_type}}', '{{$key}}')"
                                                 onfocus="focusin(event, this)" name="order_quantity[]"
                                                 class="form-control rounded-left-0 rounded-right-0 form-control-sm qty-input"
-                                                value="{{$detail[2]}}" min="0" max="{{$qty['quantity']}}">
+                                                value="{{$detail[2]}}" min="0" max="{{$qty['quantity']}}" disabled>
                                             <span class="input-group-btn">
                                                 <button onclick="clicked(event, this);" type="button"
                                                     class="btn btn-sm btn-secondary btn-number rounded-left-0 qty-btn"
@@ -194,22 +191,16 @@
 
             </div>
 
-</div>
-@endif
-@endforeach
-<div class="row">
-    <div class="col-md-12 mt-xs-2">
-        <button type="submit" id="basket-order-btn" class="btn btn-sm btn-primary btn-block font-weight-bold"
-            data-attach-loading="true" disabled>
-            Place order <span id="basket-final-price" class="float-right" data-item-subtotal="">₦0.00</span>
-        </button>
+    </div>
+    @endif
+    @endforeach
+    <div class="row">
+        <div class="col-md-12 mt-xs-2">
+            <button type="button" id="basket-order-btn" onclick="placeOrder()"
+                class="btn btn-sm btn-primary btn-block font-weight-bold" data-attach-loading="true" disabled>
+                Place order <span id="basket-final-price" class="float-right" data-item-subtotal="">₦0.00</span>
+            </button>
+        </div>
     </div>
 </div>
-</form>
 </div>
-@push('scripts')
-<script>
-    console.log("hello my");
-
-</script>
-@endpush

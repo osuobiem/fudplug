@@ -107,10 +107,16 @@
                         </a>
                         <div class="dropdown-menu dropdown-menu-right shadow noti-drop">
                             <h6 class="dropdown-header text-center">
-                                Orders
+                                <span>
+                                    My Orders
+                                </span>
+                                <span class="float-right" title="Order history">
+                                    <a href="" class="text-dark"><i class="las la-history la-2x"></i></a>
+                                </span>
                             </h6>
                             <div class="dropdown-divider"></div>
-                            <div id="h-noti-cont" class="p-2 text-center">
+                            <div class="box-body generic-scrollbar p-2 text-center job-item-2 order-container"
+                                style="max-height: 450px; overflow: auto;" id="h-noti-cont">
                                 <p>No Orders yet!</p>
                             </div>
                         </div>
