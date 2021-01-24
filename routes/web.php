@@ -108,8 +108,18 @@ Route::group(['prefix' => 'user'], function () {
         Route::get('vendor-profile/{vendor_id}', 'UserController@vendor_profile');
         // Order Details
         Route::get('order-details/{dish_id}', 'UserController@order_details');
-        // Place Order
-        Route::post('place-order/{vendor_id}', 'UserController@place_order');
+        // Add to basket
+        Route::post('add-to-basket', 'UserController@add_to_basket');
+        // Get user basket data
+        Route::get('get-basket', 'UserController@get_basket');
+        // Remove from basket
+        Route::post('delete-basket', 'UserController@delete_basket');
+        // Update basket item quantity
+        Route::post('update-basket', 'UserController@update_basket');
+        // Place order
+        Route::post('place-order', 'UserController@place_order');
+        // Get user orders
+        Route::get('get-order', 'UserController@get_order');
     });
 });
 // -------------

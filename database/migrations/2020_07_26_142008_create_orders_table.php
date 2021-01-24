@@ -17,10 +17,7 @@ class CreateOrdersTable extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained()->onDelete('cascade')->onUpdate('no action');
             $table->foreignId('vendor_id')->constrained()->onDelete('cascade')->onUpdate('no action');
-            $table->text('items');
-            // Uncomment this when migrating
-            // $table->enum('order_type', ['bulk', 'regular']);
-            // $table->integer('status');
+            $table->integer('status');
 
             $table->softDeletes();
             $table->timestamps();

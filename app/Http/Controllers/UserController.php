@@ -3,14 +3,17 @@
 namespace App\Http\Controllers;
 
 use App\Area;
+use App\Basket;
 use App\Item;
 use App\Menu;
+use App\Order;
 use App\Rules\MatchOldPassword;
 use App\State;
 use App\User;
 use App\Vendor;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
@@ -377,7 +380,7 @@ class UserController extends Controller
             return view('user.components.left-side', compact('vendors'));
         } catch (\Throwable $th) {
             Log::error($th);
-            return response()->json(['success' => false, 'status' => 500, 'message' => $th->getMessage()]);
+            return response()->json(['success' => false, 'status' => 500, 'message' => "Oops! Something went wrong. Try Again!"]);
         }
     }
 
@@ -427,7 +430,7 @@ class UserController extends Controller
             }
         } catch (\Throwable $th) {
             Log::error($th);
-            return response()->json(['success' => false, 'status' => 500, 'message' => $th->getMessage()]);
+            return response()->json(['success' => false, 'status' => 500, 'message' => "Oops! Something went wrong. Try Again!"]);
         }
     }
 
@@ -457,7 +460,7 @@ class UserController extends Controller
             return $vendors;
         } catch (\Throwable $th) {
             Log::error($th);
-            return response()->json(['success' => false, 'status' => 500, 'message' => $th->getMessage()]);
+            return response()->json(['success' => false, 'status' => 500, 'message' => "Oops! Something went wrong. Try Again!"]);
         }
     }
 
@@ -480,7 +483,7 @@ class UserController extends Controller
             return $vendors;
         } catch (\Throwable $th) {
             Log::error($th);
-            return response()->json(['success' => false, 'status' => 500, 'message' => $th->getMessage()]);
+            return response()->json(['success' => false, 'status' => 500, 'message' => "Oops! Something went wrong. Try Again!"]);
         }
     }
 
@@ -564,7 +567,6 @@ class UserController extends Controller
             return view('user.vendor-profile', compact('vendor', 'vendor_location', 'states', 'areas', 'social_handles', 'vendor_menu'));
         } catch (\Throwable $th) {
             Log::error($th);
-            dd($th);
         }
     }
 
@@ -609,17 +611,43 @@ class UserController extends Controller
     {
         try {
             $dish = Item::where(['id' => $dish_id])->first();
+
             $data = [];
             if ($dish->type == "simple") {
+                // Get basket items (simple)
+                $simple_basket = Basket::where([['user_id', '=', Auth::guard('user')->user()->id], ['order_type', '=', 'simple']])->get();
+                $simple_items = [];
+                if (!empty($simple_basket)) {
+                    foreach ($simple_basket as $key => $val) {
+                        $simple_items[$key] = $val->item_id;
+                    }
+                }
+
                 $qty = json_decode($dish->quantity);
                 $data['dish'] = $dish;
                 $data['price'] = $qty->price;
                 $data['quantity'] = $qty->quantity;
+                $data['basket_items'] = $simple_items;
             } else {
+                // Get basket items (simple)
+                $advanced_basket = Basket::where([['user_id', '=', Auth::guard('user')->user()->id], ['order_type', '=', 'advanced']])->get();
+                $advanced_items = [];
+                if (!empty($advanced_basket)) {
+                    foreach ($advanced_basket as $key => $val) {
+                        $basket_item = json_decode($val->order_detail);
+                        $items = [];
+                        foreach ($basket_item as $inner_key => $inner_val) {
+                            $items[$inner_key] = $inner_val[1];
+                        }
+                        $advanced_items['item' . $val->item_id] = $items;
+                    }
+                }
+
                 $qty = $dish->quantity = json_decode($dish->quantity);
                 $data['dish'] = $dish;
                 $data['regular_qty'] = json_decode($qty->regular);
                 $data['bulk_qty'] = json_decode($qty->bulk);
+                $data['basket_items'] = $advanced_items;
             }
             return view('user.components.regular-order', $data);
         } catch (\Throwable $th) {
@@ -628,16 +656,270 @@ class UserController extends Controller
     }
 
     /**
-     * Process User Order Placing
+     * Add items to basket
+     * @param Request $request
      * @return String
      */
-    public function place_order(Request $request, $vendor_id)
+    public function add_to_basket(Request $request)
     {
         try {
-            return response()->json(['success' => true, 'message' => 'Order placed successfully', 'request' => $request->all()], 200);
+            // Check if the dish already exists
+            $dish = Basket::where([['item_id', '=', $request->item_id], ['user_id', '=', Auth::guard('user')->user()->id]]);
+            if ($dish->count() > 0) {
+                // Append new order details
+                $basket_item = Basket::find($dish->first()->id);
+                $detail = json_decode($basket_item->order_detail);
+                $basket_item->order_detail = json_encode(array_merge($detail, $this->fix_details($request)));
+                $basket_item->save();
+            } else {
+                $basket = new Basket();
+                $basket->user_id = Auth::guard('user')->user()->id;
+                $basket->vendor_id = $request->vendor_id;
+                $basket->item_id = $request->item_id;
+                $basket->order_type = $request->order_type;
+                $basket->order_detail = json_encode($this->fix_details($request));
+                $basket->save();
+            }
+
+            return response()->json(['success' => true, 'message' => 'Item added to basket', 'output' => $request->order_type], 200);
         } catch (\Throwable $th) {
             Log::error($th);
-            return response()->json(['success' => false, 'message' => $th->getMessage()], 500);
+            return response()->json(['success' => false, 'message' => "Oops! Something went wrong. Try Again!"], 500);
         }
+    }
+
+    /**
+     * Get user basket items
+     * @param Request $request
+     * @return String
+     */
+    public function get_basket(Request $request)
+    {
+        try {
+            $basket = Item::join('baskets', 'baskets.item_id', '=', 'items.id')
+                ->select(['items.title', 'items.quantity', 'items.image', 'baskets.id', 'baskets.order_type', 'baskets.order_detail'])
+                ->where('baskets.user_id', Auth::guard('user')->user()->id);
+
+            $basket_count = $basket->count();
+            $basket_items = $basket->get();
+
+            $basket_view = view('user.components.basket', compact('basket_items'))->render();
+
+            return response()->json(['success' => true, 'basket_view' => $basket_view, 'basket_count' => $basket_count], 200);
+        } catch (\Throwable $th) {
+            Log::error($th);
+            return response()->json(['success' => false, 'message' => "Oops! Something went wrong. Try Again!"], 500);
+        }
+    }
+
+    /**
+     * Construct order details based on order type
+     * @param Request $request
+     * @return Array $order_detail
+     */
+    public function fix_details(Request $request)
+    {
+        $order_detail = $request->order_detail;
+        $order_quantity = $request->order_quantity;
+
+        if ($request->order_type == "simple") {
+            $order_detail[0] = $order_quantity[0];
+        } else {
+            foreach ($order_detail as $key => $val) {
+                $val = $this->to_array($val);
+                if ($val[0] == "regular") {
+                    $val[2] = $order_quantity[$key];
+                }
+                $order_detail[$key] = $val;
+            }
+        }
+
+        return $order_detail;
+    }
+
+    public function to_array($str)
+    {
+        $str = substr($str, 1, strlen($str));
+        $str = substr($str, 0, strlen($str) - 1);
+        $str = str_replace("'", "", $str);
+
+        return explode(',', $str);
+    }
+
+    /**
+     * Remove item from basket
+     * @param Request $request
+     * @return Json $response
+     */
+    public function delete_basket(Request $request)
+    {
+        try {
+            if ($request->order_type == "simple") {
+                Basket::where([['id', '=', $request->basket_id], ['user_id', '=', Auth::guard('user')->user()->id]])->delete();
+            } else {
+                $basket_item = Basket::find($request->basket_id);
+                $order_detail = json_decode($basket_item->order_detail);
+                if (count($order_detail) > 1) {
+                    unset($order_detail[$request->item_position]);
+                    $basket_item->order_detail = json_encode(array_values($order_detail));
+                    $basket_item->save();
+                } else {
+                    Basket::where([['id', '=', $request->basket_id], ['user_id', '=', Auth::guard('user')->user()->id]])->delete();
+                }
+            }
+            return response()->json(['success' => true, 'message' => 'Item removed from basket'], 200);
+        } catch (\Throwable $th) {
+            Log::error($th);
+            return response()->json(['success' => false, 'message' => "Oops! Something went wrong. Try Again!"], 500);
+        }
+    }
+
+    /**
+     * Update item in basket
+     * @param Request $request
+     * @return Json $response
+     */
+    public function update_basket(Request $request)
+    {
+        try {
+            if ($request->order_type == "simple") {
+                $basket_item = Basket::find($request->basket_id);
+                $order_detail = json_decode($basket_item->order_detail);
+                $order_detail[0] = $request->quantity;
+                $basket_item->order_detail = json_encode($order_detail);
+                $basket_item->save();
+            } else {
+                $basket_item = Basket::find($request->basket_id);
+                $order_detail = json_decode($basket_item->order_detail);
+                $detail_item = $order_detail[$request->item_position];
+                $detail_item[2] = $request->quantity;
+                $order_detail[$request->item_position] = $detail_item;
+                $basket_item->order_detail = json_encode($order_detail);
+                $basket_item->save();
+            }
+            return response()->json(['success' => true, 'message' => 'Item updated'], 200);
+        } catch (\Throwable $th) {
+            Log::error($th);
+            return response()->json(['success' => false, 'message' => "Oops! Something went wrong. Try Again!"], 500);
+        }
+    }
+
+    /**
+     * Place order
+     * @param Request $request
+     * @return Json $response
+     */
+    public function place_order(Request $request)
+    {
+        try {
+            $user_id = Auth::guard('user')->user()->id;
+            $vendor_ids = Basket::where('user_id', $user_id)->groupBy('vendor_id')->get(['vendor_id']);
+            $id_arr = [];
+
+            foreach ($vendor_ids as $key => $val) {
+                // $id_arr[$key] = $val->vendor_id;
+                $order = new Order();
+                $order->user_id = $user_id;
+                $order->vendor_id = $val->vendor_id;
+                $order->status = 0;
+                $order->save();
+
+                Basket::query()
+                    ->where([['user_id', '=', $user_id], ['vendor_id', '=', $val->vendor_id]])
+                    ->each(function ($old_record) use ($order) {
+                        $new_record = $old_record->replicate();
+                        $new_record->setTable('order_items');
+                        $new_record->order_id = $order->id;
+                        $new_record->save();
+
+                        $old_record->delete();
+                    });
+
+                // Unset the order variable
+                unset($order);
+            }
+
+            return response()->json(['success' => true, 'message' => 'Your order was placed successfully.'], 200);
+        } catch (\Throwable $th) {
+            Log::error($th);
+            return response()->json(['success' => false, 'message' => "Oops! Something went wrong. Try Again!"], 500);
+        }
+    }
+
+    /**
+     * Get user orders
+     * @param Request $request
+     * @return Json $response
+     */
+    public function get_order(Request $request)
+    {
+        try {
+            $orders = Vendor::join('orders', 'orders.vendor_id', '=', 'vendors.id')->join('order_items', 'order_items.order_id', '=', 'orders.id')->join('items', 'items.id', '=', 'order_items.item_id')->select("orders.id as order_id", "orders.status as order_status", DB::raw("GROUP_CONCAT(items.title) as title, GROUP_CONCAT(TO_BASE64(items.quantity)) AS quantity, GROUP_CONCAT(items.image) AS image,GROUP_CONCAT(order_items.order_type) AS order_type, GROUP_CONCAT(TO_BASE64(order_items.order_detail)) AS order_detail, GROUP_CONCAT(DISTINCT vendors.business_name) AS vendor_name, GROUP_CONCAT(DISTINCT vendors.cover_image) AS vendor_image"))->where('orders.user_id', Auth::guard('user')->user()->id)->groupBy('orders.id')->get();
+
+            if (!empty($orders)) {
+                foreach ($orders as $order) {
+                    $order->title = explode(',', $order->title);
+                    $order->quantity = explode(',', $order->quantity);
+                    $order->order_detail = explode(',', $order->order_detail);
+
+                    // Fix order quantity & order details
+                    $quant_arr = [];
+                    $ord_arr = [];
+                    foreach ($order->quantity as $key => $val) {
+                        $quant_arr[$key] = base64_decode($val);
+                        $ord_arr[$key] = base64_decode($order->order_detail[$key]);
+                    }
+                    $order->quantity = $quant_arr;
+                    $order->order_detail = $ord_arr;
+                    // Fix order quantity & order details
+
+                    // Fix order status
+                    $order->order_status = $this->order_status($order->order_status);
+
+                    $order->image = explode(',', $order->image);
+                    $order->order_type = explode(',', $order->order_type);
+                }
+            } else {
+                $orders = null;
+            }
+
+            $order_view = view('user.components.order', compact('orders'))->render();
+
+            return response()->json(['success' => true, 'order_view' => $order_view], 200);
+        } catch (\Throwable $th) {
+            Log::error($th);
+            return response()->json(['success' => false, 'message' => "Oops! Something went wrong. Try Again!"], 500);
+        }
+    }
+
+    /**
+     * Convert order status to human readable format
+     * @param Integer $order_status
+     * @return String $status
+     */
+    public function order_status($order_status)
+    {
+        $status = array();
+
+        switch ($order_status) {
+            case 0:
+                $status['status'] = "Pending";
+                $status['colour'] = "badge-info";
+                break;
+            case 1:
+                $status['status'] = "Approved";
+                $status['colour'] = "badge-success";
+                break;
+            case -1:
+                $status['status'] = "Rejected";
+                $status['colour'] = "badge-warning";
+                break;
+            case -2:
+                $status['status'] = "Cancelled";
+                $status['colour'] = "badge-warning";
+                break;
+        }
+
+        return $status;
     }
 }
