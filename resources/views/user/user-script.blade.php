@@ -22,17 +22,23 @@
         getOrder();
     });
 
+    // Open user profile modal
+    $("#user-profile-btn").on('click', function(){
+        $("#user-profile-modal").modal('toggle');
+    });
+
 
     // Load User Right Side (User Profile) For Mobile
     function loadUserRight(loadEdit = true, mobileEdit = false) {
         spin('user-right-side');
 
-        if (window.matchMedia("(max-width: 767px)")
-            .matches) { // The viewport is less than 768 pixels wide (mobile device)
+        if (window.matchMedia("(max-width: 767px)").matches) { // The viewport is less than 768 pixels wide (mobile device)
             let getUrl = `${server}/user/profile/mobile`;
 
             goGet(getUrl).then((res) => {
+                // console.log(res);return
                 $("#user-right-side-small").html(res);
+
                 // Load Edit Modal Afer Loading Right Side
                 if (loadEdit) {
                     loadEditModal();
@@ -61,6 +67,7 @@
             });
         }
     }
+
 
     // Load User Profile dit Modal
     function loadEditModal() {

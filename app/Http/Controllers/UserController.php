@@ -181,9 +181,9 @@ class UserController extends Controller
 
             // Retrieve View Based On Request Type (Mobile or Desktop)
             if ($type == "mobile") {
-                $view = view('user.components.right-side-mobile', compact('user_location'));
+                $view = view('user.components.right-side-mobile', compact('user_location'))->render();
             } else {
-                $view = view('user.components.right-side-desktop', compact('user_location'));
+                $view = view('user.components.right-side-desktop', compact('user_location'))->render();
             }
 
             return $view;
@@ -662,9 +662,17 @@ class UserController extends Controller
      */
     public function add_to_basket(Request $request)
     {
+
         try {
             // Check if the dish already exists
             $dish = Basket::where([['item_id', '=', $request->item_id], ['user_id', '=', Auth::guard('user')->user()->id]]);
+
+            // Validate basket request (Returns boolean value when correct and array when wrong)
+            $result = gettype($this->validate_quantity($request));
+            if ($result != "boolean") {
+                return response()->json(['success' => true, 'type' => 'error', 'message' => 'Quantity error', 'data' => $this->validate_quantity($request), 'order_type' => $request->order_type], 200);
+            }
+
             if ($dish->count() > 0) {
                 // Append new order details
                 $basket_item = Basket::find($dish->first()->id);
@@ -681,11 +689,63 @@ class UserController extends Controller
                 $basket->save();
             }
 
-            return response()->json(['success' => true, 'message' => 'Item added to basket', 'output' => $request->order_type], 200);
+            return response()->json(['success' => true, 'type' => 'success', 'message' => 'Item added to basket', 'output' => $request->order_type], 200);
         } catch (\Throwable $th) {
             Log::error($th);
             return response()->json(['success' => false, 'message' => "Oops! Something went wrong. Try Again!"], 500);
         }
+    }
+
+    /**
+     * Check if quantity requested is available
+     * @param Request $request
+     * @return Boolean true
+     * @return Array $validate_info
+     */
+    public function validate_quantity(Request $request)
+    {
+        // Fetch item
+        $item = Item::where([['id', '=', $request->item_id], ['vendor_id', '=', $request->vendor_id]])->first();
+
+        $order_detail = $request->order_detail;
+        $order_quantity = $request->order_quantity;
+        $validate_info = array();
+
+        if ($request->order_type == "simple") {
+            $available_qty = json_decode($item->quantity, true)['quantity'];
+            $order_qty = $order_quantity[0];
+            if ($order_qty > $available_qty) {
+                $validate_info['item'] = 'item-' . $request->item_id;
+                $validate_info['new_qty'] = $available_qty;
+            } else {
+                $validate_info = true;
+            }
+        } else {
+            $i = 0;
+            $err_count = 0;
+            $validate_info = array();
+            foreach ($order_detail as $key => $val) {
+                $val = $this->to_array($val);
+                if ($val[0] == "regular") {
+                    $index = $val[1];
+                    $available_qty = json_decode(json_decode($item->quantity, true)['regular'], true)[$index]['quantity'];
+                    //  json_decode($item->quantity, true)['regular'][$index]['quantity'];
+                    $order_qty = $request->order_quantity[$key];
+                    if ($order_qty > $available_qty) {
+                        $validate_info[$i] = ['item' => 'item-' . $request->item_id . '-' . $index, 'new_qty' => $available_qty];
+                    } else {
+                        $err_count++;
+                    }
+                    $i++;
+                }
+            }
+
+            if ($err_count == $i) {
+                $validate_info = true;
+            }
+        }
+
+        return $validate_info;
     }
 
     /**

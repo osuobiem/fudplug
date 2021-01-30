@@ -57,9 +57,12 @@
                                                 @else
                                                 <small style="margin-left:-26px;">{{$title}}</small>
                                                 @endif
-                                                <p class="mb-0 mt-0">
-                                                    <span class="text-danger" style="font-size: large;">
+                                                <p class="mb-0 mt-0" style="margin-left: 82px; font-size:15px;">
+                                                    <span class="text-danger ml-2 mr-4 border-right pr-4">
                                                         ₦{{$actual_detail['price']}}
+                                                    </span>
+                                                    <span class="text-dark">
+                                                        <strong>Qty: </strong>{{$order_qty}}
                                                     </span>
                                                 </p>
                                         </div>
@@ -88,9 +91,12 @@
                                         <div class="media-body" style="margin-left:-208px;  margin-top:-5px;">
                                             <small style="margin-left:105px;">{{$title}}
                                                 ({{$qty['title']}})</small>
-                                            <p class="mb-0 mt-0">
-                                                <span class="text-danger" style="font-size: large;">
+                                            <p class="mb-0 mt-0" style="margin-left: 82px; font-size:15px;">
+                                                <span class="text-danger ml-2 mr-4 border-right pr-4">
                                                     ₦{{$qty['price']}}
+                                                </span>
+                                                <span class="text-dark">
+                                                    <strong>Qty: </strong>{{$detail[2]}}
                                                 </span>
                                             </p>
                                         </div>
@@ -119,13 +125,13 @@
         @else
         <p>No Orders yet!</p>
         @endif
-        <!-- <div class="row">
-        <div class="col-md-12 mt-xs-2">
-            <button type="button" id="basket-order-btn" onclick="placeOrder()"
-                class="btn btn-sm btn-primary btn-block font-weight-bold" data-attach-loading="true" disabled>
-                Place order <span id="basket-final-price" class="float-right" data-item-subtotal="">₦0.00</span>
-            </button>
+        <div class="row">
+            <div class="col-md-12 mt-xs-2">
+                <button type="button" id="basket-order-btn" onclick="placeOrder()"
+                    class="btn btn-sm btn-primary btn-block font-weight-bold" data-attach-loading="true" disabled>
+                    Place order <span id="basket-final-price" class="float-right" data-item-subtotal="">₦0.00</span>
+                </button>
+            </div>
         </div>
-    </div> -->
     </div>
 </div>

@@ -135,7 +135,7 @@
                         </a>
                         <!-- Dropdown - User Information -->
                         <div class="dropdown-menu dropdown-menu-right shadow">
-                            <a class="dropdown-item d-lg-none" data-toggle="modal" href="#user-profile-modal"><i
+                            <a class="dropdown-item d-lg-none" id="user-profile-btn"><i
                                     class="la la-user la-lg mr-1"></i> Profile</a>
                             <a class="dropdown-item" href="{{ url('user/logout') }}"><i
                                     class="la la-sign-out la-lg mr-1"></i>

@@ -78,7 +78,8 @@
                                                                     onfocus="focusin(event, this)"
                                                                     class="form-control rounded-left-0 rounded-right-0 form-control-sm qty-input"
                                                                     value="0" min="0" max="{{$quantity}}"
-                                                                    style="margin-top: 4px;" disabled>
+                                                                    style="margin-top: 4px;" id="item-{{$dish->id}}"
+                                                                    disabled>
                                                                 <span class="input-group-btn">
                                                                     <button onclick="clicked(event, this);"
                                                                         type="button"
@@ -167,6 +168,7 @@
                                                                     onchange="change(event, this)"
                                                                     onfocus="focusin(event, this)"
                                                                     name="order_quantity[]"
+                                                                    id="item-{{$dish->id}}-{{$key}}"
                                                                     class="form-control rounded-left-0 rounded-right-0 form-control-sm qty-input"
                                                                     value="0" min="0" max="{{$qty->quantity}}"
                                                                     style="margin-top: 4px;" disabled>
@@ -194,6 +196,7 @@
                                                                     onchange="change(event, this)"
                                                                     onfocus="focusin(event, this)"
                                                                     name="order_quantity[]"
+                                                                    id="item-{{$dish->id}}-{{$key}}"
                                                                     class="form-control rounded-left-0 rounded-right-0 form-control-sm qty-input"
                                                                     value="0" min="0" max="{{$qty->quantity}}"
                                                                     style="margin-top: 4px;" disabled>
@@ -269,17 +272,56 @@
                 // spin('profile')
 
                 if (handleFormRes(res)) {
-                    showAlert(true, res.message);
-                    // Load user basket details
-                    getBasket();
-                    // Close modal
-                    $("#regular-order-modal").modal('hide');
+                    if (res.type == "error") {
+                        handleValidateErr(res);
+                        console.log("Okay")
+                    } else {
+                        showAlert(true, res.message);
+                        // Load user basket details
+                        getBasket();
+                        // Close modal
+                        $("#regular-order-modal").modal('hide');
+                    }
                 }
             })
             .catch(err => {
                 // spin('profile');
                 handleFormRes(err, 'pr-update-error');
             })
+    }
+
+    function handleValidateErr(res) {
+        if (res.order_type == "simple") {
+            let elemId = res.data.item;
+            let newQty = res.data.new_qty;
+            let message = `Only ${newQty} left`;
+            $("#" + elemId).val(0);
+            $("#" + elemId).attr('max', newQty);
+            $("#" + elemId).attr('disabled', '');
+
+            $("#" + elemId).next().find('button').trigger('click');
+            $("#" + elemId).prev().find('button').trigger('click');
+            $("#" + elemId).parent().parent().next().remove();
+            $("#" + elemId).parent().parent().parent().append(
+                `<div class="text-danger add-bask-err" style="margin-right: 7px; float: right; font-size:13px;">${message}</div>`
+            );
+        } else {
+            res.data.forEach(element => {
+                let elemId = element.item;
+                let newQty = element.new_qty;
+                let message = `Only ${newQty} left`;
+                $("#" + elemId).val(0);
+                $("#" + elemId).attr('max', newQty);
+                $("#" + elemId).attr('disabled', '');
+
+                $("#" + elemId).next().find('button').trigger('click');
+                $("#" + elemId).prev().find('button').trigger('click');
+                $("#" + elemId).parent().parent().next().remove();
+                $("#" + elemId).parent().parent().parent().append(
+                    `<div class="text-danger add-bask-err" style="margin-right: 7px; float: right; font-size:13px;">${message}</div>`
+                );
+            });
+        }
     }
 
 </script>
