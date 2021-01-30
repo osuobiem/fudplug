@@ -44,7 +44,6 @@
 						title="Notifications">
 						<a class="nav-link dropdown-toggle pr-0 h-link" href="#" role="button" data-toggle="dropdown"
 							aria-haspopup="true" aria-expanded="false">
-							<span class="noti-pin d-none"></span>
 							<i class="la la-bell la-2x icon-hover bright-ic" onclick="clearNViewed()"></i>
 							<small id="noti-dot" class="d-none">0</small>
 						</a>
@@ -113,6 +112,8 @@
 		<script>
 			$('#noti-dot').text(`{{ $other_details['nviewed'] }}`)
 			$('#noti-dot').removeClass('d-none');
+			$('#mob-noti-dot').text(`{{ $other_details['nviewed'] }}`)
+			$('#mob-noti-dot').removeClass('d-none');
 		</script>
 	@endpush
 @endif
