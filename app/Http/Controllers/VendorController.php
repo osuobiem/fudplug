@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Area;
 use App\Item;
 use App\Menu;
-use App\Notification;
 use App\State;
 use App\User;
 use App\Vendor;
@@ -828,15 +827,14 @@ class VendorController extends Controller
 
             if (!empty($dishes)) {
                 // Fetch the Menu Item
-                $menu = Menu::where('vendor_id', Auth::user('vendor')->id)->first("items");
+                $menu = Menu::where('vendor_id', Auth::user('vendor')->id)->first()->items;
                 if (!empty($menu)) {
                     $menu = json_decode($menu);
 
                     // Get the Array of Dish IDs
-                    $menu_items = json_decode($menu->items);
-                    $menu_items = $menu_items->item;
+                    $menu_items = $menu->item;
 
-                    if (!empty($menu)) {
+                    if (!empty($menu_items)) {
                         // Fetch Dishes for Menu
                         $menu_data = Item::select("*")
                             ->whereIn('id', $menu_items);

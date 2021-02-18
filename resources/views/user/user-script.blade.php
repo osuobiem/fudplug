@@ -23,7 +23,7 @@
     });
 
     // Open user profile modal
-    $("#user-profile-btn").on('click', function(){
+    $("#user-profile-btn").on('click', function () {
         $("#user-profile-modal").modal('toggle');
     });
 
@@ -32,7 +32,8 @@
     function loadUserRight(loadEdit = true, mobileEdit = false) {
         spin('user-right-side');
 
-        if (window.matchMedia("(max-width: 767px)").matches) { // The viewport is less than 768 pixels wide (mobile device)
+        if (window.matchMedia("(max-width: 767px)")
+            .matches) { // The viewport is less than 768 pixels wide (mobile device)
             let getUrl = `${server}/user/profile/mobile`;
 
             goGet(getUrl).then((res) => {
@@ -125,6 +126,10 @@
                 $("#head-count").html("(" + res.basket_count + " Items)");
                 $("#basket-noti-dot").removeClass('d-none');
                 $(".basket-container").html(res.basket_view);
+                // Validate basket data on page load
+                if (res.validate_status == true) {
+                    setTimeout(handleOrderValidateErr(res), 600);
+                }
             }
         }).catch((err) => {
             // spin('user-left-side');
@@ -205,34 +210,144 @@
             })
     }
 
-    function placeOrder(){
+    function placeOrder() {
         let url = `${server}/user/place-order`;
-        goPost(url)
+        let formData = new FormData();
+        formData.append('_token', _token);
+
+        goPost(url, formData)
             .then(res => {
-
                 if (handleFormRes(res)) {
-                    // Load user basket details
-                    getBasket();
+                    if (res.type == "error") {
+                        handleOrderValidateErr(res);
+                    } else {
+                        // Load user basket details
+                        getBasket();
 
-                    // Close basket
-                    $("#basket-btn").next().removeClass("show");
+                        // Close basket
+                        $("#basket-btn").next().removeClass("show");
 
-                    showAlert(true, res.message);
+                        showAlert(true, res.message);
+                    }
                 }
             })
             .catch(err => {
-                console.error(err);
+                console.log(err);
             })
     }
 
-    function getOrder(){
+    function getOrder() {
         let getUrl = `${server}/user/get-order`;
 
-            goGet(getUrl).then((res) => {
-                $(".order-container").html(res.order_view);
-            }).catch((err) => {
-                spin('user-right-side');
+        goGet(getUrl).then((res) => {
+            $(".order-container").html(res.order_view);
+            $("#order-price").html(`₦${res.total_amount}.00`);
+
+            // Disable "Cancel all" button when there is no pending order
+            if (res.pending_count < 1) {
+                $("#order-cancel-btn").attr('disabled', '');
+            }
+        }).catch((err) => {
+            spin('user-right-side');
+        });
+    }
+
+    // Cancel all orders if parameter is empty
+    function cancelOrder(orderId = "") {
+        let getUrl = (orderId == "") ? `${server}/user/cancel-order` : `${server}/user/cancel-order/${orderId}`;
+
+        goGet(getUrl).then((res) => {
+            getOrder();
+        }).catch((err) => {
+            console.log(err);
+        });
+    }
+
+    // Cancel all user order
+    $("#order-cancel-btn").on('click', function () {
+        cancelOrder();
+    });
+
+    // Validate quantity (on adding to basket)
+    function handleValidateErr(res) {
+        if (res.order_type == "simple") {
+            let elemId = res.data.item;
+            let newQty = res.data.new_qty;
+            let message = `Only ${newQty} left`;
+            $("#" + elemId).val(0);
+            $("#" + elemId).attr('max', newQty);
+            $("#" + elemId).attr('disabled', '');
+
+            $("#" + elemId).next().find('button').trigger('click');
+            $("#" + elemId).prev().find('button').trigger('click');
+            $("#" + elemId).parent().parent().next().remove();
+            $("#" + elemId).parent().parent().parent().append(
+                `<div class="text-dark add-bask-err" style="margin-right: 7px; float: right; font-size:13px;"><i>${message}</i></div>`
+            );
+        } else {
+            res.data.forEach(element => {
+                let elemId = element.item;
+                let newQty = element.new_qty;
+                let message = `Only ${newQty} left`;
+                $("#" + elemId).val(0);
+                $("#" + elemId).attr('max', newQty);
+                $("#" + elemId).attr('disabled', '');
+
+                $("#" + elemId).next().find('button').trigger('click');
+                $("#" + elemId).prev().find('button').trigger('click');
+                $("#" + elemId).parent().parent().next().remove();
+                $("#" + elemId).parent().parent().parent().append(
+                    `<div class="text-dark add-bask-err" style="margin-right: 7px; float: right; font-size:13px;"><i>${message}</i></div>`
+                );
             });
+        }
+    }
+
+    // Validate quantity (on placing order)
+    function handleOrderValidateErr(res) {
+        let errorData = res.data;
+
+        errorData.forEach(elem => {
+            if (elem.validate_type == "item_in_menu") {
+                if (elem.order_type == "simple") {
+                    let elemId = elem.item;
+                    let newQty = elem.new_qty;
+                    let message = `Only ${newQty} left`;
+                    $("#" + elemId).val(0);
+                    $("#" + elemId).attr('max', newQty);
+                    $("#" + elemId).attr('disabled', '');
+
+                    $("#" + elemId).next().find('button').trigger('click');
+                    $("#" + elemId).prev().find('button').trigger('click');
+                    $("#" + elemId).parent().parent().next().remove();
+                    $("#" + elemId).parent().parent().parent().append(
+                        `<div class="text-dark add-bask-err" style="margin-right: 7px; float: right; font-size:13px;"><i>${message}</i></div>`
+                    );
+                } else {
+                    elem.error_data.forEach(element => {
+                        let elemId = element.item;
+                        let newQty = element.new_qty;
+                        let message = `Only ${newQty} left`;
+                        $("#" + elemId).val(0);
+                        $("#" + elemId).attr('max', newQty);
+                        $("#" + elemId).attr('disabled', '');
+
+                        $("#" + elemId).next().find('button').trigger('click');
+                        $("#" + elemId).prev().find('button').trigger('click');
+                        $("#" + elemId).parent().parent().next().remove();
+                        $("#" + elemId).parent().parent().parent().append(
+                            `<div class="text-dark add-bask-err" style="margin-right: 7px; float: right; font-size:13px;"><i>${message}</i></div>`
+                        );
+                    });
+                }
+            } else {
+                let elemId = elem.item;
+                $("#" + elemId).removeClass('d-none');
+                setTimeout(function () {
+                    $("#basket-order-btn").attr('disabled', 'disabled');
+                }, 600);
+            }
+        });
     }
     /*********************************** Basket script */
 
@@ -331,7 +446,7 @@
 
 
 
-    /****** Basket specific script ***************/
+    /****** Basket specific quantity input script ***************/
     $("#basket-btn").click(function () {
         getBasketQtyPrice();
 
@@ -370,9 +485,13 @@
         });
         finalTotal = productArr.reduce((a, b) => a + b);
 
-        $("#basket-final-price").text('₦' + String(finalTotal.toFixed(2)));
-        $("#basket-order-btn").removeAttr('disabled');
-
+        if (finalTotal < 1) {
+            $("#basket-final-price").text('₦' + String(finalTotal.toFixed(2)));
+            $("#basket-order-btn").attr('disabled', '');
+        } else {
+            $("#basket-final-price").text('₦' + String(finalTotal.toFixed(2)));
+            $("#basket-order-btn").removeAttr('disabled');
+        }
     }
 
 
@@ -388,12 +507,12 @@
         }
     }
 
-    /*********************************** Basket specific script */
+    /*********************************** Basket specific quantity input script */
 
 
 
 
-    /******************************* Regular order-specific script */
+    /******************************* Regular order-specific quantity input script */
     // Initiate price input field state
     packCount = $("#price-type li").length;
     prices = [];
@@ -430,6 +549,6 @@
             $(element).removeAttr('disabled');
         }
     }
-    /******************************* Regular order-specific script */
+    /******************************* Regular order-specific quantity input script */
 
 </script>

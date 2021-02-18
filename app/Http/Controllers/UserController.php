@@ -577,15 +577,15 @@ class UserController extends Controller
     public function vendor_menu($vendor)
     {
         // Fetch the Menu Item
-        $menu = Menu::where('vendor_id', $vendor)->first("items");
+        $menu = Menu::where('vendor_id', $vendor)->first()->items;
+
         if (!empty($menu)) {
             $menu = json_decode($menu);
 
             // Get the Array of Dish IDs
-            $menu_items = json_decode($menu->items);
-            $menu_items = $menu_items->item;
+            $menu_items = $menu->item;
 
-            if (!empty($menu)) {
+            if (!empty($menu_items)) {
                 // Fetch Dishes for Menu
                 $menu_data = Item::select("*")
                     ->whereIn('id', $menu_items);
@@ -729,7 +729,6 @@ class UserController extends Controller
                 if ($val[0] == "regular") {
                     $index = $val[1];
                     $available_qty = json_decode(json_decode($item->quantity, true)['regular'], true)[$index]['quantity'];
-                    //  json_decode($item->quantity, true)['regular'][$index]['quantity'];
                     $order_qty = $request->order_quantity[$key];
                     if ($order_qty > $available_qty) {
                         $validate_info[$i] = ['item' => 'item-' . $request->item_id . '-' . $index, 'new_qty' => $available_qty];
@@ -765,7 +764,18 @@ class UserController extends Controller
 
             $basket_view = view('user.components.basket', compact('basket_items'))->render();
 
-            return response()->json(['success' => true, 'basket_view' => $basket_view, 'basket_count' => $basket_count], 200);
+            if ($basket_count > 0) {
+                // Initiate validation of basket
+                $result = $this->validate_order_quantity();
+
+                if ($result['track_err'] > 0) {
+                    return response()->json(['success' => true, 'basket_view' => $basket_view, 'basket_count' => $basket_count, 'validate_status' => true, 'data' => $result['validate_data']], 200);
+                } else {
+                    return response()->json(['success' => true, 'basket_view' => $basket_view, 'basket_count' => $basket_count, 'validate_status' => false], 200);
+                }
+            } else {
+                return response()->json(['success' => true, 'basket_view' => $basket_view, 'basket_count' => $basket_count], 200);
+            }
         } catch (\Throwable $th) {
             Log::error($th);
             return response()->json(['success' => false, 'message' => "Oops! Something went wrong. Try Again!"], 500);
@@ -871,10 +881,16 @@ class UserController extends Controller
      */
     public function place_order(Request $request)
     {
+
         try {
+            // Validate order request
+            $result = $this->validate_order_quantity();
+            if ($result['track_err'] > 0) {
+                return response()->json(['success' => true, 'type' => 'error', 'message' => 'Quantity error', 'data' => $result['validate_data']], 200);
+            }
+
             $user_id = Auth::guard('user')->user()->id;
             $vendor_ids = Basket::where('user_id', $user_id)->groupBy('vendor_id')->get(['vendor_id']);
-            $id_arr = [];
 
             foreach ($vendor_ids as $key => $val) {
                 // $id_arr[$key] = $val->vendor_id;
@@ -907,14 +923,117 @@ class UserController extends Controller
     }
 
     /**
+     * Check if quantity requested is available when placing order
+     *
+     * @param Request $request
+     * @return Array $validate_data
+     */
+    public function validate_order_quantity()
+    {
+        // Fetch item
+        $basket_items = Basket::where('user_id', Auth::guard('user')->user()->id)->get();
+        $validate_data = array();
+
+        $track_err = 0;
+
+        foreach ($basket_items as $key => $basket_item) {
+            $item = Menu::where('vendor_id', $basket_item->vendor_id)->first()->items;
+            $item = json_decode($item, true)['item'];
+            $validate_info = array();
+
+            // Vendor menu empty
+            if (!empty($item)) {
+                // Do something when menu is not empty (check if item exists in nonempty menu)
+                if (in_array($basket_item->item_id, $item)) {
+                    $item = Item::find($basket_item->item_id);
+
+                    // Item exists in vendor menu
+                    if ($basket_item->order_type == "simple") {
+                        $available_qty = json_decode($item->quantity, true)['quantity'];
+                        $order_qty = json_decode($basket_item->order_detail, true)[0];
+                        if ($order_qty > $available_qty) {
+                            $validate_info['validate_type'] = "item_in_menu";
+                            $validate_info['item'] = 'inner-item-' . $basket_item->id;
+                            $validate_info['new_qty'] = $available_qty;
+                            $validate_info['status'] = true;
+                            $validate_info['order_type'] = $basket_item->order_type;
+                            $track_err++;
+                        } else {
+                            $validate_info['validate_type'] = "item_in_menu";
+                            $validate_info['status'] = false;
+                            $validate_info['order_type'] = $basket_item->order_type;
+                        }
+                    } else {
+                        $i = 0;
+                        $err_count = 0;
+                        $validate_info = array();
+                        $order_detail = json_decode($basket_item->order_detail, true);
+                        $error_data = array();
+
+                        foreach ($order_detail as $key => $val) {
+                            // $val = $this->to_array($val);
+                            if ($val[0] == "regular") {
+                                $index = $val[1];
+                                $available_qty = json_decode(json_decode($item->quantity, true)['regular'], true)[$index]['quantity'];
+                                $order_qty = $val[2];
+                                if ($order_qty > $available_qty) {
+                                    $error_data[$i] = ['item' => 'inner-item-' . $basket_item->id . '-' . $index, 'new_qty' => $available_qty];
+                                } else {
+                                    $err_count++;
+                                }
+                                $i++;
+                            }
+                        }
+
+                        if ($err_count == $i) {
+                            $validate_info['validate_type'] = "item_in_menu";
+                            $validate_info['status'] = false;
+                            $validate_info['order_type'] = $basket_item->order_type;
+                        } else {
+                            $validate_info['validate_type'] = "item_in_menu";
+                            $validate_info['status'] = true;
+                            $validate_info['order_type'] = $basket_item->order_type;
+                            $validate_info['error_data'] = $error_data;
+                            $track_err++;
+                        }
+                    }
+                } else {
+                    // Item not in vendor menu
+                    $validate_info['validate_type'] = "item_not_in_menu";
+                    $validate_info['item'] = 'item-' . $basket_item->id;
+                    $validate_info['status'] = true;
+                    $validate_info['order_type'] = $basket_item->order_type;
+                    $track_err++;
+                }
+            } else {
+                // Do something when menu is empty
+                $validate_info['validate_type'] = "vendor_menu_empty";
+                $validate_info['item'] = 'item-' . $basket_item->id;
+                $validate_info['status'] = true;
+                $validate_info['order_type'] = $basket_item->order_type;
+                $track_err++;
+            }
+
+            $validate_data[$key] = $validate_info;
+        }
+
+        return compact('validate_data', 'track_err');
+    }
+
+    /**
      * Get user orders
      * @param Request $request
      * @return Json $response
      */
     public function get_order(Request $request)
     {
+        // Fetch orders for today (Check after handlin cancelling of orders)
+        //  $posts = Post::whereDate('created_at', Carbon::today())->get();
         try {
             $orders = Vendor::join('orders', 'orders.vendor_id', '=', 'vendors.id')->join('order_items', 'order_items.order_id', '=', 'orders.id')->join('items', 'items.id', '=', 'order_items.item_id')->select("orders.id as order_id", "orders.status as order_status", DB::raw("GROUP_CONCAT(items.title) as title, GROUP_CONCAT(TO_BASE64(items.quantity)) AS quantity, GROUP_CONCAT(items.image) AS image,GROUP_CONCAT(order_items.order_type) AS order_type, GROUP_CONCAT(TO_BASE64(order_items.order_detail)) AS order_detail, GROUP_CONCAT(DISTINCT vendors.business_name) AS vendor_name, GROUP_CONCAT(DISTINCT vendors.cover_image) AS vendor_image"))->where('orders.user_id', Auth::guard('user')->user()->id)->groupBy('orders.id')->get();
+
+            // Get pending orders for user
+            $pending_count = Order::where('status', 0)->count();
 
             if (!empty($orders)) {
                 foreach ($orders as $order) {
@@ -943,9 +1062,73 @@ class UserController extends Controller
                 $orders = null;
             }
 
+            // Total amount for orders
+            $total_amount = $this->get_order_total($orders);
+
             $order_view = view('user.components.order', compact('orders'))->render();
 
-            return response()->json(['success' => true, 'order_view' => $order_view], 200);
+            return response()->json(['success' => true, 'order_view' => $order_view, 'total_amount' => $total_amount, 'pending_count' => $pending_count], 200);
+        } catch (\Throwable $th) {
+            Log::error($th);
+            return response()->json(['success' => false, 'message' => "Oops! Something went wrong. Try Again!"], 500);
+        }
+    }
+
+    /**
+     * Get total amount for user order
+     * @param Object $orders
+     * @return Int $sum
+     */
+    public function get_order_total($orders)
+    {
+        $sum = 0;
+
+        foreach ($orders as $order) {
+            $inner_sum = 0;
+            foreach ($order->title as $key => $title) {
+                if ($order->order_type[$key] == "simple") {
+                    $price = (Integer) json_decode($order->quantity[$key], true)['price'];
+                    $quantity = (Integer) json_decode($order->order_detail[$key])[0];
+                    $inner_sum += ($price * $quantity);
+                } else {
+                    $inner_details = json_decode($order->order_detail[$key]);
+                    $inner_inner_sum = 0;
+                    foreach ($inner_details as $inner_detail) {
+                        $type = $inner_detail[0];
+                        $index = $inner_detail[1];
+                        $qty = (Integer) $inner_detail[2];
+                        $price = 0;
+
+                        if ($type == "regular") {
+                            $price = (Integer) json_decode(json_decode($order->quantity[$key], true)['regular'], true)[$index]['price'];
+                        }
+
+                        $inner_inner_sum += ($price * $qty);
+                    }
+                    $inner_sum += $inner_inner_sum;
+                }
+            }
+            $sum += $inner_sum;
+        }
+        return $sum;
+    }
+
+    /**
+     * Cancel user order
+     * @param Request $request
+     * @return string json response
+     */
+    public function cancel_order(Request $request, $order_id = null)
+    {
+        try {
+            if (!empty($order_id)) {
+                $order = Order::find($request->order_id);
+                $order->status = -2;
+                $order->save();
+            } else {
+                Order::where('user_id', Auth::guard('user')->user()->id)->update(['status' => -2]);
+            }
+            return response()->json(['success' => true, 'message' => 'Order cancelled successfully.'], 200);
         } catch (\Throwable $th) {
             Log::error($th);
             return response()->json(['success' => false, 'message' => "Oops! Something went wrong. Try Again!"], 500);
@@ -976,6 +1159,10 @@ class UserController extends Controller
                 break;
             case -2:
                 $status['status'] = "Cancelled";
+                $status['colour'] = "badge-warning";
+                break;
+            case -3:
+                $status['status'] = "Expired";
                 $status['colour'] = "badge-warning";
                 break;
         }

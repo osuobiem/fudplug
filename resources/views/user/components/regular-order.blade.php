@@ -274,7 +274,6 @@
                 if (handleFormRes(res)) {
                     if (res.type == "error") {
                         handleValidateErr(res);
-                        console.log("Okay")
                     } else {
                         showAlert(true, res.message);
                         // Load user basket details
@@ -288,40 +287,6 @@
                 // spin('profile');
                 handleFormRes(err, 'pr-update-error');
             })
-    }
-
-    function handleValidateErr(res) {
-        if (res.order_type == "simple") {
-            let elemId = res.data.item;
-            let newQty = res.data.new_qty;
-            let message = `Only ${newQty} left`;
-            $("#" + elemId).val(0);
-            $("#" + elemId).attr('max', newQty);
-            $("#" + elemId).attr('disabled', '');
-
-            $("#" + elemId).next().find('button').trigger('click');
-            $("#" + elemId).prev().find('button').trigger('click');
-            $("#" + elemId).parent().parent().next().remove();
-            $("#" + elemId).parent().parent().parent().append(
-                `<div class="text-danger add-bask-err" style="margin-right: 7px; float: right; font-size:13px;">${message}</div>`
-            );
-        } else {
-            res.data.forEach(element => {
-                let elemId = element.item;
-                let newQty = element.new_qty;
-                let message = `Only ${newQty} left`;
-                $("#" + elemId).val(0);
-                $("#" + elemId).attr('max', newQty);
-                $("#" + elemId).attr('disabled', '');
-
-                $("#" + elemId).next().find('button').trigger('click');
-                $("#" + elemId).prev().find('button').trigger('click');
-                $("#" + elemId).parent().parent().next().remove();
-                $("#" + elemId).parent().parent().parent().append(
-                    `<div class="text-danger add-bask-err" style="margin-right: 7px; float: right; font-size:13px;">${message}</div>`
-                );
-            });
-        }
     }
 
 </script>

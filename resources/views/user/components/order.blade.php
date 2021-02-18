@@ -25,7 +25,7 @@
                                             alt="Image Description">
                                     </div>
                                     <div class="media-body mt-2">
-                                        {{$order->vendor_name}}au
+                                        {{$order->vendor_name}}
 
                                         <span
                                             class="badge {{$order->order_status['colour']}} ml-2">{{$order->order_status['status']}}</span>
@@ -111,10 +111,13 @@
                                 @endforeach
                             </ul>
                         </div>
+                        @if($order->order_status['status'] == "Pending")
                         <div class="card-footer border-top p-0 text-muted">
-                            <a href="javascript:void(0);" class="btn btn-sm"><i class="las la-times"></i>&nbsp;Cancel
+                            <a href="javascript:void(0);" onclick="cancelOrder('{{$order->order_id}}')"
+                                class="btn btn-sm"><i class="las la-times"></i>&nbsp;Cancel
                                 order</a>
                         </div>
+                        @endif
                     </div>
                 </div>
 
@@ -125,13 +128,5 @@
         @else
         <p>No Orders yet!</p>
         @endif
-        <div class="row">
-            <div class="col-md-12 mt-xs-2">
-                <button type="button" id="basket-order-btn" onclick="placeOrder()"
-                    class="btn btn-sm btn-primary btn-block font-weight-bold" data-attach-loading="true" disabled>
-                    Place order <span id="basket-final-price" class="float-right" data-item-subtotal="">₦0.00</span>
-                </button>
-            </div>
-        </div>
     </div>
 </div>

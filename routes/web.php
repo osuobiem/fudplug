@@ -120,6 +120,8 @@ Route::group(['prefix' => 'user'], function () {
         Route::post('place-order', 'UserController@place_order');
         // Get user orders
         Route::get('get-order', 'UserController@get_order');
+        // Cancel Order
+        Route::get('cancel-order/{order_id?}', 'UserController@cancel_order');
     });
 });
 // -------------

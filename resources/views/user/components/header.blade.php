@@ -108,7 +108,7 @@
                         <div class="dropdown-menu dropdown-menu-right shadow noti-drop">
                             <h6 class="dropdown-header text-center">
                                 <span>
-                                    My Orders
+                                    My Orders (Today)
                                 </span>
                                 <span class="float-right" title="Order history">
                                     <a href="" class="text-dark"><i class="las la-history la-2x"></i></a>
@@ -118,6 +118,16 @@
                             <div class="box-body generic-scrollbar p-2 text-center job-item-2 order-container"
                                 style="max-height: 450px; overflow: auto;" id="h-noti-cont">
                                 <p>No Orders yet!</p>
+                            </div>
+                            <div class="box-body">
+                                <div class="col-md-12 mt-xs-2">
+                                    <button type="button" id="order-cancel-btn"
+                                        class="btn btn-sm btn-primary btn-block font-weight-bold"
+                                        data-attach-loading="true"><i class="las la-times"></i>&nbsp;
+                                        Cancel All <span id="order-price" class="float-right"
+                                            data-item-subtotal="">₦0.00</span>
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </li>

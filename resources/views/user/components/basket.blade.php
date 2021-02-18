@@ -25,6 +25,8 @@
                                     </div>
                                     <div class="media-body mt-2">
                                         {{ucfirst($dish->title)}}
+                                        <span class="badge badge-warning ml-2 d-none" id="item-{{$dish->id}}">Out of
+                                            stock</span>
                                     </div>
                                 </div>
                             </a>
@@ -67,7 +69,7 @@
                                             </span>
                                             <input type="text" name="order_quantity[]" onkeydown="keydown(event)"
                                                 onchange="change(event, this, '{{$dish->id}}', '{{$dish->order_type}}')"
-                                                onfocus="focusin(event, this)"
+                                                onfocus="focusin(event, this)" id="inner-item-{{$dish->id}}"
                                                 class="form-control rounded-left-0 rounded-right-0 form-control-sm qty-input"
                                                 value="{{$order_qty}}" min="0" max="{{$actual_detail['quantity']}}"
                                                 disabled>
@@ -115,6 +117,8 @@
                                     </div>
                                     <div class="media-body mt-2">
                                         {{ucfirst($dish->title)}}
+                                        <span class="badge badge-warning ml-2 d-none" id="item-{{$dish->id}}">Out of
+                                            stock</span>
                                     </div>
                                 </div>
                             </a>
@@ -168,7 +172,8 @@
                                                 onchange="change(event, this, '{{$dish->id}}', '{{$dish->order_type}}', '{{$key}}')"
                                                 onfocus="focusin(event, this)" name="order_quantity[]"
                                                 class="form-control rounded-left-0 rounded-right-0 form-control-sm qty-input"
-                                                value="{{$detail[2]}}" min="0" max="{{$qty['quantity']}}" disabled>
+                                                id="inner-item-{{$dish->id}}-{{$key}}" value="{{$detail[2]}}" min="0"
+                                                max="{{$qty['quantity']}}" disabled>
                                             <span class="input-group-btn">
                                                 <button onclick="clicked(event, this);" type="button"
                                                     class="btn btn-sm btn-secondary btn-number rounded-left-0 qty-btn"
