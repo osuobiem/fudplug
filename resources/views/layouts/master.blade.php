@@ -121,6 +121,9 @@
                                 <div id="regular-order-container">
 
                                 </div>
+                                <div id="bulk-order-container">
+
+                                </div>
                                 <!-- ********************* USER COMPONENTS ************************* -->
                             </main>
 

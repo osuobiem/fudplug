@@ -45,7 +45,7 @@
                             </div>
                             <div class="p-3 job-item-footer">
                                 <a class="font-weight-bold d-block"
-                                    href="{{url('user/vendor-profile/'.$vendor->vendor_id)}}">
+                                    href="{{url('user/vendor-profile/'.enc($vendor->vendor_id))}}">
                                     View
                                 </a>
                             </div>

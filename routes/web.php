@@ -107,7 +107,7 @@ Route::group(['prefix' => 'user'], function () {
         // Vendor Profile Page
         Route::get('vendor-profile/{vendor_id}', 'UserController@vendor_profile');
         // Order Details
-        Route::get('order-details/{dish_id}', 'UserController@order_details');
+        Route::get('order-details/{dish_id}/{dish_type?}', 'UserController@order_details');
         // Add to basket
         Route::post('add-to-basket', 'UserController@add_to_basket');
         // Get user basket data
@@ -119,7 +119,7 @@ Route::group(['prefix' => 'user'], function () {
         // Place order
         Route::post('place-order', 'UserController@place_order');
         // Get user orders
-        Route::get('get-order', 'UserController@get_order');
+        Route::get('get-order/{type?}', 'UserController@get_order');
         // Cancel Order
         Route::get('cancel-order/{order_id?}', 'UserController@cancel_order');
     });
