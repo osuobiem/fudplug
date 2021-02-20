@@ -4,6 +4,10 @@
     scroll-behavior: smooth;
 }
 
+body {
+    background-color: #fff !important;
+}
+
 /* The switch - the box around the slider */
 .switch {
     position: relative;
@@ -1130,7 +1134,7 @@ a:visited {
     padding: .5rem !important;
 }
 
-.comments-container {
+.dropup-container {
     width: 100%;
     height: 100%;
     position: fixed;
@@ -1141,7 +1145,7 @@ a:visited {
     overflow: auto;
 }
 
-.comments-inner {
+.dropup-inner {
     background: #fff;
     height: 90%;
     width: 100%;
@@ -1152,41 +1156,42 @@ a:visited {
 }
 
 @media (min-width: 768px) {
-    .comments-inner {
+    .dropup-inner {
         width: 80%;
         margin: 0 10%
     }
 }
 
 @media (min-width: 992px) {
-    .comments-inner {
+    .dropup-inner {
         width: 48%;
         margin: 0 26%
     }
 }
 
-.comments-top-ico {
+.dropup-top-ico {
     background: #e6554a;
-    padding: 10px;
+    padding: 12px;
     border-top-left-radius: 15px;
     border-top-right-radius: 15px;
-    border-bottom-right-radius: 15px;
+    border-bottom-left-radius: 15px;
     color: #fff;
 }
 
-.comments-top-ico:hover {
+.dropup-top-ico:hover {
     cursor: pointer;
 }
 
-.comments-top-a {
+.dropup-top-a {
     font-size: 16px;
+    justify-content: space-between;
 }
 
-.comments-top-a:hover {
+.dropup-top-a:hover {
     cursor: unset;
 }
 
-.comments-ico-a:hover {
+.dropup-ico-a:hover {
     cursor: pointer;
 }
 
