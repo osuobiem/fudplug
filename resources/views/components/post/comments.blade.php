@@ -1,11 +1,13 @@
-<div class="comments-container animate__animated d-none" onclick="closeComments()">
-  <div class="comments-inner animate__animated">
+<div class="dropup-container comments-container animate__animated d-none" onclick="closeComments()">
+  <div class="dropup-inner comments-inner animate__animated">
 
     <ul class="nav nav-justified osahan-line-tab" style="box-shadow: 0 5px 10px 0 #00000061">
       <li class="nav-item text-left">
-        <a class="nav-link active comments-top-a" style="padding: 0 !important">
-          <i class="la la-arrow-left la-lg comments-top-ico" onclick="closeComments()"></i>
-          <span class="ml-2"> <i class="la la-comments la-lg"></i> Comments</span>
+        <a class="nav-link active comments-top-a dropup-top-a d-flex" style="padding: 0 !important">
+          <span class="ml-2 py-2"> <i class="la la-comments la-lg"></i> Comments</span>
+          <div class="text-right">
+            <i class="la la-times la-lg comments-top-ico dropup-top-ico" onclick="closeComments()"></i>
+          </div>
         </a>
       </li>
     </ul>

@@ -220,7 +220,7 @@ function popPostModal() {
     $(".post-modal").removeClass("d-none");
     $(".post-modal").removeClass("animate__fadeOut");
     $(".post-modal").addClass("animate__fadeIn");
-    $("#post-textarea").focus();
+    $("#post-textarea")[0].emojioneArea.setFocus()
 }
 
 function closePostModal() {
