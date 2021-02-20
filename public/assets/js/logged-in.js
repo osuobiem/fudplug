@@ -85,10 +85,10 @@ function openComments(post_id) {
     $("body").addClass("modal-open");
     $(".comments-container").removeClass("d-none");
 
-    $(".comments-inner").addClass("animate__fadeInUp");
+    $(".comments-inner").addClass("animate__fadeIn");
     $(".comments-container").addClass("animate__fadeIn");
 
-    $(".comments-inner").removeClass("animate__fadeOutDown");
+    $(".comments-inner").removeClass("animate__fadeOut");
     $(".comments-container").removeClass("animate__fadeOut");
     
     $('#comment-textarea')[0].emojioneArea.setFocus()
@@ -102,10 +102,10 @@ function openComments(post_id) {
 // Close Comments Modal
 function closeComments() {
     $("body").removeClass("modal-open");
-    $(".comments-inner").removeClass("animate__fadeInUp");
+    $(".comments-inner").removeClass("animate__fadeIn");
     $(".comments-container").removeClass("animate__fadeIn");
 
-    $(".comments-inner").addClass("animate__fadeOutDown");
+    $(".comments-inner").addClass("animate__fadeOut");
     $(".comments-container").addClass("animate__fadeOut");
 
     commentModalOpen = false;
@@ -226,4 +226,34 @@ function clearNViewed() {
             $('#noti-dot').addClass('d-none')
         }, 1500)
     })
+}
+
+// Open Mobile Notification Dropup Modal
+function openMND() {
+    $("body").addClass("modal-open");
+    $(".mnd-container").removeClass("d-none");
+
+    $(".mnd-inner").addClass("animate__fadeIn");
+    $(".mnd-container").addClass("animate__fadeIn");
+
+    $(".mnd-inner").removeClass("animate__fadeOut");
+    $(".mnd-container").removeClass("animate__fadeOut");
+
+    mndModalOpen = true;
+}
+
+// Close Mobile Notification Dropup Modal
+function closeMND() {
+    $("body").removeClass("modal-open");
+    $(".mnd-inner").removeClass("animate__fadeIn");
+    $(".mnd-container").removeClass("animate__fadeIn");
+
+    $(".mnd-inner").addClass("animate__fadeOut");
+    $(".mnd-container").addClass("animate__fadeOut");
+
+    setTimeout(() => {
+        $(".mnd-container").addClass("d-none");
+    }, 500);
+
+    mndModalOpen = false;
 }

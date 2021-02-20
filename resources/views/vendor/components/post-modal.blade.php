@@ -173,6 +173,8 @@
       data.append('thumbnail', videoThumb);
     }
 
+    closePostModal()
+
     goPost(url, data)
       .then(res => {
         spin('post')

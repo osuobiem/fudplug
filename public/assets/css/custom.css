@@ -1489,3 +1489,7 @@ a:visited {
     font-weight: 800;
     border: solid .5px #000000;
 }
+
+.mbm-item:hover {
+    cursor: pointer;
+}

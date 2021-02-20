@@ -15,7 +15,7 @@
                     onclick="gotoP(`{{ url('/') }}`)"></i>
             </div>
             <div class="col-3">
-                <i class="la la-bell la-2x feather-24 p-2 mbm-item" onclick="popNotiModal()"></i>
+                <i class="la la-bell la-2x feather-24 p-2 mbm-item" onclick="openMND()"></i>
                 <small id="mob-noti-dot" class="d-none">0</small>
             </div>
             <div class="col-3">
