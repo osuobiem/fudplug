@@ -257,3 +257,14 @@ function closeMND() {
 
     mndModalOpen = false;
 }
+
+// Compress image
+function compressImg(image) {
+    const options = {
+        maxSizeMB: 0.5,
+        maxWidthOrHeight: 1920,
+        useWebWorker: true
+      }
+    
+    return  imageCompression(image, options);
+}

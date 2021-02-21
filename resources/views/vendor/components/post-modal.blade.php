@@ -152,11 +152,12 @@
     })
   });
   // Send Post
-  function sendPost(el) {
+  async function sendPost(el) {
     el.preventDefault()
 
     spin('post')
     liner();
+    closePostModal()
 
     let url = `{{ url('post/create') }}`;
     let data = new FormData(el.target)
@@ -164,7 +165,8 @@
     // Attach images to form data
     if (Object.keys(images).length > 0) {
       for (image in images) {
-        data.append('images[]', images[image])
+        compressedimage = compressImg(images[image])
+        data.append('images[]', await compressedimage)
       }
     }
     // Attach video to form data
@@ -172,8 +174,6 @@
       data.append('video', video.file);
       data.append('thumbnail', videoThumb);
     }
-
-    closePostModal()
 
     goPost(url, data)
       .then(res => {
