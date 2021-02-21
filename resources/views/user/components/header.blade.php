@@ -108,10 +108,13 @@
                         <div class="dropdown-menu dropdown-menu-right shadow noti-drop">
                             <h6 class="dropdown-header text-center">
                                 <span>
-                                    My Orders (Today)
+                                    My Orders <span id="state-display">(Today)</span>
                                 </span>
-                                <span class="float-right" title="Order history">
-                                    <a href="" class="text-dark"><i class="las la-history la-2x"></i></a>
+                                <span class="float-right">
+                                    <a href="javascript:void(0)" title="Order history" class="text-dark"
+                                        id="order-history-btn"><i class="las la-history la-2x"></i></a>
+                                    <a href="javascript:void(0)" title="Today's Orders" class="text-dark d-none"
+                                        id="today-order-btn"><i class="las la-list la-2x"></i></a>
                                 </span>
                             </h6>
                             <div class="dropdown-divider"></div>

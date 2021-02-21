@@ -35,12 +35,13 @@
         </div> -->
 
         <div class="py-4 px-3 border-bottom text-center">
-            <img id="avatar" src="{{ Storage::url('vendor/profile/'.$vendor->profile_image) }}"
-                class="mt-2 img-fluid rounded-circle col-md-3" alt="Responsive image">
+            <img id="avatar" style="width:100px;height:100px;border-radius:50%;object-fit:cover;overflow:hidden;"
+                src="{{ Storage::url('vendor/profile/'.$vendor->profile_image) }}" class="mt-2 img-fluid rounded-circle"
+                alt="Responsive image">
             <input type="file" class="sr-only" id="input" name="image" accept="image/*">
             <br />
 
-            <h5 class="font-weight-bold text-white mb-1 mt-4">{{ $vendor->business_name }}</h5>
+            <h5 class="font-weight-bold text-white mb-n3 mt-0">{{ $vendor->business_name }}</h5>
             <p class="mb-0 text-white">@<b>{{ $vendor->username }}</b></p>
         </div>
     </div>
@@ -165,7 +166,6 @@
                 <div class="box-body row p-3 overflow-auto generic-scrollbar" style="height: 300px;">
                     @if(!empty($vendor_menu))
                     @foreach($vendor_menu as $menu_dish)
-
                     <div class="col-md-6">
                         <div class="border shadow-sm border rounded bg-white job-item-2 p-3 mb-3">
                             <div class="media">
@@ -191,11 +191,31 @@
                                         </a>
                                     </div>
                                     <div class="d-flex align-items-center">
+                                        @if($menu_dish->type == "simple")
+                                        <a class="small" onclick="loadRegOrderModal('{{$menu_dish->id}}')">Regular
+                                            Order</a>
+                                        @else
+                                        @php
+                                        $bulk_qty = json_decode($menu_dish->quantity, true)['bulk'];
+                                        $regular_qty = json_decode($menu_dish->quantity, true)['regular'];
+                                        @endphp
+                                        @if($bulk_qty == "null")
+                                        <a class="small" onclick="loadRegOrderModal('{{$menu_dish->id}}')">Regular
+                                            Order</a>
+                                        @elseif($regular_qty == "null")
                                         <div class="border-right pr-3 mr-3">
-                                            <a class="text-secondary small" href="job-profile.html">Bulk Order</a>
+                                            <a class="text-secondary small"
+                                                onclick="loadBulkOrderModal('{{$menu_dish->id}}')">Bulk Order</a>
+                                        </div>
+                                        @else
+                                        <div class="border-right pr-3 mr-3">
+                                            <a class="text-secondary small"
+                                                onclick="loadBulkOrderModal('{{$menu_dish->id}}')">Bulk Order</a>
                                         </div>
                                         <a class="small" onclick="loadRegOrderModal('{{$menu_dish->id}}')">Regular
                                             Order</a>
+                                        @endif
+                                        @endif
                                     </div>
                                 </div>
                             </div>

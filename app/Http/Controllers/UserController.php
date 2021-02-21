@@ -419,8 +419,11 @@ class UserController extends Controller
             // Variable to hold Html
             $html = '';
 
+            // Format "All-Vendors" Card Component
             foreach ($vendors as $vendor) {
-                $html .= $this->card($vendor);
+                $vendor->cover_image = Storage::url("vendor/cover/") . $vendor->cover_image;
+                $vendor->profile_image = Storage::url('vendor/profile/') . $vendor->profile_image;
+                $html .= view('user.components.view-all-card', compact('vendor'));
             }
 
             if ($request->ajax()) {
@@ -543,6 +546,9 @@ class UserController extends Controller
     public function vendor_profile($vendor_id)
     {
         try {
+            // Decode $vendor_id
+            $vendor_id = dec($vendor_id);
+
             // Get States Data
             $states = State::get();
 
@@ -607,10 +613,12 @@ class UserController extends Controller
      * Get Vendor Dishes
      * @return object Laravel View Instance
      */
-    public function order_details(Request $request, $dish_id)
+    public function order_details(Request $request, $dish_id, $dish_type = null)
     {
         try {
             $dish = Item::where(['id' => $dish_id])->first();
+
+            $view = "";
 
             $data = [];
             if ($dish->type == "simple") {
@@ -628,6 +636,8 @@ class UserController extends Controller
                 $data['price'] = $qty->price;
                 $data['quantity'] = $qty->quantity;
                 $data['basket_items'] = $simple_items;
+
+                $view = view('user.components.regular-order', $data);
             } else {
                 // Get basket items (simple)
                 $advanced_basket = Basket::where([['user_id', '=', Auth::guard('user')->user()->id], ['order_type', '=', 'advanced']])->get();
@@ -648,8 +658,14 @@ class UserController extends Controller
                 $data['regular_qty'] = json_decode($qty->regular);
                 $data['bulk_qty'] = json_decode($qty->bulk);
                 $data['basket_items'] = $advanced_items;
+
+                if (empty($dish_type)) {
+                    $view = view('user.components.regular-order', $data);
+                } else {
+                    $view = view('user.components.bulk-order', $data);
+                }
             }
-            return view('user.components.regular-order', $data);
+            return $view;
         } catch (\Throwable $th) {
             Log::error($th);
         }
@@ -1025,17 +1041,16 @@ class UserController extends Controller
      * @param Request $request
      * @return Json $response
      */
-    public function get_order(Request $request)
+    public function get_order(Request $request, $type = "today")
     {
-        // Fetch orders for today (Check after handlin cancelling of orders)
-        //  $posts = Post::whereDate('created_at', Carbon::today())->get();
         try {
-            $orders = Vendor::join('orders', 'orders.vendor_id', '=', 'vendors.id')->join('order_items', 'order_items.order_id', '=', 'orders.id')->join('items', 'items.id', '=', 'order_items.item_id')->select("orders.id as order_id", "orders.status as order_status", DB::raw("GROUP_CONCAT(items.title) as title, GROUP_CONCAT(TO_BASE64(items.quantity)) AS quantity, GROUP_CONCAT(items.image) AS image,GROUP_CONCAT(order_items.order_type) AS order_type, GROUP_CONCAT(TO_BASE64(order_items.order_detail)) AS order_detail, GROUP_CONCAT(DISTINCT vendors.business_name) AS vendor_name, GROUP_CONCAT(DISTINCT vendors.cover_image) AS vendor_image"))->where('orders.user_id', Auth::guard('user')->user()->id)->groupBy('orders.id')->get();
+            $orders = $this->order_query($type);
+            $to_check = $orders->toArray();
 
             // Get pending orders for user
             $pending_count = Order::where('status', 0)->count();
 
-            if (!empty($orders)) {
+            if (!empty($to_check)) {
                 foreach ($orders as $order) {
                     $order->title = explode(',', $order->title);
                     $order->quantity = explode(',', $order->quantity);
@@ -1063,7 +1078,7 @@ class UserController extends Controller
             }
 
             // Total amount for orders
-            $total_amount = $this->get_order_total($orders);
+            $total_amount = ($orders == null) ? 0 : $this->get_order_total($orders);
 
             $order_view = view('user.components.order', compact('orders'))->render();
 
@@ -1072,6 +1087,23 @@ class UserController extends Controller
             Log::error($th);
             return response()->json(['success' => false, 'message' => "Oops! Something went wrong. Try Again!"], 500);
         }
+    }
+
+    /**
+     * Fix order fetching query based on type parameter
+     * @param string $type
+     * @return object $orders
+     */
+    public function order_query($type)
+    {
+        $order = "";
+        //  $posts = Post::whereDate('created_at', Carbon::today())->get();
+        if ($type == "history") {
+            $order = Vendor::join('orders', 'orders.vendor_id', '=', 'vendors.id')->join('order_items', 'order_items.order_id', '=', 'orders.id')->join('items', 'items.id', '=', 'order_items.item_id')->select("orders.id as order_id", "orders.status as order_status", DB::raw("GROUP_CONCAT(items.title) as title, GROUP_CONCAT(TO_BASE64(items.quantity)) AS quantity, GROUP_CONCAT(items.image) AS image,GROUP_CONCAT(order_items.order_type) AS order_type, GROUP_CONCAT(TO_BASE64(order_items.order_detail)) AS order_detail, GROUP_CONCAT(DISTINCT vendors.business_name) AS vendor_name, GROUP_CONCAT(DISTINCT vendors.cover_image) AS vendor_image"))->where('orders.user_id', Auth::guard('user')->user()->id)->whereIn('orders.status', ['1', '-1', '-2'])->groupBy('orders.id')->get();
+        } else {
+            $order = Vendor::join('orders', 'orders.vendor_id', '=', 'vendors.id')->join('order_items', 'order_items.order_id', '=', 'orders.id')->join('items', 'items.id', '=', 'order_items.item_id')->select("orders.id as order_id", "orders.status as order_status", DB::raw("GROUP_CONCAT(items.title) as title, GROUP_CONCAT(TO_BASE64(items.quantity)) AS quantity, GROUP_CONCAT(items.image) AS image,GROUP_CONCAT(order_items.order_type) AS order_type, GROUP_CONCAT(TO_BASE64(order_items.order_detail)) AS order_detail, GROUP_CONCAT(DISTINCT vendors.business_name) AS vendor_name, GROUP_CONCAT(DISTINCT vendors.cover_image) AS vendor_image"))->where([['orders.user_id', '=', Auth::guard('user')->user()->id], ['orders.status', '=', 0]])->groupBy('orders.id')->get();
+        }
+        return $order;
     }
 
     /**
@@ -1150,7 +1182,7 @@ class UserController extends Controller
                 $status['colour'] = "badge-info";
                 break;
             case 1:
-                $status['status'] = "Approved";
+                $status['status'] = "Accepted";
                 $status['colour'] = "badge-success";
                 break;
             case -1:

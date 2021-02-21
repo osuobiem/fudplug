@@ -93,7 +93,7 @@
         </div>
 
         @else
-        <div">
+        <div>
 
             <!-- <div class="mb-5 pt-3 text-lg-left text-center">
                 <div class="float-left">
@@ -101,6 +101,7 @@
                     </h4>
                 </div>
             </div> -->
+
             <div id="basicsAccordion">
 
                 <div class="box shadow border rounded bg-white mb-2">
@@ -133,11 +134,12 @@
                                 @php
                                 $i = 1;
 
-                                $regular_qty = json_decode($dish->quantity, true)['regular'];
                                 $order_detail = json_decode($dish->order_detail, true);
                                 @endphp
                                 @foreach($order_detail as $key=>$detail)
+                                @if($detail[0] == "regular")
                                 @php
+                                $regular_qty = json_decode($dish->quantity, true)['regular'];
                                 $index = $detail[1];
                                 $qty = json_decode($regular_qty, true)[$index];
                                 @endphp
@@ -187,6 +189,40 @@
                                 @php
                                 $i++;
                                 @endphp
+                                @else
+                                @php
+                                $bulk_qty = json_decode($dish->quantity, true)['bulk'];
+                                $index = $detail[1];
+                                $qty = json_decode($bulk_qty, true)[$index];
+                                @endphp
+                                <!-- Show for bulk -->
+                                <li id="price-type" class="list-group-item pt-0 col">
+                                    <div class="float-left col-4">
+                                        <small class="basket-small">{{$qty['title']}}</small>
+                                        <p class="mt-0">
+                                            <span class="float-left text-danger" style="font-size: large;">
+                                                ₦{{$qty['price']}}</span>
+                                        </p>
+                                        <input class="basket-price" name="basket_price[]" type="hidden"
+                                            value="{{$qty['price']}}">
+                                        <input name="order_detail[]" type="hidden" value="['bulk','{{$key}}']" disabled>
+                                    </div>
+                                    <div class="float-right col-2">
+                                        <a href="javascript:void(0)"
+                                            onclick="deleteCartItem('{{$dish->id}}', '{{$dish->order_type}}', '{{$key}}')">
+                                            <i class="las la-trash-alt mt-4 bskt-del-btn"></i>
+                                        </a>
+                                    </div>
+                                    <div class="float-right col-5 mt-4">
+                                        <!-- <input class="" type="checkbox" onchange="bulkCheck(event, this)"
+                                            value="['bulk','{{$key}}']" name="order_detail[]"
+                                            id="item-{{$dish->id}}-{{$key}}">
+                                        <label class="form-check-label small" for="item-{{$dish->id}}-{{$key}}">
+                                            Select
+                                        </label> -->
+                                    </div>
+                                </li>
+                                @endif
                                 @endforeach
                             </ul>
 
@@ -196,16 +232,16 @@
 
             </div>
 
-    </div>
-    @endif
-    @endforeach
-    <div class="row">
-        <div class="col-md-12 mt-xs-2">
-            <button type="button" id="basket-order-btn" onclick="placeOrder()"
-                class="btn btn-sm btn-primary btn-block font-weight-bold" data-attach-loading="true" disabled>
-                Place order <span id="basket-final-price" class="float-right" data-item-subtotal="">₦0.00</span>
-            </button>
+        </div>
+        @endif
+        @endforeach
+        <div class="row">
+            <div class="col-md-12 mt-xs-2">
+                <button type="button" id="basket-order-btn" onclick="placeOrder()"
+                    class="btn btn-sm btn-primary btn-block font-weight-bold" data-attach-loading="true" disabled>
+                    Place order <span id="basket-final-price" class="float-right" data-item-subtotal="">₦0.00</span>
+                </button>
+            </div>
         </div>
     </div>
-</div>
 </div>

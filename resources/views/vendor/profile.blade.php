@@ -34,12 +34,13 @@
         </div>
 
         <div class="py-4 px-3 border-bottom text-center">
-            <img id="avatar" src="{{ Storage::url('vendor/profile/'.Auth::user('vendor')->profile_image) }}"
-                class="mt-2 img-fluid rounded-circle col-md-3" alt="Responsive image">
+            <img id="avatar" style="width:100px;height:100px;border-radius:50%;object-fit:cover;overflow:hidden;"
+                src="{{ Storage::url('vendor/profile/'.Auth::user('vendor')->profile_image) }}"
+                class="mt-2 img-fluid rounded-circle" alt="Responsive image">
             <input type="file" class="sr-only" id="input" name="image" accept="image/*">
             <br />
 
-            <h5 class="font-weight-bold text-white mb-1 mt-4">{{ Auth::user('vendor')->business_name }}</h5>
+            <h5 class="font-weight-bold text-white mb-n3 mt-0">{{ Auth::user('vendor')->business_name }}</h5>
             <p class="mb-0 text-white">@<b>{{ Auth::user('vendor')->username }}</b></p>
         </div>
     </div>
