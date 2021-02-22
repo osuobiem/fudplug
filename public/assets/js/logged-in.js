@@ -284,6 +284,32 @@ function closeOrders() {
     }, 500);
 }
 
+// Open Basket Dropup Modal
+function openBasket() {
+    $("body").addClass("modal-open");
+    $(".bas-container").removeClass("d-none");
+
+    $(".bas-inner").addClass("animate__fadeIn");
+    $(".bas-container").addClass("animate__fadeIn");
+
+    $(".bas-inner").removeClass("animate__fadeOut");
+    $(".bas-container").removeClass("animate__fadeOut");
+}
+
+// Close Basket Dropup Modal
+function closeBasket() {
+    $("body").removeClass("modal-open");
+    $(".bas-inner").removeClass("animate__fadeIn");
+    $(".bas-container").removeClass("animate__fadeIn");
+
+    $(".bas-inner").addClass("animate__fadeOut");
+    $(".bas-container").addClass("animate__fadeOut");
+
+    setTimeout(() => {
+        $(".bas-container").addClass("d-none");
+    }, 500);
+}
+
 // Compress image
 function compressImg(image) {
     const options = {

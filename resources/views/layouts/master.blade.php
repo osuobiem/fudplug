@@ -135,6 +135,10 @@
                                 <div id="bulk-order-container">
 
                                 </div>
+
+                                {{-- Basket Modal --}}
+                                @include('user.components.basket-dropup')
+
                                 <!-- ********************* USER COMPONENTS ************************* -->
                             </main>
 

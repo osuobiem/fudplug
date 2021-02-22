@@ -12,11 +12,11 @@
                         <small id="mob-noti-dot" class="d-none">0</small>
                     </span>
                 </div>
-                <div class="col-3" onclick="openOrders()">
-                    <i class="la la-list la-2x p-2"></i>
+                <div class="col-3">
+                    <i class="la la-list la-2x p-2" onclick="openOrders()"></i>
                 </div>
                 <div class="col-3">
-                    <i class="la la-user la-2x p-2"></i>
+                    <i class="la la-shopping-basket la-2x p-2" onclick="openBasket()"></i>
                 </div>
             </div>
         </nav>
