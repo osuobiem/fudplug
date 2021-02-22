@@ -90,6 +90,17 @@
                             <main class="col col-md-10 col-lg-6" id="main-content">
                                 @yield('content')
 
+                                <!-- ********************** SHARED COMPONENTS ******************* -->
+
+                                {{-- Notification Modal --}}
+                                @include('components.notification-dropup')
+
+                                {{-- Orders Modal --}}
+                                @include('components.orders-dropup')
+
+                                <!-- ********************* SHARED COMPONENTS *********************** -->
+
+
                                 <!-- ********************** VENDOR COMPONENTS ******************* -->
 
                                 {{-- Dish Addition Modal--}}
