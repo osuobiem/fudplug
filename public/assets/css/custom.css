@@ -243,6 +243,10 @@ a.text-light:hover {
     text-align: end;
 }
 
+.feed-vid-cont {
+    text-align: center;
+}
+
 .mobile-bottom {
     position: fixed;
     bottom: 0;
