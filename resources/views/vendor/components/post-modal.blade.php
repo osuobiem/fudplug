@@ -152,11 +152,12 @@
     })
   });
   // Send Post
-  function sendPost(el) {
+  async function sendPost(el) {
     el.preventDefault()
 
     spin('post')
     liner();
+    closePostModal()
 
     let url = `{{ url('post/create') }}`;
     let data = new FormData(el.target)
@@ -164,7 +165,8 @@
     // Attach images to form data
     if (Object.keys(images).length > 0) {
       for (image in images) {
-        data.append('images[]', images[image])
+        compressedimage = compressImg(images[image])
+        data.append('images[]', await compressedimage)
       }
     }
     // Attach video to form data
@@ -172,8 +174,6 @@
       data.append('video', video.file);
       data.append('thumbnail', videoThumb);
     }
-
-    closePostModal()
 
     goPost(url, data)
       .then(res => {
@@ -259,9 +259,9 @@
     if (input.files) {
       hideMediaInputs();
       [...input.files].forEach((file, ind) => {
-        if (file.size > 83886080) {
+        if (file.size > 157286400) {
           $('#video-spinner').addClass('d-none')
-          showAlert(false, "Video size must not be more than 80MB");
+          showAlert(false, "Video size must not be more than 150MB");
           hideMediaInputs(false);
         } else if (file.type.split("/")[0] != "video") {
           $('#video-spinner').addClass('d-none')
@@ -287,9 +287,9 @@
           // Check video duration
           var timer = setInterval(function () {
             if (vid.readyState === 4) {
-              if (vid.duration.toFixed(2) > 30) {
+              if (vid.duration.toFixed(2) > 60) {
                 $('#video-spinner').addClass('d-none')
-                showAlert(false, "The video duration must not be more than 30 seconds");
+                showAlert(false, "The video duration must not be more than 60 seconds");
               }
               else {
                 $('#video-spinner').addClass('d-none')

@@ -22,9 +22,6 @@
 {{-- Comments Modal --}}
 @include('components.post.comments')
 
-{{-- Notification Modal --}}
-@include('components.notification-dropup')
-
 @endsection
 
 @push('scripts')

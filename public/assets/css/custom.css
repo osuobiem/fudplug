@@ -243,6 +243,10 @@ a.text-light:hover {
     text-align: end;
 }
 
+.feed-vid-cont {
+    text-align: center;
+}
+
 .mobile-bottom {
     position: fixed;
     bottom: 0;
@@ -1147,7 +1151,8 @@ a:visited {
 
 .dropup-inner {
     background: #fff;
-    height: 90%;
+    max-height: 90%;
+    height: auto;
     width: 100%;
     position: inherit;
     bottom: 0;
@@ -1171,7 +1176,7 @@ a:visited {
 
 .dropup-top-ico {
     background: #e6554a;
-    padding: 12px;
+    padding: 13px;
     border-top-left-radius: 15px;
     border-top-right-radius: 15px;
     border-bottom-left-radius: 15px;
@@ -1183,7 +1188,7 @@ a:visited {
 }
 
 .dropup-top-a {
-    font-size: 16px;
+    font-size: 16px !important;
     justify-content: space-between;
 }
 

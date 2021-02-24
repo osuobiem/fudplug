@@ -77,16 +77,9 @@ if(!Auth::guard('vendor')->guest()) {
           <div class="pm pm-im-l pm-{{ count($post->media) }}" onclick="launchLight('{{ $media->id }}')" style="background-image: url('{{ Storage::url('posts/photos/'.$media->name) }}')"><div></div></div>
           @else
           @php $thumb = explode('.', $media->name)[0] . '.png'; @endphp
-          <div class="w-100 feed-vid-cont" onfocus="trackPosition('{{ $media->name }}', 'med-{{ $media->id }}', 'play{{ $media->id }}')" id="med-{{ $media->id }}">
-            <img class="pm-1 vid-bod" src="{{ Storage::url('posts/videos/thumbnails/'.$thumb) }}" />
+          <div class="w-100 feed-vid-cont">
+            <video preload="metadata" class="pm-1 vid-bod" style="max-height: 300px" controls src="{{ Storage::url('posts/videos/'.$media->name) }}"></video>
           </div>
-
-          <div class="spinner-border play-btn p-4" style="display: none" id="play{{ $media->id }}-spinner" role="status">
-            <span class="sr-only">Loading...</span>
-          </div>
-
-          <i class="la la-play-circle la-5x play-btn" onclick="playVideo('{{ $media->name }}', 'med-{{ $media->id }}', 'play{{ $media->id }}')" id="play{{ $media->id }}-txt"></i>
-
           @endif
         @endforeach
       @endif

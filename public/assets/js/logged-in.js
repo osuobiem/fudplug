@@ -257,3 +257,66 @@ function closeMND() {
 
     mndModalOpen = false;
 }
+
+// Open Orders Dropup Modal
+function openOrders() {
+    $("body").addClass("modal-open");
+    $(".order-container").removeClass("d-none");
+
+    $(".order-inner").addClass("animate__fadeIn");
+    $(".order-container").addClass("animate__fadeIn");
+
+    $(".order-inner").removeClass("animate__fadeOut");
+    $(".order-container").removeClass("animate__fadeOut");
+}
+
+// Close Orders Dropup Modal
+function closeOrders() {
+    $("body").removeClass("modal-open");
+    $(".order-inner").removeClass("animate__fadeIn");
+    $(".order-container").removeClass("animate__fadeIn");
+
+    $(".order-inner").addClass("animate__fadeOut");
+    $(".order-container").addClass("animate__fadeOut");
+
+    setTimeout(() => {
+        $(".order-container").addClass("d-none");
+    }, 500);
+}
+
+// Open Basket Dropup Modal
+function openBasket() {
+    $("body").addClass("modal-open");
+    $(".bas-container").removeClass("d-none");
+
+    $(".bas-inner").addClass("animate__fadeIn");
+    $(".bas-container").addClass("animate__fadeIn");
+
+    $(".bas-inner").removeClass("animate__fadeOut");
+    $(".bas-container").removeClass("animate__fadeOut");
+}
+
+// Close Basket Dropup Modal
+function closeBasket() {
+    $("body").removeClass("modal-open");
+    $(".bas-inner").removeClass("animate__fadeIn");
+    $(".bas-container").removeClass("animate__fadeIn");
+
+    $(".bas-inner").addClass("animate__fadeOut");
+    $(".bas-container").addClass("animate__fadeOut");
+
+    setTimeout(() => {
+        $(".bas-container").addClass("d-none");
+    }, 500);
+}
+
+// Compress image
+function compressImg(image) {
+    const options = {
+        maxSizeMB: 0.5,
+        maxWidthOrHeight: 1920,
+        useWebWorker: true
+      }
+    
+    return  imageCompression(image, options);
+}

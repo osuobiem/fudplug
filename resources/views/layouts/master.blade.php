@@ -90,6 +90,17 @@
                             <main class="col col-md-10 col-lg-6" id="main-content">
                                 @yield('content')
 
+                                <!-- ********************** SHARED COMPONENTS ******************* -->
+
+                                {{-- Notification Modal --}}
+                                @include('components.notification-dropup')
+
+                                {{-- Orders Modal --}}
+                                @include('components.orders-dropup')
+
+                                <!-- ********************* SHARED COMPONENTS *********************** -->
+
+
                                 <!-- ********************** VENDOR COMPONENTS ******************* -->
 
                                 {{-- Dish Addition Modal--}}
@@ -124,6 +135,10 @@
                                 <div id="bulk-order-container">
 
                                 </div>
+
+                                {{-- Basket Modal --}}
+                                @include('user.components.basket-dropup')
+
                                 <!-- ********************* USER COMPONENTS ************************* -->
                             </main>
 
@@ -261,6 +276,7 @@
                     <!-- Vendor Scipts -->
                     <script src="{{ url('assets/js/vendor.js') }}" server="{{ url('') }}" token="{{ csrf_token()}}">
                     </script>
+                    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/browser-image-compression@latest/dist/browser-image-compression.js"></script>
                     <!-- Vendor Scipts -->
                     @elseif(!Auth::guard('user')->guest())
                     <!-- USER SCRIPTS -->
