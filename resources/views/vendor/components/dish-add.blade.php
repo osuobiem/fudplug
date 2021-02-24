@@ -380,11 +380,15 @@
                                         <label class="text-center"> Bulk Quantity </label>
                                         <div>
                                             <div class="bulk-entry-1 mb-2 form-inline">
-                                                <input class="form-control col-sm-6 rounded-right-0 one"
-                                                    name="bulk_title_one[]" type="text" placeholder="Title" disabled />
-                                                <input class="form-control col-sm-6 rounded-left-0 one"
+                                                <input class="form-control col-sm-4 rounded-right-0 one"
+                                                    name="bulk_title_one[]" step="0.01" type="number"
+                                                    placeholder="Litres" disabled />
+                                                <input class="form-control col-sm-4 rounded-left-0 rounded-right-0 one"
                                                     name="bulk_price_one[]" type="number" placeholder="Price"
                                                     disabled />
+                                                <input class="form-control col-sm-4 rounded-left-0 one"
+                                                    name="bulk_quantity_one[]" type="number"
+                                                    placeholder="Quantity Available" disabled />
                                                 <div class="col-sm-12 pt-2 text-left input-group-btn">
                                                     <button type="button" onclick="toggleMain(this)"
                                                         class="btn btn-success btn-sm qty-btn-add-1">
@@ -395,30 +399,15 @@
                                                     placeholder="Quantity Available" /> -->
                                             </div>
                                             <div class="bulk-entry-1 mb-2 form-inline d-none">
-                                                <input class="form-control col-sm-6 rounded-right-0"
-                                                    name="bulk_title_one[]" type="text" placeholder="Title" disabled />
-                                                <input class="form-control col-sm-6 rounded-left-0"
+                                                <input class="form-control col-sm-4 rounded-right-0"
+                                                    name="bulk_title_one[]" step="0.01" type="number"
+                                                    placeholder="Litres" disabled />
+                                                <input class="form-control col-sm-4 rounded-left-0 rounded-right-0"
                                                     name="bulk_price_one[]" type="number" placeholder="Price"
                                                     disabled />
-                                                <div class="col-sm-12 pt-2 text-left input-group-btn">
-                                                    <button type="button" onclick="toggleMain(this)"
-                                                        class="btn btn-success btn-sm qty-btn-add-1">
-                                                        <span class="las la-plus" aria-hidden="true"></span>
-                                                    </button>
-                                                    <button type="button" onclick="toggleMain(this, false)"
-                                                        class="btn btn-danger btn-sm qty-btn-add-1">
-                                                        <span class="las la-minus" aria-hidden="true"></span>
-                                                    </button>
-                                                </div>
-                                                <!-- <input class="form-control col-sm-4" name="fields[]" type="text"
-                                                    placeholder="Quantity Available" /> -->
-                                            </div>
-                                            <div class="bulk-entry-1 mb-2 form-inline d-none">
-                                                <input class="form-control col-sm-6 rounded-right-0"
-                                                    name="bulk_title_one[]" type="text" placeholder="Title" disabled />
-                                                <input class="form-control col-sm-6 rounded-left-0"
-                                                    name="bulk_price_one[]" type="number" placeholder="Price"
-                                                    disabled />
+                                                <input class="form-control col-sm-4 rounded-left-0"
+                                                    name="bulk_quantity_one[]" type="number"
+                                                    placeholder="Quantity Available" disabled />
                                                 <div class="col-sm-12 pt-2 text-left input-group-btn">
                                                     <button type="button" onclick="toggleMain(this)"
                                                         class="btn btn-success btn-sm qty-btn-add-1">
@@ -433,11 +422,15 @@
                                                     placeholder="Quantity Available" /> -->
                                             </div>
                                             <div class="bulk-entry-1 mb-2 form-inline d-none">
-                                                <input class="form-control col-sm-6 rounded-right-0"
-                                                    name="bulk_title_one[]" type="text" placeholder="Title" disabled />
-                                                <input class="form-control col-sm-6 rounded-left-0"
+                                                <input class="form-control col-sm-4 rounded-right-0"
+                                                    name="bulk_title_one[]" step="0.01" type="number"
+                                                    placeholder="Litres" disabled />
+                                                <input class="form-control col-sm-4 rounded-left-0 rounded-right-0"
                                                     name="bulk_price_one[]" type="number" placeholder="Price"
                                                     disabled />
+                                                <input class="form-control col-sm-4 rounded-left-0"
+                                                    name="bulk_quantity_one[]" type="number"
+                                                    placeholder="Quantity Available" disabled />
                                                 <div class="col-sm-12 pt-2 text-left input-group-btn">
                                                     <button type="button" onclick="toggleMain(this)"
                                                         class="btn btn-success btn-sm qty-btn-add-1">
@@ -452,11 +445,38 @@
                                                     placeholder="Quantity Available" /> -->
                                             </div>
                                             <div class="bulk-entry-1 mb-2 form-inline d-none">
-                                                <input class="form-control col-sm-6 rounded-right-0"
-                                                    name="bulk_title_one[]" type="text" placeholder="Title" disabled />
-                                                <input class="form-control col-sm-6 rounded-left-0"
+                                                <input class="form-control col-sm-4 rounded-right-0"
+                                                    name="bulk_title_one[]" step="0.01" type="number"
+                                                    placeholder="Litres" disabled />
+                                                <input class="form-control col-sm-4 rounded-left-0 rounded-right-0"
                                                     name="bulk_price_one[]" type="number" placeholder="Price"
                                                     disabled />
+                                                <input class="form-control col-sm-4 rounded-left-0"
+                                                    name="bulk_quantity_one[]" type="number"
+                                                    placeholder="Quantity Available" disabled />
+                                                <div class="col-sm-12 pt-2 text-left input-group-btn">
+                                                    <button type="button" onclick="toggleMain(this)"
+                                                        class="btn btn-success btn-sm qty-btn-add-1">
+                                                        <span class="las la-plus" aria-hidden="true"></span>
+                                                    </button>
+                                                    <button type="button" onclick="toggleMain(this, false)"
+                                                        class="btn btn-danger btn-sm qty-btn-add-1">
+                                                        <span class="las la-minus" aria-hidden="true"></span>
+                                                    </button>
+                                                </div>
+                                                <!-- <input class="form-control col-sm-4" name="fields[]" type="text"
+                                                    placeholder="Quantity Available" /> -->
+                                            </div>
+                                            <div class="bulk-entry-1 mb-2 form-inline d-none">
+                                                <input class="form-control col-sm-4 rounded-right-0"
+                                                    name="bulk_title_one[]" step="0.01" type="number"
+                                                    placeholder="Litres" disabled />
+                                                <input class="form-control col-sm-4 rounded-left-0 rounded-right-0"
+                                                    name="bulk_price_one[]" type="number" placeholder="Price"
+                                                    disabled />
+                                                <input class="form-control col-sm-4 rounded-left-0"
+                                                    name="bulk_quantity_one[]" type="number"
+                                                    placeholder="Quantity Available" disabled />
                                                 <div class="col-sm-12 pt-2 text-left input-group-btn">
                                                     <button type="button" onclick="toggleMain(this, false)"
                                                         class="btn btn-danger btn-sm qty-btn-add-1">
@@ -602,11 +622,15 @@
                                         <label class="text-center"> Bulk Quantity </label>
                                         <div>
                                             <div class="bulk-entry-1 mb-2 form-inline">
-                                                <input class="form-control col-sm-6 rounded-right-0 init"
-                                                    name="bulk_title_two[]" type="text" placeholder="Title" disabled />
-                                                <input class="form-control col-sm-6 rounded-left-0 init"
+                                                <input class="form-control col-sm-4 rounded-right-0 init"
+                                                    name="bulk_title_two[]" step="0.01" type="number"
+                                                    placeholder="Litres" disabled />
+                                                <input class="form-control col-sm-4 rounded-left-0 rounded-right-0 init"
                                                     name="bulk_price_two[]" type="number" placeholder="Price"
                                                     disabled />
+                                                <input class="form-control col-sm-4 rounded-left-0 init"
+                                                    name="bulk_quantity_two[]" type="number"
+                                                    placeholder="Quantity Available" disabled />
                                                 <div class="col-sm-12 pt-2 text-left input-group-btn">
                                                     <button type="button" onclick="toggleMain(this)"
                                                         class="btn btn-success btn-sm qty-btn-add-1">
@@ -617,30 +641,15 @@
                                                     placeholder="Quantity Available" /> -->
                                             </div>
                                             <div class="bulk-entry-1 mb-2 form-inline d-none">
-                                                <input class="form-control col-sm-6 rounded-right-0"
-                                                    name="bulk_title_two[]" type="text" placeholder="Title" disabled />
-                                                <input class="form-control col-sm-6 rounded-left-0"
+                                                <input class="form-control col-sm-4 rounded-right-0"
+                                                    name="bulk_title_two[]" step="0.01" type="number"
+                                                    placeholder="Litres" disabled />
+                                                <input class="form-control col-sm-4 rounded-left-0 rounded-right-0"
                                                     name="bulk_price_two[]" type="number" placeholder="Price"
                                                     disabled />
-                                                <div class="col-sm-12 pt-2 text-left input-group-btn">
-                                                    <button type="button" onclick="toggleMain(this)"
-                                                        class="btn btn-success btn-sm qty-btn-add-1">
-                                                        <span class="las la-plus" aria-hidden="true"></span>
-                                                    </button>
-                                                    <button type="button" onclick="toggleMain(this, false)"
-                                                        class="btn btn-danger btn-sm qty-btn-add-1">
-                                                        <span class="las la-minus" aria-hidden="true"></span>
-                                                    </button>
-                                                </div>
-                                                <!-- <input class="form-control col-sm-4" name="fields[]" type="text"
-                                                    placeholder="Quantity Available" /> -->
-                                            </div>
-                                            <div class="bulk-entry-1 mb-2 form-inline d-none">
-                                                <input class="form-control col-sm-6 rounded-right-0"
-                                                    name="bulk_title_two[]" type="text" placeholder="Title" disabled />
-                                                <input class="form-control col-sm-6 rounded-left-0"
-                                                    name="bulk_price_two[]" type="number" placeholder="Price"
-                                                    disabled />
+                                                <input class="form-control col-sm-4 rounded-left-0"
+                                                    name="bulk_quantity_two[]" type="number"
+                                                    placeholder="Quantity Available" disabled />
                                                 <div class="col-sm-12 pt-2 text-left input-group-btn">
                                                     <button type="button" onclick="toggleMain(this)"
                                                         class="btn btn-success btn-sm qty-btn-add-1">
@@ -655,11 +664,15 @@
                                                     placeholder="Quantity Available" /> -->
                                             </div>
                                             <div class="bulk-entry-1 mb-2 form-inline d-none">
-                                                <input class="form-control col-sm-6 rounded-right-0"
-                                                    name="bulk_title_two[]" type="text" placeholder="Title" disabled />
-                                                <input class="form-control col-sm-6 rounded-left-0"
+                                                <input class="form-control col-sm-4 rounded-right-0"
+                                                    name="bulk_title_two[]" step="0.01" type="number"
+                                                    placeholder="Litres" disabled />
+                                                <input class="form-control col-sm-4 rounded-left-0 rounded-right-0"
                                                     name="bulk_price_two[]" type="number" placeholder="Price"
                                                     disabled />
+                                                <input class="form-control col-sm-4 rounded-left-0"
+                                                    name="bulk_quantity_two[]" type="number"
+                                                    placeholder="Quantity Available" disabled />
                                                 <div class="col-sm-12 pt-2 text-left input-group-btn">
                                                     <button type="button" onclick="toggleMain(this)"
                                                         class="btn btn-success btn-sm qty-btn-add-1">
@@ -674,11 +687,38 @@
                                                     placeholder="Quantity Available" /> -->
                                             </div>
                                             <div class="bulk-entry-1 mb-2 form-inline d-none">
-                                                <input class="form-control col-sm-6 rounded-right-0"
-                                                    name="bulk_title_two[]" type="text" placeholder="Title" disabled />
-                                                <input class="form-control col-sm-6 rounded-left-0"
+                                                <input class="form-control col-sm-4 rounded-right-0"
+                                                    name="bulk_title_two[]" step="0.01" type="number"
+                                                    placeholder="Litres" disabled />
+                                                <input class="form-control col-sm-4 rounded-left-0"
                                                     name="bulk_price_two[]" type="number" placeholder="Price"
                                                     disabled />
+                                                <input class="form-control col-sm-4 rounded-left-0"
+                                                    name="bulk_quantity_two[]" type="number"
+                                                    placeholder="Quantity Available" disabled />
+                                                <div class="col-sm-12 pt-2 text-left input-group-btn">
+                                                    <button type="button" onclick="toggleMain(this)"
+                                                        class="btn btn-success btn-sm qty-btn-add-1">
+                                                        <span class="las la-plus" aria-hidden="true"></span>
+                                                    </button>
+                                                    <button type="button" onclick="toggleMain(this, false)"
+                                                        class="btn btn-danger btn-sm qty-btn-add-1">
+                                                        <span class="las la-minus" aria-hidden="true"></span>
+                                                    </button>
+                                                </div>
+                                                <!-- <input class="form-control col-sm-4" name="fields[]" type="text"
+                                                    placeholder="Quantity Available" /> -->
+                                            </div>
+                                            <div class="bulk-entry-1 mb-2 form-inline d-none">
+                                                <input class="form-control col-sm-4 rounded-right-0"
+                                                    name="bulk_title_two[]" step="0.01" type="number"
+                                                    placeholder="Litres" disabled />
+                                                <input class="form-control col-sm-4 rounded-left-0"
+                                                    name="bulk_price_two[]" type="number" placeholder="Price"
+                                                    disabled />
+                                                <input class="form-control col-sm-4 rounded-left-0"
+                                                    name="bulk_quantity_two[]" type="number"
+                                                    placeholder="Quantity Available" disabled />
                                                 <div class="col-sm-12 pt-2 text-left input-group-btn">
                                                     <button type="button" onclick="toggleMain(this, false)"
                                                         class="btn btn-danger btn-sm qty-btn-add-1">
@@ -828,12 +868,15 @@
                                         <label class="text-center"> Bulk Quantity </label>
                                         <div>
                                             <div class="bulk-entry-1 mb-2 form-inline">
-                                                <input class="form-control col-sm-6 rounded-right-0 init"
-                                                    name="bulk_title_three[]" type="text" placeholder="Title"
-                                                    disabled />
-                                                <input class="form-control col-sm-6 rounded-left-0 init"
+                                                <input class="form-control col-sm-4 rounded-right-0 init"
+                                                    name="bulk_title_three[]" step="0.01" type="number"
+                                                    placeholder="Litres" disabled />
+                                                <input class="form-control col-sm-4 rounded-left-0 rounded-right-0 init"
                                                     name="bulk_price_three[]" type="number" placeholder="Price"
                                                     disabled />
+                                                <input class="form-control col-sm-4 rounded-left-0 init"
+                                                    name="bulk_quantity_three[]" type="number"
+                                                    placeholder="Quantity Available" disabled />
                                                 <div class="col-sm-12 pt-2 text-left input-group-btn">
                                                     <button type="button" onclick="toggleMain(this)"
                                                         class="btn btn-success btn-sm qty-btn-add-1">
@@ -844,32 +887,15 @@
                                                     placeholder="Quantity Available" /> -->
                                             </div>
                                             <div class="bulk-entry-1 mb-2 form-inline d-none">
-                                                <input class="form-control col-sm-6 rounded-right-0"
-                                                    name="bulk_title_three[]" type="text" placeholder="Title"
-                                                    disabled />
-                                                <input class="form-control col-sm-6 rounded-left-0"
+                                                <input class="form-control col-sm-4 rounded-right-0"
+                                                    name="bulk_title_three[]" step="0.01" type="number"
+                                                    placeholder="Litres" disabled />
+                                                <input class="form-control col-sm-4 rounded-left-0 rounded-right-0"
                                                     name="bulk_price_three[]" type="number" placeholder="Price"
                                                     disabled />
-                                                <div class="col-sm-12 pt-2 text-left input-group-btn">
-                                                    <button type="button" onclick="toggleMain(this)"
-                                                        class="btn btn-success btn-sm qty-btn-add-1">
-                                                        <span class="las la-plus" aria-hidden="true"></span>
-                                                    </button>
-                                                    <button type="button" onclick="toggleMain(this, false)"
-                                                        class="btn btn-danger btn-sm qty-btn-add-1">
-                                                        <span class="las la-minus" aria-hidden="true"></span>
-                                                    </button>
-                                                </div>
-                                                <!-- <input class="form-control col-sm-4" name="fields[]" type="text"
-                                                    placeholder="Quantity Available" /> -->
-                                            </div>
-                                            <div class="bulk-entry-1 mb-2 form-inline d-none">
-                                                <input class="form-control col-sm-6 rounded-right-0"
-                                                    name="bulk_title_three[]" type="text" placeholder="Title"
-                                                    disabled />
-                                                <input class="form-control col-sm-6 rounded-left-0"
-                                                    name="bulk_price_three[]" type="number" placeholder="Price"
-                                                    disabled />
+                                                <input class="form-control col-sm-4 rounded-left-0"
+                                                    name="bulk_quantity_three[]" type="number"
+                                                    placeholder="Quantity Available" disabled />
                                                 <div class="col-sm-12 pt-2 text-left input-group-btn">
                                                     <button type="button" onclick="toggleMain(this)"
                                                         class="btn btn-success btn-sm qty-btn-add-1">
@@ -884,12 +910,15 @@
                                                     placeholder="Quantity Available" /> -->
                                             </div>
                                             <div class="bulk-entry-1 mb-2 form-inline d-none">
-                                                <input class="form-control col-sm-6 rounded-right-0"
-                                                    name="bulk_title_three[]" type="text" placeholder="Title"
-                                                    disabled />
-                                                <input class="form-control col-sm-6 rounded-left-0"
+                                                <input class="form-control col-sm-4 rounded-right-0"
+                                                    name="bulk_title_three[]" step="0.01" type="number"
+                                                    placeholder="Litres" disabled />
+                                                <input class="form-control col-sm-4 rounded-left-0 rounded-right-0"
                                                     name="bulk_price_three[]" type="number" placeholder="Price"
                                                     disabled />
+                                                <input class="form-control col-sm-4 rounded-left-0"
+                                                    name="bulk_quantity_three[]" type="number"
+                                                    placeholder="Quantity Available" disabled />
                                                 <div class="col-sm-12 pt-2 text-left input-group-btn">
                                                     <button type="button" onclick="toggleMain(this)"
                                                         class="btn btn-success btn-sm qty-btn-add-1">
@@ -904,12 +933,38 @@
                                                     placeholder="Quantity Available" /> -->
                                             </div>
                                             <div class="bulk-entry-1 mb-2 form-inline d-none">
-                                                <input class="form-control col-sm-6 rounded-right-0"
-                                                    name="bulk_title_three[]" type="text" placeholder="Title"
-                                                    disabled />
-                                                <input class="form-control col-sm-6 rounded-left-0"
+                                                <input class="form-control col-sm-4 rounded-right-0"
+                                                    name="bulk_title_three[]" step="0.01" type="number"
+                                                    placeholder="Litres" disabled />
+                                                <input class="form-control col-sm-4 rounded-left-0 rounded-right-0"
                                                     name="bulk_price_three[]" type="number" placeholder="Price"
                                                     disabled />
+                                                <input class="form-control col-sm-4 rounded-left-0"
+                                                    name="bulk_quantity_three[]" type="number"
+                                                    placeholder="Quantity Available" disabled />
+                                                <div class="col-sm-12 pt-2 text-left input-group-btn">
+                                                    <button type="button" onclick="toggleMain(this)"
+                                                        class="btn btn-success btn-sm qty-btn-add-1">
+                                                        <span class="las la-plus" aria-hidden="true"></span>
+                                                    </button>
+                                                    <button type="button" onclick="toggleMain(this, false)"
+                                                        class="btn btn-danger btn-sm qty-btn-add-1">
+                                                        <span class="las la-minus" aria-hidden="true"></span>
+                                                    </button>
+                                                </div>
+                                                <!-- <input class="form-control col-sm-4" name="fields[]" type="text"
+                                                    placeholder="Quantity Available" /> -->
+                                            </div>
+                                            <div class="bulk-entry-1 mb-2 form-inline d-none">
+                                                <input class="form-control col-sm-4 rounded-right-0"
+                                                    name="bulk_title_three[]" step="0.01" type="number"
+                                                    placeholder="Litres" disabled />
+                                                <input class="form-control col-sm-4 rounded-left-0 rounded-right-0"
+                                                    name="bulk_price_three[]" type="number" placeholder="Price"
+                                                    disabled />
+                                                <input class="form-control col-sm-4 rounded-left-0"
+                                                    name="bulk_quantity_three[]" type="number"
+                                                    placeholder="Quantity Available" disabled />
                                                 <div class="col-sm-12 pt-2 text-left input-group-btn">
                                                     <button type="button" onclick="toggleMain(this, false)"
                                                         class="btn btn-danger btn-sm qty-btn-add-1">
@@ -1059,11 +1114,15 @@
                                         <label class="text-center"> Bulk Quantity </label>
                                         <div>
                                             <div class="bulk-entry-1 mb-2 form-inline">
-                                                <input class="form-control col-sm-6 rounded-right-0 init"
-                                                    name="bulk_title_four[]" type="text" placeholder="Title" disabled />
-                                                <input class="form-control col-sm-6 rounded-left-0 init"
+                                                <input class="form-control col-sm-4 rounded-right-0 init"
+                                                    name="bulk_title_four[]" step="0.01" type="number"
+                                                    placeholder="Litres" disabled />
+                                                <input class="form-control col-sm-4 rounded-left-0 rounded-right-0 init"
                                                     name="bulk_price_four[]" type="number" placeholder="Price"
                                                     disabled />
+                                                <input class="form-control col-sm-4 rounded-left-0 init"
+                                                    name="bulk_quantity_four[]" type="number"
+                                                    placeholder="Quantity Available" disabled />
                                                 <div class="col-sm-12 pt-2 text-left input-group-btn">
                                                     <button type="button" onclick="toggleMain(this)"
                                                         class="btn btn-success btn-sm qty-btn-add-1">
@@ -1074,30 +1133,15 @@
                                                     placeholder="Quantity Available" /> -->
                                             </div>
                                             <div class="bulk-entry-1 mb-2 form-inline d-none">
-                                                <input class="form-control col-sm-6 rounded-right-0"
-                                                    name="bulk_title_four[]" type="text" placeholder="Title" disabled />
-                                                <input class="form-control col-sm-6 rounded-left-0"
+                                                <input class="form-control col-sm-4 rounded-right-0"
+                                                    name="bulk_title_four[]" step="0.01" type="number"
+                                                    placeholder="Litres" disabled />
+                                                <input class="form-control col-sm-4 rounded-left-0 rounded-right-0"
                                                     name="bulk_price_four[]" type="number" placeholder="Price"
                                                     disabled />
-                                                <div class="col-sm-12 pt-2 text-left input-group-btn">
-                                                    <button type="button" onclick="toggleMain(this)"
-                                                        class="btn btn-success btn-sm qty-btn-add-1">
-                                                        <span class="las la-plus" aria-hidden="true"></span>
-                                                    </button>
-                                                    <button type="button" onclick="toggleMain(this, false)"
-                                                        class="btn btn-danger btn-sm qty-btn-add-1">
-                                                        <span class="las la-minus" aria-hidden="true"></span>
-                                                    </button>
-                                                </div>
-                                                <!-- <input class="form-control col-sm-4" name="fields[]" type="text"
-                                                    placeholder="Quantity Available" /> -->
-                                            </div>
-                                            <div class="bulk-entry-1 mb-2 form-inline d-none">
-                                                <input class="form-control col-sm-6 rounded-right-0"
-                                                    name="bulk_title_four[]" type="text" placeholder="Title" disabled />
-                                                <input class="form-control col-sm-6 rounded-left-0"
-                                                    name="bulk_price_four[]" type="number" placeholder="Price"
-                                                    disabled />
+                                                <input class="form-control col-sm-4 rounded-left-0"
+                                                    name="bulk_quantity_four[]" type="number"
+                                                    placeholder="Quantity Available" disabled />
                                                 <div class="col-sm-12 pt-2 text-left input-group-btn">
                                                     <button type="button" onclick="toggleMain(this)"
                                                         class="btn btn-success btn-sm qty-btn-add-1">
@@ -1112,11 +1156,15 @@
                                                     placeholder="Quantity Available" /> -->
                                             </div>
                                             <div class="bulk-entry-1 mb-2 form-inline d-none">
-                                                <input class="form-control col-sm-6 rounded-right-0"
-                                                    name="bulk_title_four[]" type="text" placeholder="Title" disabled />
-                                                <input class="form-control col-sm-6 rounded-left-0"
+                                                <input class="form-control col-sm-4 rounded-right-0"
+                                                    name="bulk_title_four[]" step="0.01" type="number"
+                                                    placeholder="Litres" disabled />
+                                                <input class="form-control col-sm-4 rounded-left-0 rounded-right-0"
                                                     name="bulk_price_four[]" type="number" placeholder="Price"
                                                     disabled />
+                                                <input class="form-control col-sm-4 rounded-left-0"
+                                                    name="bulk_quantity_four[]" type="number"
+                                                    placeholder="Quantity Available" disabled />
                                                 <div class="col-sm-12 pt-2 text-left input-group-btn">
                                                     <button type="button" onclick="toggleMain(this)"
                                                         class="btn btn-success btn-sm qty-btn-add-1">
@@ -1131,11 +1179,38 @@
                                                     placeholder="Quantity Available" /> -->
                                             </div>
                                             <div class="bulk-entry-1 mb-2 form-inline d-none">
-                                                <input class="form-control col-sm-6 rounded-right-0"
-                                                    name="bulk_title_four[]" type="text" placeholder="Title" disabled />
-                                                <input class="form-control col-sm-6 rounded-left-0"
+                                                <input class="form-control col-sm-4 rounded-right-0"
+                                                    name="bulk_title_four[]" step="0.01" type="number"
+                                                    placeholder="Litres" disabled />
+                                                <input class="form-control col-sm-4 rounded-left-0 rounded-right-0"
                                                     name="bulk_price_four[]" type="number" placeholder="Price"
                                                     disabled />
+                                                <input class="form-control col-sm-4 rounded-left-0"
+                                                    name="bulk_quantity_four[]" type="number"
+                                                    placeholder="Quantity Available" disabled />
+                                                <div class="col-sm-12 pt-2 text-left input-group-btn">
+                                                    <button type="button" onclick="toggleMain(this)"
+                                                        class="btn btn-success btn-sm qty-btn-add-1">
+                                                        <span class="las la-plus" aria-hidden="true"></span>
+                                                    </button>
+                                                    <button type="button" onclick="toggleMain(this, false)"
+                                                        class="btn btn-danger btn-sm qty-btn-add-1">
+                                                        <span class="las la-minus" aria-hidden="true"></span>
+                                                    </button>
+                                                </div>
+                                                <!-- <input class="form-control col-sm-4" name="fields[]" type="text"
+                                                    placeholder="Quantity Available" /> -->
+                                            </div>
+                                            <div class="bulk-entry-1 mb-2 form-inline d-none">
+                                                <input class="form-control col-sm-4 rounded-right-0"
+                                                    name="bulk_title_four[]" step="0.01" type="number"
+                                                    placeholder="Litres" disabled />
+                                                <input class="form-control col-sm-4 rounded-left-0 rounded-right-0"
+                                                    name="bulk_price_four[]" type="number" placeholder="Price"
+                                                    disabled />
+                                                <input class="form-control col-sm-4 rounded-left-0"
+                                                    name="bulk_quantity_four[]" type="number"
+                                                    placeholder="Quantity Available" disabled />
                                                 <div class="col-sm-12 pt-2 text-left input-group-btn">
                                                     <button type="button" onclick="toggleMain(this, false)"
                                                         class="btn btn-danger btn-sm qty-btn-add-1">
@@ -1285,11 +1360,15 @@
                                         <label class="text-center"> Bulk Quantity </label>
                                         <div>
                                             <div class="bulk-entry-1 mb-2 form-inline">
-                                                <input class="form-control col-sm-6 rounded-right-0 init"
-                                                    name="bulk_title_five[]" type="text" placeholder="Title" disabled />
-                                                <input class="form-control col-sm-6 rounded-left-0 init"
+                                                <input class="form-control col-sm-4 rounded-right-0 init"
+                                                    name="bulk_title_five[]" step="0.01" type="number"
+                                                    placeholder="Litres" disabled />
+                                                <input class="form-control col-sm-4 rounded-left-0 rounded-right-0 init"
                                                     name="bulk_price_five[]" type="number" placeholder="Price"
                                                     disabled />
+                                                <input class="form-control col-sm-4 rounded-left-0 init"
+                                                    name="bulk_quantity_five[]" type="number"
+                                                    placeholder="Quantity Available" disabled />
                                                 <div class="col-sm-12 pt-2 text-left input-group-btn">
                                                     <button type="button" onclick="toggleMain(this)"
                                                         class="btn btn-success btn-sm qty-btn-add-1">
@@ -1300,30 +1379,15 @@
                                                     placeholder="Quantity Available" /> -->
                                             </div>
                                             <div class="bulk-entry-1 mb-2 form-inline d-none">
-                                                <input class="form-control col-sm-6 rounded-right-0"
-                                                    name="bulk_title_five[]" type="text" placeholder="Title" disabled />
-                                                <input class="form-control col-sm-6 rounded-left-0"
+                                                <input class="form-control col-sm-4 rounded-right-0"
+                                                    name="bulk_title_five[]" step="0.01" type="number"
+                                                    placeholder="Litres" disabled />
+                                                <input class="form-control col-sm-4 rounded-left-0 rounded-right-0"
                                                     name="bulk_price_five[]" type="number" placeholder="Price"
                                                     disabled />
-                                                <div class="col-sm-12 pt-2 text-left input-group-btn">
-                                                    <button type="button" onclick="toggleMain(this)"
-                                                        class="btn btn-success btn-sm qty-btn-add-1">
-                                                        <span class="las la-plus" aria-hidden="true"></span>
-                                                    </button>
-                                                    <button type="button" onclick="toggleMain(this, false)"
-                                                        class="btn btn-danger btn-sm qty-btn-add-1">
-                                                        <span class="las la-minus" aria-hidden="true"></span>
-                                                    </button>
-                                                </div>
-                                                <!-- <input class="form-control col-sm-4" name="fields[]" type="text"
-                                                    placeholder="Quantity Available" /> -->
-                                            </div>
-                                            <div class="bulk-entry-1 mb-2 form-inline d-none">
-                                                <input class="form-control col-sm-6 rounded-right-0"
-                                                    name="bulk_title_five[]" type="text" placeholder="Title" disabled />
-                                                <input class="form-control col-sm-6 rounded-left-0"
-                                                    name="bulk_price_five[]" type="number" placeholder="Price"
-                                                    disabled />
+                                                <input class="form-control col-sm-4 rounded-left-0"
+                                                    name="bulk_quantity_five[]" type="number"
+                                                    placeholder="Quantity Available" disabled />
                                                 <div class="col-sm-12 pt-2 text-left input-group-btn">
                                                     <button type="button" onclick="toggleMain(this)"
                                                         class="btn btn-success btn-sm qty-btn-add-1">
@@ -1338,11 +1402,15 @@
                                                     placeholder="Quantity Available" /> -->
                                             </div>
                                             <div class="bulk-entry-1 mb-2 form-inline d-none">
-                                                <input class="form-control col-sm-6 rounded-right-0"
-                                                    name="bulk_title_five[]" type="text" placeholder="Title" disabled />
-                                                <input class="form-control col-sm-6 rounded-left-0"
+                                                <input class="form-control col-sm-4 rounded-right-0"
+                                                    name="bulk_title_five[]" step="0.01" type="number"
+                                                    placeholder="Litres" disabled />
+                                                <input class="form-control col-sm-4 rounded-left-0 rounded-right-0"
                                                     name="bulk_price_five[]" type="number" placeholder="Price"
                                                     disabled />
+                                                <input class="form-control col-sm-4 rounded-left-0"
+                                                    name="bulk_quantity_five[]" type="number"
+                                                    placeholder="Quantity Available" disabled />
                                                 <div class="col-sm-12 pt-2 text-left input-group-btn">
                                                     <button type="button" onclick="toggleMain(this)"
                                                         class="btn btn-success btn-sm qty-btn-add-1">
@@ -1357,11 +1425,38 @@
                                                     placeholder="Quantity Available" /> -->
                                             </div>
                                             <div class="bulk-entry-1 mb-2 form-inline d-none">
-                                                <input class="form-control col-sm-6 rounded-right-0"
-                                                    name="bulk_title_five[]" type="text" placeholder="Title" disabled />
-                                                <input class="form-control col-sm-6 rounded-left-0"
+                                                <input class="form-control col-sm-4 rounded-right-0"
+                                                    name="bulk_title_five[]" step="0.01" type="number"
+                                                    placeholder="Litres" disabled />
+                                                <input class="form-control col-sm-4 rounded-left-0 rounded-right-0"
                                                     name="bulk_price_five[]" type="number" placeholder="Price"
                                                     disabled />
+                                                <input class="form-control col-sm-4 rounded-left-0"
+                                                    name="bulk_quantity_five[]" type="number"
+                                                    placeholder="Quantity Available" disabled />
+                                                <div class="col-sm-12 pt-2 text-left input-group-btn">
+                                                    <button type="button" onclick="toggleMain(this)"
+                                                        class="btn btn-success btn-sm qty-btn-add-1">
+                                                        <span class="las la-plus" aria-hidden="true"></span>
+                                                    </button>
+                                                    <button type="button" onclick="toggleMain(this, false)"
+                                                        class="btn btn-danger btn-sm qty-btn-add-1">
+                                                        <span class="las la-minus" aria-hidden="true"></span>
+                                                    </button>
+                                                </div>
+                                                <!-- <input class="form-control col-sm-4" name="fields[]" type="text"
+                                                    placeholder="Quantity Available" /> -->
+                                            </div>
+                                            <div class="bulk-entry-1 mb-2 form-inline d-none">
+                                                <input class="form-control col-sm-4 rounded-right-0"
+                                                    name="bulk_title_five[]" step="0.01" type="number"
+                                                    placeholder="Litres" disabled />
+                                                <input class="form-control col-sm-4 rounded-left-0 rounded-right-0"
+                                                    name="bulk_price_five[]" type="number" placeholder="Price"
+                                                    disabled />
+                                                <input class="form-control col-sm-4 rounded-left-0"
+                                                    name="bulk_quantity_five[]" type="number"
+                                                    placeholder="Quantity Available" disabled />
                                                 <div class="col-sm-12 pt-2 text-left input-group-btn">
                                                     <button type="button" onclick="toggleMain(this, false)"
                                                         class="btn btn-danger btn-sm qty-btn-add-1">
@@ -1463,14 +1558,16 @@
         // Set required fields
         $("[name='title[]']").attr('required', 'true');
         $("[name='image[]']").attr('required', 'true');
+        $("#advanced").children().not(':eq(0)').addClass('d-none').find("[name='image[]']").attr('disabled',
+            '');
         $("[name^='regular']").attr('required', 'true');
 
         // Check form validity and fire submit event
         let form = document.getElementById('add-dish');
         document.getElementById('submit-btn').onclick = function () {
-            if (form.reportValidity()) {
-                $('#add-dish').trigger('submit')
-            }
+            // if (form.reportValidity()) {
+            $('#add-dish').trigger('submit')
+            // }
         }
 
         // Attach dish form event listener
@@ -1493,16 +1590,21 @@
         goPost(url, data)
             .then(res => {
                 spin('vendor')
+                // Check if response carries file validation
+                if (res.file_val) {
+                    $("#modal-body").html(res.message);
+                    $("#error-modal").modal('toggle');
+                } else {
+                    if (handleFormRes(res, false, false, 'modal-body')) {
+                        // console.log(res)
+                        showAlert(true, res.message);
+                        // setTimeout(() => {
+                        //     $('#add-dish').trigger('reset');
 
-                if (handleFormRes(res, false, false, 'modal-body')) {
-                    // console.log(res)
-                    showAlert(true, res.message);
-                    setTimeout(() => {
-                        $('#add-dish').trigger('reset');
-
-                        // Reload the Right Bar on Completion
-                        loadRight(activeTab);
-                    }, 2000)
+                        //     // Reload the Right Bar on Completion
+                        //     loadRight(activeTab);
+                        // }, 2000)
+                    }
                 }
             })
             .catch(err => {

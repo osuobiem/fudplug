@@ -445,7 +445,7 @@
             // $(".btn-number[data-type='minus'][data-field='" + name + "']").removeAttr('disabled')
             $(element).prev().find('button').removeAttr('disabled');
         } else {
-            alert('Sorry, the minimum value was reached');
+
             $(element).val($(element).data('oldValue'));
             $(element).attr('disabled', '');
         }
@@ -455,7 +455,7 @@
             // $(".btn-number[data-type='plus'][data-field='" + name + "']").removeAttr('disabled')
             $(element).next().find('button').removeAttr('disabled');
         } else {
-            alert('Sorry, the maximum value was reached');
+
             $(element).val($(this).data('oldValue'));
         }
 

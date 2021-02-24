@@ -390,19 +390,21 @@ class VendorController extends Controller
             $validator = $this->dish_add_rules($request);
 
             if ($validator->fails()) {
-                return response()->json(['success' => false, 'message' => $validator->errors('image')->messages()], 200);
+                return response()->json(['success' => false, 'file_val' => false, 'message' => $validator->errors('image')->messages()], 200);
+            } else if (in_array('', $_FILES['image']['name'])) {
+                return response()->json(['success' => false, 'file_val' => true, 'message' => 'Dish images are required.'], 200);
             } else {
                 if ($request->form_type == "simple") {
                     $this->simple_put($request);
                 } else {
                     $this->advanced_put($request);
                 }
-                return response()->json(['success' => true, 'message' => "Your dish was successfully uploaded."], 200);
+                return response()->json(['success' => true, 'file_val' => false, 'message' => "Your dish was successfully uploaded."], 200);
             }
         } catch (\Throwable $th) {
             //throw $th;
             Log::error($th);
-            return response()->json(['success' => false, 'message' => $th->getMessage()], 500);
+            return response()->json(['success' => false, 'file_val' => false, 'message' => $th->getMessage()], 500);
         }
     }
 
@@ -479,7 +481,7 @@ class VendorController extends Controller
     {
         $regular_arr = [];
 
-        if (empty($key)) {
+        if ($key === null) {
             // Executed when editing dish
             foreach ($request->regular_title as $key => $value) {
                 $regular_arr[$key] = ['title' => $value, 'price' => $request->regular_price[$key], 'quantity' => $request->regular_quantity[$key]];
@@ -489,36 +491,56 @@ class VendorController extends Controller
             switch ($key) {
                 case 0:
                     # Array for first group of quantities
-                    foreach ($request->regular_title_one as $key_one => $value_one) {
-                        $regular_arr[$key_one] = ['title' => $value_one, 'price' => $request->regular_price_one[$key_one], 'quantity' => $request->regular_quantity_one[$key_one]];
+                    if (in_array(null, $request->regular_title_one) || in_array(null, $request->regular_price_one) || in_array(null, $request->regular_quantity_one)) {
+                        $regular_arr = null;
+                    } else {
+                        foreach ($request->regular_title_one as $key_one => $value_one) {
+                            $regular_arr[$key_one] = ['title' => $value_one, 'price' => $request->regular_price_one[$key_one], 'quantity' => $request->regular_quantity_one[$key_one]];
+                        }
                     }
                     break;
 
                 case 1:
                     # Array for second group of quantities
-                    foreach ($request->regular_title_two as $key_two => $value_two) {
-                        $regular_arr[$key_two] = ['title' => $value_two, 'price' => $request->regular_price_two[$key_two], 'quantity' => $request->regular_quantity_two[$key_two]];
+                    if (in_array(null, $request->regular_title_two) || in_array(null, $request->regular_price_two) || in_array(null, $request->regular_quantity_two)) {
+                        $regular_arr = null;
+                    } else {
+                        foreach ($request->regular_title_two as $key_two => $value_two) {
+                            $regular_arr[$key_two] = ['title' => $value_two, 'price' => $request->regular_price_two[$key_two], 'quantity' => $request->regular_quantity_two[$key_two]];
+                        }
                     }
                     break;
 
                 case 2:
                     # Array for third group of quantities
-                    foreach ($request->regular_title_three as $key_three => $value_three) {
-                        $regular_arr[$key_three] = ['title' => $value_three, 'price' => $request->regular_price_three[$key_three], 'quantity' => $request->regular_quantity_three[$key_three]];
+                    if (in_array(null, $request->regular_title_three) || in_array(null, $request->regular_price_three) || in_array(null, $request->regular_quantity_three)) {
+                        $regular_arr = null;
+                    } else {
+                        foreach ($request->regular_title_three as $key_three => $value_three) {
+                            $regular_arr[$key_three] = ['title' => $value_three, 'price' => $request->regular_price_three[$key_three], 'quantity' => $request->regular_quantity_three[$key_three]];
+                        }
                     }
                     break;
 
                 case 3:
                     # Array for fourth group of quantities
-                    foreach ($request->regular_title_four as $key_four => $value_four) {
-                        $regular_arr[$key_four] = ['title' => $value_four, 'price' => $request->regular_price_four[$key_four], 'quantity' => $request->regular_quantity_four[$key_four]];
+                    if (in_array(null, $request->regular_title_four) || in_array(null, $request->regular_price_four) || in_array(null, $request->regular_quantity_four)) {
+                        $regular_arr = null;
+                    } else {
+                        foreach ($request->regular_title_four as $key_four => $value_four) {
+                            $regular_arr[$key_four] = ['title' => $value_four, 'price' => $request->regular_price_four[$key_four], 'quantity' => $request->regular_quantity_four[$key_four]];
+                        }
                     }
                     break;
 
                 case 4:
                     # Array for fifth group of quantities
-                    foreach ($request->regular_title_five as $key_five => $value_five) {
-                        $regular_arr[$key_five] = ['title' => $value_five, 'price' => $request->regular_price_five[$key_five], 'quantity' => $request->regular_quantity_five[$key_five]];
+                    if (in_array(null, $request->regular_title_five) || in_array(null, $request->regular_price_five) || in_array(null, $request->regular_quantity_five)) {
+                        $regular_arr = null;
+                    } else {
+                        foreach ($request->regular_title_five as $key_five => $value_five) {
+                            $regular_arr[$key_five] = ['title' => $value_five, 'price' => $request->regular_price_five[$key_five], 'quantity' => $request->regular_quantity_five[$key_five]];
+                        }
                     }
                     break;
 
@@ -538,48 +560,68 @@ class VendorController extends Controller
     {
         $bulk_arr = [];
 
-        if (empty($key)) {
+        if ($key === null) {
             // Executed when editing dish
             foreach ($request->bulk_title as $key => $value) {
-                $bulk_arr[$key] = ['title' => $value, 'price' => $request->bulk_price[$key]];
+                $bulk_arr[$key] = ['title' => $value, 'price' => $request->bulk_price[$key], 'quantity' => $request->bulk_quantity[$key]];
             }
         } else {
-            if (in_array(null, $request->bulk_title_one) || in_array(null, $request->bulk_price_one)) {
+            if (in_array(null, $request->bulk_title_one) || in_array(null, $request->bulk_price_one) || in_array(null, $request->bulk_quantity_one)) {
                 $bulk_arr = null;
             } else {
                 switch ($key) {
                     case 0:
                         # Array for first group of quantities
-                        foreach ($request->bulk_title_one as $key_one => $value_one) {
-                            $bulk_arr[$key_one] = ['title' => $value_one, 'price' => $request->bulk_price_one[$key_one]];
+                        if (in_array(null, $request->bulk_title_one) || in_array(null, $request->bulk_price_one) || in_array(null, $request->bulk_quantity_one)) {
+                            $bulk_arr = null;
+                        } else {
+                            foreach ($request->bulk_title_one as $key_one => $value_one) {
+                                $bulk_arr[$key_one] = ['title' => $value_one, 'price' => $request->bulk_price_one[$key_one], 'quantity' => $request->bulk_quantity_one[$key_one]];
+                            }
                         }
                         break;
 
                     case 1:
                         # Array for second group of quantities
-                        foreach ($request->bulk_title_two as $key_two => $value_two) {
-                            $bulk_arr[$key_two] = ['title' => $value_two, 'price' => $request->bulk_price_two[$key_two]];
+                        if (in_array(null, $request->bulk_title_two) || in_array(null, $request->bulk_price_two) || in_array(null, $request->bulk_quantity_two)) {
+                            $bulk_arr = null;
+                        } else {
+                            foreach ($request->bulk_title_two as $key_two => $value_two) {
+                                $bulk_arr[$key_two] = ['title' => $value_two, 'price' => $request->bulk_price_two[$key_two], 'quantity' => $request->bulk_quantity_two[$key_two]];
+                            }
                         }
                         break;
 
                     case 2:
                         # Array for third group of quantities
-                        foreach ($request->bulk_title_three as $key_three => $value_three) {
-                            $bulk_arr[$key_three] = ['title' => $value_three, 'price' => $request->bulk_price_three[$key_three]];
+                        if (in_array(null, $request->bulk_title_three) || in_array(null, $request->bulk_price_three) || in_array(null, $request->bulk_quantity_three)) {
+                            $bulk_arr = null;
+                        } else {
+                            foreach ($request->bulk_title_three as $key_three => $value_three) {
+                                $bulk_arr[$key_three] = ['title' => $value_three, 'price' => $request->bulk_price_three[$key_three], 'quantity' => $request->bulk_quantity_three[$key_three]];
+                            }
                         }
                         break;
 
                     case 3:
                         # Array for fourth group of quantities
-                        foreach ($request->bulk_title_four as $key_four => $value_four) {
-                            $bulk_arr[$key_four] = ['title' => $value_four, 'price' => $request->bulk_price_four[$key_four]];
+                        if (in_array(null, $request->bulk_title_four) || in_array(null, $request->bulk_price_four) || in_array(null, $request->bulk_quantity_four)) {
+                            $bulk_arr = null;
+                        } else {
+                            foreach ($request->bulk_title_four as $key_four => $value_four) {
+                                $bulk_arr[$key_four] = ['title' => $value_four, 'price' => $request->bulk_price_four[$key_four], 'quantity' => $request->bulk_quantity_four[$key_four]];
+                            }
                         }
                         break;
 
                     case 4:
                         # Array for fifth group of quantities
-                        foreach ($request->bulk_title_five as $key_five => $value_five) {
-                            $bulk_arr[$key_five] = ['title' => $value_five, 'price' => $request->bulk_price_five[$key_five]];
+                        if (in_array(null, $request->bulk_title_five) || in_array(null, $request->bulk_price_five) || in_array(null, $request->bulk_quantity_five)) {
+                            $bulk_arr = null;
+                        } else {
+                            foreach ($request->bulk_title_five as $key_five => $value_five) {
+                                $bulk_arr[$key_five] = ['title' => $value_five, 'price' => $request->bulk_price_five[$key_five], 'quantity' => $request->bulk_quantity_five[$key_five]];
+                            }
                         }
                         break;
 
@@ -601,46 +643,54 @@ class VendorController extends Controller
     {
         // Custom message
         $message = [
-            'required' => 'All except bulk fields are required.',
+            'required' => 'Dish/Item name is required.',
             'alpha_dash' => 'Title fields only allow alphabets, hyphens and underscores.',
             'mimes' => 'Images must be of type jpg or jpeg.',
             'numeric' => 'Quantity and price fields must be numeric characters.',
             'max' => 'The :attribute may not be greater than 25mb.',
-
+            'required_without' => 'Please add items to Regular or Bulk or Both.',
+            'bulk_required' => 'Sibling fields can not be left empty.',
+            'required_with' => 'The :attribute field can not be empty when adjacent fields have been entered.',
         ];
+
         // Make and return validation rules
         return Validator::make($request->all(), [
             'title.*' => 'required',
-            'image.*' => 'required|image|mimes:jpeg,jpg|max:25000',
-            'regular_title_one.*' => 'required',
-            'regular_price_one.*' => 'required|numeric',
-            'regular_quantity_one.*' => 'required|numeric',
-            'bulk_title_one.*' => 'nullable',
-            'bulk_price_one.*' => 'nullable|numeric',
+            'image.*' => 'mimes:jpeg,jpg|max:25000',
+            'regular_title_one.*' => 'bail|required_without:bulk_title_one.*|bulk_required|required_with:regular_price_one.*,regular_quantity_one.*',
+            'regular_price_one.*' => 'bail|required_without:bulk_price_one.*|bulk_required|required_with:regular_title_one.*,regular_quantity_one.*',
+            'regular_quantity_one.*' => 'bail|required_without:bulk_quantity_one.*|bulk_required|required_with:regular_title_one.*,regular_price_one.*',
+            'bulk_title_one.*' => 'bail|required_without:regular_title_one.*|bulk_required|required_with:bulk_price_one.*,bulk_quantity_one.*',
+            'bulk_price_one.*' => 'bail|required_without:regular_price_one.*|bulk_required|required_with:bulk_title_one.*,bulk_quantity_one.*',
+            'bulk_quantity_one.*' => 'bail|required_without:regular_quantity_one.*|bulk_required|required_with:bulk_title_one.*,bulk_price_one.*',
 
-            'regular_title_two.*' => 'required',
-            'regular_price_two.*' => 'required|numeric',
-            'regular_quantity_two.*' => 'required|numeric',
-            'bulk_title_two.*' => 'nullable',
-            'bulk_price_two.*' => 'nullable|numeric',
+            'regular_title_two.*' => 'bail|required_without:bulk_title_two.*|bulk_required|required_with:regular_price_two.*,regular_quantity_two.*',
+            'regular_price_two.*' => 'bail|required_without:bulk_price_two.*|bulk_required|required_with:regular_title_two.*,regular_quantity_two.*',
+            'regular_quantity_two.*' => 'bail|required_without:bulk_quantity_two.*|bulk_required|required_with:regular_title_two.*,regular_price_two.*',
+            'bulk_title_two.*' => 'bail|required_without:regular_title_two.*|bulk_required|required_with:bulk_price_two.*,bulk_quantity_two.*',
+            'bulk_price_two.*' => 'bail|required_without:regular_price_two.*|bulk_required|required_with:bulk_title_two.*,bulk_quantity_two.*',
+            'bulk_quantity_two.*' => 'bail|required_without:regular_quantity_two.*|bulk_required|required_with:bulk_title_two.*,bulk_price_two.*',
 
-            'regular_title_three.*' => 'required',
-            'regular_price_three.*' => 'required|numeric',
-            'regular_quantity_three.*' => 'required|numeric',
-            'bulk_title_three.*' => 'nullable',
-            'bulk_price_three.*' => 'nullable|numeric',
+            'regular_title_three.*' => 'bail|required_without:bulk_title_three.*|bulk_required|required_with:regular_price_three.*,regular_quantity_three.*',
+            'regular_price_three.*' => 'bail|required_without:bulk_price_three.*|bulk_required|required_with:regular_title_three.*,regular_quantity_three.*',
+            'regular_quantity_three.*' => 'bail|required_without:bulk_quantity_three.*|bulk_required|required_with:regular_title_three.*,regular_price_three.*',
+            'bulk_title_three.*' => 'bail|required_without:regular_title_three.*|bulk_required|required_with:bulk_price_three.*,bulk_quantity_three.*',
+            'bulk_price_three.*' => 'bail|required_without:regular_price_three.*|bulk_required|required_with:bulk_title_three.*,bulk_quantity_three.*',
+            'bulk_quantity_three.*' => 'bail|required_without:regular_quantity_three.*|bulk_required|required_with:bulk_title_three.*,bulk_price_three.*',
 
-            'regular_title_four.*' => 'required',
-            'regular_price_four.*' => 'required|numeric',
-            'regular_quantity_four.*' => 'required|numeric',
-            'bulk_title_four.*' => 'nullable',
-            'bulk_price_four.*' => 'nullable|numeric',
+            'regular_title_four.*' => 'bail|required_without:bulk_title_four.*|bulk_required|required_with:regular_price_four.*,regular_quantity_four.*',
+            'regular_price_four.*' => 'bail|required_without:bulk_price_four.*|bulk_required|required_with:regular_title_four.*,regular_quantity_four.*',
+            'regular_quantity_four.*' => 'bail|required_without:bulk_quantity_four.*|bulk_required|required_with:regular_title_four.*,regular_price_four.*',
+            'bulk_title_four.*' => 'bail|required_without:regular_title_four.*|bulk_required|required_with:bulk_price_four.*,bulk_quantity_four.*',
+            'bulk_price_four.*' => 'bail|required_without:regular_price_four.*|bulk_required|required_with:bulk_title_four.*,bulk_quantity_four.*',
+            'bulk_quantity_four.*' => 'bail|required_without:regular_quantity_four.*|bulk_required|required_with:bulk_title_four.*,bulk_price_four.*',
 
-            'regular_title_five.*' => 'required',
-            'regular_price_five.*' => 'required|numeric',
-            'regular_quantity_five.*' => 'required|numeric',
-            'bulk_title_five.*' => 'nullable',
-            'bulk_price_five.*' => 'nullable|numeric',
+            'regular_title_five.*' => 'bail|required_without:bulk_title_five.*|bulk_required|required_with:regular_price_five.*,regular_quantity_five.*',
+            'regular_price_five.*' => 'bail|required_without:bulk_price_five.*|bulk_required|required_with:regular_title_five.*,regular_quantity_five.*',
+            'regular_quantity_five.*' => 'bail|required_without:bulk_quantity_five.*|bulk_required|required_with:regular_title_five.*,regular_price_five.*',
+            'bulk_title_five.*' => 'bail|required_without:regular_title_five.*|bulk_required|required_with:bulk_price_five.*,bulk_quantity_five.*',
+            'bulk_price_five.*' => 'bail|required_without:regular_price_five.*|bulk_required|required_with:bulk_title_five.*,bulk_quantity_five.*',
+            'bulk_quantity_five.*' => 'bail|required_without:regular_quantity_five.*|bulk_required|required_with:bulk_title_five.*,bulk_price_five.*',
 
         ], $message);
     }

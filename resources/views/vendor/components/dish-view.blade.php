@@ -114,6 +114,7 @@
                                                 style="">
                                                 <div class="card-body border-top p-2 text-muted"
                                                     style="font-size: large;">
+                                                    @if(!empty($regular_qty))
                                                     <ul class="list-group box-body generic-scrollbar"
                                                         style="max-height: 250px; overflow: auto;">
                                                         @foreach($regular_qty as $qty)
@@ -129,6 +130,12 @@
                                                         </li>
                                                         @endforeach
                                                     </ul>
+                                                    @else
+                                                    <div class="bg-light text-center py-5">
+                                                        <i class="las la-info" style="font-size:xx-large;"></i><br>
+                                                        <small>Empty Content</small>
+                                                    </div>
+                                                    @endif
                                                 </div>
                                             </div>
                                         </div>
@@ -154,11 +161,13 @@
                                                     <ul class="list-group">
                                                         @foreach($bulk_qty as $qty)
                                                         <li class="list-group-item pt-0">
-                                                            <small>{{$qty->title}}</small>
+                                                            <small>{{$qty->title}} Litres</small>
                                                             <p class="mt-0">
                                                                 <span class="float-left text-danger"
                                                                     style="font-size: larger;">
                                                                     ₦{{$qty->price}}</span>
+                                                                <span class="badge badge-secondary float-right">
+                                                                    {{$qty->quantity}} left</span>
                                                             </p>
                                                         </li>
                                                         @endforeach
@@ -287,7 +296,7 @@
                                 <div class="col-sm-6 border text-center pt-3 pb-3">
                                     <label class="text-center"> Regular Quantity </label>
                                     <div>
-
+                                        @if(!empty($regular_qty))
                                         @foreach($regular_qty as $qty)
                                         <div class="mb-2 form-inline">
                                             <input class="form-control rounded-right-0 col-sm-4 one"
@@ -300,7 +309,12 @@
                                                 placeholder="Quantity Available" required />
                                         </div>
                                         @endforeach
-
+                                        @else
+                                        <div class="bg-light text-center py-5">
+                                            <i class="las la-info" style="font-size:xx-large;"></i><br>
+                                            <small>No fields for this category</small>
+                                        </div>
+                                        @endif
                                     </div>
                                 </div>
                                 <div class="col-sm-6 border text-center pt-3 pb-3">
@@ -310,10 +324,15 @@
                                         @if(!empty($bulk_qty))
                                         @foreach($bulk_qty as $qty)
                                         <div class="bulk-entry-1 mb-2 form-inline">
-                                            <input class="form-control col-sm-6 rounded-right-0" name="bulk_title[]"
-                                                type="text" value="{{$qty->title}}" placeholder="Title" required />
-                                            <input class="form-control col-sm-6 rounded-left-0" name="bulk_price[]"
-                                                type="number" value="{{$qty->price}}" placeholder="Price" required />
+                                            <input class="form-control col-sm-4 rounded-right-0" name="bulk_title[]"
+                                                value="{{$qty->title}}" step="0.01" type="number" placeholder="Litres"
+                                                required />
+                                            <input class="form-control col-sm-4 rounded-left-0 rounded-right-0"
+                                                name="bulk_price[]" type="number" value="{{$qty->price}}"
+                                                placeholder="Price" required />
+                                            <input class="form-control col-sm-4 rounded-left-0 init"
+                                                name="bulk_quantity[]" value="{{$qty->quantity}}" type="number"
+                                                placeholder="Quantity Available" required />
                                             <!-- <input class="form-control col-sm-4" name="fields[]" type="text"
                                             placeholder="Quantity Available" /> -->
                                         </div>
