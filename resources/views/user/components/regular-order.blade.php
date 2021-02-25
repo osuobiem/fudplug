@@ -135,7 +135,7 @@
                                                     $i = 1;
                                                     @endphp
                                                     @foreach($regular_qty as $key=>$qty)
-                                                    <li id="price-type" class="list-group-item pt-0 col">
+                                                    <li class="list-group-item pt-0 col">
                                                         <div class="float-left col-4">
                                                             <small>{{$qty->title}}</small>
                                                             <p class="mt-0">
@@ -150,7 +150,8 @@
                                                         <div class="float-right col-6 offset-2 mt-4">
                                                             @if(!empty($basket_items) &&
                                                             array_key_exists('item'.$dish->id, $basket_items))
-                                                            @if(in_array($key, $basket_items['item'.$dish->id]))
+                                                            @if(in_array($key,
+                                                            $basket_items['item'.$dish->id]['regular_items']))
                                                             <span class="font-weight-bold font-italic"><small>Item
                                                                     already in
                                                                     basket.</small></span>
@@ -228,10 +229,10 @@
                             @endif
                             <div class="row">
                                 <div class="col-md-12 mt-xs-2">
-                                    <button type="submit" id="order-btn"
+                                    <button type="submit" id="regular-order-btn"
                                         class="btn btn-sm btn-primary btn-block font-weight-bold"
                                         data-attach-loading="true" disabled>
-                                        Add to basket <span id="final-price" class="float-right"
+                                        Add to basket <span id="regular-final-price" class="float-right"
                                             data-item-subtotal="">₦0.00</span>
                                     </button>
                                 </div>

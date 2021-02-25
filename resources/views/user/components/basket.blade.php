@@ -198,14 +198,15 @@
                                 <!-- Show for bulk -->
                                 <li id="price-type" class="list-group-item pt-0 col">
                                     <div class="float-left col-4">
-                                        <small class="basket-small">{{$qty['title']}}</small>
+                                        <small class="basket-small">{{$qty['title']}} <strong>Litres</strong></small>
                                         <p class="mt-0">
                                             <span class="float-left text-danger" style="font-size: large;">
                                                 ₦{{$qty['price']}}</span>
                                         </p>
                                         <input class="basket-price" name="basket_price[]" type="hidden"
                                             value="{{$qty['price']}}">
-                                        <input name="order_detail[]" type="hidden" value="['bulk','{{$key}}']" disabled>
+                                        <input name="order_detail[]" type="hidden" value="['regular','{{$key}}']"
+                                            disabled>
                                     </div>
                                     <div class="float-right col-2">
                                         <a href="javascript:void(0)"
@@ -214,12 +215,28 @@
                                         </a>
                                     </div>
                                     <div class="float-right col-5 mt-4">
-                                        <!-- <input class="" type="checkbox" onchange="bulkCheck(event, this)"
-                                            value="['bulk','{{$key}}']" name="order_detail[]"
-                                            id="item-{{$dish->id}}-{{$key}}">
-                                        <label class="form-check-label small" for="item-{{$dish->id}}-{{$key}}">
-                                            Select
-                                        </label> -->
+                                        <div class="input-group qty-field">
+                                            <span class="input-group-btn">
+                                                <button onclick="clicked(event, this);" type="button bordered"
+                                                    class="btn btn-sm btn-secondary btn-number rounded-right-0 qty-btn"
+                                                    data-type="minus">
+                                                    <span class="la la-minus"></span>
+                                                </button>
+                                            </span>
+                                            <input type="text" onkeydown="keydown(event)"
+                                                onchange="change(event, this, '{{$dish->id}}', '{{$dish->order_type}}', '{{$key}}')"
+                                                onfocus="focusin(event, this)" name="order_quantity[]"
+                                                class="form-control rounded-left-0 rounded-right-0 form-control-sm qty-input"
+                                                id="inner-item-{{$dish->id}}-{{$key}}" value="{{$detail[2]}}" min="0"
+                                                max="{{$qty['quantity']}}" disabled>
+                                            <span class="input-group-btn">
+                                                <button onclick="clicked(event, this);" type="button"
+                                                    class="btn btn-sm btn-secondary btn-number rounded-left-0 qty-btn"
+                                                    data-type="plus">
+                                                    <span class="la la-plus"></span>
+                                                </button>
+                                            </span>
+                                        </div>
                                     </div>
                                 </li>
                                 @endif

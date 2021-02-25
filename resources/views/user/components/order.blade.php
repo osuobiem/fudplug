@@ -74,11 +74,17 @@
                                 $i = 1;
 
                                 $regular_qty = json_decode($order['quantity'][$title_key], true)['regular'];
+                                $bulk_qty = json_decode($order['quantity'][$title_key], true)['bulk'];
                                 $order_detail = json_decode($order['order_detail'][$title_key], true);
+
                                 @endphp
                                 @foreach($order_detail as $key=>$detail)
                                 @php
                                 $index = $detail[1];
+                                $type = $detail[0];
+                                @endphp
+                                @if($type == "regular")
+                                @php
                                 $qty = json_decode($regular_qty, true)[$index];
                                 @endphp
                                 <li id="price-type" class="list-group-item pt-0 col">
@@ -102,6 +108,32 @@
                                         </div>
                                     </div>
                                 </li>
+                                @else
+                                @php
+                                $qty = json_decode($bulk_qty, true)[$index];
+                                @endphp
+                                <li id="price-type" class="list-group-item pt-0 col">
+                                    <div class="media mt-2">
+                                        <div class="u-avatar">
+                                            <img class="img-fluid rounded-circle"
+                                                src="/storage/vendor/dish/{{$order['image'][$title_key]}}"
+                                                alt="Image Description">
+                                        </div>
+                                        <div class="media-body" style="margin-left:-208px;  margin-top:-5px;">
+                                            <small style="margin-left:105px;">{{$title}}
+                                                ({{$qty['title']}} <strong>Litres</strong>)</small>
+                                            <p class="mb-0 mt-0" style="margin-left: 82px; font-size:15px;">
+                                                <span class="text-danger ml-2 mr-4 border-right pr-4">
+                                                    ₦{{$qty['price']}}
+                                                </span>
+                                                <span class="text-dark">
+                                                    <strong>Qty: </strong>{{$detail[2]}}
+                                                </span>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </li>
+                                @endif
                                 @php
                                 $i++;
                                 @endphp

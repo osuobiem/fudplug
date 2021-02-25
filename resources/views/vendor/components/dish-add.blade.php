@@ -1598,12 +1598,12 @@
                     if (handleFormRes(res, false, false, 'modal-body')) {
                         // console.log(res)
                         showAlert(true, res.message);
-                        // setTimeout(() => {
-                        //     $('#add-dish').trigger('reset');
+                        setTimeout(() => {
+                            $('#add-dish').trigger('reset');
 
-                        //     // Reload the Right Bar on Completion
-                        //     loadRight(activeTab);
-                        // }, 2000)
+                            // Reload the Right Bar on Completion
+                            loadRight(activeTab);
+                        }, 2000)
                     }
                 }
             })

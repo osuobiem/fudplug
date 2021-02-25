@@ -645,11 +645,16 @@ class UserController extends Controller
                 if (!empty($advanced_basket)) {
                     foreach ($advanced_basket as $key => $val) {
                         $basket_item = json_decode($val->order_detail);
-                        $items = [];
+                        $regular_items = [];
+                        $bulk_items = [];
                         foreach ($basket_item as $inner_key => $inner_val) {
-                            $items[$inner_key] = $inner_val[1];
+                            if ($inner_val[0] == 'regular') {
+                                $regular_items[$inner_key] = $inner_val[1];
+                            } else {
+                                $bulk_items[$inner_key] = $inner_val[1];
+                            }
                         }
-                        $advanced_items['item' . $val->item_id] = $items;
+                        $advanced_items['item' . $val->item_id] = ['regular_items' => $regular_items, 'bulk_items' => $bulk_items];
                     }
                 }
 
@@ -658,7 +663,7 @@ class UserController extends Controller
                 $data['regular_qty'] = json_decode($qty->regular);
                 $data['bulk_qty'] = json_decode($qty->bulk);
                 $data['basket_items'] = $advanced_items;
-
+                // dd($data['basket_items']);
                 if (empty($dish_type)) {
                     $view = view('user.components.regular-order', $data);
                 } else {
@@ -678,7 +683,6 @@ class UserController extends Controller
      */
     public function add_to_basket(Request $request)
     {
-
         try {
             // Check if the dish already exists
             $dish = Basket::where([['item_id', '=', $request->item_id], ['user_id', '=', Auth::guard('user')->user()->id]]);
@@ -752,6 +756,16 @@ class UserController extends Controller
                         $err_count++;
                     }
                     $i++;
+                } else {
+                    $index = $val[1];
+                    $available_qty = json_decode(json_decode($item->quantity, true)['bulk'], true)[$index]['quantity'];
+                    $order_qty = $request->order_quantity[$key];
+                    if ($order_qty > $available_qty) {
+                        $validate_info[$i] = ['item' => 'item-' . $request->item_id . '-' . $index, 'new_qty' => $available_qty];
+                    } else {
+                        $err_count++;
+                    }
+                    $i++;
                 }
             }
 
@@ -813,9 +827,7 @@ class UserController extends Controller
         } else {
             foreach ($order_detail as $key => $val) {
                 $val = $this->to_array($val);
-                if ($val[0] == "regular") {
-                    $val[2] = $order_quantity[$key];
-                }
+                $val[2] = $order_quantity[$key];
                 $order_detail[$key] = $val;
             }
         }
@@ -998,6 +1010,16 @@ class UserController extends Controller
                                     $err_count++;
                                 }
                                 $i++;
+                            } else {
+                                $index = $val[1];
+                                $available_qty = json_decode(json_decode($item->quantity, true)['bulk'], true)[$index]['quantity'];
+                                $order_qty = $val[2];
+                                if ($order_qty > $available_qty) {
+                                    $error_data[$i] = ['item' => 'inner-item-' . $basket_item->id . '-' . $index, 'new_qty' => $available_qty];
+                                } else {
+                                    $err_count++;
+                                }
+                                $i++;
                             }
                         }
 
@@ -1133,6 +1155,8 @@ class UserController extends Controller
 
                         if ($type == "regular") {
                             $price = (Integer) json_decode(json_decode($order->quantity[$key], true)['regular'], true)[$index]['price'];
+                        } else {
+                            $price = (Integer) json_decode(json_decode($order->quantity[$key], true)['bulk'], true)[$index]['price'];
                         }
 
                         $inner_inner_sum += ($price * $qty);

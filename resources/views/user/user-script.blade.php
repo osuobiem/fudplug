@@ -127,7 +127,7 @@
         });
     }
 
-    /*********************************** Basket script */
+    /*********************************** Basket/Order script */
     // Load user basket
     function getBasket() {
         let getUrl = `${server}/user/get-basket`;
@@ -293,6 +293,11 @@
         });
     }
 
+    // Load order dropdown on click of order button
+    $("#order-btn").click(function () {
+        getOrder();
+    });
+
     // Cancel all user order
     $("#order-cancel-btn").on('click', function () {
         cancelOrder();
@@ -353,7 +358,7 @@
     function handleOrderValidateErr(res) {
         let errorData = res.data;
 
-        errorData.forEach(elem => {
+        Object.values(errorData).forEach(elem => {
             if (elem.validate_type == "item_in_menu") {
                 if (elem.order_type == "simple") {
                     let elemId = elem.item;
@@ -370,7 +375,7 @@
                         `<div class="text-dark add-bask-err" style="margin-right: 7px; float: right; font-size:13px;"><i>${message}</i></div>`
                     );
                 } else {
-                    elem.error_data.forEach(element => {
+                    Object.values(elem.error_data).forEach(element => {
                         let elemId = element.item;
                         let newQty = element.new_qty;
                         let message = `Only ${newQty} left`;
@@ -466,7 +471,13 @@
 
             // Disable and enable details input field
             handleDetailInput(element);
-        } else {
+        } else if($('#bulk-order-modal').hasClass('show')) {
+            // Compute total amount and bind to order button. Also disable and enable order button
+            bindBulkQtyPrice(element);
+
+            // Disable and enable details input field
+            handleBulkDetailInput(element);
+        }else{
             updateCartItem(basketId, orderType, valueCurrent, itemPosition);
         }
     }
@@ -576,11 +587,11 @@
         finalTotal = prices.reduce((a, b) => a + b);
 
         if (finalTotal < 1) {
-            $("#final-price").text('₦' + String(finalTotal.toFixed(2)));
-            $("#order-btn").attr('disabled', '');
+            $("#regular-final-price").text('₦' + String(finalTotal.toFixed(2)));
+            $("#regular-order-btn").attr('disabled', '');
         } else {
-            $("#final-price").text('₦' + String(finalTotal.toFixed(2)));
-            $("#order-btn").removeAttr('disabled');
+            $("#regular-final-price").text('₦' + String(finalTotal.toFixed(2)));
+            $("#regular-order-btn").removeAttr('disabled');
         }
     }
 
@@ -598,15 +609,9 @@
     /******************************* Regular order-specific quantity input script */
 
 
-
     /******************************* Bulk order-specific quantity input script */
-    // Entry point
-    function bulkCheck(e, element) {
-        bindBulkQtyPrice(element);
-    }
-
     // Initiate price input field state
-    bulkPackCount = $("#price-type li").length;
+    bulkPackCount = $("#bulk-price-type li").length;
     bulkPrices = [];
     for (let i = 0; i < bulkPackCount; i++) {
         bulkPrices[i] = 0;
@@ -614,14 +619,11 @@
 
     // Function to compute total amount and bind to order button. Also disable and enable order button
     function bindBulkQtyPrice(element) {
-        let index = $(element).parent().parent().index();
-
-        // Assign price value if item is selected (checked) or not
-        let price = ($(element).prop("checked") == true) ? Number($(element).parent().prev().find('span').text()
-            .replace('₦', '').trim()) : 0;
-
-        let finalTotal = 0;
-        bulkPrices[index] = price;
+        let index = $(element).parent().parent().parent().index();
+        let price = Number($(element).parent().parent().prev().find('span').text().replace('₦', '').trim());
+        let qty = $(element).val();
+        let finalTotal = (price * qty);
+        bulkPrices[index] = finalTotal;
         finalTotal = bulkPrices.reduce((a, b) => a + b);
 
         if (finalTotal < 1) {
