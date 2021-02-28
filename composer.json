@@ -15,7 +15,8 @@
         "intervention/image": "^2.5",
         "laravel/framework": "^7.0",
         "laravel/passport": "^9.3",
-        "laravel/tinker": "^2.0"
+        "laravel/tinker": "^2.0",
+        "pbmedia/laravel-ffmpeg": "^7.4"
     },
     "require-dev": {
         "facade/ignition": "^2.0",
@@ -64,5 +65,11 @@
         "post-create-project-cmd": [
             "@php artisan key:generate --ansi"
         ]
+    },
+    "repositories": {
+        "packagist": {
+            "type": "composer",
+            "url": "https://packagist.org"
+        }
     }
 }

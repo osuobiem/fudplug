@@ -1,4 +1,4 @@
-<div class="dropup-container order-container animate__animated d-none" onclick="closeOrders()">
+<div class="dropup-container order-container animate__animated d-none">
     <div class="dropup-inner order-inner animate__animated">
   
       <ul class="nav nav-justified osahan-line-tab" style="box-shadow: 0 5px 10px 0 #00000061">
