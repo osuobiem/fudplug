@@ -180,7 +180,7 @@ class PostController extends Controller
 
         // Upload video
         $stored = Storage::put('/public/posts/videos/', $request['video']);
-
+        
         // Save video thumbnail
         $name = '/public/posts/videos/thumbnails/' . explode('.', basename($stored))[0] . '.png';
         $image_parts = explode(";base64,", $request['thumbnail']);

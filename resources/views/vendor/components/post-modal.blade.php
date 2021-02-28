@@ -170,6 +170,7 @@
       }
     }
     // Attach video to form data
+    capture()
     if (video.file) {
       data.append('video', video.file);
       data.append('thumbnail', videoThumb);
@@ -211,8 +212,8 @@
       hideMediaInputs();
       [...input.files].forEach((file, ind) => {
         if (imageCounter < 5) {
-          if (file.size > 26214400) {
-            showAlert(false, "Image size must not be more than 25MB");
+          if (file.size > 52428800) {
+            showAlert(false, "Image size must not be more than 50MB");
             imageCounter -= 1
             hideMediaInputs(false);
           } else if (file.type.split("/")[0] != "image") {
@@ -257,11 +258,15 @@
   function fillVideo(input) {
     $('#video-spinner').removeClass('d-none')
     if (input.files) {
+      if(input.files.length > 1) {
+        showAlert(false, "Only 1 video upload allowed");
+      }
+      
       hideMediaInputs();
       [...input.files].forEach((file, ind) => {
-        if (file.size > 157286400) {
+        if (file.size > 262144000) {
           $('#video-spinner').addClass('d-none')
-          showAlert(false, "Video size must not be more than 150MB");
+          showAlert(false, "Video size must not be more than 250MB");
           hideMediaInputs(false);
         } else if (file.type.split("/")[0] != "video") {
           $('#video-spinner').addClass('d-none')
@@ -276,20 +281,31 @@
             "src",
             video_url
           )
-
-          vid.setAttribute('controls', 'controls')
-          vid.setAttribute('id', 'video-loaded')
-          
-          video = { 'file': file }
-          cont = document.getElementById('post-video-container');
-          cont.innerHTML = `<span class="pmmc-ixv" onclick="removePostVid()"><i class="la la-times la-lg"></i></span>`;
-          cont.prepend(vid)
-          $('#video-spinner').addClass('d-none')
-          
-          $('#post-video-container').removeClass('d-none')
-          $('#post-media-container').addClass('d-none')
-            
-          hideMediaInputs(false)
+          setTimeout(() => {
+            duration = vid.duration
+            if(duration >= 151) {
+              $('#video-spinner').addClass('d-none')
+              showAlert(false, "Video cannot be longer than 1min 30secs. Please trim the video and try again.");
+              hideMediaInputs(false);
+            }
+            else {
+              vid.setAttribute('controls', 'controls')
+              vid.setAttribute('id', 'video-loaded')
+              
+              video = { 'file': file }
+              cont = document.getElementById('post-video-container');
+              cont.innerHTML = `<span class="pmmc-ixv" onclick="removePostVid()"><i class="la la-times la-lg"></i></span>`;
+              cont.prepend(vid)
+              
+              $('#video-spinner').addClass('d-none')
+              
+              
+              $('#post-video-container').removeClass('d-none')
+              $('#post-media-container').addClass('d-none')
+                
+              hideMediaInputs(false)
+            }
+          }, 1000)
         }
       })
     }
