@@ -275,40 +275,26 @@
             vid.setAttribute(
               "src",
               e.target.result
-            );
+            )
           };
           vid.setAttribute(
             "style",
             "width: 100%; border-radius: 12px; border: solid #dee2e6 1px; max-height: 300px"
           );
-          vid.setAttribute('controls', true)
+          vid.setAttribute('controls', 'controls')
           vid.setAttribute('id', 'video-loaded')
           reader.readAsDataURL(file);
-          // Check video duration
-          var timer = setInterval(function () {
-            if (vid.readyState === 4) {
-              if (vid.duration.toFixed(2) > 60) {
-                $('#video-spinner').addClass('d-none')
-                showAlert(false, "The video duration must not be more than 60 seconds");
-              }
-              else {
-                $('#video-spinner').addClass('d-none')
-                video = { 'file': file }
-                cont = document.getElementById('post-video-container');
-                cont.innerHTML = `<span class="pmmc-ixv" onclick="removePostVid()"><i class="la la-times la-lg"></i></span>`;
-                cont.prepend(vid)
-
-                setTimeout(() => {
-                  capture()
-                }, 500)
-
-                $('#post-video-container').removeClass('d-none')
-                $('#post-media-container').addClass('d-none')
-              }
-              clearInterval(timer);
-              hideMediaInputs(false)
-            }
-          }, 1000)
+          
+          $('#video-spinner').addClass('d-none')
+          video = { 'file': file }
+          cont = document.getElementById('post-video-container');
+          cont.innerHTML = `<span class="pmmc-ixv" onclick="removePostVid()"><i class="la la-times la-lg"></i></span>`;
+          cont.prepend(vid)
+          
+          $('#post-video-container').removeClass('d-none')
+          $('#post-media-container').addClass('d-none')
+            
+          hideMediaInputs(false)
         }
       })
     }
