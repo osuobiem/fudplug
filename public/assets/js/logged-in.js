@@ -254,8 +254,6 @@ function closeMND() {
     setTimeout(() => {
         $(".mnd-container").addClass("d-none");
     }, 500);
-
-    mndModalOpen = false;
 }
 
 // Open Orders Dropup Modal
