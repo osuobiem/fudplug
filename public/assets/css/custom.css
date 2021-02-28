@@ -1393,6 +1393,18 @@ a:visited {
     border: solid .5px #000000;
 }
 
+#mob-basket-noti-dot{
+    color: #ffffff !important;
+    background: red;
+    padding: 0px 5px;
+    border-radius: 25px;
+    position: absolute;
+    left: 48%;
+    top: 6px;
+    font-weight: 800;
+    border: solid .5px #000000;
+}
+
 
 .m-a-r:hover {
     cursor: pointer;

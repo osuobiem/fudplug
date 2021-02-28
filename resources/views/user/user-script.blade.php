@@ -134,14 +134,25 @@
 
         goGet(getUrl).then((res) => {
             if (res.basket_count == 0) {
-                $("#basket-noti-dot").addClass('d-none');
+                $("#basket-noti-dot, #mob-basket-noti-dot").addClass('d-none');
                 $("#head-count").html("");
-                $(".basket-container").html("<p>Your Basket is empty!</p>");
+                if (window.matchMedia("(max-width: 767px)")
+                    .matches) { // The viewport is less than 768 pixels wide (mobile device)
+                    $(".mob-basket-container").html("<p>Your Basket is empty!</p>");
+                } else {
+                    $(".basket-container").html("<p>Your Basket is empty!</p>");
+                }
             } else {
-                $("#basket-noti-dot").html(res.basket_count);
+                $("#basket-noti-dot, #mob-basket-noti-dot").html(res.basket_count);
                 $("#head-count").html("(" + res.basket_count + " Items)");
-                $("#basket-noti-dot").removeClass('d-none');
-                $(".basket-container").html(res.basket_view);
+                $("#basket-noti-dot, #mob-basket-noti-dot").removeClass('d-none');
+                // Check viewport
+                if (window.matchMedia("(max-width: 767px)")
+                    .matches) { // The viewport is less than 768 pixels wide (mobile device)
+                    $(".mob-basket-container").html(res.basket_view);
+                } else {
+                    $(".basket-container").html(res.basket_view);
+                }
                 // Validate basket data on page load
                 if (res.validate_status == true) {
                     setTimeout(handleOrderValidateErr(res), 600);
@@ -471,13 +482,13 @@
 
             // Disable and enable details input field
             handleDetailInput(element);
-        } else if($('#bulk-order-modal').hasClass('show')) {
+        } else if ($('#bulk-order-modal').hasClass('show')) {
             // Compute total amount and bind to order button. Also disable and enable order button
             bindBulkQtyPrice(element);
 
             // Disable and enable details input field
             handleBulkDetailInput(element);
-        }else{
+        } else {
             updateCartItem(basketId, orderType, valueCurrent, itemPosition);
         }
     }
@@ -504,7 +515,7 @@
 
 
     /****** Basket specific quantity input script ***************/
-    $("#basket-btn").click(function () {
+    $("#basket-btn, #mob-basket-btn").click(function () {
         getBasketQtyPrice();
 
         // Load user basket details
