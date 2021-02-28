@@ -909,7 +909,6 @@ class UserController extends Controller
      */
     public function place_order(Request $request)
     {
-
         try {
             // Validate order request
             $result = $this->validate_order_quantity();
@@ -936,7 +935,11 @@ class UserController extends Controller
                         $new_record->order_id = $order->id;
                         $new_record->save();
 
+                        // Delete old basket record
                         $old_record->delete();
+
+                        // Update item quantity
+                        $this->update_quantity($new_record);
                     });
 
                 // Unset the order variable
@@ -948,6 +951,58 @@ class UserController extends Controller
             Log::error($th);
             return response()->json(['success' => false, 'message' => "Oops! Something went wrong. Try Again!"], 500);
         }
+    }
+
+    /**
+     * Make necessary changes to the quantity of items ordered
+     *
+     * @param Request $request
+     * @return Array $validate_data
+     */
+    public function update_quantity($new_record)
+    {
+        $item_id = $new_record->item_id;
+
+        // Get the particular item
+        $item = Item::find($item_id);
+
+        if ($new_record->order_type == "simple") {
+            $new_quantity = json_decode($new_record->order_detail)[0];
+            $item_quantity = json_decode($item->quantity, true);
+            $item_quantity['quantity'] = ($item_quantity['quantity'] - $new_quantity);
+            $item->quantity = json_encode($item_quantity);
+        } else {
+            $order_detail = json_decode($new_record->order_detail);
+            foreach ($order_detail as $key => $detail) {
+                $type = $detail[0];
+                $index = $detail[1];
+                $order_quantity = $detail[2];
+                if ($type == "regular") {
+                    // Get values
+                    $item_quantity = json_decode($item->quantity, true);
+                    $regular_quantity = json_decode($item_quantity['regular']);
+                    $sub_item = $regular_quantity[$index];
+                    $sub_item->quantity = (string) ($sub_item->quantity - $order_quantity);
+
+                    // Reassign values
+                    $regular_quantity[$index] = $sub_item;
+                    $item_quantity['regular'] = json_encode($regular_quantity);
+                    $item->quantity = json_encode($item_quantity);
+                } else {
+                    // Get values
+                    $item_quantity = json_decode($item->quantity, true);
+                    $regular_quantity = json_decode($item_quantity['bulk']);
+                    $sub_item = $regular_quantity[$index];
+                    $sub_item->quantity = (string) ($sub_item->quantity - $order_quantity);
+
+                    // Reassign values
+                    $regular_quantity[$index] = $sub_item;
+                    $item_quantity['bulk'] = json_encode($regular_quantity);
+                    $item->quantity = json_encode($item_quantity);
+                }
+            }
+        }
+        $item->save();
     }
 
     /**

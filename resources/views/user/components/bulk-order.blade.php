@@ -16,7 +16,7 @@
                             src="{{Storage::url('vendor/dish/'.$dish->image)}}">
                     </div>
                     <div class="col-md-5">
-                        <form id="order-form">
+                        <form id="bulk-order-form">
                             @csrf
                             @if($dish->type == "simple")
                             <div id="basics">
@@ -248,7 +248,7 @@
 
 <script>
     $(document).ready(function () {
-        $("#order-form").submit(function (el) {
+        $("#bulk-order-form").submit(function (el) {
             addToBasket(el, '{{$dish->vendor_id}}');
         });
     });
