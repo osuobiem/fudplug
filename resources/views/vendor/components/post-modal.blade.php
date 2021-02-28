@@ -270,26 +270,21 @@
         } else {
           var vid = document.createElement('video')
 
-          var reader = new FileReader();
-          reader.onload = (e) => {
-            vid.setAttribute(
-              "src",
-              e.target.result
-            )
-          };
+          video_url = URL.createObjectURL(file)
+
           vid.setAttribute(
-            "style",
-            "width: 100%; border-radius: 12px; border: solid #dee2e6 1px; max-height: 300px"
-          );
+            "src",
+            video_url
+          )
+
           vid.setAttribute('controls', 'controls')
           vid.setAttribute('id', 'video-loaded')
-          reader.readAsDataURL(file);
           
-          $('#video-spinner').addClass('d-none')
           video = { 'file': file }
           cont = document.getElementById('post-video-container');
           cont.innerHTML = `<span class="pmmc-ixv" onclick="removePostVid()"><i class="la la-times la-lg"></i></span>`;
           cont.prepend(vid)
+          $('#video-spinner').addClass('d-none')
           
           $('#post-video-container').removeClass('d-none')
           $('#post-media-container').addClass('d-none')
