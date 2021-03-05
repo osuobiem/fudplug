@@ -83,7 +83,7 @@ if(!Auth::guard('vendor')->guest()) {
           @else
           @php $thumb = explode('.', $media->name)[0] . '.png'; @endphp
           <div class="w-100 feed-vid-cont">
-            <video preload="metadata" class="pm-1 vid-bod" style="max-height: 300px" controls src="{{ Storage::url('posts/videos/'.$media->name) }}"></video>
+            <video preload="metadata" poster="{{ Storage::url('posts/videos/thumbnails/'.$thumb) }}" class="pm-1 vid-bod" style="max-height: 300px" controls src="{{ Storage::url('posts/videos/'.$media->name) }}"></video>
           </div>
           @endif
         @endforeach
