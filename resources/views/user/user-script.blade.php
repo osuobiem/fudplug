@@ -135,23 +135,25 @@
         goGet(getUrl).then((res) => {
             if (res.basket_count == 0) {
                 $("#basket-noti-dot, #mob-basket-noti-dot").addClass('d-none');
-                $("#head-count").html("");
                 if (window.matchMedia("(max-width: 767px)")
                     .matches) { // The viewport is less than 768 pixels wide (mobile device)
-                    $(".mob-basket-container").html("<p>Your Basket is empty!</p>");
+                    $("#mob-basket-container").html("<p>Your Basket is empty!</p>");
+                    $("#mob-head-count").html("");
                 } else {
-                    $(".basket-container").html("<p>Your Basket is empty!</p>");
+                    $("#basket-container").html("<p>Your Basket is empty!</p>");
+                    $("#head-count").html("");
                 }
             } else {
                 $("#basket-noti-dot, #mob-basket-noti-dot").html(res.basket_count);
-                $("#head-count").html("(" + res.basket_count + " Items)");
                 $("#basket-noti-dot, #mob-basket-noti-dot").removeClass('d-none');
                 // Check viewport
                 if (window.matchMedia("(max-width: 767px)")
                     .matches) { // The viewport is less than 768 pixels wide (mobile device)
-                    $(".mob-basket-container").html(res.basket_view);
+                    $("#mob-basket-container").html(res.basket_view);
+                    $("#mob-head-count").html("(" + res.basket_count + " Items)");
                 } else {
-                    $(".basket-container").html(res.basket_view);
+                    $("#basket-container").html(res.basket_view);
+                    $("#head-count").html("(" + res.basket_count + " Items)");
                 }
                 // Validate basket data on page load
                 if (res.validate_status == true) {
@@ -267,25 +269,52 @@
         let getUrl = (type == "") ? `${server}/user/get-order` : `${server}/user/get-order/${type}`;
 
         goGet(getUrl).then((res) => {
-            $(".order-container").html(res.order_view);
-            $("#order-price").html(`₦${res.total_amount}.00`);
+            if (window.matchMedia("(max-width: 767px)")
+                .matches) { // The viewport is less than 768 pixels wide (mobile device)
+                $(".mob-order-container").html(res.order_view);
+                $("#mob-order-price").html(`₦${res.total_amount}.00`);
+                if (type == "history") {
+                    // Hide cancel button on displaying history
+                    $("#mob-order-cancel-btn").addClass('d-none');
 
-            if (type == "history") {
-                // Hide cancel button on displaying history
-                $("#order-cancel-btn").addClass('d-none');
+                    // Change display status
+                    $("#mob-state-display").text('(History)');
+                } else {
+                    // Hide cancel button on displaying history
+                    $("#mob-order-cancel-btn").removeClass('d-none');
 
-                // Change display status
-                $("#state-display").text('(History)');
+                    // Change display status
+                    $("#mob-state-display").text('(Today)');
+
+                    // Disable "Cancel all" button when there is no pending order
+                    if (res.pending_count == 0) {
+                        $("#mob-order-cancel-btn").attr('disabled', '');
+                    } else {
+                        $("#mob-order-cancel-btn").removeAttr('disabled')
+                    }
+                }
             } else {
-                // Hide cancel button on displaying history
-                $("#order-cancel-btn").removeClass('d-none');
+                $(".desktop-order-container").html(res.order_view);
+                $("#order-price").html(`₦${res.total_amount}.00`);
+                if (type == "history") {
+                    // Hide cancel button on displaying history
+                    $("#order-cancel-btn").addClass('d-none');
 
-                // Change display status
-                $("#state-display").text('(Today)');
+                    // Change display status
+                    $("#state-display").text('(History)');
+                } else {
+                    // Hide cancel button on displaying history
+                    $("#order-cancel-btn").removeClass('d-none');
 
-                // Disable "Cancel all" button when there is no pending order
-                if (res.pending_count < 1) {
-                    $("#order-cancel-btn").attr('disabled', '');
+                    // Change display status
+                    $("#state-display").text('(Today)');
+
+                    // Disable "Cancel all" button when there is no pending order
+                    if (res.pending_count == 0) {
+                        $("#order-cancel-btn").attr('disabled', '');
+                    } else {
+                        $("#order-cancel-btn").removeAttr('disabled')
+                    }
                 }
             }
         }).catch((err) => {
@@ -305,27 +334,42 @@
     }
 
     // Load order dropdown on click of order button
-    $("#order-btn").click(function () {
+    $("#order-btn, #mob-order-btn").click(function () {
+        // Always make history button show on toggling orders on mobile
+        $("#mob-today-order-btn, #today-order-btn").addClass('d-none');
+        $("#mob-order-history-btn, #order-history-btn").removeClass('d-none')
+        // Always make history button show on toggling orders on mobile
+
         getOrder();
     });
 
     // Cancel all user order
-    $("#order-cancel-btn").on('click', function () {
+    $("#order-cancel-btn, #mob-order-cancel-btn").on('click', function () {
         cancelOrder();
     });
 
     // Toggle Order History
-    $("#order-history-btn").on('click', function () {
+    $("#order-history-btn, #mob-order-history-btn").on('click', function () {
         $(this).addClass('d-none');
-        $("#today-order-btn").removeClass('d-none');
+        if (window.matchMedia("(max-width: 767px)")
+            .matches) { // The viewport is less than 768 pixels wide (mobile device)
+            $("#mob-today-order-btn").removeClass('d-none');
+        } else {
+            $("#today-order-btn").removeClass('d-none');
+        }
 
         getOrder("history");
     });
 
     // Toggle Today's Order
-    $("#today-order-btn").on('click', function () {
+    $("#today-order-btn, #mob-today-order-btn").on('click', function () {
         $(this).addClass('d-none');
-        $("#order-history-btn").removeClass('d-none');
+        if (window.matchMedia("(max-width: 767px)")
+            .matches) { // The viewport is less than 768 pixels wide (mobile device)
+            $("#mob-order-history-btn").removeClass('d-none');
+        } else {
+            $("#order-history-btn").removeClass('d-none');
+        }
 
         getOrder();
     });

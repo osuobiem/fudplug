@@ -41,7 +41,7 @@
                                 style="max-height: 250px; overflow: auto;">
                                 @foreach($order['title'] as $title_key=>$title)
                                 @if($order['order_type'][$title_key] == "simple")
-                                <li class="list-group-item  pt-0 col">
+                                <li class="list-group-item pt-0 col">
                                     @php
                                     $actual_detail = json_decode($order['quantity'][$title_key], true);
                                     $order_qty = json_decode($order['order_detail'][$title_key])[0];
@@ -52,19 +52,21 @@
                                                 src="/storage/vendor/dish/{{$order['image'][$title_key]}}"
                                                 alt="Image Description">
                                         </div>
-                                        <div class="media-body" style="margin-left:-208px;  margin-top:-5px;">
-                                            @if($order_key < 1) <small style="margin-left:-6px;">{{$title}}</small>
-                                                @else
-                                                <small style="margin-left:-26px;">{{$title}}</small>
-                                                @endif
-                                                <p class="mb-0 mt-0" style="margin-left: 82px; font-size:15px;">
-                                                    <span class="text-danger ml-2 mr-4 border-right pr-4">
-                                                        ₦{{$actual_detail['price']}}
-                                                    </span>
-                                                    <span class="text-dark">
-                                                        <strong>Qty: </strong>{{$order_qty}}
-                                                    </span>
-                                                </p>
+                                        <div class="media-body pl-4">
+                                            <div class="text-left">
+                                                @if($order_key < 1) <small>{{$title}}</small>
+                                                    @else
+                                                    <small>{{$title}}</small>
+                                                    @endif
+                                                    <p class="mb-0 mt-0" style="font-size:15px;">
+                                                        <span class="text-danger pr-3 border-right">
+                                                            ₦{{$actual_detail['price']}}
+                                                        </span>
+                                                        <span class="text-dark pl-3">
+                                                            <strong>Qty: </strong>{{$order_qty}}
+                                                        </span>
+                                                    </p>
+                                            </div>
                                         </div>
                                     </div>
                                 </li>
@@ -94,17 +96,19 @@
                                                 src="/storage/vendor/dish/{{$order['image'][$title_key]}}"
                                                 alt="Image Description">
                                         </div>
-                                        <div class="media-body" style="margin-left:-208px;  margin-top:-5px;">
-                                            <small style="margin-left:105px;">{{$title}}
-                                                ({{$qty['title']}})</small>
-                                            <p class="mb-0 mt-0" style="margin-left: 82px; font-size:15px;">
-                                                <span class="text-danger ml-2 mr-4 border-right pr-4">
-                                                    ₦{{$qty['price']}}
-                                                </span>
-                                                <span class="text-dark">
-                                                    <strong>Qty: </strong>{{$detail[2]}}
-                                                </span>
-                                            </p>
+                                        <div class="media-body pl-4">
+                                            <div class="text-left">
+                                                <small style="">{{$title}}
+                                                    ({{$qty['title']}})</small>
+                                                <p class="mb-0 mt-0" style="font-size:15px;">
+                                                    <span class="text-danger pr-3 border-right">
+                                                        ₦{{$qty['price']}}
+                                                    </span>
+                                                    <span class="text-dark pl-3">
+                                                        <strong>Qty: </strong>{{$detail[2]}}
+                                                    </span>
+                                                </p>
+                                            </div>
                                         </div>
                                     </div>
                                 </li>
@@ -119,17 +123,19 @@
                                                 src="/storage/vendor/dish/{{$order['image'][$title_key]}}"
                                                 alt="Image Description">
                                         </div>
-                                        <div class="media-body" style="margin-left:-208px;  margin-top:-5px;">
-                                            <small style="margin-left:105px;">{{$title}}
-                                                ({{$qty['title']}} <strong>Litres</strong>)</small>
-                                            <p class="mb-0 mt-0" style="margin-left: 82px; font-size:15px;">
-                                                <span class="text-danger ml-2 mr-4 border-right pr-4">
-                                                    ₦{{$qty['price']}}
-                                                </span>
-                                                <span class="text-dark">
-                                                    <strong>Qty: </strong>{{$detail[2]}}
-                                                </span>
-                                            </p>
+                                        <div class="media-body pl-4">
+                                            <div class="text-left">
+                                                <small style="">{{$title}}
+                                                    ({{$qty['title']}} <strong>Litres</strong>)</small>
+                                                <p class="mb-0 mt-0" style="font-size:15px;">
+                                                    <span class="text-danger pr-3 border-right">
+                                                        ₦{{$qty['price']}}
+                                                    </span>
+                                                    <span class="text-dark pl-3">
+                                                        <strong>Qty: </strong>{{$detail[2]}}
+                                                    </span>
+                                                </p>
+                                            </div>
                                         </div>
                                     </div>
                                 </li>

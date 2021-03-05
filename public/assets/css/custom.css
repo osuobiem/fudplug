@@ -1183,6 +1183,16 @@ a:visited {
     color: #fff;
 }
 
+.dropup-top-ico-left {
+    background: #e6554a;
+    padding: 13px;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+    border-bottom-left-radius: 0px;
+    border-bottom-right-radius: 15px;
+    color: #fff;
+}
+
 .dropup-top-ico:hover {
     cursor: pointer;
 }
@@ -1470,9 +1480,6 @@ a:visited {
     }
 }
 
-@media(min-width: 1024px) {
-    .qty-field {}
-}
 
 .qty-btn{
     font-size: 9px;
@@ -1489,6 +1496,12 @@ a:visited {
 .qty-input {
     height: 23px;
     margin-top: 3px;
+}
+
+@media(max-width: 425px) {
+    .qty-input {
+        margin-top: 4px;
+    }
 }
 
 .bskt-del-btn{
@@ -1514,3 +1527,5 @@ a:visited {
 #video-loaded {
     width: 100%; border-radius: 12px; border: solid #dee2e6 1px; max-height: 300px
 }
+
+

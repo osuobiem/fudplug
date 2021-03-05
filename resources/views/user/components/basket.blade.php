@@ -145,15 +145,17 @@
                                 @endphp
                                 <li id="price-type" class="list-group-item pt-0 col">
                                     <div class="float-left col-4">
-                                        <small class="basket-small">{{$qty['title']}}</small>
-                                        <p class="mt-0">
-                                            <span class="float-left text-danger" style="font-size: large;">
-                                                ₦{{$qty['price']}}</span>
-                                        </p>
-                                        <input class="basket-price" name="basket_price[]" type="hidden"
-                                            value="{{$qty['price']}}">
-                                        <input name="order_detail[]" type="hidden" value="['regular','{{$key}}']"
-                                            disabled>
+                                        <div class="text-left">
+                                            <small class="">{{$qty['title']}}</small>
+                                            <p class="mt-0">
+                                                <span class="float-left text-danger" style="font-size: large;">
+                                                    ₦{{$qty['price']}}</span>
+                                            </p>
+                                            <input class="basket-price" name="basket_price[]" type="hidden"
+                                                value="{{$qty['price']}}">
+                                            <input name="order_detail[]" type="hidden" value="['regular','{{$key}}']"
+                                                disabled>
+                                        </div>
                                     </div>
                                     <div class="float-right col-2">
                                         <a href="javascript:void(0)"
@@ -198,15 +200,17 @@
                                 <!-- Show for bulk -->
                                 <li id="price-type" class="list-group-item pt-0 col">
                                     <div class="float-left col-4">
-                                        <small class="basket-small">{{$qty['title']}} <strong>Litres</strong></small>
-                                        <p class="mt-0">
-                                            <span class="float-left text-danger" style="font-size: large;">
-                                                ₦{{$qty['price']}}</span>
-                                        </p>
-                                        <input class="basket-price" name="basket_price[]" type="hidden"
-                                            value="{{$qty['price']}}">
-                                        <input name="order_detail[]" type="hidden" value="['regular','{{$key}}']"
-                                            disabled>
+                                        <div class="text-left">
+                                            <small class="">{{$qty['title']}} <strong>Litres</strong></small>
+                                            <p class="mt-0">
+                                                <span class="float-left text-danger" style="font-size: large;">
+                                                    ₦{{$qty['price']}}</span>
+                                            </p>
+                                            <input class="basket-price" name="basket_price[]" type="hidden"
+                                                value="{{$qty['price']}}">
+                                            <input name="order_detail[]" type="hidden" value="['regular','{{$key}}']"
+                                                disabled>
+                                        </div>
                                     </div>
                                     <div class="float-right col-2">
                                         <a href="javascript:void(0)"

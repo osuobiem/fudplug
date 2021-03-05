@@ -17,25 +17,9 @@
         <!-- Cover image file input -->
         <input type="file" class="sr-only" id="cover-input" name="cover-image" accept="image/*">
 
-        <!-- <a href="#profile-edit-modal" data-toggle="modal" target="_blank" title="edit profile"
-            rel="noopener noreferrer">
-            <i class="la la-ellipsis-v la-2x icon-hover text-white" style="margin-left: 90%;"></i>
-        </a> -->
-
-        <!-- <div class="profile-dropdown">
-            <a class="" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <i class="la la-ellipsis-v la-2x icon-hover text-white"></i>
-            </a>
-            <div class="dropdown-menu" aria-labelledby="dropdownMenu2" style="">
-                <button class="dropdown-item" data-target="#profile-edit-modal" data-toggle="modal" type="button">Edit
-                    Profile</button>
-                <label class="dropdown-item" for="input">Change Profile Image</label>
-                <label class="dropdown-item" for="cover-input">Change Cover Photo</label>
-            </div>
-        </div> -->
 
         <div class="py-4 px-3 border-bottom text-center">
-            <img id="avatar" style="width:100px;height:100px;border-radius:50%;object-fit:cover;overflow:hidden;"
+            <img style="width:100px;height:100px;border-radius:50%;object-fit:cover;overflow:hidden;"
                 src="{{ Storage::url('vendor/profile/'.$vendor->profile_image) }}" class="mt-2 img-fluid rounded-circle"
                 alt="Responsive image">
             <input type="file" class="sr-only" id="input" name="image" accept="image/*">
@@ -167,7 +151,7 @@
                     @if(!empty($vendor_menu))
                     @foreach($vendor_menu as $menu_dish)
                     <div class="col-md-6">
-                        <div class="border shadow-sm border rounded bg-white job-item-2 p-3 mb-3">
+                        <div class="border shadow-sm border rounded bg-white job-item-2 pl-3 pt-3 pb-1 pr-0">
                             <div class="media">
                                 <div class="u-avatar mr-3">
                                     <img class="img-fluid rounded-circle"
@@ -178,7 +162,7 @@
                                     <div class="mb-3">
                                         <h6 class="font-weight-bold mb-0"><a class="text-dark"
                                                 href="job-profile.html">{{$menu_dish->title}}</a></h6>
-                                        <a class="d-inline-block small pt-1" href="job-profile.html">
+                                        <!-- <a class="d-inline-block small pt-1" href="job-profile.html">
                                             <span class="text-warning">
                                                 <span class="feather-star"></span>
                                                 <span class="feather-star"></span>
@@ -188,9 +172,9 @@
                                             </span>
                                             <span class="text-dark font-weight-bold ml-2">3.74</span>
                                             <span class="text-muted">(567 reviews)</span>
-                                        </a>
+                                        </a> -->
                                     </div>
-                                    <div class="d-flex align-items-center">
+                                    <div class="d-flex align-items-center border-top">
                                         @if($menu_dish->type == "simple")
                                         <a class="small" onclick="loadRegOrderModal('{{$menu_dish->id}}')">Regular
                                             Order</a>
@@ -203,7 +187,7 @@
                                         <a class="small" onclick="loadRegOrderModal('{{$menu_dish->id}}')">Regular
                                             Order</a>
                                         @elseif($regular_qty == "null")
-                                        <div class="border-right pr-3 mr-3">
+                                        <div class="pr-3 mr-3">
                                             <a class="text-secondary small"
                                                 onclick="loadBulkOrderModal('{{$menu_dish->id}}')">Bulk Order</a>
                                         </div>
@@ -221,48 +205,18 @@
                             </div>
                         </div>
                     </div>
+                    @endforeach
+                    @else
+                    <div class="bg-light text-center col-md-12" style="height:inherit; padding-top: 7rem;">
+                        <i class="las la-info" style="font-size:xx-large;"></i><br>
+                        <small>Empty Content</small>
+                    </div>
+                    @endif
 
-
-
-
-                    {{-- <div class="box h-50 shadow-sm mb-3 rounded bg-white text-center overflow-hidden">
-                        <div class="float-left col-6">
-                            <img src="{{Storage::url('vendor/dish/'.$menu_dish->image)}}" class="img-fluid"
-                    alt="Responsive image">
                 </div>
-                <div class="float-right col-6">
-                    <div class="p-3">
-                        <h6 class="font-weight-bold text-dark float-left">{{$menu_dish->title}}</h6>
-                        <!-- <p class="mb-0 text-muted">Looking for food?</p> -->
-                    </div>
-                    <div class="border-top mt-3 float-left">
-                        <span class="mb-0 text-muted">
-                            50
-                        </span>
-                    </div>
-                    <div class="float-right border-top mt-3">
-                        <span class="mb-0 text-muted border-left">
-                            100
-                        </span>
-                    </div>
-                    <div class="p-3">
-                        <button type="button" onclick="viewDish('{{$menu_dish->id}}')"
-                            class="btn btn-sm btn-outline-danger btn-block pl-4 pr-4"> View </button>
-                    </div>
-                </div>
-            </div> --}}
-            @endforeach
-            @else
-            <div class="bg-light text-center" style="height:inherit; padding-top: 7rem;">
-                <i class="las la-info" style="font-size:xx-large;"></i><br>
-                <small>Empty Content</small>
             </div>
-            @endif
-
         </div>
     </div>
-</div>
-</div>
 
 </div>
 @endsection
