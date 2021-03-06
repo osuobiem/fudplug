@@ -169,9 +169,10 @@
         data.append('images[]', await compressedimage)
       }
     }
+    
     // Attach video to form data
-    capture()
     if (video.file) {
+      capture()
       data.append('video', video.file);
       data.append('thumbnail', videoThumb);
     }

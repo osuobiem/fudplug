@@ -204,8 +204,8 @@ class PostController extends Controller
         // Make and return validation rules
         return Validator::make($request->all(), [
             'content' => 'required|max:1500',
-            'images.*' => 'image|max:26214400',
-            'video' => 'mimes:mp4,ogx,oga,ogv,ogg,webm|max:157286400',
+            'images.*' => 'image|max:614400',
+            'video' => 'mimes:mp4,ogx,oga,ogv,ogg,webm|max:262144000',
         ]);
     }
 

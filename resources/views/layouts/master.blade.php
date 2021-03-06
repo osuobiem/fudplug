@@ -276,7 +276,7 @@
                     <!-- Vendor Scipts -->
                     <script src="{{ url('assets/js/vendor.js') }}" server="{{ url('') }}" token="{{ csrf_token()}}">
                     </script>
-                    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/browser-image-compression@latest/dist/browser-image-compression.js"></script>
+                    <script type="text/javascript" src="{{ url('assets/vendor/browser-image-compression/bic.min.js') }}"></script>
                     <!-- Vendor Scipts -->
                     @elseif(!Auth::guard('user')->guest())
                     <!-- USER SCRIPTS -->
