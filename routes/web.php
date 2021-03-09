@@ -72,6 +72,8 @@ Route::group(['prefix' => 'vendor'], function () {
         Route::post('update-menu', 'VendorController@update_menu');
         // Get Vendor Menu
         Route::get('get-menu/{vendor_id?}', 'VendorController@main_menu');
+        // Get user orders
+        Route::get('get-order/{type?}', 'VendorController@get_order');
     });
 });
 // -------------

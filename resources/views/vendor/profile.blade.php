@@ -25,11 +25,11 @@
             <a class="" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <i class="la la-ellipsis-v la-2x icon-hover text-white"></i>
             </a>
-            <div class="dropdown-menu" aria-labelledby="dropdownMenu2" style="">
-                <button class="dropdown-item" data-target="#profile-edit-modal" data-toggle="modal" type="button">Edit
-                    Profile</button>
-                <label class="dropdown-item" for="input">Change Profile Image</label>
-                <label class="dropdown-item" for="cover-input">Change Cover Photo</label>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
+                <label class="dropdown-item" id="profile-edit-btn" type="button">Edit
+                    Profile</label>
+                <label type="button" class="dropdown-item" for="input">Change Profile Image</label>
+                <label type="button" class="dropdown-item" for="cover-input">Change Cover Photo</label>
             </div>
         </div>
 
@@ -449,6 +449,11 @@
         theBlob.name = fileName;
         return theBlob;
     }
+
+    // Open profile edit modal
+    $("#profile-edit-btn").on('click', function () {
+        $("#profile-edit-modal").modal('toggle');
+    });
 
 </script>
 @endpush

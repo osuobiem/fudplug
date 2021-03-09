@@ -30,8 +30,9 @@
                                 </label>
                                 <div class="form-group">
                                     <input type="text" class="form-control" name="business_name"
-                                        value="{{Auth::user('vendor')->business_name}}" placeholder="Enter your business name"
-                                        aria-label="Enter your business name" required="" aria-describedby="nameLabel"
+                                        value="{{Auth::user('vendor')->business_name}}"
+                                        placeholder="Enter your business name" aria-label="Enter your business name"
+                                        required="" aria-describedby="nameLabel"
                                         data-msg="Please enter your business name." data-error-class="u-has-error"
                                         data-success-class="u-has-success">
 
@@ -91,10 +92,11 @@
                                 </label>
                                 <div cfreachlass="form-group">
                                     <input class="form-control" type="tel" name="phone_number"
-                                        value="{{Auth::user('vendor')->phone_number}}" placeholder="Enter your phone number"
-                                        aria-label="Enter your phone number" required=""
-                                        aria-describedby="phoneNumberLabel" data-msg="Please enter a valid phone number"
-                                        data-error-class="u-has-error" data-success-class="u-has-success">
+                                        value="{{Auth::user('vendor')->phone_number}}"
+                                        placeholder="Enter your phone number" aria-label="Enter your phone number"
+                                        required="" aria-describedby="phoneNumberLabel"
+                                        data-msg="Please enter a valid phone number" data-error-class="u-has-error"
+                                        data-success-class="u-has-success">
                                 </div>
                             </div>
                             <small class="text-danger error-message" id="phone_number"></small>
@@ -215,7 +217,7 @@
                                 <textarea class="form-control" rows="4" name="address" placeholder="Enter business info"
                                     required>{{Auth::user('vendor')->address}}</textarea>
                             </div>
-                            <small class="text-danger error-message" id="about"></small>
+                            <small class="text-danger error-message" id="address"></small>
                         </div>
                         <!-- End Input -->
                         <!-- Input -->

@@ -5,11 +5,13 @@ namespace App\Http\Controllers;
 use App\Area;
 use App\Item;
 use App\Menu;
+use App\Order;
 use App\State;
 use App\User;
 use App\Vendor;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
@@ -873,13 +875,15 @@ class VendorController extends Controller
     {
         try {
             // Fetch Vendor Dishes
-            $dishes = Item::where('vendor_id', Auth::user('vendor')->id)->get();
+            $dishes = Item::where('vendor_id', Auth::user('vendor')->id);
+            if (!empty($dishes->count())) {
+                $dishes = $dishes->get();
 
-            if (!empty($dishes)) {
                 // Fetch the Menu Item
-                $menu = Menu::where('vendor_id', Auth::user('vendor')->id)->first()->items;
+                $menu = Menu::where('vendor_id', Auth::user('vendor')->id)->first();
+                // dd($menu);
                 if (!empty($menu)) {
-                    $menu = json_decode($menu);
+                    $menu = json_decode($menu->items);
 
                     // Get the Array of Dish IDs
                     $menu_items = $menu->item;
@@ -955,5 +959,151 @@ class VendorController extends Controller
             Log::error($th);
             return response()->json(['success' => false, 'message' => $th->getMessage()], 500);
         }
+    }
+
+    /**
+     * Get user orders
+     * @param Request $request
+     * @return Json $response
+     */
+    public function get_order(Request $request, $type = "today")
+    {
+        try {
+            $orders = $this->order_query($type);
+            $to_check = $orders->toArray();
+
+            // Get pending orders for user
+            $pending_count = Order::where([['user_id', '=', Auth::user()->id], ['status', '=', 0]])->count();
+
+            if (!empty($to_check)) {
+                foreach ($orders as $order) {
+                    $order->title = explode(',', $order->title);
+                    $order->quantity = explode(',', $order->quantity);
+                    $order->order_detail = explode(',', $order->order_detail);
+
+                    // Fix order quantity & order details
+                    $quant_arr = [];
+                    $ord_arr = [];
+                    foreach ($order->quantity as $key => $val) {
+                        $quant_arr[$key] = base64_decode($val);
+                        $ord_arr[$key] = base64_decode($order->order_detail[$key]);
+                    }
+                    $order->quantity = $quant_arr;
+                    $order->order_detail = $ord_arr;
+                    // Fix order quantity & order details
+
+                    // Fix order status
+                    $order->order_status = $this->order_status($order->order_status);
+
+                    $order->image = explode(',', $order->image);
+                    $order->order_type = explode(',', $order->order_type);
+                }
+            } else {
+                $orders = null;
+            }
+
+            // Total amount for orders
+            $total_amount = ($orders == null) ? 0 : $this->get_order_total($orders);
+
+            $order_view = view('vendor.components.order', compact('orders'))->render();
+
+            return response()->json(['success' => true, 'order_view' => $order_view, 'total_amount' => $total_amount, 'pending_count' => $pending_count], 200);
+        } catch (\Throwable $th) {
+            Log::error($th);
+            return response()->json(['success' => false, 'message' => "Oops! Something went wrong. Try Again!"], 500);
+        }
+    }
+
+    /**
+     * Fix order fetching query based on type parameter
+     * @param string $type
+     * @return object $orders
+     */
+    public function order_query($type)
+    {
+        $order = "";
+        //  $posts = Post::whereDate('created_at', Carbon::today())->get();
+        if ($type == "history") {
+            $order = Vendor::join('orders', 'orders.vendor_id', '=', 'vendors.id')->join('order_items', 'order_items.order_id', '=', 'orders.id')->join('items', 'items.id', '=', 'order_items.item_id')->select("orders.id as order_id", "orders.status as order_status", DB::raw("GROUP_CONCAT(items.title) as title, GROUP_CONCAT(TO_BASE64(items.quantity)) AS quantity, GROUP_CONCAT(items.image) AS image,GROUP_CONCAT(order_items.order_type) AS order_type, GROUP_CONCAT(TO_BASE64(order_items.order_detail)) AS order_detail, GROUP_CONCAT(DISTINCT vendors.business_name) AS vendor_name, GROUP_CONCAT(DISTINCT vendors.cover_image) AS vendor_image"))->where('orders.user_id', Auth::user()->id)->whereIn('orders.status', ['1', '-1', '-2'])->groupBy('orders.id')->get();
+        } else {
+            $order = User::join('orders', 'orders.user_id', '=', 'users.id')->join('order_items', 'order_items.order_id', '=', 'orders.id')->join('items', 'items.id', '=', 'order_items.item_id')->select("orders.id as order_id", "orders.status as order_status", DB::raw("GROUP_CONCAT(items.title) as title, GROUP_CONCAT(TO_BASE64(items.quantity)) AS quantity, GROUP_CONCAT(items.image) AS image,GROUP_CONCAT(order_items.order_type) AS order_type, GROUP_CONCAT(TO_BASE64(order_items.order_detail)) AS order_detail, GROUP_CONCAT(DISTINCT users.username) AS username, GROUP_CONCAT(DISTINCT users.profile_image) AS profile_image"))->where([['orders.vendor_id', '=', Auth::user()->id], ['orders.status', '=', 0]])->groupBy('orders.id')->get();
+        }
+        return $order;
+    }
+
+    /**
+     * Get total amount for user order
+     * @param Object $orders
+     * @return Int $sum
+     */
+    public function get_order_total($orders)
+    {
+        $sum = 0;
+
+        foreach ($orders as $order) {
+            $inner_sum = 0;
+            foreach ($order->title as $key => $title) {
+                if ($order->order_type[$key] == "simple") {
+                    $price = (Integer) json_decode($order->quantity[$key], true)['price'];
+                    $quantity = (Integer) json_decode($order->order_detail[$key])[0];
+                    $inner_sum += ($price * $quantity);
+                } else {
+                    $inner_details = json_decode($order->order_detail[$key]);
+                    $inner_inner_sum = 0;
+                    foreach ($inner_details as $inner_detail) {
+                        $type = $inner_detail[0];
+                        $index = $inner_detail[1];
+                        $qty = (Integer) $inner_detail[2];
+                        $price = 0;
+
+                        if ($type == "regular") {
+                            $price = (Integer) json_decode(json_decode($order->quantity[$key], true)['regular'], true)[$index]['price'];
+                        } else {
+                            $price = (Integer) json_decode(json_decode($order->quantity[$key], true)['bulk'], true)[$index]['price'];
+                        }
+
+                        $inner_inner_sum += ($price * $qty);
+                    }
+                    $inner_sum += $inner_inner_sum;
+                }
+            }
+            $sum += $inner_sum;
+        }
+        return $sum;
+    }
+
+    /**
+     * Convert order status to human readable format
+     * @param Integer $order_status
+     * @return String $status
+     */
+    public function order_status($order_status)
+    {
+        $status = array();
+
+        switch ($order_status) {
+            case 0:
+                $status['status'] = "Pending";
+                $status['colour'] = "badge-info";
+                break;
+            case 1:
+                $status['status'] = "Accepted";
+                $status['colour'] = "badge-success";
+                break;
+            case -1:
+                $status['status'] = "Rejected";
+                $status['colour'] = "badge-warning";
+                break;
+            case -2:
+                $status['status'] = "Cancelled";
+                $status['colour'] = "badge-warning";
+                break;
+            case -3:
+                $status['status'] = "Expired";
+                $status['colour'] = "badge-warning";
+                break;
+        }
+
+        return $status;
     }
 }
