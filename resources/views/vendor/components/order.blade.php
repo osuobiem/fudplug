@@ -24,10 +24,19 @@
                                             src="/storage/user/profile/{{$order->profile_image}}"
                                             alt="Image Description">
                                     </div>
-                                    <div class="media-body mt-2">
-                                        @<span>{{$order->username}}</span>
-                                        <span
-                                            class="badge {{$order->order_status['colour']}} ml-2">{{$order->order_status['status']}}</span>
+                                    <div class="media-body mt-0">
+                                        <div class="text-left">
+                                            @<span>{{$order->username}}</span>
+                                            <span
+                                                class="badge {{$order->order_status['colour']}} ml-1">{{$order->order_status['status']}}</span>
+                                        </div>
+                                        <div class="small text-left">
+                                            @php
+                                            $time = strtotime($order->date_time);
+                                            $time = date('h:m a', $time);
+                                            @endphp
+                                            {{$time}}
+                                        </div>
                                     </div>
                                 </div>
                             </a>
@@ -58,10 +67,10 @@
                                                     <small>{{$title}}</small>
                                                     @endif
                                                     <p class="mb-0 mt-0" style="font-size:15px;">
-                                                        <span class="text-danger pr-3 border-right">
+                                                        <span class="text-danger pr-2 border-right">
                                                             ₦{{$actual_detail['price']}}
                                                         </span>
-                                                        <span class="text-dark pl-3">
+                                                        <span class="text-dark pl-2">
                                                             <strong>Qty: </strong>{{$order_qty}}
                                                         </span>
                                                     </p>
@@ -149,11 +158,22 @@
                             </ul>
                         </div>
                         @if($order->order_status['status'] == "Pending")
-                        <div class="card-footer border-top p-0 text-muted">
-                            <a href="javascript:void(0);" onclick="cancelOrder('{{$order->order_id}}')"
+                        <!-- <div class="card-footer border-top p-0 text-muted"> -->
+                        <!-- <a href="javascript:void(0);" onclick="cancelOrder('{{$order->order_id}}')"
                                 class="btn btn-sm"><i class="las la-times"></i>&nbsp;Cancel
-                                order</a>
+                                order</a> -->
+                        <div class="card-footer border-top p-0 text-muted btn-group btn-group-sm col-12" role="group"
+                            aria-label="Basic example">
+                            <button type="button" class="btn text-danger"
+                                onclick="rejectOrder('{{$order->order_id}}')"><i
+                                    class="las la-times"></i>&nbsp;Reject</button>
+                            <button type="button" class="btn border-left border-right text-success"
+                                onclick="acceptOrder('{{$order->order_id}}')"><i
+                                    class="las la-check"></i>&nbsp;Accept</button>
+                            <button type="button" class="btn text-primary"><i
+                                    class="las la-phone"></i>&nbsp;Contact</button>
                         </div>
+                        <!-- </div> -->
                         @endif
                     </div>
                 </div>

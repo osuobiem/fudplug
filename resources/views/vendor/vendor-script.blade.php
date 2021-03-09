@@ -119,8 +119,8 @@
     }
 
     // Cancel all orders if parameter is empty
-    function cancelOrder(orderId = "") {
-        let getUrl = (orderId == "") ? `${server}/user/cancel-order` : `${server}/user/cancel-order/${orderId}`;
+    function rejectOrder(orderId = "") {
+        let getUrl = (orderId == "") ? `${server}/vendor/reject-order` : `${server}/vendor/reject-order/${orderId}`;
 
         goGet(getUrl).then((res) => {
             getOrder();
@@ -128,6 +128,27 @@
             console.log(err);
         });
     }
+
+    // Reject all user order
+    $("#order-cancel-btn, #mob-order-cancel-btn").on('click', function () {
+        rejectOrder();
+    });
+
+    // Accept all orders if parameter is empty
+    function acceptOrder(orderId = "") {
+        let getUrl = (orderId == "") ? `${server}/vendor/accept-order` : `${server}/vendor/accept-order/${orderId}`;
+
+        goGet(getUrl).then((res) => {
+            getOrder();
+        }).catch((err) => {
+            console.log(err);
+        });
+    }
+
+    // Accept all user order
+    $("#order-cancel-btn, #mob-order-cancel-btn").on('click', function () {
+        rejectOrder();
+    });
 
     // Load order dropdown on click of order button
     $("#order-btn, #mob-order-btn").click(function () {
@@ -137,11 +158,6 @@
         // Always make history button show on toggling orders on mobile
 
         getOrder();
-    });
-
-    // Cancel all user order
-    $("#order-cancel-btn, #mob-order-cancel-btn").on('click', function () {
-        cancelOrder();
     });
 
     // Toggle Order History
@@ -169,5 +185,14 @@
 
         getOrder();
     });
+
+    function toggleAccordion(e, element) {
+        $(element).parent().parent().next().collapse('toggle');
+        $('.collapse').collapse('hide');
+    }
+
+    function hideAccordion() {
+        $('.collapse-hide').collapse('hide');
+    }
 
 </script>

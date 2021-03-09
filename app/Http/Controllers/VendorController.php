@@ -6,6 +6,7 @@ use App\Area;
 use App\Item;
 use App\Menu;
 use App\Order;
+use App\OrderItems;
 use App\State;
 use App\User;
 use App\Vendor;
@@ -1024,9 +1025,9 @@ class VendorController extends Controller
         $order = "";
         //  $posts = Post::whereDate('created_at', Carbon::today())->get();
         if ($type == "history") {
-            $order = Vendor::join('orders', 'orders.vendor_id', '=', 'vendors.id')->join('order_items', 'order_items.order_id', '=', 'orders.id')->join('items', 'items.id', '=', 'order_items.item_id')->select("orders.id as order_id", "orders.status as order_status", DB::raw("GROUP_CONCAT(items.title) as title, GROUP_CONCAT(TO_BASE64(items.quantity)) AS quantity, GROUP_CONCAT(items.image) AS image,GROUP_CONCAT(order_items.order_type) AS order_type, GROUP_CONCAT(TO_BASE64(order_items.order_detail)) AS order_detail, GROUP_CONCAT(DISTINCT vendors.business_name) AS vendor_name, GROUP_CONCAT(DISTINCT vendors.cover_image) AS vendor_image"))->where('orders.user_id', Auth::user()->id)->whereIn('orders.status', ['1', '-1', '-2'])->groupBy('orders.id')->get();
+            $order = User::join('orders', 'orders.user_id', '=', 'users.id')->join('order_items', 'order_items.order_id', '=', 'orders.id')->join('items', 'items.id', '=', 'order_items.item_id')->select("orders.id as order_id", "orders.status as order_status", "orders.created_at as date_time", DB::raw("GROUP_CONCAT(items.title) as title, GROUP_CONCAT(TO_BASE64(items.quantity)) AS quantity, GROUP_CONCAT(items.image) AS image,GROUP_CONCAT(order_items.order_type) AS order_type, GROUP_CONCAT(TO_BASE64(order_items.order_detail)) AS order_detail, GROUP_CONCAT(DISTINCT users.username) AS username, GROUP_CONCAT(DISTINCT users.profile_image) AS profile_image"))->where('orders.vendor_id', Auth::user()->id)->whereIn('orders.status', ['1', '-1'])->groupBy('orders.id')->orderBy('orders.updated_at', 'DESC')->get();
         } else {
-            $order = User::join('orders', 'orders.user_id', '=', 'users.id')->join('order_items', 'order_items.order_id', '=', 'orders.id')->join('items', 'items.id', '=', 'order_items.item_id')->select("orders.id as order_id", "orders.status as order_status", DB::raw("GROUP_CONCAT(items.title) as title, GROUP_CONCAT(TO_BASE64(items.quantity)) AS quantity, GROUP_CONCAT(items.image) AS image,GROUP_CONCAT(order_items.order_type) AS order_type, GROUP_CONCAT(TO_BASE64(order_items.order_detail)) AS order_detail, GROUP_CONCAT(DISTINCT users.username) AS username, GROUP_CONCAT(DISTINCT users.profile_image) AS profile_image"))->where([['orders.vendor_id', '=', Auth::user()->id], ['orders.status', '=', 0]])->groupBy('orders.id')->get();
+            $order = User::join('orders', 'orders.user_id', '=', 'users.id')->join('order_items', 'order_items.order_id', '=', 'orders.id')->join('items', 'items.id', '=', 'order_items.item_id')->select("orders.id as order_id", "orders.status as order_status", "orders.created_at as date_time", DB::raw("GROUP_CONCAT(items.title) as title, GROUP_CONCAT(TO_BASE64(items.quantity)) AS quantity, GROUP_CONCAT(items.image) AS image,GROUP_CONCAT(order_items.order_type) AS order_type, GROUP_CONCAT(TO_BASE64(order_items.order_detail)) AS order_detail, GROUP_CONCAT(DISTINCT users.username) AS username, GROUP_CONCAT(DISTINCT users.profile_image) AS profile_image"))->where([['orders.vendor_id', '=', Auth::user()->id], ['orders.status', '=', 0]])->groupBy('orders.id')->orderBy('orders.created_at', 'DESC')->get();
         }
         return $order;
     }
@@ -1105,5 +1106,134 @@ class VendorController extends Controller
         }
 
         return $status;
+    }
+
+    /**
+     * Reject user order
+     * @param Request $request
+     * @return string json response
+     */
+    public function reject_order(Request $request, $order_id = null)
+    {
+        try {
+            if (!empty($order_id)) {
+                // Fetch order
+                $order = Order::find($request->order_id);
+                $order->status = -1;
+
+                // Update order-item quantity
+                $vendor_id = Auth::user()->id;
+                OrderItems::query()
+                    ->where([['vendor_id', '=', $vendor_id], ['order_id', '=', $order_id]])
+                    ->each(function ($record) {
+                        // Update item quantity
+                        $this->update_reject_quantity($record);
+                    });
+
+                // Update order status
+                $order->save();
+            } else {
+                $orders = Order::where([['vendor_id', '=', Auth::user()->id], ['status', '=', 0]]);
+                $vendor_id = Auth::user()->id;
+
+                // Update order-item quantity
+                foreach ($orders->get() as $order) {
+                    // Update order-item quantity
+                    OrderItems::query()
+                        ->where([['vendor_id', '=', $vendor_id], ['order_id', '=', $order->id]])
+                        ->each(function ($record) {
+                            // Update item quantity
+                            $this->update_reject_quantity($record);
+                        });
+                }
+
+                // Update order status
+                $orders->update(['status' => -1]);
+            }
+            return response()->json(['success' => true, 'message' => 'Order rejected successfully.'], 200);
+        } catch (\Throwable $th) {
+            Log::error($th);
+            return response()->json(['success' => false, 'message' => "Oops! Something went wrong. Try Again!"], 500);
+        }
+    }
+
+    /**
+     * Make necessary changes to the quantity of items when order is rejected
+     *
+     * @param Request $request
+     * @return Array $validate_data
+     */
+    public function update_reject_quantity($record)
+    {
+        $item_id = $record->item_id;
+
+        // Get the particular item
+        $item = Item::find($item_id);
+
+        if ($record->order_type == "simple") {
+            $new_quantity = json_decode($record->order_detail)[0];
+            $item_quantity = json_decode($item->quantity, true);
+            $item_quantity['quantity'] = ($item_quantity['quantity'] + $new_quantity);
+            $item->quantity = json_encode($item_quantity);
+        } else {
+            $order_detail = json_decode($record->order_detail);
+            foreach ($order_detail as $key => $detail) {
+                $type = $detail[0];
+                $index = $detail[1];
+                $order_quantity = $detail[2];
+                if ($type == "regular") {
+                    // Get values
+                    $item_quantity = json_decode($item->quantity, true);
+                    $regular_quantity = json_decode($item_quantity['regular']);
+                    $sub_item = $regular_quantity[$index];
+                    $sub_item->quantity = (string) ($sub_item->quantity + $order_quantity);
+
+                    // Reassign values
+                    $regular_quantity[$index] = $sub_item;
+                    $item_quantity['regular'] = json_encode($regular_quantity);
+                    $item->quantity = json_encode($item_quantity);
+                } else {
+                    // Get values
+                    $item_quantity = json_decode($item->quantity, true);
+                    $regular_quantity = json_decode($item_quantity['bulk']);
+                    $sub_item = $regular_quantity[$index];
+                    $sub_item->quantity = (string) ($sub_item->quantity + $order_quantity);
+
+                    // Reassign values
+                    $regular_quantity[$index] = $sub_item;
+                    $item_quantity['bulk'] = json_encode($regular_quantity);
+                    $item->quantity = json_encode($item_quantity);
+                }
+            }
+        }
+        $item->save();
+    }
+
+    /**
+     * Accept user order
+     * @param Request $request
+     * @return string json response
+     */
+    public function accept_order(Request $request, $order_id = null)
+    {
+        try {
+            if (!empty($order_id)) {
+                // Fetch order
+                $order = Order::find($request->order_id);
+                $order->status = 1;
+
+                // Update order status
+                $order->save();
+            } else {
+                $orders = Order::where([['vendor_id', '=', Auth::user()->id], ['status', '=', 0]]);
+
+                // Update order status
+                $orders->update(['status' => 1]);
+            }
+            return response()->json(['success' => true, 'message' => 'Order accepted successfully.'], 200);
+        } catch (\Throwable $th) {
+            Log::error($th);
+            return response()->json(['success' => false, 'message' => "Oops! Something went wrong. Try Again!"], 500);
+        }
     }
 }

@@ -1,7 +1,17 @@
 <aside class="col col-lg-3 d-none d-lg-block side-section side-section-l">
     <div class="box shadow-sm border rounded bg-white mb-3">
         <div class="box-title border-bottom p-3">
-            <h6 class="m-0">Orders</h6>
+            <h6 class="m-0">
+                <span>
+                    Orders
+                </span>
+                <span class="float-right mt-n1">
+                    <a href="javascript:void(0)" title="Order history" class="text-dark" id="order-history-btn"><i
+                            class="las la-history la-2x"></i></a>
+                    <a href="javascript:void(0)" title="Today's Orders" class="text-dark d-none" id="today-order-btn"><i
+                            class="las la-list la-2x"></i></a>
+                </span>
+            </h6>
         </div>
         <!-- <div class="box-body p-3 h-100 overflow-auto desktop-order-container">
             <div class="justify-content-center text-center w-100 pb-2 box shadow-sm border rounded bg-white p-2">
