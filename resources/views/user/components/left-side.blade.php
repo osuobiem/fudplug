@@ -1,11 +1,12 @@
 <div class="box shadow-sm border rounded bg-white mb-3">
-    <div class="box-title border-bottom pt-2 pl-2 pr-2 pb-0 row">
-        <div class="col-10 mb-n3">
+    <div class="box-title border-bottom pt-2 pl-2 pr-2 pb-0">
+        <div class="text-left mb-n3">
             <h6 class="m-0"> <strong>Vendors In
                     Your Area</strong></h6>
         </div>
 
-        <div class="col-2 mb-n3">
+        <div class="text-right" style="margin-top: -24px;
+        margin-bottom: -12px;">
             <h6>
                 <i class="la la-map-marker-alt text-warning text-bold" style="font-size:25px;"></i>
             </h6>

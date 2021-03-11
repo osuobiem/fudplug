@@ -78,6 +78,8 @@ Route::group(['prefix' => 'vendor'], function () {
         Route::get('reject-order/{order_id?}', 'VendorController@reject_order');
         // Accept Order
         Route::get('accept-order/{order_id?}', 'VendorController@accept_order');
+        // Get order detail
+        Route::get('get-order-detail/{order_id}', 'VendorController@get_order_detail');
     });
 });
 // -------------

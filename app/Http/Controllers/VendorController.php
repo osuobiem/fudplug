@@ -973,6 +973,9 @@ class VendorController extends Controller
             $orders = $this->order_query($type);
             $to_check = $orders->toArray();
 
+            // Number of orders
+            $order_count = $orders->count();
+
             // Get pending orders for user
             $pending_count = Order::where([['user_id', '=', Auth::user()->id], ['status', '=', 0]])->count();
 
@@ -1008,7 +1011,7 @@ class VendorController extends Controller
 
             $order_view = view('vendor.components.order', compact('orders'))->render();
 
-            return response()->json(['success' => true, 'order_view' => $order_view, 'total_amount' => $total_amount, 'pending_count' => $pending_count], 200);
+            return response()->json(['success' => true, 'order_view' => $order_view, 'total_amount' => $total_amount, 'pending_count' => $pending_count, 'order_count' => $order_count], 200);
         } catch (\Throwable $th) {
             Log::error($th);
             return response()->json(['success' => false, 'message' => "Oops! Something went wrong. Try Again!"], 500);
@@ -1235,5 +1238,72 @@ class VendorController extends Controller
             Log::error($th);
             return response()->json(['success' => false, 'message' => "Oops! Something went wrong. Try Again!"], 500);
         }
+    }
+
+    /**
+     * Get user orders
+     * @param Request $request
+     * @param integer $order_id
+     * @param string $type
+     * @return Json $response
+     */
+    public function get_order_detail(Request $request, $order_id)
+    {
+        try {
+            $order = $this->order_detail_query($order_id);
+            // $to_check = $order->toArray();
+
+            // Get pending orders for user
+            // $pending_count = Order::where([['user_id', '=', Auth::user()->id], ['status', '=', 0]])->count();
+
+            if (!empty($order)) {
+                // foreach ($orders as $order) {
+                $order->title = explode(',', $order->title);
+                $order->quantity = explode(',', $order->quantity);
+                $order->order_detail = explode(',', $order->order_detail);
+
+                // Fix order quantity & order details
+                $quant_arr = [];
+                $ord_arr = [];
+                foreach ($order->quantity as $key => $val) {
+                    $quant_arr[$key] = base64_decode($val);
+                    $ord_arr[$key] = base64_decode($order->order_detail[$key]);
+                }
+                $order->quantity = $quant_arr;
+                $order->order_detail = $ord_arr;
+                // Fix order quantity & order details
+
+                // Fix order status
+                $order->order_status = $this->order_status($order->order_status);
+
+                $order->image = explode(',', $order->image);
+                $order->order_type = explode(',', $order->order_type);
+                // }
+            } else {
+                $order = null;
+            }
+
+            // Total amount for orders
+            // $total_amount = ($orders == null) ? 0 : $this->get_order_total($orders);
+
+            $order_detail_view = view('vendor.components.order-detail', compact('order'))->render();
+
+            return response()->json(['success' => true, 'order_detail_view' => $order_detail_view], 200);
+        } catch (\Throwable $th) {
+            Log::error($th);
+            return response()->json(['success' => false, 'message' => "Oops! Something went wrong. Try Again!"], 500);
+        }
+    }
+
+    /**
+     * Fix order-detail fetching query
+     *
+     * @return object $order
+     */
+    public function order_detail_query($order_id)
+    {
+        $order = User::join('orders', 'orders.user_id', '=', 'users.id')->join('order_items', 'order_items.order_id', '=', 'orders.id')->join('items', 'items.id', '=', 'order_items.item_id')->select("orders.id as order_id", "orders.status as order_status", "orders.created_at as date_time", DB::raw("GROUP_CONCAT(items.title) as title, GROUP_CONCAT(TO_BASE64(items.quantity)) AS quantity, GROUP_CONCAT(items.image) AS image,GROUP_CONCAT(order_items.order_type) AS order_type, GROUP_CONCAT(TO_BASE64(order_items.order_detail)) AS order_detail, GROUP_CONCAT(DISTINCT users.username) AS username, GROUP_CONCAT(DISTINCT users.name) AS name, GROUP_CONCAT(DISTINCT users.phone_number) AS phone, GROUP_CONCAT(DISTINCT users.profile_image) AS profile_image"))->where([['orders.vendor_id', '=', Auth::user()->id], ['orders.id', '=', $order_id]])->groupBy('orders.id')->orderBy('orders.created_at', 'DESC')->first();
+
+        return $order;
     }
 }

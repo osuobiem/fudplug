@@ -69,10 +69,10 @@
                         <a class="nav-link" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home"
                             aria-selected="false">Feed</a>
                     </li>
-                    <li class="nav-item d-lg-none">
+                    <!-- <li class="nav-item d-lg-none">
                         <a class="nav-link" id="home-tab" data-toggle="tab" href="#order" role="tab"
                             aria-controls="home" aria-selected="false">Orders</a>
-                    </li>
+                    </li> -->
                     <li class="nav-item d-lg-none">
                         <a class="nav-link" id="home-tab" data-toggle="tab" href="#menu-dish" role="tab"
                             aria-controls="home" aria-selected="false">Menu/Dishes</a>

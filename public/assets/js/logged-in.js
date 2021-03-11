@@ -90,7 +90,7 @@ function openComments(post_id) {
 
     $(".comments-inner").removeClass("animate__fadeOut");
     $(".comments-container").removeClass("animate__fadeOut");
-    
+
     $('#comment-textarea')[0].emojioneArea.setFocus()
 
     commentModalOpen = true;
@@ -168,16 +168,16 @@ function getNotifications(from = 0) {
     let url = `${server}/notification/get/${from}`
 
     goGet(url)
-    .then(res => {
-        if(res.length > 0) {
-            from == 0 ? $('#notification-container').html(res) : $('#notification-container').append(res)
-        }
-    })
+        .then(res => {
+            if (res.length > 0) {
+                from == 0 ? $('#notification-container').html(res) : $('#notification-container').append(res)
+            }
+        })
 }
 
 // Get more notifications
 function getMoreNotifications() {
-    if(spyBottom('notification-container', 300)) {
+    if (spyBottom('notification-container', 300)) {
         from = $('#noti-from').text()
         getNotifications(from)
     }
@@ -188,12 +188,12 @@ function markAsRead(id, el) {
     let url = `${server}/notification/mark-as-read/${id}`
 
     goGet(url)
-    .then(res => {
-        $(el).parent().parent().removeClass('notification-card-u')
-        $(el).parent().parent().addClass('notification-card-r')
+        .then(res => {
+            $(el).parent().parent().removeClass('notification-card-u')
+            $(el).parent().parent().addClass('notification-card-r')
 
-        $(el).parent().parent().html(res)
-    })
+            $(el).parent().parent().html(res)
+        })
 }
 
 // Mark all notifications as read
@@ -201,18 +201,18 @@ function markAllAsRead() {
     let url = `${server}/notification/mark-as-read`
 
     goGet(url)
-    .then(res => {
-        [...$('.notification-card-u')].forEach(el => {
-            $(el).removeClass('notification-card-u')
-            $(el).addClass('notification-card-r')
+        .then(res => {
+            [...$('.notification-card-u')].forEach(el => {
+                $(el).removeClass('notification-card-u')
+                $(el).addClass('notification-card-r')
 
-            $($(el).children()[1]).removeClass('col-10')
-            $($(el).children()[1]).addClass('col-11')
+                $($(el).children()[1]).removeClass('col-10')
+                $($(el).children()[1]).addClass('col-11')
 
-            $($(el).children()[2]).remove()
+                $($(el).children()[2]).remove()
+            })
+            $('#m-a-a-r').addClass('d-none')
         })
-        $('#m-a-a-r').addClass('d-none')
-    })
 }
 
 // Clear NViewed
@@ -220,12 +220,12 @@ function clearNViewed() {
     let url = `${server}/notification/clear-nviewed`
 
     goGet(url)
-    .then(res => {
-        setTimeout(() => {
-            $('#noti-dot').text(0)
-            $('#noti-dot').addClass('d-none')
-        }, 1500)
-    })
+        .then(res => {
+            setTimeout(() => {
+                $('#noti-dot').text(0)
+                $('#noti-dot').addClass('d-none')
+            }, 1500)
+        })
 }
 
 // Open Mobile Notification Dropup Modal
@@ -266,6 +266,9 @@ function openOrders() {
 
     $(".order-inner").removeClass("animate__fadeOut");
     $(".order-container").removeClass("animate__fadeOut");
+
+    // Populate order DIV for mobile
+    getOrder();
 }
 
 // Close Orders Dropup Modal
@@ -314,7 +317,7 @@ function compressImg(image) {
         maxSizeMB: 0.5,
         maxWidthOrHeight: 1920,
         useWebWorker: true
-      }
-    
-    return  imageCompression(image, options);
+    }
+
+    return imageCompression(image, options);
 }
