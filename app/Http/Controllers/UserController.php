@@ -7,6 +7,7 @@ use App\Basket;
 use App\Item;
 use App\Menu;
 use App\Order;
+use App\OrderItems;
 use App\Rules\MatchOldPassword;
 use App\State;
 use App\User;
@@ -491,41 +492,6 @@ class UserController extends Controller
     }
 
     /**
-     * Format "All-Vendors" Card Component
-     * @return string HTML
-     */
-    public function card($vendor)
-    {
-        $html = "
-        <div class=\"col-md-4 col-6 text-center vend mb-2\">
-        <div class=\"border rounded bg-white job-item shadow\">
-            <div class=\"d-flex job-item-header border-bottom\"
-                style=\"height: 200px; background-position: center; background-size: cover; background-repeat: no-repeat; background-image: url('" . Storage::url("vendor/cover/") . $vendor->cover_image . "');\">
-
-                <div class=\"overflow-hidden\" style=\"width:100%; background-color: rgba(0,0,0,0.5)\">
-                    <img class=\"img-fluid vend-img rounded-circle mt-5\"
-                        src=\"" . Storage::url('vendor/profile/') . $vendor->profile_image . "\" alt=\"\">
-                    <h6 class=\"font-weight-bold text-white mb-0 text-truncate\">
-" . $vendor->business_name . "
-                    </h6>
-                    <div class=\"text-truncate text-white\">@<span>" . $vendor->username . "</span></div>
-                    <div class=\"small text-gray-500\"><i
-                            class=\"la la-map-marker-alt text-warning text-bold\"></i>
-" . $vendor->area . ", " . $vendor->state . "</div>
-                </div>
-            </div>
-            <div class=\"p-3 job-item-footer\">
-                <a class=\"font-weight-bold d-block\" data-toggle=\"modal\" href=\"#profile-edit-modal\">
-                    View
-                </a>
-            </div>
-        </div>
-    </div>
-";
-        return $html;
-    }
-
-    /**
      * Fix Query Conditions Based On Value
      * @return Array
      */
@@ -582,11 +548,12 @@ class UserController extends Controller
      */
     public function vendor_menu($vendor)
     {
+
         // Fetch the Menu Item
-        $menu = Menu::where('vendor_id', $vendor)->first()->items;
+        $menu = Menu::where('vendor_id', $vendor)->first();
 
         if (!empty($menu)) {
-            $menu = json_decode($menu);
+            $menu = json_decode($menu->items);
 
             // Get the Array of Dish IDs
             $menu_items = $menu->item;
@@ -1125,7 +1092,7 @@ class UserController extends Controller
             $to_check = $orders->toArray();
 
             // Get pending orders for user
-            $pending_count = Order::where('status', 0)->count();
+            $pending_count = Order::where([['user_id', '=', Auth::guard('user')->user()->id], ['status', '=', 0]])->count();
 
             if (!empty($to_check)) {
                 foreach ($orders as $order) {
@@ -1176,9 +1143,9 @@ class UserController extends Controller
         $order = "";
         //  $posts = Post::whereDate('created_at', Carbon::today())->get();
         if ($type == "history") {
-            $order = Vendor::join('orders', 'orders.vendor_id', '=', 'vendors.id')->join('order_items', 'order_items.order_id', '=', 'orders.id')->join('items', 'items.id', '=', 'order_items.item_id')->select("orders.id as order_id", "orders.status as order_status", DB::raw("GROUP_CONCAT(items.title) as title, GROUP_CONCAT(TO_BASE64(items.quantity)) AS quantity, GROUP_CONCAT(items.image) AS image,GROUP_CONCAT(order_items.order_type) AS order_type, GROUP_CONCAT(TO_BASE64(order_items.order_detail)) AS order_detail, GROUP_CONCAT(DISTINCT vendors.business_name) AS vendor_name, GROUP_CONCAT(DISTINCT vendors.cover_image) AS vendor_image"))->where('orders.user_id', Auth::guard('user')->user()->id)->whereIn('orders.status', ['1', '-1', '-2'])->groupBy('orders.id')->get();
+            $order = Vendor::join('orders', 'orders.vendor_id', '=', 'vendors.id')->join('order_items', 'order_items.order_id', '=', 'orders.id')->join('items', 'items.id', '=', 'order_items.item_id')->select("orders.id as order_id", "orders.status as order_status", DB::raw("GROUP_CONCAT(items.title) as title, GROUP_CONCAT(TO_BASE64(items.quantity)) AS quantity, GROUP_CONCAT(items.image) AS image,GROUP_CONCAT(order_items.order_type) AS order_type, GROUP_CONCAT(TO_BASE64(order_items.order_detail)) AS order_detail, GROUP_CONCAT(DISTINCT vendors.business_name) AS vendor_name, GROUP_CONCAT(DISTINCT vendors.cover_image) AS vendor_image"))->where('orders.user_id', Auth::guard('user')->user()->id)->whereIn('orders.status', ['1', '-1', '-2'])->groupBy('orders.id')->orderBy('orders.updated_at', 'DESC')->get();
         } else {
-            $order = Vendor::join('orders', 'orders.vendor_id', '=', 'vendors.id')->join('order_items', 'order_items.order_id', '=', 'orders.id')->join('items', 'items.id', '=', 'order_items.item_id')->select("orders.id as order_id", "orders.status as order_status", DB::raw("GROUP_CONCAT(items.title) as title, GROUP_CONCAT(TO_BASE64(items.quantity)) AS quantity, GROUP_CONCAT(items.image) AS image,GROUP_CONCAT(order_items.order_type) AS order_type, GROUP_CONCAT(TO_BASE64(order_items.order_detail)) AS order_detail, GROUP_CONCAT(DISTINCT vendors.business_name) AS vendor_name, GROUP_CONCAT(DISTINCT vendors.cover_image) AS vendor_image"))->where([['orders.user_id', '=', Auth::guard('user')->user()->id], ['orders.status', '=', 0]])->groupBy('orders.id')->get();
+            $order = Vendor::join('orders', 'orders.vendor_id', '=', 'vendors.id')->join('order_items', 'order_items.order_id', '=', 'orders.id')->join('items', 'items.id', '=', 'order_items.item_id')->select("orders.id as order_id", "orders.status as order_status", DB::raw("GROUP_CONCAT(items.title) as title, GROUP_CONCAT(TO_BASE64(items.quantity)) AS quantity, GROUP_CONCAT(items.image) AS image,GROUP_CONCAT(order_items.order_type) AS order_type, GROUP_CONCAT(TO_BASE64(order_items.order_detail)) AS order_detail, GROUP_CONCAT(DISTINCT vendors.business_name) AS vendor_name, GROUP_CONCAT(DISTINCT vendors.cover_image) AS vendor_image"))->where([['orders.user_id', '=', Auth::guard('user')->user()->id], ['orders.status', '=', 0]])->groupBy('orders.id')->orderBy('orders.created_at', 'DESC')->get();
         }
         return $order;
     }
@@ -1233,17 +1200,96 @@ class UserController extends Controller
     {
         try {
             if (!empty($order_id)) {
+                // Fetch order
                 $order = Order::find($request->order_id);
                 $order->status = -2;
+
+                // Update order-item quantity
+                $user_id = Auth::guard('user')->user()->id;
+                OrderItems::query()
+                    ->where([['user_id', '=', $user_id], ['order_id', '=', $order_id]])
+                    ->each(function ($record) {
+                        // Update item quantity
+                        $this->update_cancel_quantity($record);
+                    });
+
+                // Update order status
                 $order->save();
             } else {
-                Order::where('user_id', Auth::guard('user')->user()->id)->update(['status' => -2]);
+                $orders = Order::where([['user_id', '=', Auth::guard('user')->user()->id], ['status', '=', 0]]);
+                $user_id = Auth::guard('user')->user()->id;
+
+                // Update order-item quantity
+                foreach ($orders->get() as $order) {
+                    // Update order-item quantity
+                    OrderItems::query()
+                        ->where([['user_id', '=', $user_id], ['order_id', '=', $order->id]])
+                        ->each(function ($record) {
+                            // Update item quantity
+                            $this->update_cancel_quantity($record);
+                        });
+                }
+
+                // Update order status
+                $orders->update(['status' => -2]);
             }
             return response()->json(['success' => true, 'message' => 'Order cancelled successfully.'], 200);
         } catch (\Throwable $th) {
             Log::error($th);
             return response()->json(['success' => false, 'message' => "Oops! Something went wrong. Try Again!"], 500);
         }
+    }
+
+    /**
+     * Make necessary changes to the quantity of items when order is cancelled
+     *
+     * @param Request $request
+     * @return Array $validate_data
+     */
+    public function update_cancel_quantity($record)
+    {
+        $item_id = $record->item_id;
+
+        // Get the particular item
+        $item = Item::find($item_id);
+
+        if ($record->order_type == "simple") {
+            $new_quantity = json_decode($record->order_detail)[0];
+            $item_quantity = json_decode($item->quantity, true);
+            $item_quantity['quantity'] = ($item_quantity['quantity'] + $new_quantity);
+            $item->quantity = json_encode($item_quantity);
+        } else {
+            $order_detail = json_decode($record->order_detail);
+            foreach ($order_detail as $key => $detail) {
+                $type = $detail[0];
+                $index = $detail[1];
+                $order_quantity = $detail[2];
+                if ($type == "regular") {
+                    // Get values
+                    $item_quantity = json_decode($item->quantity, true);
+                    $regular_quantity = json_decode($item_quantity['regular']);
+                    $sub_item = $regular_quantity[$index];
+                    $sub_item->quantity = (string) ($sub_item->quantity + $order_quantity);
+
+                    // Reassign values
+                    $regular_quantity[$index] = $sub_item;
+                    $item_quantity['regular'] = json_encode($regular_quantity);
+                    $item->quantity = json_encode($item_quantity);
+                } else {
+                    // Get values
+                    $item_quantity = json_decode($item->quantity, true);
+                    $regular_quantity = json_decode($item_quantity['bulk']);
+                    $sub_item = $regular_quantity[$index];
+                    $sub_item->quantity = (string) ($sub_item->quantity + $order_quantity);
+
+                    // Reassign values
+                    $regular_quantity[$index] = $sub_item;
+                    $item_quantity['bulk'] = json_encode($regular_quantity);
+                    $item->quantity = json_encode($item_quantity);
+                }
+            }
+        }
+        $item->save();
     }
 
     /**

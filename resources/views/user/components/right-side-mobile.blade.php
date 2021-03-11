@@ -152,9 +152,9 @@
                     height: 2000
                 });
                 initialAvatarURL = avatar.src;
-                console.log(params[0]);
                 if (params[0] == "avatar") {
                     avatar.src = canvas.toDataURL();
+                    $(".img-profile").attr('src', canvas.toDataURL());
                 } else {
                     document.getElementById("cover-holder").style.backgroundImage = "url(" + canvas
                         .toDataURL() + ")";
@@ -220,7 +220,6 @@
 
                         error: function (res) {
                             avatar.src = initialAvatarURL;
-                            console.log(res.responseJSON);
                         }
 
                         // complete: function () {

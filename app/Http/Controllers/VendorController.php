@@ -5,11 +5,14 @@ namespace App\Http\Controllers;
 use App\Area;
 use App\Item;
 use App\Menu;
+use App\Order;
+use App\OrderItems;
 use App\State;
 use App\User;
 use App\Vendor;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
@@ -873,13 +876,15 @@ class VendorController extends Controller
     {
         try {
             // Fetch Vendor Dishes
-            $dishes = Item::where('vendor_id', Auth::user('vendor')->id)->get();
+            $dishes = Item::where('vendor_id', Auth::user('vendor')->id);
+            if (!empty($dishes->count())) {
+                $dishes = $dishes->get();
 
-            if (!empty($dishes)) {
                 // Fetch the Menu Item
-                $menu = Menu::where('vendor_id', Auth::user('vendor')->id)->first()->items;
+                $menu = Menu::where('vendor_id', Auth::user('vendor')->id)->first();
+                // dd($menu);
                 if (!empty($menu)) {
-                    $menu = json_decode($menu);
+                    $menu = json_decode($menu->items);
 
                     // Get the Array of Dish IDs
                     $menu_items = $menu->item;
@@ -954,6 +959,281 @@ class VendorController extends Controller
         } catch (\Throwable $th) {
             Log::error($th);
             return response()->json(['success' => false, 'message' => $th->getMessage()], 500);
+        }
+    }
+
+    /**
+     * Get user orders
+     * @param Request $request
+     * @return Json $response
+     */
+    public function get_order(Request $request, $type = "today")
+    {
+        try {
+            $orders = $this->order_query($type);
+            $to_check = $orders->toArray();
+
+            // Get pending orders for user
+            $pending_count = Order::where([['user_id', '=', Auth::user()->id], ['status', '=', 0]])->count();
+
+            if (!empty($to_check)) {
+                foreach ($orders as $order) {
+                    $order->title = explode(',', $order->title);
+                    $order->quantity = explode(',', $order->quantity);
+                    $order->order_detail = explode(',', $order->order_detail);
+
+                    // Fix order quantity & order details
+                    $quant_arr = [];
+                    $ord_arr = [];
+                    foreach ($order->quantity as $key => $val) {
+                        $quant_arr[$key] = base64_decode($val);
+                        $ord_arr[$key] = base64_decode($order->order_detail[$key]);
+                    }
+                    $order->quantity = $quant_arr;
+                    $order->order_detail = $ord_arr;
+                    // Fix order quantity & order details
+
+                    // Fix order status
+                    $order->order_status = $this->order_status($order->order_status);
+
+                    $order->image = explode(',', $order->image);
+                    $order->order_type = explode(',', $order->order_type);
+                }
+            } else {
+                $orders = null;
+            }
+
+            // Total amount for orders
+            $total_amount = ($orders == null) ? 0 : $this->get_order_total($orders);
+
+            $order_view = view('vendor.components.order', compact('orders'))->render();
+
+            return response()->json(['success' => true, 'order_view' => $order_view, 'total_amount' => $total_amount, 'pending_count' => $pending_count], 200);
+        } catch (\Throwable $th) {
+            Log::error($th);
+            return response()->json(['success' => false, 'message' => "Oops! Something went wrong. Try Again!"], 500);
+        }
+    }
+
+    /**
+     * Fix order fetching query based on type parameter
+     * @param string $type
+     * @return object $orders
+     */
+    public function order_query($type)
+    {
+        $order = "";
+        //  $posts = Post::whereDate('created_at', Carbon::today())->get();
+        if ($type == "history") {
+            $order = User::join('orders', 'orders.user_id', '=', 'users.id')->join('order_items', 'order_items.order_id', '=', 'orders.id')->join('items', 'items.id', '=', 'order_items.item_id')->select("orders.id as order_id", "orders.status as order_status", "orders.created_at as date_time", DB::raw("GROUP_CONCAT(items.title) as title, GROUP_CONCAT(TO_BASE64(items.quantity)) AS quantity, GROUP_CONCAT(items.image) AS image,GROUP_CONCAT(order_items.order_type) AS order_type, GROUP_CONCAT(TO_BASE64(order_items.order_detail)) AS order_detail, GROUP_CONCAT(DISTINCT users.username) AS username, GROUP_CONCAT(DISTINCT users.profile_image) AS profile_image"))->where('orders.vendor_id', Auth::user()->id)->whereIn('orders.status', ['1', '-1'])->groupBy('orders.id')->orderBy('orders.updated_at', 'DESC')->get();
+        } else {
+            $order = User::join('orders', 'orders.user_id', '=', 'users.id')->join('order_items', 'order_items.order_id', '=', 'orders.id')->join('items', 'items.id', '=', 'order_items.item_id')->select("orders.id as order_id", "orders.status as order_status", "orders.created_at as date_time", DB::raw("GROUP_CONCAT(items.title) as title, GROUP_CONCAT(TO_BASE64(items.quantity)) AS quantity, GROUP_CONCAT(items.image) AS image,GROUP_CONCAT(order_items.order_type) AS order_type, GROUP_CONCAT(TO_BASE64(order_items.order_detail)) AS order_detail, GROUP_CONCAT(DISTINCT users.username) AS username, GROUP_CONCAT(DISTINCT users.profile_image) AS profile_image"))->where([['orders.vendor_id', '=', Auth::user()->id], ['orders.status', '=', 0]])->groupBy('orders.id')->orderBy('orders.created_at', 'DESC')->get();
+        }
+        return $order;
+    }
+
+    /**
+     * Get total amount for user order
+     * @param Object $orders
+     * @return Int $sum
+     */
+    public function get_order_total($orders)
+    {
+        $sum = 0;
+
+        foreach ($orders as $order) {
+            $inner_sum = 0;
+            foreach ($order->title as $key => $title) {
+                if ($order->order_type[$key] == "simple") {
+                    $price = (Integer) json_decode($order->quantity[$key], true)['price'];
+                    $quantity = (Integer) json_decode($order->order_detail[$key])[0];
+                    $inner_sum += ($price * $quantity);
+                } else {
+                    $inner_details = json_decode($order->order_detail[$key]);
+                    $inner_inner_sum = 0;
+                    foreach ($inner_details as $inner_detail) {
+                        $type = $inner_detail[0];
+                        $index = $inner_detail[1];
+                        $qty = (Integer) $inner_detail[2];
+                        $price = 0;
+
+                        if ($type == "regular") {
+                            $price = (Integer) json_decode(json_decode($order->quantity[$key], true)['regular'], true)[$index]['price'];
+                        } else {
+                            $price = (Integer) json_decode(json_decode($order->quantity[$key], true)['bulk'], true)[$index]['price'];
+                        }
+
+                        $inner_inner_sum += ($price * $qty);
+                    }
+                    $inner_sum += $inner_inner_sum;
+                }
+            }
+            $sum += $inner_sum;
+        }
+        return $sum;
+    }
+
+    /**
+     * Convert order status to human readable format
+     * @param Integer $order_status
+     * @return String $status
+     */
+    public function order_status($order_status)
+    {
+        $status = array();
+
+        switch ($order_status) {
+            case 0:
+                $status['status'] = "Pending";
+                $status['colour'] = "badge-info";
+                break;
+            case 1:
+                $status['status'] = "Accepted";
+                $status['colour'] = "badge-success";
+                break;
+            case -1:
+                $status['status'] = "Rejected";
+                $status['colour'] = "badge-warning";
+                break;
+            case -2:
+                $status['status'] = "Cancelled";
+                $status['colour'] = "badge-warning";
+                break;
+            case -3:
+                $status['status'] = "Expired";
+                $status['colour'] = "badge-warning";
+                break;
+        }
+
+        return $status;
+    }
+
+    /**
+     * Reject user order
+     * @param Request $request
+     * @return string json response
+     */
+    public function reject_order(Request $request, $order_id = null)
+    {
+        try {
+            if (!empty($order_id)) {
+                // Fetch order
+                $order = Order::find($request->order_id);
+                $order->status = -1;
+
+                // Update order-item quantity
+                $vendor_id = Auth::user()->id;
+                OrderItems::query()
+                    ->where([['vendor_id', '=', $vendor_id], ['order_id', '=', $order_id]])
+                    ->each(function ($record) {
+                        // Update item quantity
+                        $this->update_reject_quantity($record);
+                    });
+
+                // Update order status
+                $order->save();
+            } else {
+                $orders = Order::where([['vendor_id', '=', Auth::user()->id], ['status', '=', 0]]);
+                $vendor_id = Auth::user()->id;
+
+                // Update order-item quantity
+                foreach ($orders->get() as $order) {
+                    // Update order-item quantity
+                    OrderItems::query()
+                        ->where([['vendor_id', '=', $vendor_id], ['order_id', '=', $order->id]])
+                        ->each(function ($record) {
+                            // Update item quantity
+                            $this->update_reject_quantity($record);
+                        });
+                }
+
+                // Update order status
+                $orders->update(['status' => -1]);
+            }
+            return response()->json(['success' => true, 'message' => 'Order rejected successfully.'], 200);
+        } catch (\Throwable $th) {
+            Log::error($th);
+            return response()->json(['success' => false, 'message' => "Oops! Something went wrong. Try Again!"], 500);
+        }
+    }
+
+    /**
+     * Make necessary changes to the quantity of items when order is rejected
+     *
+     * @param Request $request
+     * @return Array $validate_data
+     */
+    public function update_reject_quantity($record)
+    {
+        $item_id = $record->item_id;
+
+        // Get the particular item
+        $item = Item::find($item_id);
+
+        if ($record->order_type == "simple") {
+            $new_quantity = json_decode($record->order_detail)[0];
+            $item_quantity = json_decode($item->quantity, true);
+            $item_quantity['quantity'] = ($item_quantity['quantity'] + $new_quantity);
+            $item->quantity = json_encode($item_quantity);
+        } else {
+            $order_detail = json_decode($record->order_detail);
+            foreach ($order_detail as $key => $detail) {
+                $type = $detail[0];
+                $index = $detail[1];
+                $order_quantity = $detail[2];
+                if ($type == "regular") {
+                    // Get values
+                    $item_quantity = json_decode($item->quantity, true);
+                    $regular_quantity = json_decode($item_quantity['regular']);
+                    $sub_item = $regular_quantity[$index];
+                    $sub_item->quantity = (string) ($sub_item->quantity + $order_quantity);
+
+                    // Reassign values
+                    $regular_quantity[$index] = $sub_item;
+                    $item_quantity['regular'] = json_encode($regular_quantity);
+                    $item->quantity = json_encode($item_quantity);
+                } else {
+                    // Get values
+                    $item_quantity = json_decode($item->quantity, true);
+                    $regular_quantity = json_decode($item_quantity['bulk']);
+                    $sub_item = $regular_quantity[$index];
+                    $sub_item->quantity = (string) ($sub_item->quantity + $order_quantity);
+
+                    // Reassign values
+                    $regular_quantity[$index] = $sub_item;
+                    $item_quantity['bulk'] = json_encode($regular_quantity);
+                    $item->quantity = json_encode($item_quantity);
+                }
+            }
+        }
+        $item->save();
+    }
+
+    /**
+     * Accept user order
+     * @param Request $request
+     * @return string json response
+     */
+    public function accept_order(Request $request, $order_id = null)
+    {
+        try {
+            if (!empty($order_id)) {
+                // Fetch order
+                $order = Order::find($request->order_id);
+                $order->status = 1;
+
+                // Update order status
+                $order->save();
+            } else {
+                $orders = Order::where([['vendor_id', '=', Auth::user()->id], ['status', '=', 0]]);
+
+                // Update order status
+                $orders->update(['status' => 1]);
+            }
+            return response()->json(['success' => true, 'message' => 'Order accepted successfully.'], 200);
+        } catch (\Throwable $th) {
+            Log::error($th);
+            return response()->json(['success' => false, 'message' => "Oops! Something went wrong. Try Again!"], 500);
         }
     }
 }

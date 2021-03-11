@@ -274,8 +274,7 @@
                     {{-- Execute for Different Users --}}
                     @if(!Auth::guard('vendor')->guest())
                     <!-- Vendor Scipts -->
-                    <script src="{{ url('assets/js/vendor.js') }}" server="{{ url('') }}" token="{{ csrf_token()}}">
-                    </script>
+                    @include('vendor.vendor-script')
                     <script type="text/javascript" src="{{ url('assets/vendor/browser-image-compression/bic.min.js') }}"></script>
                     <!-- Vendor Scipts -->
                     @elseif(!Auth::guard('user')->guest())

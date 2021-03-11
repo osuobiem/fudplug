@@ -73,7 +73,7 @@
                                 My Basket <span id="head-count"></span>
                             </h6>
                             <div class="dropdown-divider"></div>
-                            <div class="box-body generic-scrollbar p-2 text-center job-item-2 basket-container"
+                            <div class="box-body generic-scrollbar p-2 text-center job-item-2" id="basket-container"
                                 style="max-height: 450px; overflow: auto;">
                                 <p>Your Basket is empty!</p>
                             </div>
@@ -118,7 +118,7 @@
                                 </span>
                             </h6>
                             <div class="dropdown-divider"></div>
-                            <div class="box-body generic-scrollbar p-2 text-center job-item-2 order-container"
+                            <div class="box-body generic-scrollbar p-2 text-center job-item-2 desktop-order-container"
                                 style="max-height: 450px; overflow: auto;" id="h-noti-cont">
                                 <p>No Orders yet!</p>
                             </div>

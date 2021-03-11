@@ -127,6 +127,7 @@
                 console.log(params[0]);
                 if (params[0] == "avatar") {
                     avatar.src = canvas.toDataURL();
+                    $(".img-profile").attr('src', canvas.toDataURL());
                 } else {
                     document.getElementById("cover-holder").style.backgroundImage = "url(" + canvas
                         .toDataURL() + ")";
@@ -143,6 +144,12 @@
 
                     formData.append("image", blobToFile(blob, params[0] + ".jpg"), params[0] +
                         ".jpg");
+
+                    // Compress Image On Upload
+                    // let compressedimage = compressImg(formData.get('image'));
+                    // formData.append('image', compressedimage);
+                    // Compress Image On Upload
+
                     $.ajax(upload_url, {
                         method: "POST",
                         data: formData,

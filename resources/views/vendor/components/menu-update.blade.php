@@ -91,22 +91,21 @@
                             </ul>
                         </form>
                     </div>
-
+                    <div class="form-group text-center col-sm-12 m-0">
+                        <button id="menu-update-btn" class="btn btn-primary px-5">
+                            <span id="vendor-txt">Update</span>
+                            <div class="spinner-border spinner-border-sm btn-pr" id="vendor-spinner"
+                                style="display: none;" role="status">
+                                <span class="sr-only">Loading...</span>
+                            </div>
+                        </button>
+                    </div>
                     @else
-                    <div class="bg-light text-center" style="height:inherit; padding-top: 7rem;">
+                    <div class="bg-light text-center py-3">
                         <i class="las la-info" style="font-size:xx-large;"></i><br>
-                        <small>You have not added Dishes Yet.</small>
+                        <small>You have not added dishes yet.</small>
                     </div>
                     @endif
-                </div>
-                <div class="form-group text-center col-sm-12 m-0">
-                    <button id="menu-update-btn" class="btn btn-primary px-5">
-                        <span id="vendor-txt">Update</span>
-                        <div class="spinner-border spinner-border-sm btn-pr" id="vendor-spinner" style="display: none;"
-                            role="status">
-                            <span class="sr-only">Loading...</span>
-                        </div>
-                    </button>
                 </div>
             </div>
         </div>
