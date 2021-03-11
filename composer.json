@@ -16,7 +16,7 @@
         "laravel/framework": "^7.0",
         "laravel/passport": "^9.3",
         "laravel/tinker": "^2.0",
-        "pbmedia/laravel-ffmpeg": "^7.4"
+        "cloudinary/cloudinary_php": "^2"
     },
     "require-dev": {
         "facade/ignition": "^2.0",
