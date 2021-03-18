@@ -172,7 +172,7 @@
     
     // Attach video to form data
     if (video.file) {
-      // capture()
+      capture()
       data.append('video', video.file);
       data.append('thumbnail', videoThumb);
     }

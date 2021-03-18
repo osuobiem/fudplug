@@ -9,6 +9,7 @@ use App\Post;
 use App\SocketData;
 use App\User;
 use App\Vendor;
+use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -178,18 +179,25 @@ class PostController extends Controller
     {
         $resp = false;
 
+        $video = Cloudinary::uploadVideo($request->file('video')->getRealPath());
+        $video_url = $video->getSecurePath();
+        $url_parts = explode('/', $video_url);
+        $url_parts[8] = $url_parts[7];
+        $url_parts[7] = $url_parts[6];
+        $url_parts[6] = 'q_45';
+
         // Upload video
-        $stored = Storage::put('/public/posts/videos/', $request['video']);
+        copy(implode('/', $url_parts), 'storage/posts/videos/'.$url_parts[8]);
         
         // Save video thumbnail
-        $name = '/public/posts/videos/thumbnails/' . explode('.', basename($stored))[0] . '.png';
+        $name = '/public/posts/videos/thumbnails/' . explode('.', $url_parts[8])[0] . '.png';
         $image_parts = explode(";base64,", $request['thumbnail']);
         $image_base64 = base64_decode($image_parts[1]);
 
         $th = Storage::put($name, $image_base64);
 
-        if ($stored && $th) {
-            $resp = basename($stored);
+        if ($video_url && $th) {
+            $resp = $url_parts[8];
         }
 
         return $resp;
