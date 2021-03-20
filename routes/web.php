@@ -130,6 +130,8 @@ Route::group(['prefix' => 'user'], function () {
         Route::get('get-order/{type?}', 'UserController@get_order');
         // Cancel Order
         Route::get('cancel-order/{order_id?}', 'UserController@cancel_order');
+        // Rate Vendor
+        Route::post('rate', 'UserController@rate');
     });
 });
 // -------------

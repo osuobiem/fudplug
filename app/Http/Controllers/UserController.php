@@ -8,6 +8,7 @@ use App\Item;
 use App\Menu;
 use App\Order;
 use App\OrderItems;
+use App\Rating;
 use App\Rules\MatchOldPassword;
 use App\State;
 use App\User;
@@ -536,7 +537,10 @@ class UserController extends Controller
             // Social Media Links
             $social_handles = json_decode($vendor->social_handles);
 
-            return view('user.vendor-profile', compact('vendor', 'vendor_location', 'states', 'areas', 'social_handles', 'vendor_menu'));
+            // Rating Data
+            $rating_data = $this->get_rating($vendor_id, Auth::guard('user')->user()->id);
+
+            return view('user.vendor-profile', compact('vendor', 'vendor_location', 'states', 'areas', 'social_handles', 'vendor_menu', 'rating_data'));
         } catch (\Throwable $th) {
             Log::error($th);
         }
@@ -1325,5 +1329,56 @@ class UserController extends Controller
         }
 
         return $status;
+    }
+
+    /**
+     * Rate a vendor
+     *
+     * @param Request $request
+     */
+    public function rate(Request $request)
+    {
+        try {
+            $user_id = Auth::guard('user')->user()->id;
+            $vendor_id = $request->vendor_id;
+            $rating = $request->rating;
+
+            // Fetch user rating
+            $ratings = Rating::where([['user_id', '=', $user_id], ['vendor_id', '=', $vendor_id]]);
+
+            if ($ratings->count() < 1) {
+                $rate = new Rating();
+                $rate->user_id = $user_id;
+                $rate->vendor_id = $vendor_id;
+                $rate->rating = $rating;
+                $rate->save();
+            }
+
+            return response()->json(['success' => true, 'data' => $this->get_rating($vendor_id, $user_id)], 200);
+        } catch (\Throwable $th) {
+            Log::error($th);
+            return response()->json(['success' => false, 'message' => "Oops! Something went wrong. Try Again!"], 500);
+        }
+    }
+
+    /**
+     * Get the total rating for a vendor
+     *
+     * @param integer $vendor_id
+     */
+    public function get_rating($vendor_id, $user_id)
+    {
+        $total_rating = Rating::where('vendor_id', $vendor_id)->selectRaw('SUM(rating)/COUNT(user_id) AS avg_rating')->first()->avg_rating;
+        $total_rating = number_format((float) $total_rating, 1, '.', '');
+
+        $user_rating = Rating::where([['user_id', '=', $user_id], ['vendor_id', '=', $vendor_id]]);
+
+        if ($user_rating->count() > 0) {
+            $user_rating = true;
+        } else {
+            $user_rating = false;
+        }
+
+        return compact('total_rating', 'user_rating');
     }
 }

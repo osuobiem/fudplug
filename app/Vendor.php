@@ -55,5 +55,10 @@ class Vendor extends Authenticatable
     {
         return $this->hasMany('App\Item');
     }
+
+    public function rating()
+    {
+        return $this->hasMany(Rating::class);
+    }
     //
 }

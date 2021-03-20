@@ -65,4 +65,9 @@ class User extends Authenticatable
     {
         return $this->hasMany('App\Basket');
     }
+
+    public function rating()
+    {
+        return $this->hasMany(Rating::class);
+    }
 }

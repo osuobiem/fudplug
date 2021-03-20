@@ -169,7 +169,7 @@
         data.append('images[]', await compressedimage)
       }
     }
-    
+
     // Attach video to form data
     if (video.file) {
       // capture()
@@ -262,7 +262,7 @@
       if(input.files.length > 1) {
         showAlert(false, "Only 1 video upload allowed");
       }
-      
+
       hideMediaInputs();
       [...input.files].forEach((file, ind) => {
         if (file.size > 262144000) {
@@ -292,18 +292,18 @@
             else {
               vid.setAttribute('controls', 'controls')
               vid.setAttribute('id', 'video-loaded')
-              
+
               video = { 'file': file }
               cont = document.getElementById('post-video-container');
               cont.innerHTML = `<span class="pmmc-ixv" onclick="removePostVid()"><i class="la la-times la-lg"></i></span>`;
               cont.prepend(vid)
-              
+
               $('#video-spinner').addClass('d-none')
-              
-              
+
+
               $('#post-video-container').removeClass('d-none')
               $('#post-media-container').addClass('d-none')
-                
+
               hideMediaInputs(false)
             }
           }, 1000)
@@ -361,7 +361,7 @@
     $('#post-form').submit();
   }
 
-  // Hide/Show Post Media Inputs 
+  // Hide/Show Post Media Inputs
   function hideMediaInputs(hide = true) {
     hide ? $('#media-input-div').addClass('d-none') : $('#media-input-div').removeClass('d-none');
   }

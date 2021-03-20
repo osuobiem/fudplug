@@ -388,6 +388,10 @@ class VendorController extends Controller
      */
     public function add_dish(Request $request)
     {
+        // dd($request->image);
+        // $request->image = json_decode($request->image[0]);
+        // dd($_FILES['image']);
+
         try {
             //Validate Input
             $validator = $this->dish_add_rules($request);

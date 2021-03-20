@@ -33,6 +33,8 @@
     <link href="{{ url('assets/vendor/emojionearea/emojionearea.min.css') }}" rel="stylesheet">
     <script src="{{ url('assets/vendor/emojionearea/emojionearea.min.js') }}"></script>
 
+    <!-- Rateyo (rating plugin) -->
+    <link rel="stylesheet" href="{{ url('assets/vendor/rateyo/jquery.rateyo.min.css') }}" />
 </head>
 
 <body>
@@ -242,9 +244,9 @@
                     <!-- Sweetalert -->
                     <script type="text/javascript" src="{{ url('assets/vendor/sweetalert/sweetalert.min.js') }}">
                     </script>
+
                     <!-- Cropper.js -->
                     <script src="{{ url('assets/js/cropper.js') }}"></script>
-
 
                     <!-- Custom scripts for all pages-->
                     <script src="{{ url('assets/js/osahan.js') }}"></script>
@@ -261,6 +263,10 @@
                     @if(!Auth::guard('vendor')->guest() || !Auth::guard('user')->guest())
                     <script src="{{ url('assets/js/logged-in.js') }}" server="{{ url('') }}"></script>
 
+                    <!-- Image Compression Script -->
+                    <script type="text/javascript"
+                        src="{{ url('assets/vendor/browser-image-compression/bic.min.js') }}"></script>
+
                     <!-- Socket.IO -->
                     <script src="{{ url('assets/js/socket.io/socket.io.min.js') }}"></script>
                     <script src="{{ url('assets/js/socket.client.js') }}"></script>
@@ -268,7 +274,8 @@
                     Auth::user('vendor'); @endphp
                     <script>
                         $(document).ready(function () {
-                            initIO(`{{ env('SOCKET_SERVER') }}`, `{{ $logged_in->username }}`, `{{ $logged_in->area_id }}`)
+                            // initIO(`{{ env('SOCKET_SERVER') }}`, `{{ $logged_in->username }}`,
+                            //     `{{ $logged_in->area_id }}`)
                         });
 
                     </script>
@@ -281,10 +288,13 @@
                     @if(!Auth::guard('vendor')->guest())
                     <!-- Vendor Scipts -->
                     @include('vendor.vendor-script')
-                    <script type="text/javascript" src="{{ url('assets/vendor/browser-image-compression/bic.min.js') }}"></script>
                     <!-- Vendor Scipts -->
                     @elseif(!Auth::guard('user')->guest())
                     <!-- USER SCRIPTS -->
+                    <link rel="stylesheet" href="{{ url('assets/vendor/rateyo/jquery.min.js') }}" />
+                    <!-- Auxiliary rater (rating plugin) -->
+                    <link rel="stylesheet" href="{{ url('assets/vendor/auxiliary-rater/rater.min.js') }}" />
+
                     @include('user.user-script')
                     <!-- USER SCRIPTS -->
                     @endif

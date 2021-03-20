@@ -1578,14 +1578,28 @@
     });
 
     // Add dish
-    function addDish(el) {
+    async function addDish(el) {
         el.preventDefault()
 
         spin('vendor')
         offError('v-dish-error')
 
         let url = `{{ url('vendor/add-dish') }}`;
-        let data = new FormData(el.target)
+        data = new FormData(el.target);
+
+        /***************   Compress images **********/
+        let images = data.getAll('image[]');
+
+        // Delete old images from form data
+        data.delete('image[]');
+
+        // Add new (compressed) set of images to form data
+        for (let image of images) {
+            compressedimage = await compressImg(image);
+
+            data.append('image[]', blobToFile(compressedimage, image.name), image.name);
+        }
+        /***************   Compress images **********/
 
         goPost(url, data)
             .then(res => {
