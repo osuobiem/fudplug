@@ -1563,3 +1563,8 @@ a:visited {
   .rating-stars ul > li.star.selected > i.lar {
     color:#FF912C;
   }
+
+  /* Give red border color to bottom of modal header */
+  .red-bottom{
+    border-bottom-color: var(--i-primary) !important;
+  }

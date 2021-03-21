@@ -772,7 +772,8 @@
             // Update rating on server
             let ratingData = {
                 rating: onStar,
-                vendorId: "{{$vendor->id ?? ''}}"
+                vendorId: "{{$vendor->id ?? ''}}",
+                ratingComment: $(e.target).parent().attr('title'),
             }
 
             updateRating(ratingData);
@@ -789,13 +790,22 @@
         goPost(url, formData)
             .then(res => {
                 if (handleFormRes(res)) {
+                    // Add new values to rating view
                     let ratingHtml = `
                         <div class="ml-3 d-inline float-left mt-1 font-weight-bold">
                             <span>${res.data.total_rating}</span>/5
                             <sub class="d-block">You have rated this vendor.</sub>
                         </div>
                     `;
+
+                    // Update rating view on vendor profile
                     $("#rating-holder").html(ratingHtml);
+
+                    // Add comment on rating modal on rating
+                    $("#rating-comment").html(ratingData.ratingComment);
+
+                    // Reset rating value/state
+                    rating = res.data.total_rating;
                 }
             })
             .catch(err => {
@@ -805,7 +815,10 @@
 
     // Popup rating modal
     $("#rating-view").on('click', function () {
-        $("#rating-modal").modal('toggle');
+        // Check if user has already rated
+        if (rating == 0) {
+            $("#rating-modal").modal('toggle');
+        }
     });
 
 </script>
