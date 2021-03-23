@@ -8,6 +8,7 @@
     // Rating state variable
     @if(isset($rating_data))
     let rating = "{{round($rating_data['total_rating']) }}";
+    let ratingState = "{{json_encode($rating_data['user_rating'])}}";
     @endif
 
     $(document).ready(function () {
@@ -746,7 +747,7 @@
 
         let stars = starId == "" ? targetEl.parent().children('li.star') : $("#" + starId).children('li.star');
 
-        // Update star colour for stars inside rating modal
+        // Update star colour for stars outside rating modal
         for (i = 0; i < stars.length; i++) {
             $(stars[i]).removeClass('selected');
         }
@@ -760,7 +761,7 @@
             // Close rating modal
             $("#rating-modal").modal('toggle');
 
-            // Update star colour for stars outside rating modal
+            // Update star colour for stars inside rating modal
             for (i = 0; i < $("#stars").children('li.star').length; i++) {
                 $("#stars").children('li.star').eq(i).removeClass('selected');
             }
@@ -774,6 +775,7 @@
                 rating: onStar,
                 vendorId: "{{$vendor->id ?? ''}}",
                 ratingComment: $(e.target).parent().attr('title'),
+                starElement: stars,
             }
 
             updateRating(ratingData);
@@ -798,14 +800,17 @@
                         </div>
                     `;
 
+                    // Update colour of stars outside modal to reflect overall rating
+                    handleRating("", Math.round(res.data.total_rating), 'stars');
+
                     // Update rating view on vendor profile
                     $("#rating-holder").html(ratingHtml);
 
                     // Add comment on rating modal on rating
                     $("#rating-comment").html(ratingData.ratingComment);
 
-                    // Reset rating value/state
-                    rating = res.data.total_rating;
+                    // Reset rating state
+                    ratingState = "true";
                 }
             })
             .catch(err => {
@@ -816,7 +821,7 @@
     // Popup rating modal
     $("#rating-view").on('click', function () {
         // Check if user has already rated
-        if (rating == 0) {
+        if (ratingState == "false") {
             $("#rating-modal").modal('toggle');
         }
     });

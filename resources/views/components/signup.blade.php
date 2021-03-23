@@ -207,7 +207,7 @@
       .then(res => {
         spin('user')
 
-        handleFormRes(res, 'u-sign-error', 'u') ? location.reload() : null
+        handleFormRes(res, 'u-sign-error', 'u') ? location.replace("{{route('verify-email')}}") : null
       })
       .catch(err => {
         spin('user')

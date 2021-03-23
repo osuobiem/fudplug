@@ -298,9 +298,10 @@
                     @include('user.user-script')
                     <!-- USER SCRIPTS -->
                     @endif
-                    <!-- Add CSRF Token to Headers for Ajax Requests -->
+                    <!-- Additional Scripts -->
                     <script>
                         $(document).ready(function () {
+                            // Add CSRF Token to Headers for Ajax Requests
                             $.ajaxSetup({
                                 headers: {
                                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -309,7 +310,24 @@
                         });
 
                     </script>
-                    <!-- Add CSRF Token to Headers for Ajax Requests -->
+
+                    <!-- Handle alert for email activation -->
+                    @if(session()->has('verify_status'))
+                    @if(session()->get('verify_status') == true)
+                    <script>
+                        showAlert(true, "Your account is activated, you can log in now.");
+
+                    </script>
+                    @else
+                    <script>
+                        showAlert(false, "Invalid verification token.");
+
+                    </script>
+                    @endif
+                    @endif
+                    <!-- Handle alert for email activation -->
+
+                    <!-- Additional Scripts -->
 </body>
 
 </html

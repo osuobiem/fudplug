@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Route;
 // GENERIC ROUTES
 
 // UI
-Route::get('', 'ViewController@feed');
+Route::get('', 'ViewController@feed')->name('.');
 
 // LOGIC
 
@@ -31,6 +31,18 @@ Route::get('states/{area_id?}', 'StateController@get');
 
 // Update Location form onboarding
 Route::get('location/{area_id}', 'AuthController@update_location');
+
+// Email Verification Route
+Route::get('verify/{token}', 'VerifyController@verify_email')->name('verify');
+
+// Email Verification Resend Route
+Route::post('verification/resend', 'VerifyController@verification_resend')->name('verification.resend');
+
+// Display Page with Verification Message to User
+Route::get('verify-email', 'ViewController@verify_page')->name('verify-email');
+
+// Display Expired Link Page
+Route::get('expired-link', 'ViewController@expired_link_page')->name('expired-link');
 
 // --------------
 

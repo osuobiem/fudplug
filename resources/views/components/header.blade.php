@@ -31,14 +31,16 @@
 				<ul class="navbar-nav ml-auto d-flex align-items-center">
 
 					<!-- Nav Item - User Information -->
-					@if(Auth::guard('vendor')->guest())
+                    @if(Auth::guard('vendor')->guest())
+                    @if(\Request::route()->getName() != 'verify-email')
 					<li class="nav-item nav-link ml-1 p-0">
 						<a class="btn btn-primary text-light hover-lift" id="login-btn-top" href="#loginModal" data-toggle="modal">
 							<strong>
 								<i class="la la-sign-in d-none d-sm-inline"></i> Login
 							</strong>
 						</a>
-					</li>
+                    </li>
+                    @endif
 					@else
 					<li class="nav-item dropdown no-arrow ml-1 osahan-profile-dropdown pr-3 d-none d-lg-flex">
 						<a class="nav-link dropdown-toggle pr-0 h-link" href="#" role="button" data-toggle="dropdown"

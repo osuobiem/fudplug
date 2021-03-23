@@ -29,7 +29,6 @@
                 </div>
                 <!-- Rating Stars Box -->
                 <div id="rating-comment" class="text-center font-weight-bold">
-                    Fair
                 </div>
             </div>
         </div>

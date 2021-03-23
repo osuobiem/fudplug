@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Area;
 use App\Basket;
 use App\Item;
+use App\Mail\VerificationEmail;
 use App\Menu;
 use App\Order;
 use App\OrderItems;
@@ -18,8 +19,10 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 
 class UserController extends Controller
@@ -67,15 +70,22 @@ class UserController extends Controller
         $user->phone_number = $request['phone'];
         $user->password = Hash::make(strtolower($request['password']));
         $user->username = $this->generate_username($user->name);
+        $user->email_verification_token = Str::random(32);
 
         // Try user save or catch error if any
         try {
             $user->save();
 
-            // Attempt login
-            $this->fast_login($request);
+            // Send verification email
+            Mail::to($user->email)->send(new VerificationEmail($user));
 
-            return ['success' => true, 'status' => 200, 'message' => 'Signup Successful'];
+            // Add user email to session to be used for resending verification emails
+            session()->put('verify_email', [$user->email, "registration"]);
+
+            // Attempt login
+            // $this->fast_login($request);
+
+            return ['success' => true, 'status' => 200, 'message' => 'Signup Successful.'];
         } catch (\Throwable $th) {
             Log::error($th);
             return ['success' => false, 'status' => 500, 'message' => 'Oops! Something went wrong. Try Again!'];
