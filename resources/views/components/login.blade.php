@@ -53,7 +53,7 @@
         </form>
 
         <div class="py-3 d-flex align-item-center">
-          <a href="forgot-password.html">Forgot password?</a>
+          <a onclick="forgotPasswordModal()" href="javascript:void(0)">Forgot password?</a>
           <span class="ml-auto"> New to FudPlug? <a class="font-weight-bold" href="#" onclick="signModal()">Join
               now</a></span>
         </div>
@@ -99,8 +99,15 @@
   }
 
   function signModal() {
+    $("#forgot-password-modal").modal('hide');
     $('#close-login').click()
     $('#sign-pop').click()
+  }
+
+  function forgotPasswordModal(){
+      $('#close-login').click()
+      $('#close-sign').click()
+      $("#forgot-password-modal").modal('toggle');
   }
 </script>
 @endpush

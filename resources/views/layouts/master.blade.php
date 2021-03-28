@@ -59,6 +59,7 @@
                     @include('components.header')
                     @include('components.login')
                     @include('components.signup')
+                    @include('components.forgot-password')
                     @endif
 
                     <div class="container-fluid">
@@ -320,7 +321,7 @@
                     </script>
                     @else
                     <script>
-                        showAlert(false, "Invalid verification token.");
+                        showAlert(false, "Invalid token.");
 
                     </script>
                     @endif

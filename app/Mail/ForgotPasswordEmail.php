@@ -6,11 +6,11 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
-class VerificationEmail extends Mailable
+class ForgotPasswordEmail extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public $user = "";
+    public $user;
 
     /**
      * Create a new message instance.
@@ -29,6 +29,6 @@ class VerificationEmail extends Mailable
      */
     public function build()
     {
-        return $this->view('auth.verify-mail')->with($this->user);
+        return $this->view('auth.passwords.email')->with($this->user);
     }
 }

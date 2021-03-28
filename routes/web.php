@@ -44,6 +44,15 @@ Route::get('verify-email', 'ViewController@verify_page')->name('verify-email');
 // Display Expired Link Page
 Route::get('expired-link', 'ViewController@expired_link_page')->name('expired-link');
 
+// Send Forgot Password Email
+Route::post('forgot-password-email', 'ForgotPasswordController@send_mail')->name('forgot-password-email');
+
+// Display Password Reset View
+Route::get('reset-password/{token?}', 'ForgotPasswordController@show')->name('reset-password');
+
+// Send Forgot Password Email
+Route::post('update-password', 'ForgotPasswordController@update_password')->name('update-password');
+
 // --------------
 
 // **********************************************************

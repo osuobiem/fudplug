@@ -137,7 +137,7 @@
 					<tr>
 						<td bgcolor="#ffffff" align="left"
 							style="padding: 20px 30px 40px 30px; color: #666666; font-family: 'Lato', Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 400; line-height: 25px;">
-							<p style="margin: 0;">Dear {{ $user->name }}, we're excited to have you get started. First,
+							<p style="margin: 0;">Dear {{ $user['user']->name ?? $user['user']->business_name }}, we're excited to have you get started. First,
 								you need to confirm your account. Just press the button below.</p>
 						</td>
 					</tr>
@@ -149,7 +149,7 @@
 										<table border="0" cellspacing="0" cellpadding="0">
 											<tr>
 												<td align="center" style="border-radius: 3px;" bgcolor="#df3f29"><a
-														href="{{ route('verify',$user->email_verification_token) }}"
+														href="{{ $user['link'] }}"
 														target="_blank"
 														style="font-size: 16px; font-family: Helvetica, Arial, sans-serif; color: #ffffff; text-decoration: none; color: #ffffff; text-decoration: none; padding: 15px 25px; border-radius: 2px; border: 1px solid #df3f29; display: inline-block;">Confirm
 														Account</a></td>
@@ -171,7 +171,7 @@
 						<td bgcolor="#ffffff" align="left"
 							style="padding: 20px 30px 20px 30px; color: #666666; font-family: 'Lato', Helvetica, Arial, sans-serif; font-size: 14px; font-weight: 400; line-height: 25px;">
 							<p style="margin: 0;"><a href="#" target="_blank"
-									style="color: #df3f29;">{{ route('verify',$user->email_verification_token) }}</a>
+									style="color: #df3f29;">{{ $user['link'] }}</a>
 							</p>
 						</td>
 					</tr>
@@ -179,7 +179,7 @@
 						<td bgcolor="#ffffff" align="left"
 							style="padding: 0px 30px 20px 30px; color: #666666; font-family: 'Lato', Helvetica, Arial, sans-serif; font-size: 16px; font-weight: 400; line-height: 25px;">
 							<p style="margin: 0;">If you have any questions, just reply to this email—we're always happy
-								to help out.</p>
+								to help out. This email verification link will expire in 60 minutes.</p>
 						</td>
 					</tr>
 					<tr>

@@ -65,55 +65,6 @@
                <div class="col-md-12 mt-3">
                   <h1 class="text-primary display-3 font-weight-light">Expired <span class="font-weight-bold">Link</span></h1>
                   <p class="mb-0 lead">Oops! Looks like you followed an expired link.</p>
-
-                  @if(session()->has('forgot_password'))
-                    <p class="lead mb-5">Click the button below to receive a new verification link.</p>
-                    <!-- <a href="index.html" class="btn btn-primary btn-lg">Get link</a> -->
-                    <button class="btn btn-primary btn-lg px-5" type="button" id="resend-btn">
-                            <span id="resend-txt">{{ __('Get link') }}</span>
-                            <div class="spinner-border spinner-border-sm btn-pr" id="resend-spinner" style="display: none;"
-                                role="status">
-                                <span class="sr-only">Loading...</span>
-                            </div>
-                    </button>
-                    <!-- <a href="button" class="btn btn-light btn-lg">Help</a> -->
-                  @endif
                </div>
             </div>
 @endsection
-
-@push('scripts')
-<script>
-    $("#resend-btn").on('click', function () {
-        resendEmail();
-    });
-
-    function resendEmail() {
-        // Btn spinner
-        spin('resend');
-
-        let url = "{{ route('verification.resend') }}";
-        let formData = new FormData();
-        formData.append('_token', "{{ csrf_token() }}");
-        formData.append('email', "{{session()->get('verify_email')[0]}}");
-
-        goPost(url, formData)
-            .then(res => {
-                // Btn spinner
-                spin('resend');
-                if (res.success) {
-                    location.replace("{{route('verify-email')}}");
-                } else {
-                    showAlert(false, res.message);
-                }
-            })
-            .catch(err => {
-                // Btn spinner
-                spin('resend');
-
-                showAlert(false, err.responseJSON.message);
-            })
-    }
-
-</script>
-@endpush

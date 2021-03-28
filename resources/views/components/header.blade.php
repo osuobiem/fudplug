@@ -32,7 +32,7 @@
 
 					<!-- Nav Item - User Information -->
                     @if(Auth::guard('vendor')->guest())
-                    @if(\Request::route()->getName() != 'verify-email')
+                    @if(\Request::route()->getName() == '.')
 					<li class="nav-item nav-link ml-1 p-0">
 						<a class="btn btn-primary text-light hover-lift" id="login-btn-top" href="#loginModal" data-toggle="modal">
 							<strong>

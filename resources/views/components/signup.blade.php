@@ -146,7 +146,7 @@
         </div>
 
         <div class="py-3 d-flex align-item-center">
-          <a href="forgot-password.html">Forgot password?</a>
+        <a onclick="forgotPasswordModal()" href="javascript:void(0)">Forgot password?</a>
           <span class="ml-auto"> Already on FudPlug? <a class="font-weight-bold" href="#"
               onclick="loginModal()">Login</a></span>
         </div>
@@ -185,7 +185,7 @@
       .then(res => {
         spin('vendor')
 
-        handleFormRes(res, 'v-sign-error') ? location.reload() : null
+        handleFormRes(res, 'v-sign-error') ? location.replace("{{route('verify-email')}}") : null
       })
       .catch(err => {
         spin('vendor')
@@ -216,6 +216,7 @@
   }
 
   function loginModal() {
+    $("#forgot-password-modal").modal('hide');
     $('#close-sign').click()
     $('#login-pop').click()
   }

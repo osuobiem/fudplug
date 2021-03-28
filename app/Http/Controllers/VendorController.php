@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Area;
 use App\Item;
+use App\Jobs\EmailJob;
 use App\Menu;
 use App\Order;
 use App\OrderItems;
@@ -17,6 +18,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 
 class VendorController extends Controller
@@ -75,13 +77,21 @@ class VendorController extends Controller
         $user->email = strtolower($request['email']);
         $user->phone_number = $request['phone'];
         $user->password = Hash::make(strtolower($request['password']));
+        $user->email_verification_token = Str::random(32);
 
         // Try vendor save or catch error if any
         try {
             $user->save();
 
+            // Send verification email by dispatching email job five seconds after it has been dispatched
+            $job_data = ['email_type' => 'email_verification', 'user_data' => ['user' => $user, 'link' => route('verify', $user->email_verification_token)]];
+            EmailJob::dispatch($job_data)->delay(now()->addSeconds(1));
+
+            // Add user email to session to be used for resending verification emails
+            session()->put('verify_email', [$user->email, "registration"]);
+
             // Attempt login
-            $this->fast_login($request);
+            // $this->fast_login($request);
 
             return ['success' => true, 'status' => 200, 'message' => 'Signup Successful'];
         } catch (\Throwable $th) {

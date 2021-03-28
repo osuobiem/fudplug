@@ -46,7 +46,7 @@ class AuthController extends Controller
         // Check if User/Vendor Email is Verified
         if ($user_data->email_verified != 1) {
             // Add user email to session to be used for resending verification emails
-            session()->put('verify_email', [$user->email, "unverified_login"]);
+            session()->put('verify_email', [$user_data->email, "unverified_login"]);
 
             return response()->json([
                 'success' => false,

@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Mail\VerificationEmail;
+use App\Jobs\EmailJob;
 use App\User;
+use App\Vendor;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -29,7 +30,10 @@ class VerifyController extends Controller
 
             }
 
-            $user = User::where('email_verification_token', $token)->first();
+            // Get user
+            $user_data = User::where('email_verification_token', $token)->first();
+            $user = $user_data == null ? Vendor::where('email_verification_token', $token)->first() : $user_data;
+            // $user = User::where('email_verification_token', $token)->first();
 
             if ($user == null) {
 
@@ -74,7 +78,8 @@ class VerifyController extends Controller
     {
         try {
             // Get user
-            $user = User::where('email', $request->email)->first();
+            $user_data = User::where('email', $request->email)->first();
+            $user = $user_data == null ? Vendor::where('email', $request->email)->first() : $user_data;
 
             if ($user == null) {
                 return response()->json(['success' => false, 'message' => 'This account does not exist.'], 200);
@@ -87,14 +92,21 @@ class VerifyController extends Controller
                 $user->email_verification_token = Str::random(32);
                 $user->save();
 
-                // Send verification email
-                Mail::to($user->email)->send(new VerificationEmail($user));
+                // Send verification email by dispatching email job five seconds after it has been dispatched
+                $job_data = ['email_type' => 'email_verification', 'user_data' => ['user' => $user, 'link' => route('verify', $user->email_verification_token)]];
+                EmailJob::dispatch($job_data)->delay(now()->addSeconds(1));
+
+                // Mail::to($user->email)->send(new VerificationEmail($user));
 
                 // Add user email to session to be used for resending verification emails
                 session()->put('verify_email', [$user->email, "registration"]);
             } else {
+                // Send verification email by dispatching email job five seconds after it has been dispatched
+                $job_data = ['email_type' => 'email_verification', 'user_data' => ['user' => $user, 'link' => route('verify', $user->email_verification_token)]];
+                EmailJob::dispatch($job_data)->delay(now()->addSeconds(1));
+
                 // Send verification email
-                Mail::to($user->email)->send(new VerificationEmail($user));
+                // Mail::to($user->email)->send(new VerificationEmail($user));
             }
 
             return response()->json(['success' => true, 'message' => 'A new mail has been sent to your email.'], 200);
@@ -113,7 +125,7 @@ class VerifyController extends Controller
     public function link_expired($user)
     {
         // Stipulated time before expiry is 15 minutes => 900 secs
-        $sti_time = 900;
+        $sti_time = 60;
 
         $last_updated = $user->updated_at;
         $last_updated = strtotime($last_updated);

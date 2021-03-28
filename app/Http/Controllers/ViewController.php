@@ -37,6 +37,11 @@ class ViewController extends Controller
         if (session()->has('verify_email')) {
             $user_email = session('verify_email');
             return view('auth.expired-link', compact('user_email'));
+        } else if (session()->has('forgot_password')) {
+            // Delete the forgot_password session variable after successful verification
+            session()->forget('forgot_password');
+
+            return view('auth.passwords.expired-link');
         } else {
             return redirect()->route('.');
         }
