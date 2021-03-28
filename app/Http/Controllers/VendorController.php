@@ -7,6 +7,7 @@ use App\Item;
 use App\Menu;
 use App\Order;
 use App\OrderItems;
+use App\SocketData;
 use App\State;
 use App\User;
 use App\Vendor;
@@ -277,6 +278,8 @@ class VendorController extends Controller
         // New vendor object
         $vendor = Vendor::find(Auth::user('vendor')->id);
 
+        $username = $vendor->username;
+
         // Assign vendor object properties
         $vendor->business_name = $request->business_name;
         $vendor->username = $request->username;
@@ -287,9 +290,13 @@ class VendorController extends Controller
         $vendor->about_business = $request->about;
         $vendor->social_handles = $this->fix_media($request);
 
+        $socket = SocketData::where('username', $username)->first();
+        $socket->username = $vendor->username;
+
         // Try vendor save or catch error if any
         try {
             $vendor->save();
+            $socket->save();
             return ['success' => true, 'status' => 200, 'message' => 'Update Successful'];
         } catch (\Throwable $th) {
             Log::error($th);
