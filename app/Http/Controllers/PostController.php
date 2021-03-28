@@ -316,7 +316,8 @@ class PostController extends Controller
                 // Send Notification
                 Http::post(env('SOCKET_SERVER') . '/notify', [
                     "owner_socket" => SocketData::where('username', $post->vendor->username)->first()->socket_id,
-                    "content" => view('components.notification-s', ['notification' => $notification])->render()
+                    "content" => view('components.notification-s', ['notification' => $notification])->render(),
+                    "content_nmu" => $name . ' ' . $content_data[1] . ': "' . substr($notification->post->content, 0, 40) . '..."'
                 ]);
 
                 // Update nviewed
@@ -397,6 +398,69 @@ class PostController extends Controller
             return response()->json([
                 'success' => true,
                 'message' => 'Unlike Successful'
+            ]);
+        } catch (\Throwable $th) {
+            Log::error($th);
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Internal Server Error'
+            ], 500);
+        }
+    }
+
+    /**
+     * Delete Post
+     * @param int $post_id Post ID
+     * @return json
+     */
+    public function delete(Request $request, $post_id) {
+        // Check Login
+        if (Auth::guard('vendor')->guest()) {
+            return response()->json([
+                "success" => false,
+                "message" => "You're not logged in"
+            ]);
+        }
+
+        $post = Post::findOrFail($post_id);
+
+        $vendor = $request->user();
+
+        // Check post owner
+        if($post->vendor_id != $vendor->id) {
+            return response()->json([
+                "success" => false,
+                "message" => "You cannot delete this post"
+            ]);
+        }
+
+        // Get post media
+        $media = $post->media;
+
+        if(!empty($media)) {
+            foreach($media as $m) {
+                if($m->type == 'image') {
+                    Storage::delete('/public/posts/photos/' . $m->name);
+                }
+                else {
+                    Storage::delete('/public/posts/videos/' . $m->name);
+                    Storage::delete('/public/posts/videos/thumbnails/' . explode('.', $m->name)[0].'.png');
+                }
+            }
+        }
+
+        try {
+            $post->forceDelete();
+
+            // Send Notification
+            Http::post(env('SOCKET_SERVER') . '/delete-post', [
+                "post_id" => $post->id
+            ]);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Post Deleted'
             ]);
         } catch (\Throwable $th) {
             Log::error($th);

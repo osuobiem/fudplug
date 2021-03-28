@@ -1,9 +1,15 @@
 // Grab server url from script tag
 server = document.currentScript.getAttribute("server");
-notiSound = new Audio(`${server}/assets/ding.mp3`)
+notiSound = new Audio(`${server}/assets/ding.mp3`);
 
 $(document).ready(function () {
-    getNotifications()
+    getNotifications();
+
+    setTimeout(() => {
+        pushPermission();
+    }, 3000);
+
+    initializeSW();
 });
 
 // Like/Unlike a post
@@ -90,11 +96,11 @@ function openComments(post_id) {
 
     $(".comments-inner").removeClass("animate__fadeOut");
     $(".comments-container").removeClass("animate__fadeOut");
-    
-    $('#comment-textarea')[0].emojioneArea.setFocus()
+
+    $("#comment-textarea")[0].emojioneArea.setFocus();
 
     commentModalOpen = true;
-    openCommentsPost = post_id
+    openCommentsPost = post_id;
 
     fetchComments(post_id);
 }
@@ -109,7 +115,7 @@ function closeComments() {
     $(".comments-container").addClass("animate__fadeOut");
 
     commentModalOpen = false;
-    openCommentsPost = null
+    openCommentsPost = null;
 
     setTimeout(() => {
         $(".comments-container").addClass("d-none");
@@ -148,11 +154,11 @@ function doDelete(id) {
 
 // Remove comment from container
 function popComment(id) {
-    $("#comment__" + id).addClass("animate__animated animate__fadeOutDown");
+    $("#comment__" + id).addClass("animate__animated animate__fadeOut");
 
     setTimeout(() => {
         $("#comment__" + id).remove();
-    }, 1000);
+    }, 500);
 }
 
 // Scroll to top
@@ -165,67 +171,65 @@ function scrollToTop() {
 
 // Get notifications
 function getNotifications(from = 0) {
-    let url = `${server}/notification/get/${from}`
+    let url = `${server}/notification/get/${from}`;
 
-    goGet(url)
-    .then(res => {
-        if(res.length > 0) {
-            from == 0 ? $('#notification-container').html(res) : $('#notification-container').append(res)
+    goGet(url).then((res) => {
+        if (res.length > 0) {
+            from == 0
+                ? $("#notification-container").html(res)
+                : $("#notification-container").append(res);
         }
-    })
+    });
 }
 
 // Get more notifications
 function getMoreNotifications() {
-    if(spyBottom('notification-container', 300)) {
-        from = $('#noti-from').text()
-        getNotifications(from)
+    if (spyBottom("notification-container", 300)) {
+        from = $("#noti-from").text();
+        getNotifications(from);
     }
 }
 
 // Mark notification as read
 function markAsRead(id, el) {
-    let url = `${server}/notification/mark-as-read/${id}`
+    let url = `${server}/notification/mark-as-read/${id}`;
 
-    goGet(url)
-    .then(res => {
-        $(el).parent().parent().removeClass('notification-card-u')
-        $(el).parent().parent().addClass('notification-card-r')
+    goGet(url).then((res) => {
+        $(el).parent().parent().removeClass("notification-card-u");
+        $(el).parent().parent().addClass("notification-card-r");
 
-        $(el).parent().parent().html(res)
-    })
+        $(el).parent().parent().html(res);
+    });
 }
 
 // Mark all notifications as read
 function markAllAsRead() {
-    let url = `${server}/notification/mark-as-read`
+    let url = `${server}/notification/mark-as-read`;
 
-    goGet(url)
-    .then(res => {
-        [...$('.notification-card-u')].forEach(el => {
-            $(el).removeClass('notification-card-u')
-            $(el).addClass('notification-card-r')
+    goGet(url).then((res) => {
+        [...$(".notification-card-u")].forEach((el) => {
+            $(el).removeClass("notification-card-u");
+            $(el).addClass("notification-card-r");
 
-            $($(el).children()[1]).removeClass('col-10')
-            $($(el).children()[1]).addClass('col-11')
+            $($(el).children()[1]).removeClass("col-10");
+            $($(el).children()[1]).addClass("col-11");
 
-            $($(el).children()[2]).remove()
-        })
-        $('#m-a-a-r').addClass('d-none')
-    })
+            $($(el).children()[2]).remove();
+        });
+        $("#m-a-a-r").addClass("d-none");
+    });
 }
 
 // Clear NViewed
 function clearNViewed() {
-    let url = `${server}/notification/clear-nviewed`
+    let url = `${server}/notification/clear-nviewed`;
 
-    goGet(url)
-    .then(res => {
+    goGet(url).then((res) => {
         setTimeout(() => {
-            $('#noti-dot').text(0)
-            $('#noti-dot').addClass('d-none')
-        }, 1500)
-    })
+            $("#noti-dot").text(0);
+            $("#noti-dot").addClass("d-none");
+        }, 1500);
+    });
 }
 
 // Open Mobile Notification Dropup Modal
@@ -313,8 +317,70 @@ function compressImg(image) {
     const options = {
         maxSizeMB: 0.5,
         maxWidthOrHeight: 1920,
-        useWebWorker: true
-      }
-    
-    return  imageCompression(image, options);
+        useWebWorker: true,
+    };
+
+    return imageCompression(image, options);
 }
+
+// Remove post from container
+function popPost(id) {
+    $("#post__" + id).addClass("animate__animated animate__fadeOut");
+
+    setTimeout(() => {
+        $("#post__" + id).remove();
+    }, 500);
+}
+
+// Request for push notifications permission
+function pushPermission() {
+    if (
+        Notification.permission == "default" ||
+        Notification.permission == "denied"
+    ) {
+        Notification.requestPermission();
+    }
+}
+
+// Send push notification
+function sendPush(body, icon) {
+    new Notification("Fudplug", { body, icon });
+}
+
+// Initialize Service Worker
+function initializeSW() {
+    navigator.serviceWorker.register("sw.js");
+
+    navigator.serviceWorker.ready.then((reg) => {
+        return reg.pushManager.getSubscription().then(async (subscription) => {
+            if(subscription) {
+                return subscription;
+            }
+
+            // Get the server's public key
+            const publicKey = await (await fetch(`${server}/sw/public-key`)).text
+            publicKey = urlBase64ToUint8Array(publicKey)
+
+
+            return registration.pushManager.subscribe({
+                userVisibleOnly: true,
+                applicationServerKey: publicKey
+            });
+        });
+    });
+}
+
+function urlBase64ToUint8Array(base64String) {
+    var padding = '='.repeat((4 - base64String.length % 4) % 4);
+    var base64 = (base64String + padding)
+      .replace(/\-/g, '+')
+      .replace(/_/g, '/');
+   
+    var rawData = window.atob(base64);
+    var outputArray = new Uint8Array(rawData.length);
+   
+    for (var i = 0; i < rawData.length; ++i) {
+      outputArray[i] = rawData.charCodeAt(i);
+    }
+    return outputArray;
+  }

@@ -129,7 +129,8 @@ class CommentController extends Controller
                 // Send Notification
                 Http::post(env('SOCKET_SERVER') . '/notify', [
                     "owner_socket" => SocketData::where('username', $post->vendor->username)->first()->socket_id,
-                    "content" => view('components.notification-s', ['notification' => $notification])->render()
+                    "content" => view('components.notification-s', ['notification' => $notification])->render(),
+                    "content_nmu" => $name . ' ' . $content_data[1] . ': "' . substr($notification->post->content, 0, 40) . '..."'
                 ]);
 
                 // Update nviewed

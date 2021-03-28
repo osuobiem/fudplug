@@ -147,6 +147,9 @@ Route::group(['prefix' => 'post'], function () {
     Route::group(['middleware' => ['auth']], function () {
         // Create Post
         Route::post('create', 'PostController@create');
+
+        // Delete Post
+        Route::get('delete/{post_id}', 'PostController@delete');
     });
 });
 // -------------
