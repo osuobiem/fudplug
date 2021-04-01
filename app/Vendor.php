@@ -13,7 +13,7 @@ class Vendor extends Authenticatable
      * @var array
      */
     protected $hidden = [
-        'password', 'remember_token',
+        'password', 'remember_token', 'google_id',
     ];
 
     public function area()

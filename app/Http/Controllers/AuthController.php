@@ -50,7 +50,7 @@ class AuthController extends Controller
 
             return response()->json([
                 'success' => false,
-                'message' => 'unverified', // Important
+                'message' => 'unverified', // Important(This is equally data that is used for checking on the client)
             ]);
         }
 

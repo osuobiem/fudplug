@@ -53,9 +53,13 @@ Route::get('reset-password/{token?}', 'ForgotPasswordController@show')->name('re
 // Send Forgot Password Email
 Route::post('update-password', 'ForgotPasswordController@update_password')->name('update-password');
 
-// --------------
+// Socialite Auth Routes(GOOGLE)
+Route::get('auth/google', 'Socialite\GoogleController@redirect_to_google');
+Route::get('auth/google/callback', 'Socialite\GoogleController@handle_google_callback');
 
-// **********************************************************
+// Socialite Auth Routes(GOOGLE)
+Route::get('auth/facebook', 'Socialite\FacebookController@redirect_to_facebook');
+Route::get('auth/facebook/callback', 'Socialite\FacebookController@handle_facebook_callback');
 
 // VENDOR ROUTES
 Route::group(['prefix' => 'vendor'], function () {

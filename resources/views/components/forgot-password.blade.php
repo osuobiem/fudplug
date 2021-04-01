@@ -19,7 +19,7 @@
           @csrf
           <div class="form-group">
             <label class="mb-1"> Email <small class="text-danger">*</small></label>
-            <div class="position-relative icon-form-control">
+            <div class="position-relative">
               <!-- <i class="la la-at position-absolute"></i> -->
               <input type="email" class="form-control" placeholder="Enter Email Address" required
                 name="email">

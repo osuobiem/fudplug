@@ -328,6 +328,22 @@
                     @endif
                     <!-- Handle alert for email activation -->
 
+                    <!-- Handle alert for socialite login -->
+                    @if(session()->has('soclogin_status'))
+                    @if(session()->get('soclogin_status') == true)
+                    <script>
+                        showAlert(true, "Loged in successfully.");
+
+                    </script>
+                    @else
+                    <script>
+                        showAlert(false, "This account doesn't exist.");
+
+                    </script>
+                    @endif
+                    @endif
+                    <!-- Handle alert for socialite login -->
+
                     <!-- Additional Scripts -->
 </body>
 
