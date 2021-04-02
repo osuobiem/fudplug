@@ -63,7 +63,11 @@ class FacebookController extends Controller
             }
         } catch (\Throwable $th) {
             Log::error($th);
-            return redirect('auth/facebook');
+
+            // Flash to user session if there is an error from the provider or the code in the try block
+            session()->flash('soclogin_error', "Oops! Something went wrong. Try Again!");
+
+            return redirect()->route('.');
         }
     }
 

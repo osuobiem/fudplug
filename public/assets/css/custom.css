@@ -1568,3 +1568,8 @@ a:visited {
   .red-bottom{
     border-bottom-color: var(--i-primary) !important;
   }
+
+  /* Remove red colour from sociaalite link btn on visited */
+  .socialite-btn:visited {
+    color: white;
+  }

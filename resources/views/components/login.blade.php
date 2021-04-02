@@ -57,12 +57,14 @@
                     <div class="row">
                         <div class="col-6">
                             <a href="{{ url('auth/google') }}" type="button"
-                                class="btn btn-sm btn-outline-linkedin btn-block"><i class="la la-google"></i>
+                                class="btn btn-sm btn-outline-linkedin btn-block socialite-btn"><i
+                                    class="la la-google"></i>
                                 Google</a>
                         </div>
                         <div class="col-6">
                             <a href="{{ url('auth/facebook') }}" type="button"
-                                class="btn btn-sm btn-outline-facebook btn-block"><i class="la la-facebook"></i>
+                                class="btn btn-sm btn-outline-facebook btn-block socialite-btn"><i
+                                    class="la la-facebook"></i>
                                 Facebook</a>
                         </div>
                     </div>

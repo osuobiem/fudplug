@@ -342,6 +342,13 @@
                     </script>
                     @endif
                     @endif
+
+                    @if(session()->has('soclogin_error'))
+                    <script>
+                        showAlert(false, "{{session()->get('soclogin_error')}}");
+
+                    </script>
+                    @endif
                     <!-- Handle alert for socialite login -->
 
                     <!-- Additional Scripts -->
