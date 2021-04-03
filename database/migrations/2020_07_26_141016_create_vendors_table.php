@@ -31,7 +31,7 @@ class CreateVendorsTable extends Migration
             $table->integer('email_verified')->default(0);
             $table->string('email_verification_token');
             $table->timestamp('password_token_time')->nullable();
-            $table->string('password_reset_token');
+            $table->string('password_reset_token')->nullable();
             $table->string('google_id')->nullable();
             $table->rememberToken();
 
