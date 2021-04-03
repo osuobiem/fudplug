@@ -96,7 +96,7 @@ function initIO(server, username, area = '') {
             notiSound.play()
             $('#m-a-a-r').removeClass('d-none')
 
-            sendPush(data.content_nmu, "http://127.0.0.1:8000/assets/img/logo.png")
+            sendPush(data.content_nmu)
         }
     })
 

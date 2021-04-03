@@ -100,7 +100,7 @@ class PostController extends Controller
             }
 
             // Send Notification
-            Http::post(env('SOCKET_SERVER') . '/send-new-post', [
+            Http::post(env('NODE_SERVER') . '/send-new-post', [
                 "post_markup" => view('components.post.single-post', ['post' => $post])->render(),
                 "area" => $post->vendor->area_id
             ]);
@@ -314,11 +314,12 @@ class PostController extends Controller
                 $notification->photo = Storage::url($initiator_data[0] . '/profile/' . $initiator->profile_image);
 
                 // Send Notification
-                Http::post(env('SOCKET_SERVER') . '/notify', [
+                $data = [
                     "owner_socket" => SocketData::where('username', $post->vendor->username)->first()->socket_id,
                     "content" => view('components.notification-s', ['notification' => $notification])->render(),
                     "content_nmu" => $name . ' ' . $content_data[1] . ': "' . substr($notification->post->content, 0, 40) . '..."'
-                ]);
+                ];
+                (new NotificationController())->send_notification($data, $post->vendor_id, 'vendor');
 
                 // Update nviewed
                 $other_details = json_decode($post->vendor->other_details, true);
@@ -332,7 +333,7 @@ class PostController extends Controller
             }
 
             // Send Notification
-            Http::post(env('SOCKET_SERVER') . '/send-likes-count', [
+            Http::post(env('NODE_SERVER') . '/send-likes-count', [
                 "post_id" => $post->id,
                 "likes_count" => $post->likes,
                 "area" => $post->vendor->area_id
@@ -389,7 +390,7 @@ class PostController extends Controller
             $post->save();
 
             // Send Notification
-            Http::post(env('SOCKET_SERVER') . '/send-likes-count', [
+            Http::post(env('NODE_SERVER') . '/send-likes-count', [
                 "post_id" => $post->id,
                 "likes_count" => $post->likes,
                 "area" => $post->vendor->area_id
@@ -454,7 +455,7 @@ class PostController extends Controller
             $post->forceDelete();
 
             // Send Notification
-            Http::post(env('SOCKET_SERVER') . '/delete-post', [
+            Http::post(env('NODE_SERVER') . '/delete-post', [
                 "post_id" => $post->id
             ]);
 

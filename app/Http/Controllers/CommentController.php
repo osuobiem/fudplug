@@ -127,11 +127,12 @@ class CommentController extends Controller
                 $notification->photo = Storage::url($initiator_data[0] . '/profile/' . $initiator->profile_image);
 
                 // Send Notification
-                Http::post(env('SOCKET_SERVER') . '/notify', [
+                $data = [
                     "owner_socket" => SocketData::where('username', $post->vendor->username)->first()->socket_id,
                     "content" => view('components.notification-s', ['notification' => $notification])->render(),
                     "content_nmu" => $name . ' ' . $content_data[1] . ': "' . substr($notification->post->content, 0, 40) . '..."'
-                ]);
+                ];
+                (new NotificationController())->send_notification($data, $post->vendor_id, 'vendor');
 
                 // Update nviewed
                 $other_details = json_decode($post->vendor->other_details, true);
@@ -145,14 +146,14 @@ class CommentController extends Controller
             }
 
             // Send Notification
-            Http::post(env('SOCKET_SERVER') . '/send-comments-count', [
+            Http::post(env('NODE_SERVER') . '/send-comments-count', [
                 "post_id" => $post->id,
                 "comments_count" => $post->comments,
                 "area" => $post->vendor->area_id
             ]);
 
             // Send Notification
-            Http::post(env('SOCKET_SERVER') . '/send-new-comment', [
+            Http::post(env('NODE_SERVER') . '/send-new-comment', [
                 "new_comment" => view('components/post/comment-new', ['comment' => $comment])->render(),
                 "post_id" => $post->id,
                 "commentor_socket" => SocketData::where('username', $commentor->username)->first()->socket_id,
@@ -218,14 +219,14 @@ class CommentController extends Controller
             $comment->forceDelete();
 
             // Send Notification
-            Http::post(env('SOCKET_SERVER') . '/send-comments-count', [
+            Http::post(env('NODE_SERVER') . '/send-comments-count', [
                 "post_id" => $post->id,
                 "comments_count" => $post->comments,
                 "area" => $post->vendor->area_id
             ]);
 
             // Send Notification
-            Http::post(env('SOCKET_SERVER') . '/delete-comment', [
+            Http::post(env('NODE_SERVER') . '/delete-comment', [
                 "comment_id" => $comment->id,
                 "post_id" => $post->id,
                 "commentor_socket" => SocketData::where('username', $commentor->username)->first()->socket_id,

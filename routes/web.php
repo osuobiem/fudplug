@@ -184,5 +184,8 @@ Route::group(['prefix' => 'notification'], function () {
 
     // Clear nviewed
     Route::get('clear-nviewed', 'NotificationController@clear_nviewed');
+
+    // Register Web Push Subscription
+    Route::post('register-wps', 'NotificationController@register_wps');
 });
 // -------------
