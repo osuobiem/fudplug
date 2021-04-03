@@ -226,11 +226,7 @@ return [
         'URL' => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
-<<<<<<< HEAD
-        'Cloudinary' => CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary::class
-=======
         'Socialite' => Laravel\Socialite\Facades\Socialite::class,
->>>>>>> f1ace8616c6c714afaca699ff714765ed0ab5b24
     ],
 
 ];
