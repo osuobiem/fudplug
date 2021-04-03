@@ -20,12 +20,12 @@
                     <div class="container" id="view" role="tabpanel" aria-labelledby="profile-tab">
                         <div class="row shadow rounded">
                             <div class="img-container pl-md-0 col-md-7">
-                                <img id="image" class="img-edit rounded" style="height:430px;"
+                                <img id="image" class="img-edit rounded"
                                     src="{{Storage::url('vendor/dish/'.$dish->image)}}">
                             </div>
                             @if($dish->type == "simple")
                             <div class="col-md-5">
-                                <div id="basics">
+                                <div>
 
                                     <div class="mb-5 pt-3 text-lg-left text-center">
                                         <div class="float-left">
@@ -37,14 +37,14 @@
                                         </div>
                                     </div>
 
-                                    <div id="basicsAccordion">
+                                    <div>
                                         <div class="box shadow-sm border rounded bg-white mb-2">
-                                            <div id="basicsHeadingOne">
+                                            <div>
                                                 <h5 class="mb-0">
                                                     <button
                                                         class="shadow-none btn btn-block d-flex justify-content-between card-btn p-3 collapsed font-weight-bold"
-                                                        data-toggle="" data-target="#basicsCollapseOne"
-                                                        aria-expanded="false" aria-controls="basicsCollapseOne">
+                                                        data-toggle="" data-target="" aria-expanded="false"
+                                                        aria-controls="">
                                                         Regular Quantity
                                                         <!-- <span class="card-btn-arrow">
                                                             <span class="la la-chevron-down"></span>
@@ -52,13 +52,11 @@
                                                     </button>
                                                 </h5>
                                             </div>
-                                            <div id="basicsCollapseOne" class="collapse show"
-                                                aria-labelledby="basicsHeadingOne" data-parent="#basicsAccordion"
-                                                style="">
+                                            <div class="collapse show" aria-labelledby="" data-parent="" style="">
                                                 <div class="card-body border-top p-2 text-muted"
                                                     style="font-size: large;">
                                                     <ul class="list-group box-body generic-scrollbar"
-                                                        style="max-height: 250px; overflow: auto;">
+                                                        style="max-height: 202px; overflow: auto;">
                                                         <li class="list-group-item pt-0">
                                                             <small>Price</small>
                                                             <p class="mt-0">
@@ -80,7 +78,7 @@
                             </div>
                             @else
                             <div class="col-md-5">
-                                <div id="basics">
+                                <div>
 
                                     <div class="mb-5 pt-3 text-lg-left text-center">
                                         <div class="float-left">
@@ -93,7 +91,7 @@
                                     </div>
 
 
-                                    <div id="basicsAccordion">
+                                    <div class="accordion" id="basicsAccordion">
 
                                         <div class="box shadow-sm border rounded bg-white mb-2">
                                             <div id="basicsHeadingOne">
@@ -116,7 +114,7 @@
                                                     style="font-size: large;">
                                                     @if(!empty($regular_qty))
                                                     <ul class="list-group box-body generic-scrollbar"
-                                                        style="max-height: 250px; overflow: auto;">
+                                                        style="max-height: 202px; overflow: auto;">
                                                         @foreach($regular_qty as $qty)
                                                         <li class="list-group-item pt-0">
                                                             <small>{{$qty->title}}</small>
@@ -158,7 +156,8 @@
                                                 <div class="card-body border-top p-2 text-muted"
                                                     style="font-size:large;">
                                                     @if(!empty($bulk_qty))
-                                                    <ul class="list-group">
+                                                    <ul class="list-group box-body generic-scrollbar"
+                                                        style="max-height: 202px; overflow: auto;">
                                                         @foreach($bulk_qty as $qty)
                                                         <li class="list-group-item pt-0">
                                                             <small>{{$qty->title}} Litres</small>
@@ -401,14 +400,26 @@
     });
 
     // Update dish
-    function updateDish(el) {
+    async function updateDish(el) {
         el.preventDefault()
 
         spin('vendor')
         offError('v-dish-error')
 
         let url = `{{ url('vendor/update-dish') }}`;
-        let data = new FormData(el.target)
+        let data = new FormData(el.target);
+
+        /***************   Compress image **********/
+        let image = data.get('image');
+
+        // Delete old image from form data
+        data.delete('image');
+
+        // Add new (compressed) set of images to form data
+        compressedimage = await compressImg(image);
+
+        data.append('image', blobToFile(compressedimage, image.name), image.name);
+        /***************   Compress images **********/
 
         goPost(url, data)
             .then(res => {
@@ -428,12 +439,25 @@
             })
     }
 
-
-
-
     $(".custom-file-input").on("change", function () {
         var fileName = $(this).val().split("\\").pop();
         $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+    });
+
+    // Handle synchronised closing and opening of Accordions
+    $('.card-btn').click(function (e) {
+        let element = $(e.target);
+        let targetContainer = element.parent().parent().next();
+
+        if (targetContainer.attr('id') == "basicsCollapseOne") {
+            if (targetContainer.parent().next().find('.collapse').hasClass('show')) {
+                targetContainer.parent().next().find('.collapse').collapse('hide');
+            }
+        } else {
+            if (targetContainer.parent().prev().find('.collapse').hasClass('show')) {
+                targetContainer.parent().prev().find('.collapse').collapse('hide');
+            }
+        }
     });
 
 </script>

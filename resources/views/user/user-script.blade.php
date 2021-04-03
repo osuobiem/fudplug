@@ -5,6 +5,12 @@
     // CSRF Token
     _token = "{{csrf_token()}}";
 
+    // Rating state variable
+    @if(isset($rating_data))
+    let rating = "{{round($rating_data['total_rating']) }}";
+    let ratingState = "{{json_encode($rating_data['user_rating'])}}";
+    @endif
+
     $(document).ready(function () {
         // Load The Right Side when Document is Ready
         loadUserRight();
@@ -702,5 +708,122 @@
         }
     }
     /******************************* Bulk order-specific quantity input script */
+
+    $(document).ready(function () {
+        // Show rating on page load
+        handleRating("", rating, 'stars');
+
+        /* 1. Visualizing things on Hover - See next part for action on click */
+        $('#stars-main li').on('mouseover', function () {
+            var onStar = parseInt($(this).data('value'), 10); // The star currently mouse on
+
+            // Now highlight all the stars that's not after the current hovered star
+            $(this).parent().children('li.star').each(function (e) {
+                if (e < onStar) {
+                    $(this).addClass('hover');
+                } else {
+                    $(this).removeClass('hover');
+                }
+            });
+
+        }).on('mouseout', function () {
+            $(this).parent().children('li.star').each(function (e) {
+                $(this).removeClass('hover');
+            });
+        });
+
+
+        /* 2. Action to perform on click */
+        $('#stars-main li').on('click', function (e) {
+            handleRating(e);
+        });
+
+    });
+
+    function handleRating(e, dataValue = "", starId = "") {
+        let targetEl = e != "" ? $(e.target).parent() : null;
+        let onStar = dataValue == "" ? parseInt(targetEl.data('value'), 10) : parseInt(dataValue,
+            10); // The star currently selected
+
+        let stars = starId == "" ? targetEl.parent().children('li.star') : $("#" + starId).children('li.star');
+
+        // Update star colour for stars outside rating modal
+        for (i = 0; i < stars.length; i++) {
+            $(stars[i]).removeClass('selected');
+        }
+
+        for (i = 0; i < onStar; i++) {
+            $(stars[i]).addClass('selected');
+        }
+
+        // Check if user is actively rating
+        if (e != "") {
+            // Close rating modal
+            $("#rating-modal").modal('toggle');
+
+            // Update star colour for stars inside rating modal
+            for (i = 0; i < $("#stars").children('li.star').length; i++) {
+                $("#stars").children('li.star').eq(i).removeClass('selected');
+            }
+
+            for (i = 0; i < onStar; i++) {
+                $("#stars").children('li.star').eq(i).addClass('selected');
+            }
+
+            // Update rating on server
+            let ratingData = {
+                rating: onStar,
+                vendorId: "{{$vendor->id ?? ''}}",
+                ratingComment: $(e.target).parent().attr('title'),
+                starElement: stars,
+            }
+
+            updateRating(ratingData);
+        }
+    }
+
+    function updateRating(ratingData) {
+        let url = `${server}/user/rate`;
+        let formData = new FormData();
+        formData.append('_token', _token);
+        formData.append('rating', ratingData.rating);
+        formData.append('vendor_id', ratingData.vendorId);
+
+        goPost(url, formData)
+            .then(res => {
+                if (handleFormRes(res)) {
+                    // Add new values to rating view
+                    let ratingHtml = `
+                        <div class="ml-3 d-inline float-left mt-1 font-weight-bold">
+                            <span>${res.data.total_rating}</span>/5
+                            <sub class="d-block">You have rated this vendor.</sub>
+                        </div>
+                    `;
+
+                    // Update colour of stars outside modal to reflect overall rating
+                    handleRating("", Math.round(res.data.total_rating), 'stars');
+
+                    // Update rating view on vendor profile
+                    $("#rating-holder").html(ratingHtml);
+
+                    // Add comment on rating modal on rating
+                    $("#rating-comment").html(ratingData.ratingComment);
+
+                    // Reset rating state
+                    ratingState = "true";
+                }
+            })
+            .catch(err => {
+                console.log(err);
+            })
+    }
+
+    // Popup rating modal
+    $("#rating-view").on('click', function () {
+        // Check if user has already rated
+        if (ratingState == "false") {
+            $("#rating-modal").modal('toggle');
+        }
+    });
 
 </script>

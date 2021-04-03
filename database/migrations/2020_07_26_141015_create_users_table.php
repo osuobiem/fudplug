@@ -24,7 +24,12 @@ class CreateUsersTable extends Migration
             $table->enum('gender', ['Male', 'Female', 'Other'])->nullable();
             $table->foreignId('area_id')->nullable()->constrained()->onDelete('cascade')->onUpdate('no action');
             $table->timestamp('email_verified_at')->nullable();
+            $table->integer('email_verified')->default(0);
+            $table->string('email_verification_token');
+            $table->timestamp('password_token_time')->nullable();
+            $table->string('password_reset_token');
             $table->string('password');
+            $table->string('google_id')->nullable();
             $table->json('other_details')->nullable();
             $table->rememberToken();
 

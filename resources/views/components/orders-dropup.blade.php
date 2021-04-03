@@ -13,7 +13,12 @@
                         <a href="javascript:void(0)" title="Today's Orders" class="text-dark d-none"><i
                                 class="las la-list la-2x"></i></a> -->
                         <span>
+                            @if(!Auth::guard('vendor')->guest())
+                            Orders<span id="mob-state-display">(Today)</span> <span id="mob-order-count"
+                                class="badge badge-dark"></span>
+                            @elseif(!Auth::guard('user')->guest())
                             My Orders <span id="mob-state-display">(Today)</span>
+                            @endif
                         </span>
                     </span>
                     <div class="text-right">
@@ -23,13 +28,13 @@
             </li>
         </ul>
 
-        <div class="pb-2 pt-3">
-
-            <div class="p-2 text-center">
+        <div>
+            <div class="py-1 text-center">
                 <div class="box-body generic-scrollbar p-2 text-center job-item-2 mob-order-container"
                     style="max-height: 450px; overflow: auto;" id="h-noti-cont">
                     <p>No Orders yet!</p>
                 </div>
+                @if(!Auth::guard('user')->guest())
                 <div class="box-body">
                     <div class="col-md-12 mt-xs-2">
                         <button type="button" id="mob-order-cancel-btn"
@@ -39,9 +44,8 @@
                         </button>
                     </div>
                 </div>
+                @endif
             </div>
-
         </div>
-
     </div>
 </div>

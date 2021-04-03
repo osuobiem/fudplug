@@ -14,7 +14,7 @@
                 <div class="box shadow border rounded bg-white mb-2">
                     <div id="basicsHeadingOne">
                         <h5 class="mb-0">
-                            <a href="javascript:void(0)" onclick="toggleAccordion(event, this)" type="button"
+                            <a href="javascript:void(0)" onclick="getDetail('{{$order->order_id}}')" type="button"
                                 class="shadow-none d-flex p-3 collapsed font-weight-bold" data-toggle=""
                                 data-target="#basicsCollapseOne" aria-expanded="false"
                                 aria-controls="basicsCollapseOne">
@@ -42,8 +42,8 @@
                             </a>
                         </h5>
                     </div>
-                    <div id="basicsCollapseOne" class="collapse @if($order_key < 1): show @endif"
-                        aria-labelledby="basicsHeadingOne" data-parent="#basicsAccordion" style="">
+                    <div id="basicsCollapseOne" class="d-none" aria-labelledby="basicsHeadingOne"
+                        data-parent="#basicsAccordion" style="">
                         <div class="card-body border-top p-2 text-muted" style="font-size: large;">
                             <ul id="basket-price-type" id="item" class="list-group box-body generic-scrollbar"
                                 style="max-height: 250px; overflow: auto;">

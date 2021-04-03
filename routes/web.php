@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Route;
 // GENERIC ROUTES
 
 // UI
-Route::get('', 'ViewController@feed');
+Route::get('', 'ViewController@feed')->name('.');
 
 // LOGIC
 
@@ -32,9 +32,34 @@ Route::get('states/{area_id?}', 'StateController@get');
 // Update Location form onboarding
 Route::get('location/{area_id}', 'AuthController@update_location');
 
-// --------------
+// Email Verification Route
+Route::get('verify/{token}', 'VerifyController@verify_email')->name('verify');
 
-// **********************************************************
+// Email Verification Resend Route
+Route::post('verification/resend', 'VerifyController@verification_resend')->name('verification.resend');
+
+// Display Page with Verification Message to User
+Route::get('verify-email', 'ViewController@verify_page')->name('verify-email');
+
+// Display Expired Link Page
+Route::get('expired-link', 'ViewController@expired_link_page')->name('expired-link');
+
+// Send Forgot Password Email
+Route::post('forgot-password-email', 'ForgotPasswordController@send_mail')->name('forgot-password-email');
+
+// Display Password Reset View
+Route::get('reset-password/{token?}', 'ForgotPasswordController@show')->name('reset-password');
+
+// Send Forgot Password Email
+Route::post('update-password', 'ForgotPasswordController@update_password')->name('update-password');
+
+// Socialite Auth Routes(GOOGLE)
+Route::get('auth/google', 'Socialite\GoogleController@redirect_to_google');
+Route::get('auth/google/callback', 'Socialite\GoogleController@handle_google_callback');
+
+// Socialite Auth Routes(GOOGLE)
+Route::get('auth/facebook', 'Socialite\FacebookController@redirect_to_facebook');
+Route::get('auth/facebook/callback', 'Socialite\FacebookController@handle_facebook_callback');
 
 // VENDOR ROUTES
 Route::group(['prefix' => 'vendor'], function () {
@@ -78,6 +103,8 @@ Route::group(['prefix' => 'vendor'], function () {
         Route::get('reject-order/{order_id?}', 'VendorController@reject_order');
         // Accept Order
         Route::get('accept-order/{order_id?}', 'VendorController@accept_order');
+        // Get order detail
+        Route::get('get-order-detail/{order_id}', 'VendorController@get_order_detail');
     });
 });
 // -------------
@@ -128,6 +155,8 @@ Route::group(['prefix' => 'user'], function () {
         Route::get('get-order/{type?}', 'UserController@get_order');
         // Cancel Order
         Route::get('cancel-order/{order_id?}', 'UserController@cancel_order');
+        // Rate Vendor
+        Route::post('rate', 'UserController@rate');
     });
 });
 // -------------

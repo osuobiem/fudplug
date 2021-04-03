@@ -27,6 +27,12 @@ class CreateVendorsTable extends Migration
             $table->string('cover_image')->default('cover_placeholder.jpg');
             $table->string('password');
             $table->json('other_details')->nullable();
+            $table->timestamp('email_verified_at')->nullable();
+            $table->integer('email_verified')->default(0);
+            $table->string('email_verification_token');
+            $table->timestamp('password_token_time')->nullable();
+            $table->string('password_reset_token');
+            $table->string('google_id')->nullable();
             $table->rememberToken();
 
             $table->softDeletes();

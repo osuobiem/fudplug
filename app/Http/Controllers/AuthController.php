@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\User;
+use App\Vendor;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
@@ -22,7 +24,33 @@ class AuthController extends Controller
         if ($validate->fails()) {
             return response()->json([
                 "success" => false,
-                "message" => $validate->errors()
+                "message" => $validate->errors(),
+            ]);
+        }
+
+        // Check if User/Vendor Exists
+        $user = User::where('email', $request['login'])->orWhere('phone_number', $request['login'])->orWhere('username', $request['login'])->first();
+
+        $vendor = Vendor::where('email', $request['login'])->orWhere('phone_number', $request['login'])->orWhere('username', $request['login'])->first();
+
+        if ($user == null && $vendor == null) {
+            // Return failed login response
+            return response()->json([
+                'success' => false,
+                'message' => 'Invalid Credentials!',
+            ]);
+        }
+
+        $user_data = $user == null ? $vendor : $user;
+
+        // Check if User/Vendor Email is Verified
+        if ($user_data->email_verified != 1) {
+            // Add user email to session to be used for resending verification emails
+            session()->put('verify_email', [$user_data->email, "unverified_login"]);
+
+            return response()->json([
+                'success' => false,
+                'message' => 'unverified', // Important(This is equally data that is used for checking on the client)
             ]);
         }
 
@@ -30,7 +58,7 @@ class AuthController extends Controller
         if ($this->vendor_login($request)) {
             return response()->json([
                 'success' => true,
-                'message' => 'Login Successful'
+                'message' => 'Login Successful',
             ]);
         }
 
@@ -38,13 +66,13 @@ class AuthController extends Controller
         elseif ($this->user_login($request)) {
             return response()->json([
                 'success' => true,
-                'message' => 'Login Successful'
+                'message' => 'Login Successful',
             ]);
         } else {
             // Return failed login response
             return response()->json([
                 'success' => false,
-                'message' => 'Invalid Credentials!'
+                'message' => 'Invalid Credentials!',
             ]);
         }
     }
@@ -63,7 +91,7 @@ class AuthController extends Controller
         // Make and return validation rules
         return Validator::make($request->all(), [
             'login' => 'required',
-            'password' => 'required|alpha_dash'
+            'password' => 'required|alpha_dash',
         ], $message);
     }
 
@@ -175,7 +203,7 @@ class AuthController extends Controller
         else {
             return response()->json([
                 'success' => false,
-                'message' => 'Something\'s not right'
+                'message' => 'Something\'s not right',
             ]);
         }
     }

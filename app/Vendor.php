@@ -13,7 +13,7 @@ class Vendor extends Authenticatable
      * @var array
      */
     protected $hidden = [
-        'password', 'remember_token',
+        'password', 'remember_token', 'google_id',
     ];
 
     public function area()
@@ -54,6 +54,11 @@ class Vendor extends Authenticatable
     public function item()
     {
         return $this->hasMany('App\Item');
+    }
+
+    public function rating()
+    {
+        return $this->hasMany(Rating::class);
     }
     //
 }

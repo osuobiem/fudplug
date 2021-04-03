@@ -69,10 +69,10 @@
                         <a class="nav-link" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home"
                             aria-selected="false">Feed</a>
                     </li>
-                    <li class="nav-item d-lg-none">
+                    <!-- <li class="nav-item d-lg-none">
                         <a class="nav-link" id="home-tab" data-toggle="tab" href="#order" role="tab"
                             aria-controls="home" aria-selected="false">Orders</a>
-                    </li>
+                    </li> -->
                     <li class="nav-item d-lg-none">
                         <a class="nav-link" id="home-tab" data-toggle="tab" href="#menu-dish" role="tab"
                             aria-controls="home" aria-selected="false">Menu/Dishes</a>
@@ -369,7 +369,7 @@
                 }
 
                 $alert.removeClass("alert-success alert-warning");
-                canvas.toBlob(function (blob) {
+                canvas.toBlob(async function (blob) {
                     var formData = new FormData();
                     var FileSize = blob.size / 1024 / 1024; // Size of uploaded file
                     if (FileSize <= 1) {
@@ -377,8 +377,13 @@
                         $progress.show();
                     }
 
-                    formData.append("image", blobToFile(blob, params[0] + ".jpg"), params[0] +
+                    // Compress Image On Upload
+                    let compressedimage = await compressImg(blob);
+                    formData.append("image", blobToFile(compressedimage, params[0] + ".jpg"),
+                        params[0] +
                         ".jpg");
+                    // Compress Image On Upload
+
                     $.ajax(upload_url, {
                         method: "POST",
                         data: formData,

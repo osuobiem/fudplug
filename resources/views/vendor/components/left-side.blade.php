@@ -3,7 +3,8 @@
         <div class="box-title border-bottom p-3">
             <h6 class="m-0">
                 <span>
-                    Orders
+                    Orders<span id="state-display">(Today)</span> <span id="order-count"
+                        class="badge badge-dark">6</span>
                 </span>
                 <span class="float-right mt-n1">
                     <a href="javascript:void(0)" title="Order history" class="text-dark" id="order-history-btn"><i
@@ -32,7 +33,7 @@
             <!-- <p>No Orders yet!</p> -->
         </div>
         <div class="box-footer p-2 border-top">
-            <button type="button" class="btn btn-primary btn-block"> View all </button>
+            <!-- <button type="button" class="btn btn-primary btn-block"> View all </button> -->
         </div>
     </div>
 </aside>

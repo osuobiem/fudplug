@@ -39,7 +39,8 @@
             <div class="col-6 p-2">
                 <h6 class="font-weight-bold text-dark mb-1">Location</h6>
                 <p class="mb-0 text-black-50 small"><i class="las la-map-marker-alt"></i>{{ $vendor_location->area }},
-                    {{ $vendor_location->state }}</p>
+                    {{ $vendor_location->state }}
+                </p>
             </div>
         </div>
         <div class="overflow-hidden border-top">
@@ -124,6 +125,47 @@
                             <tr class="border-bottom">
                                 <th class="p-3">About</th>
                                 <td class="p-3">{{ $vendor->about_business }}</td>
+                            </tr>
+                            <tr>
+                                <th class="">User Rating</th>
+                                <td class="">
+                                    <!-- Rating Stars Box -->
+                                    <div @if($rating_data['user_rating']) @else id="rating-view" @endif
+                                        class='rating-stars text-left float-left d-inline' title="Rate Vendor">
+                                        <ul id='stars'>
+                                            <li class='star' data-value='1'>
+                                                <i class='lar la-star fa-fw'></i>
+                                            </li>
+                                            <li class='star' data-value='2'>
+                                                <i class='lar la-star fa-fw'></i>
+                                            </li>
+                                            <li class='star' data-value='3'>
+                                                <i class='lar la-star fa-fw'></i>
+                                            </li>
+                                            <li class='star' data-value='4'>
+                                                <i class='lar la-star fa-fw'></i>
+                                            </li>
+                                            <li class='star' data-value='5'>
+                                                <i class='lar la-star fa-fw'></i>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <!-- Rating Stars Box -->
+                                    <div class="d-inline" id="rating-holder">
+                                        @if($rating_data['user_rating'])
+                                        <div class="ml-3 d-inline float-left mt-1 font-weight-bold">
+                                            <span>{{ $rating_data['total_rating'] }}</span>/5
+                                            <sub class="d-block">You have rated this vendor.</sub>
+                                        </div>
+                                        @else
+                                        <div class="ml-3 d-inline float-left mt-2 font-weight-bold">
+                                            <span id="rating-val">{{ $rating_data['total_rating'] }}</span>/5
+                                        </div>
+                                        @endif
+                                    </div>
+                                    <!-- Rating Modal -->
+                                    @include('user.components.rating')
+                                </td>
                             </tr>
                         </tbody>
                     </table>

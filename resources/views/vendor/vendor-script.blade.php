@@ -68,7 +68,7 @@
             if (window.matchMedia("(max-width: 767px)")
                 .matches) { // The viewport is less than 768 pixels wide (mobile device)
                 $(".mob-order-container").html(res.order_view);
-                $("#mob-order-price").html(`₦${res.total_amount}.00`);
+                $("#mob-order-count").html(res.order_count);
                 if (type == "history") {
                     // Hide cancel button on displaying history
                     $("#mob-order-cancel-btn").addClass('d-none');
@@ -91,7 +91,7 @@
                 }
             } else {
                 $(".desktop-order-container").html(res.order_view);
-                $("#order-price").html(`₦${res.total_amount}.00`);
+                $("#order-count").html(res.order_count);
                 if (type == "history") {
                     // Hide cancel button on displaying history
                     $("#order-cancel-btn").addClass('d-none');
@@ -124,6 +124,11 @@
 
         goGet(getUrl).then((res) => {
             getOrder();
+            $('.verdict-btn').remove();
+            $("#order-status").html(`<span
+                                class="badge badge-warning ml-1">
+                                Rejected
+                            </span>`);
         }).catch((err) => {
             console.log(err);
         });
@@ -140,6 +145,11 @@
 
         goGet(getUrl).then((res) => {
             getOrder();
+            $('.verdict-btn').remove();
+            $("#order-status").html(`<span
+                                class="badge badge-success ml-1">
+                                Accepted
+                            </span>`);
         }).catch((err) => {
             console.log(err);
         });
@@ -186,13 +196,72 @@
         getOrder();
     });
 
-    function toggleAccordion(e, element) {
-        $(element).parent().parent().next().collapse('toggle');
-        $('.collapse').collapse('hide');
+    function getDetail(orderId, type = "") {
+        let getUrl = (type == "") ? `${server}/vendor/get-order-detail/${orderId}` :
+            `${server}/vendor/get-order-detail/${orderId}/${type}`;
+
+        goGet(getUrl).then((res) => {
+            $("#order-detail-modal-holder").html(res.order_detail_view);
+            closeOrders();
+            $("#order-detail-modal").modal('toggle');
+
+            // if (window.matchMedia("(max-width: 767px)")
+            //     .matches) { // The viewport is less than 768 pixels wide (mobile device)
+            //     $(".mob-order-container").html(res.order_view);
+            //     $("#mob-order-price").html(`₦${res.total_amount}.00`);
+            //     if (type == "history") {
+            //         // Hide cancel button on displaying history
+            //         $("#mob-order-cancel-btn").addClass('d-none');
+
+            //         // Change display status
+            //         $("#mob-state-display").text('(History)');
+            //     } else {
+            //         // Hide cancel button on displaying history
+            //         $("#mob-order-cancel-btn").removeClass('d-none');
+
+            //         // Change display status
+            //         $("#mob-state-display").text('(Today)');
+
+            //         // Disable "Cancel all" button when there is no pending order
+            //         if (res.pending_count == 0) {
+            //             $("#mob-order-cancel-btn").attr('disabled', '');
+            //         } else {
+            //             $("#mob-order-cancel-btn").removeAttr('disabled')
+            //         }
+            //     }
+            // } else {
+            //     $(".desktop-order-container").html(res.order_view);
+            //     $("#order-price").html(`₦${res.total_amount}.00`);
+            //     if (type == "history") {
+            //         // Hide cancel button on displaying history
+            //         $("#order-cancel-btn").addClass('d-none');
+
+            //         // Change display status
+            //         $("#state-display").text('(History)');
+            //     } else {
+            //         // Hide cancel button on displaying history
+            //         $("#order-cancel-btn").removeClass('d-none');
+
+            //         // Change display status
+            //         $("#state-display").text('(Today)');
+
+            //         // Disable "Cancel all" button when there is no pending order
+            //         if (res.pending_count == 0) {
+            //             $("#order-cancel-btn").attr('disabled', '');
+            //         } else {
+            //             $("#order-cancel-btn").removeAttr('disabled')
+            //         }
+            //     }
+            // }
+        }).catch((err) => {
+            spin('user-right-side');
+        });
     }
 
-    function hideAccordion() {
-        $('.collapse-hide').collapse('hide');
+    // Show client phone number
+    function showContact(e) {
+        $(e).remove();
+        $("#contact-btn").removeClass('d-none');
     }
 
     // Delete Post

@@ -33,6 +33,8 @@
     <link href="{{ url('assets/vendor/emojionearea/emojionearea.min.css') }}" rel="stylesheet">
     <script src="{{ url('assets/vendor/emojionearea/emojionearea.min.js') }}"></script>
 
+    <!-- Rateyo (rating plugin) -->
+    <link rel="stylesheet" href="{{ url('assets/vendor/rateyo/jquery.rateyo.min.css') }}" />
 </head>
 
 <body>
@@ -60,6 +62,7 @@
                     @include('components.header')
                     @include('components.login')
                     @include('components.signup')
+                    @include('components.forgot-password')
                     @endif
 
                     <div class="container-fluid">
@@ -126,6 +129,12 @@
 
                                 </div>
                                 <!-- Menu Update Modal Holder -->
+
+                                <!-- Order Detail Modal Holder -->
+                                <div id="order-detail-modal-holder">
+
+                                </div>
+                                <!-- Order Detail Modal Holder -->
 
                                 <!-- ********************* VENDOR COMPONENTS *********************** -->
 
@@ -239,9 +248,9 @@
                     <!-- Sweetalert -->
                     <script type="text/javascript" src="{{ url('assets/vendor/sweetalert/sweetalert.min.js') }}">
                     </script>
+
                     <!-- Cropper.js -->
                     <script src="{{ url('assets/js/cropper.js') }}"></script>
-
 
                     <!-- Custom scripts for all pages-->
                     <script src="{{ url('assets/js/osahan.js') }}"></script>
@@ -257,6 +266,10 @@
                     {{-- Check for session availablity --}}
                     @if(!Auth::guard('vendor')->guest() || !Auth::guard('user')->guest())
                         @include('scripts.logged-in')
+
+                    <!-- Image Compression Script -->
+                    <script type="text/javascript"
+                        src="{{ url('assets/vendor/browser-image-compression/bic.min.js') }}"></script>
 
                     <!-- Socket.IO -->
                     <script src="{{ url('assets/js/socket.io/socket.io.min.js') }}"></script>
@@ -278,16 +291,20 @@
                     @if(!Auth::guard('vendor')->guest())
                     <!-- Vendor Scipts -->
                     @include('vendor.vendor-script')
-                    <script type="text/javascript" src="{{ url('assets/vendor/browser-image-compression/bic.min.js') }}"></script>
                     <!-- Vendor Scipts -->
                     @elseif(!Auth::guard('user')->guest())
                     <!-- USER SCRIPTS -->
+                    <link rel="stylesheet" href="{{ url('assets/vendor/rateyo/jquery.min.js') }}" />
+                    <!-- Auxiliary rater (rating plugin) -->
+                    <link rel="stylesheet" href="{{ url('assets/vendor/auxiliary-rater/rater.min.js') }}" />
+
                     @include('user.user-script')
                     <!-- USER SCRIPTS -->
                     @endif
-                    <!-- Add CSRF Token to Headers for Ajax Requests -->
+                    <!-- Additional Scripts -->
                     <script>
                         $(document).ready(function () {
+                            // Add CSRF Token to Headers for Ajax Requests
                             $.ajaxSetup({
                                 headers: {
                                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -296,7 +313,47 @@
                         });
 
                     </script>
-                    <!-- Add CSRF Token to Headers for Ajax Requests -->
+
+                    <!-- Handle alert for email activation -->
+                    @if(session()->has('verify_status'))
+                    @if(session()->get('verify_status') == true)
+                    <script>
+                        showAlert(true, "Your account is activated, you can log in now.");
+
+                    </script>
+                    @else
+                    <script>
+                        showAlert(false, "Invalid token.");
+
+                    </script>
+                    @endif
+                    @endif
+                    <!-- Handle alert for email activation -->
+
+                    <!-- Handle alert for socialite login -->
+                    @if(session()->has('soclogin_status'))
+                    @if(session()->get('soclogin_status') == true)
+                    <script>
+                        showAlert(true, "Loged in successfully.");
+
+                    </script>
+                    @else
+                    <script>
+                        showAlert(false, "This account doesn't exist.");
+
+                    </script>
+                    @endif
+                    @endif
+
+                    @if(session()->has('soclogin_error'))
+                    <script>
+                        showAlert(false, "{{session()->get('soclogin_error')}}");
+
+                    </script>
+                    @endif
+                    <!-- Handle alert for socialite login -->
+
+                    <!-- Additional Scripts -->
 </body>
 
 </html

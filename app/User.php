@@ -2,10 +2,11 @@
 
 namespace App;
 
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
-class User extends Authenticatable
+class User extends Authenticatable implements MustVerifyEmail
 {
     use Notifiable;
 
@@ -15,7 +16,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'name', 'email', 'password', 'google_id',
     ];
 
     /**
@@ -64,5 +65,10 @@ class User extends Authenticatable
     public function baskets()
     {
         return $this->hasMany('App\Basket');
+    }
+
+    public function rating()
+    {
+        return $this->hasMany(Rating::class);
     }
 }
