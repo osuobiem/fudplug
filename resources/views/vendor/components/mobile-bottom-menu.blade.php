@@ -1,4 +1,4 @@
-@if(isset(Auth::user('vendor')->area_id))
+@if(isset(Auth::guard('vendor')->user()->area_id))
     <!-- Mobile Bottom Menu -->
     <div class="mobile-bottom d-lg-none">
 

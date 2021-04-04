@@ -1,4 +1,4 @@
-@if(isset(Auth::user('user')->area_id))
+@if(isset(Auth::guard('user')->user()->area_id))
     <!-- Mobile Bottom Menu -->
     <div class="mobile-bottom d-lg-none">
         <nav class="navbar-bottom navbar-expand navbar-light bg-light osahan-nav-top h-80" id="b-m">
