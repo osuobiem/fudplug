@@ -31,7 +31,7 @@
       <div class="modal-content">
         <div id="board-mod" class="animate__animated animate__flipInX">
           <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">Tell us your location</h5>
+            <h5 class="modal-title text-light" id="exampleModalLabel">Tell us your location</h5>
             <button type="button" class="close d-none" data-dismiss="modal" aria-label="Close" id="close-board">
             </button>
           </div>
@@ -142,8 +142,7 @@
       goGet(url)
         .then(res => {
           spin('board')
-          $('#close-board').click()
-          // loadFeed();
+          location.reload()
         })
         .catch(err => {
           spin('board')

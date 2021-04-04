@@ -317,7 +317,7 @@
     // Compress image
     function compressImg(image) {
         const options = {
-            maxSizeMB: 0.5,
+            maxSizeMB: 0.2,
             maxWidthOrHeight: 1920,
             useWebWorker: true,
         };

@@ -32,9 +32,6 @@
     <!-- Emoji -->
     <link href="{{ url('assets/vendor/emojionearea/emojionearea.min.css') }}" rel="stylesheet">
     <script src="{{ url('assets/vendor/emojionearea/emojionearea.min.js') }}"></script>
-
-    <!-- Rateyo (rating plugin) -->
-    <link rel="stylesheet" href="{{ url('assets/vendor/rateyo/jquery.rateyo.min.css') }}" />
 </head>
 
 <body>
@@ -69,7 +66,7 @@
                         <div class="row main-section">
 
                             <!-- Left Sidebar -->
-                            @if(!Auth::guard('vendor')->guest())
+                            @if(!Auth::guard('vendor')->guest() && isset(Auth::guard('vendor')->area_id))
                             @include('vendor.components.left-side')
 
                             @elseif(!Auth::guard('user')->guest())
@@ -155,7 +152,7 @@
                             </main>
 
                             {{--Right Sidebar Vendor--}}
-                            @if(!Auth::guard('vendor')->guest())
+                            @if(!Auth::guard('vendor')->guest() && isset(Auth::guard('vendor')->area_id))
                             <aside
                                 class="col col-lg-3 d-none d-lg-block side-section side-section-r right-side-large text-center">
                                 <div class="justify-content-center text-center w-100 pb-2 box shadow-sm border rounded bg-white p-2"
@@ -169,7 +166,7 @@
                             </aside>
 
                             {{--Right Sidebar User--}}
-                            @elseif(!Auth::guard('user')->guest())
+                            @elseif(!Auth::guard('user')->guest() && isset(Auth::user('user')->area_id))
                             <!-- Hold User Right Sidebar For Desktop -->
                             <aside class="col col-lg-3 d-none d-lg-block side-section side-section-r text-center"
                                 id="user-right-side-large">
@@ -202,45 +199,6 @@
                         </div>
                     </div>
 
-                    {{-- Location onboading --}}
-                    <button class="d-none" id="launchOnboarding" data-toggle="modal" data-target="#boardModal"></button>
-                    @if(!Auth::guard('vendor')->guest())
-
-                    {{-- Floating Post Buttons --}}
-                    <button class="btn btn-primary floating-post-btn d-none post-modal-init animate__animated">
-                        <i class="la la-utensil-spoon la-lg"></i>
-                        Post
-                    </button>
-
-                    <button
-                        class="btn btn-primary floating-post-btn-sm d-none d-lg-none post-modal-init animate__animated">
-                        <i class="la la-utensil-spoon la-2x"></i>
-                    </button>
-
-                    {{-- Check if vendor area is set --}}
-                    @if(!Auth::user('vendor')->area)
-                    @include('components.onboarding')
-                    <script>
-                        $(document).ready(function () {
-                            $("#launchOnboarding").click();
-                        });
-
-                    </script>
-                    @endif
-
-                    @elseif(!Auth::guard('user')->guest())
-                    {{-- Check if user area is set --}}
-                    @if(!Auth::guard('user')->user()->area)
-                    @include('components.onboarding')
-                    <script>
-                        $(document).ready(function () {
-                            $("#launchOnboarding").click();
-                        });
-
-                    </script>
-                    @endif
-                    @endif
-
                     <!-- Bootstrap core JavaScript -->
                     <script src="{{ url('assets/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
                     <!-- slick Slider JS -->
@@ -256,64 +214,68 @@
                     <script src="{{ url('assets/js/osahan.js') }}"></script>
                     <script src="{{ url('assets/js/custom.js') }}"></script>
 
-                    {{-- Additional Scripts--}}
-                    @stack('scripts')
                     <!-- jQuery Steps Plugin -->
                     <script src="{{ url('assets/js/jquery-steps-master/build/jquery.steps.js') }}"></script>
                     <script src="{{ url('assets/js/uikit.min.js') }}"></script>
                     <script src="{{ url('assets/js/uikit-icons.min.js') }}"></script>
 
-                    {{-- Check for session availablity --}}
-                    @if(!Auth::guard('vendor')->guest() || !Auth::guard('user')->guest())
-                        @include('scripts.logged-in')
-
                     <!-- Image Compression Script -->
                     <script type="text/javascript"
                         src="{{ url('assets/vendor/browser-image-compression/bic.min.js') }}"></script>
 
-                    <!-- Socket.IO -->
-                    <script src="{{ url('assets/js/socket.io/socket.io.min.js') }}"></script>
-                    <script src="{{ url('assets/js/socket.client.js') }}"></script>
-                    @php $logged_in = Auth::guard('vendor')->guest() ? Auth::guard('user')->user() :
-                    Auth::user('vendor'); @endphp
-                    <script>
-                        $(document).ready(function () {
-                            initIO(`{{ env('NODE_SERVER') }}`, `{{ $logged_in->username }}`, `{{ $logged_in->area_id }}`)
-                        });
+                    {{-- Location onboading --}}
+                    <button class="d-none" id="launchOnboarding" data-toggle="modal" data-target="#boardModal"></button>
 
-                    </script>
-                    @else
-                    <script src="{{ url('assets/js/not-logged-in.js') }}"></script>
-                    @endif
-
-
-                    {{-- Execute for Different Users --}}
-                    @if(!Auth::guard('vendor')->guest())
-                    <!-- Vendor Scipts -->
-                    @include('vendor.vendor-script')
-                    <!-- Vendor Scipts -->
-                    @elseif(!Auth::guard('user')->guest())
-                    <!-- USER SCRIPTS -->
-                    <link rel="stylesheet" href="{{ url('assets/vendor/rateyo/jquery.min.js') }}" />
-                    <!-- Auxiliary rater (rating plugin) -->
-                    <link rel="stylesheet" href="{{ url('assets/vendor/auxiliary-rater/rater.min.js') }}" />
-
-                    @include('user.user-script')
-                    <!-- USER SCRIPTS -->
-                    @endif
-                    <!-- Additional Scripts -->
-                    <script>
-                        $(document).ready(function () {
-                            // Add CSRF Token to Headers for Ajax Requests
-                            $.ajaxSetup({
-                                headers: {
-                                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                                }
+                    {{-- Check if area is set --}}
+                    @if((!Auth::guard('vendor')->guest() || !Auth::guard('user')->guest()) && (!isset(Auth::user('vendor')->area_id) || !isset(Auth::user('user')->area_id)))
+                        @include('components.onboarding')
+                        <script>
+                            $(document).ready(function () {
+                                $("#launchOnboarding").click();
                             });
-                        });
+                        </script>
+                    @else
+                        {{-- Check for session availablity --}}
+                        @if(!Auth::guard('vendor')->guest() || !Auth::guard('user')->guest())
+                            @php $logged_in = Auth::guard('vendor')->guest() ? Auth::guard('user')->user() : Auth::user('vendor'); @endphp
 
-                    </script>
+                            @include('scripts.logged-in')
+                            
+                            <!-- Socket.IO -->
+                            <script src="{{ url('assets/js/socket.io/socket.io.min.js') }}"></script>
+                            <script src="{{ url('assets/js/socket.client.js') }}"></script>
 
+                            <script>
+                                $(document).ready(function () {
+                                    initIO(`{{ env('NODE_SERVER') }}`, `{{ $logged_in->username }}`, `{{ $logged_in->area_id }}`);
+
+                                    // Add CSRF Token to Headers for Ajax Requests
+                                    $.ajaxSetup({
+                                        headers: {
+                                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                                        }
+                                    });
+                                });
+                            </script>
+
+                            {{-- For vendor --}}
+                            @if(!Auth::guard('vendor')->guest())
+                                @include('vendor.vendor-script')
+
+                            {{-- For user --}}
+                            @else
+                                @include('user.user-script')
+                            @endif
+                        @else
+                            <script src="{{ url('assets/js/not-logged-in.js') }}"></script>
+                        @endif
+
+                    @endif
+                        
+                    <!-- Additional Scripts -->
+                    @stack('scripts')
+
+                    
                     <!-- Handle alert for email activation -->
                     @if(session()->has('verify_status'))
                     @if(session()->get('verify_status') == true)

@@ -1,4 +1,5 @@
-<!-- Mobile Bottom Menu -->
+@if(isset(Auth::user('user')->area_id))
+    <!-- Mobile Bottom Menu -->
     <div class="mobile-bottom d-lg-none">
         <nav class="navbar-bottom navbar-expand navbar-light bg-light osahan-nav-top h-80" id="b-m">
             <div class="container row m-0 text-center px-0">
@@ -22,3 +23,4 @@
             </div>
         </nav>
     </div>
+@endif
