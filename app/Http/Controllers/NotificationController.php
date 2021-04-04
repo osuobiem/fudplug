@@ -225,7 +225,7 @@ class NotificationController extends Controller
         
         // Send socket notification
         Http::post(env('NODE_SERVER') . '/notify', $data);
-
+        Log::info($data['content_nmu']);
         if(!empty($subscription)) {
             // Send push notification
             $response = Http::post(env('NODE_SERVER') . '/sw/send-notification', [

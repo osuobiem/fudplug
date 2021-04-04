@@ -3,9 +3,9 @@
   <div class="modal-dialog mt-1" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Sign Up</h5>
+        <h5 class="modal-title text-light" id="exampleModalLabel">Sign Up</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="close-sign">
-          <span aria-hidden="true">&times;</span>
+          <span aria-hidden="true" class="text-light">&times;</span>
         </button>
       </div>
       <div class="modal-body">
