@@ -351,7 +351,7 @@ class UserController extends Controller
         try {
             $user->save();
             $socket->save();
-            
+
             return ['success' => true, 'status' => 200, 'message' => 'Update Successful'];
         } catch (\Throwable $th) {
             Log::error($th);
@@ -528,11 +528,17 @@ class UserController extends Controller
     /**
      * Vendor Profile Page
      */
-    public function vendor_profile($vendor_id)
+    public function vendor_profile($username)
     {
         try {
+            $vendor = Vendor::where('username', $username)->first();
+
+            if (empty($vendor)) {
+                return ['status' => false, 'message' => "404 Not found"];
+            }
+
             // Decode $vendor_id
-            $vendor_id = dec($vendor_id);
+            $vendor_id = $vendor->id;
 
             // Get States Data
             $states = State::get();
@@ -556,9 +562,9 @@ class UserController extends Controller
             $social_handles = json_decode($vendor->social_handles);
 
             // Rating Data
-            $rating_data = $this->get_rating($vendor_id, Auth::guard('user')->user()->id);
+            $rating_data = Auth::guard('user')->guest() ? $this->get_rating($vendor_id, 0) : $this->get_rating($vendor_id, Auth::guard('user')->user()->id);
 
-            return view('user.vendor-profile', compact('vendor', 'vendor_location', 'states', 'areas', 'social_handles', 'vendor_menu', 'rating_data'));
+            return ['status' => true, 'data' => compact('vendor', 'vendor_location', 'states', 'areas', 'social_handles', 'vendor_menu', 'rating_data')];
         } catch (\Throwable $th) {
             Log::error($th);
         }

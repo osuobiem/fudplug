@@ -55,10 +55,12 @@
                         <a class="nav-link" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home"
                             aria-selected="false">Feed</a>
                     </li>
+                    @if(!Auth::guard('user')->guest())
                     <li class="nav-item">
                         <a class="nav-link" id="home-tab" data-toggle="tab" href="#menu-dish" role="tab"
                             aria-controls="home" aria-selected="false">Menu</a>
                     </li>
+                    @endif
                 </ul>
             </div>
         </div>

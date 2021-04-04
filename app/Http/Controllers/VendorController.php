@@ -8,6 +8,7 @@ use App\Jobs\EmailJob;
 use App\Menu;
 use App\Order;
 use App\OrderItems;
+use App\Rating;
 use App\SocketData;
 use App\State;
 use App\User;
@@ -188,9 +189,15 @@ class VendorController extends Controller
     /**
      * Profile Page
      */
-    public function profile()
+    public function profile($username)
     {
         try {
+            $vendor = Vendor::where('username', $username)->first();
+
+            if (empty($vendor) || Auth::user()->username != $username) {
+                return ['status' => false, 'message' => "404 Not found"];
+            }
+
             // Get States Data
             $states = State::get();
 
@@ -206,9 +213,13 @@ class VendorController extends Controller
             // Social Media Links
             $social_handles = json_decode(Auth::user('vendor')->social_handles);
 
-            return view('vendor.profile', compact('vendor_location', 'states', 'areas', 'social_handles'));
+            // Rating Data
+            $rating_data = $this->get_rating(Auth::guard('vendor')->user()->id, 0);
+
+            return ['status' => true, 'data' => compact('vendor_location', 'states', 'areas', 'social_handles', 'rating_data')];
         } catch (\Throwable $th) {
             Log::error($th);
+            return ['status' => false, 'message' => "500 Server error"];
         }
     }
 
@@ -1346,5 +1357,26 @@ class VendorController extends Controller
         $order = User::join('orders', 'orders.user_id', '=', 'users.id')->join('order_items', 'order_items.order_id', '=', 'orders.id')->join('items', 'items.id', '=', 'order_items.item_id')->select("orders.id as order_id", "orders.status as order_status", "orders.created_at as date_time", DB::raw("GROUP_CONCAT(items.title) as title, GROUP_CONCAT(TO_BASE64(items.quantity)) AS quantity, GROUP_CONCAT(items.image) AS image,GROUP_CONCAT(order_items.order_type) AS order_type, GROUP_CONCAT(TO_BASE64(order_items.order_detail)) AS order_detail, GROUP_CONCAT(DISTINCT users.username) AS username, GROUP_CONCAT(DISTINCT users.name) AS name, GROUP_CONCAT(DISTINCT users.phone_number) AS phone, GROUP_CONCAT(DISTINCT users.profile_image) AS profile_image"))->where([['orders.vendor_id', '=', Auth::user()->id], ['orders.id', '=', $order_id]])->groupBy('orders.id')->orderBy('orders.created_at', 'DESC')->first();
 
         return $order;
+    }
+
+    /**
+     * Get the total rating for a vendor
+     *
+     * @param integer $vendor_id
+     */
+    public function get_rating($vendor_id, $user_id)
+    {
+        $total_rating = Rating::where('vendor_id', $vendor_id)->selectRaw('SUM(rating)/COUNT(user_id) AS avg_rating')->first()->avg_rating;
+        $total_rating = number_format((float) $total_rating, 1, '.', '');
+
+        $user_rating = Rating::where([['user_id', '=', $user_id], ['vendor_id', '=', $vendor_id]]);
+
+        if ($user_rating->count() > 0) {
+            $user_rating = true;
+        } else {
+            $user_rating = false;
+        }
+
+        return compact('total_rating', 'user_rating');
     }
 }

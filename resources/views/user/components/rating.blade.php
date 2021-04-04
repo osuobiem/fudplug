@@ -3,7 +3,7 @@
         <div class="modal-content border">
             <div class="border-bottom red-bottom">
                 <h4 class="text-center my-1">
-                    Rate {{$vendor->business_name}}
+                    Rate {{$vendor->business_name ?? Auth::guard('vendor')->user()->business_name}}
                 </h4>
             </div>
             <div class="modal-body">

@@ -80,7 +80,7 @@
 						</a>
 						<!-- Dropdown - User Information -->
 						<div class="dropdown-menu dropdown-menu-right shadow">
-							<a class="dropdown-item" href="{{ url('vendor/profile') }}"><i
+							<a class="dropdown-item" href="{{ url(Auth::user()->username) }}"><i
 									class="la la-store-alt la-lg mr-1"></i>
 								Profile</a>
 							<a class="dropdown-item" href="{{ url('vendor/logout') }}"><i
