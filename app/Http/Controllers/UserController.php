@@ -616,6 +616,7 @@ class UserController extends Controller
                 $data['dish'] = $dish;
                 $data['price'] = $qty->price;
                 $data['quantity'] = $qty->quantity;
+                $data['qty_title'] = $qty->qty_title;
                 $data['basket_items'] = $simple_items;
 
                 $view = view('user.components.regular-order', $data);

@@ -125,7 +125,7 @@ class VerifyController extends Controller
     public function link_expired($user)
     {
         // Stipulated time before expiry is 15 minutes => 900 secs
-        $sti_time = 60;
+        $sti_time = 900;
 
         $last_updated = $user->updated_at;
         $last_updated = strtotime($last_updated);

@@ -398,10 +398,6 @@ class VendorController extends Controller
      */
     public function add_dish(Request $request)
     {
-        // dd($request->image);
-        // $request->image = json_decode($request->image[0]);
-        // dd($_FILES['image']);
-
         try {
             //Validate Input
             $validator = $this->dish_add_rules($request);
@@ -432,12 +428,16 @@ class VendorController extends Controller
     public function simple_put($request)
     {
         foreach ($request->title as $key => $value) {
+            // Extract quantity and quantity title from quantity input field
+            $qty_arr = explode(" ", $request->quantity[$key]);
+
             $data = [
                 'title' => $value,
-                'quantity' => json_encode(['price' => $request->price[$key], 'quantity' => $request->quantity[$key]]),
+                'quantity' => json_encode(['price' => $request->price[$key], 'quantity' => $qty_arr[0], 'qty_title' => $qty_arr[1]]),
                 'image' => $this->dish_img_upload($request, $key) ? $this->dish_img_upload($request, $key) : null,
                 'type' => "simple",
             ];
+
             $item = new Item($data);
             $vendor = Vendor::find(Auth::user('vendor')->id);
             $vendor->item()->save($item);
@@ -512,7 +512,10 @@ class VendorController extends Controller
                         $regular_arr = null;
                     } else {
                         foreach ($request->regular_title_one as $key_one => $value_one) {
-                            $regular_arr[$key_one] = ['title' => $value_one, 'price' => $request->regular_price_one[$key_one], 'quantity' => $request->regular_quantity_one[$key_one]];
+                            // Extract quantity and quantity title from quantity input field
+                            $qty_arr = explode(" ", $request->regular_quantity_one[$key_one]);
+
+                            $regular_arr[$key_one] = ['title' => $value_one, 'price' => $request->regular_price_one[$key_one], 'quantity' => $qty_arr[0], 'qty_title' => $qty_arr[1]];
                         }
                     }
                     break;
@@ -523,7 +526,10 @@ class VendorController extends Controller
                         $regular_arr = null;
                     } else {
                         foreach ($request->regular_title_two as $key_two => $value_two) {
-                            $regular_arr[$key_two] = ['title' => $value_two, 'price' => $request->regular_price_two[$key_two], 'quantity' => $request->regular_quantity_two[$key_two]];
+                            // Extract quantity and quantity title from quantity input field
+                            $qty_arr = explode(" ", $request->regular_quantity_two[$key_two]);
+
+                            $regular_arr[$key_two] = ['title' => $value_two, 'price' => $request->regular_price_two[$key_two], 'quantity' => $qty_arr[0], 'qty_title' => $qty_arr[1]];
                         }
                     }
                     break;
@@ -534,7 +540,10 @@ class VendorController extends Controller
                         $regular_arr = null;
                     } else {
                         foreach ($request->regular_title_three as $key_three => $value_three) {
-                            $regular_arr[$key_three] = ['title' => $value_three, 'price' => $request->regular_price_three[$key_three], 'quantity' => $request->regular_quantity_three[$key_three]];
+                            // Extract quantity and quantity title from quantity input field
+                            $qty_arr = explode(" ", $request->regular_quantity_three[$key_three]);
+
+                            $regular_arr[$key_three] = ['title' => $value_three, 'price' => $request->regular_price_three[$key_three], 'quantity' => $qty_arr[0], 'qty_title' => $qty_arr[1]];
                         }
                     }
                     break;
@@ -545,7 +554,10 @@ class VendorController extends Controller
                         $regular_arr = null;
                     } else {
                         foreach ($request->regular_title_four as $key_four => $value_four) {
-                            $regular_arr[$key_four] = ['title' => $value_four, 'price' => $request->regular_price_four[$key_four], 'quantity' => $request->regular_quantity_four[$key_four]];
+                            // Extract quantity and quantity title from quantity input field
+                            $qty_arr = explode(" ", $request->regular_quantity_four[$key_four]);
+
+                            $regular_arr[$key_four] = ['title' => $value_four, 'price' => $request->regular_price_four[$key_four], 'quantity' => $qty_arr[0], 'qty_title' => $qty_arr[1]];
                         }
                     }
                     break;
@@ -556,7 +568,10 @@ class VendorController extends Controller
                         $regular_arr = null;
                     } else {
                         foreach ($request->regular_title_five as $key_five => $value_five) {
-                            $regular_arr[$key_five] = ['title' => $value_five, 'price' => $request->regular_price_five[$key_five], 'quantity' => $request->regular_quantity_five[$key_five]];
+                            // Extract quantity and quantity title from quantity input field
+                            $qty_arr = explode(" ", $request->regular_quantity_five[$key_five]);
+
+                            $regular_arr[$key_five] = ['title' => $value_five, 'price' => $request->regular_price_five[$key_five], 'quantity' => $qty_arr[0], 'qty_title' => $qty_arr[1]];
                         }
                     }
                     break;
@@ -668,43 +683,47 @@ class VendorController extends Controller
             'required_without' => 'Please add items to Regular or Bulk or Both.',
             'bulk_required' => 'Sibling fields can not be left empty.',
             'required_with' => 'The :attribute field can not be empty when adjacent fields have been entered.',
+            'quantity' => 'Quantity field for regular requires a valid quantity like (50 plates or One cup).',
+            'numeric' => 'Price field requires a number.',
         ];
 
         // Make and return validation rules
         return Validator::make($request->all(), [
             'title.*' => 'required',
             'image.*' => 'mimes:jpeg,jpg|max:25000',
+            'quantity.*' => 'quantity',
+            'price.*' => 'numeric',
             'regular_title_one.*' => 'bail|required_without:bulk_title_one.*|bulk_required|required_with:regular_price_one.*,regular_quantity_one.*',
-            'regular_price_one.*' => 'bail|required_without:bulk_price_one.*|bulk_required|required_with:regular_title_one.*,regular_quantity_one.*',
-            'regular_quantity_one.*' => 'bail|required_without:bulk_quantity_one.*|bulk_required|required_with:regular_title_one.*,regular_price_one.*',
+            'regular_price_one.*' => 'bail|numeric|required_without:bulk_price_one.*|bulk_required|required_with:regular_title_one.*,regular_quantity_one.*',
+            'regular_quantity_one.*' => 'bail|quantity|required_without:bulk_quantity_one.*|bulk_required|required_with:regular_title_one.*,regular_price_one.*',
             'bulk_title_one.*' => 'bail|required_without:regular_title_one.*|bulk_required|required_with:bulk_price_one.*,bulk_quantity_one.*',
             'bulk_price_one.*' => 'bail|required_without:regular_price_one.*|bulk_required|required_with:bulk_title_one.*,bulk_quantity_one.*',
             'bulk_quantity_one.*' => 'bail|required_without:regular_quantity_one.*|bulk_required|required_with:bulk_title_one.*,bulk_price_one.*',
 
             'regular_title_two.*' => 'bail|required_without:bulk_title_two.*|bulk_required|required_with:regular_price_two.*,regular_quantity_two.*',
-            'regular_price_two.*' => 'bail|required_without:bulk_price_two.*|bulk_required|required_with:regular_title_two.*,regular_quantity_two.*',
-            'regular_quantity_two.*' => 'bail|required_without:bulk_quantity_two.*|bulk_required|required_with:regular_title_two.*,regular_price_two.*',
+            'regular_price_two.*' => 'bail|numeric|required_without:bulk_price_two.*|bulk_required|required_with:regular_title_two.*,regular_quantity_two.*',
+            'regular_quantity_two.*' => 'bail|quantity|required_without:bulk_quantity_two.*|bulk_required|required_with:regular_title_two.*,regular_price_two.*',
             'bulk_title_two.*' => 'bail|required_without:regular_title_two.*|bulk_required|required_with:bulk_price_two.*,bulk_quantity_two.*',
             'bulk_price_two.*' => 'bail|required_without:regular_price_two.*|bulk_required|required_with:bulk_title_two.*,bulk_quantity_two.*',
             'bulk_quantity_two.*' => 'bail|required_without:regular_quantity_two.*|bulk_required|required_with:bulk_title_two.*,bulk_price_two.*',
 
             'regular_title_three.*' => 'bail|required_without:bulk_title_three.*|bulk_required|required_with:regular_price_three.*,regular_quantity_three.*',
-            'regular_price_three.*' => 'bail|required_without:bulk_price_three.*|bulk_required|required_with:regular_title_three.*,regular_quantity_three.*',
-            'regular_quantity_three.*' => 'bail|required_without:bulk_quantity_three.*|bulk_required|required_with:regular_title_three.*,regular_price_three.*',
+            'regular_price_three.*' => 'bail|numeric|required_without:bulk_price_three.*|bulk_required|required_with:regular_title_three.*,regular_quantity_three.*',
+            'regular_quantity_three.*' => 'bail|quantity|required_without:bulk_quantity_three.*|bulk_required|required_with:regular_title_three.*,regular_price_three.*',
             'bulk_title_three.*' => 'bail|required_without:regular_title_three.*|bulk_required|required_with:bulk_price_three.*,bulk_quantity_three.*',
             'bulk_price_three.*' => 'bail|required_without:regular_price_three.*|bulk_required|required_with:bulk_title_three.*,bulk_quantity_three.*',
             'bulk_quantity_three.*' => 'bail|required_without:regular_quantity_three.*|bulk_required|required_with:bulk_title_three.*,bulk_price_three.*',
 
             'regular_title_four.*' => 'bail|required_without:bulk_title_four.*|bulk_required|required_with:regular_price_four.*,regular_quantity_four.*',
-            'regular_price_four.*' => 'bail|required_without:bulk_price_four.*|bulk_required|required_with:regular_title_four.*,regular_quantity_four.*',
-            'regular_quantity_four.*' => 'bail|required_without:bulk_quantity_four.*|bulk_required|required_with:regular_title_four.*,regular_price_four.*',
+            'regular_price_four.*' => 'bail|numeric|required_without:bulk_price_four.*|bulk_required|required_with:regular_title_four.*,regular_quantity_four.*',
+            'regular_quantity_four.*' => 'bail|quantity|required_without:bulk_quantity_four.*|bulk_required|required_with:regular_title_four.*,regular_price_four.*',
             'bulk_title_four.*' => 'bail|required_without:regular_title_four.*|bulk_required|required_with:bulk_price_four.*,bulk_quantity_four.*',
             'bulk_price_four.*' => 'bail|required_without:regular_price_four.*|bulk_required|required_with:bulk_title_four.*,bulk_quantity_four.*',
             'bulk_quantity_four.*' => 'bail|required_without:regular_quantity_four.*|bulk_required|required_with:bulk_title_four.*,bulk_price_four.*',
 
             'regular_title_five.*' => 'bail|required_without:bulk_title_five.*|bulk_required|required_with:regular_price_five.*,regular_quantity_five.*',
-            'regular_price_five.*' => 'bail|required_without:bulk_price_five.*|bulk_required|required_with:regular_title_five.*,regular_quantity_five.*',
-            'regular_quantity_five.*' => 'bail|required_without:bulk_quantity_five.*|bulk_required|required_with:regular_title_five.*,regular_price_five.*',
+            'regular_price_five.*' => 'bail|numeric|required_without:bulk_price_five.*|bulk_required|required_with:regular_title_five.*,regular_quantity_five.*',
+            'regular_quantity_five.*' => 'bail|quantity|required_without:bulk_quantity_five.*|bulk_required|required_with:regular_title_five.*,regular_price_five.*',
             'bulk_title_five.*' => 'bail|required_without:regular_title_five.*|bulk_required|required_with:bulk_price_five.*,bulk_quantity_five.*',
             'bulk_price_five.*' => 'bail|required_without:regular_price_five.*|bulk_required|required_with:bulk_title_five.*,bulk_quantity_five.*',
             'bulk_quantity_five.*' => 'bail|required_without:regular_quantity_five.*|bulk_required|required_with:bulk_title_five.*,bulk_price_five.*',
@@ -727,6 +746,7 @@ class VendorController extends Controller
                     $data['dish'] = $dish;
                     $data['price'] = $qty->price;
                     $data['quantity'] = $qty->quantity;
+                    $data['qty_title'] = $qty->qty_title;
                 } else {
                     $qty = $dish->quantity = json_decode($dish->quantity);
                     $data['dish'] = $dish;

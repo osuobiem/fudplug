@@ -57,7 +57,10 @@
                                                             <input name="order_detail[]" type="hidden" value=""
                                                                 disabled>
                                                         </div>
-                                                        <div class="float-right col-6 offset-2 mt-4">
+                                                        <div class="float-right col-6 offset-2" style="margin-top:13px">
+                                                            <span class="badge badge-secondary text-wrap float-right"
+                                                                style="font-size: 11px;">
+                                                                {{$quantity}} {{$qty_title}} left</span>
                                                             @if(in_array($dish->id, $basket_items))
                                                             <span class="font-weight-bold font-italic"><small>Item
                                                                     already in
@@ -78,7 +81,7 @@
                                                                     onfocus="focusin(event, this)"
                                                                     class="form-control rounded-left-0 rounded-right-0 form-control-sm qty-input"
                                                                     value="0" min="0" max="{{$quantity}}"
-                                                                    style="margin-top: 4px;" id="item-{{$dish->id}}"
+                                                                    style="margin-top: 3px;" id="item-{{$dish->id}}"
                                                                     disabled>
                                                                 <span class="input-group-btn">
                                                                     <button onclick="clicked(event, this);"
@@ -139,15 +142,20 @@
                                                         <div class="float-left col-4">
                                                             <small>{{$qty->title}}</small>
                                                             <p class="mt-0">
-                                                                <span class="float-left text-danger"
-                                                                    style="font-size: larger;">
+                                                                <span class="float-left text-danger" style="font-size: larger;width: 156%;
+                                                                    word-wrap: break-word;">
                                                                     ₦{{$qty->price}}</span>
                                                                 <!-- {{$qty->quantity}} left -->
                                                             </p>
                                                             <input name="order_detail[]" type="hidden"
                                                                 value="['regular','{{$key}}']" disabled>
                                                         </div>
-                                                        <div class="float-right col-6 offset-2 mt-4">
+                                                        <div class="float-right col-6 offset-2" style="margin-top:13px">
+                                                            <span class="badge badge-secondary text-wrap float-right"
+                                                                style="font-size: 11px;">
+                                                                {{$qty->quantity}} {{$qty->qty_title}} left</span>
+
+
                                                             @if(!empty($basket_items) &&
                                                             array_key_exists('item'.$dish->id, $basket_items))
                                                             @if(in_array($key,
@@ -172,7 +180,7 @@
                                                                     id="item-{{$dish->id}}-{{$key}}"
                                                                     class="form-control rounded-left-0 rounded-right-0 form-control-sm qty-input"
                                                                     value="0" min="0" max="{{$qty->quantity}}"
-                                                                    style="margin-top: 4px;" disabled>
+                                                                    style="margin-top: 3px;" disabled>
                                                                 <span class="input-group-btn">
                                                                     <button onclick="clicked(event, this);"
                                                                         type="button"
@@ -200,7 +208,7 @@
                                                                     id="item-{{$dish->id}}-{{$key}}"
                                                                     class="form-control rounded-left-0 rounded-right-0 form-control-sm qty-input"
                                                                     value="0" min="0" max="{{$qty->quantity}}"
-                                                                    style="margin-top: 4px;" disabled>
+                                                                    style="margin-top: 3px;" disabled>
                                                                 <span class="input-group-btn">
                                                                     <button onclick="clicked(event, this);"
                                                                         type="button"

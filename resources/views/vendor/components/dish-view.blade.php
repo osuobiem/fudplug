@@ -61,10 +61,12 @@
                                                             <small>Price</small>
                                                             <p class="mt-0">
                                                                 <span class="float-left text-danger"
-                                                                    style="font-size: larger;">
+                                                                    style="font-size: larger; width: 50%;word-wrap: break-word;">
                                                                     ₦{{$price}}</span>
-                                                                <span class="badge badge-secondary float-right">
-                                                                    {{$quantity}} left</span>
+                                                                <span
+                                                                    class="badge badge-secondary text-wrap float-right"
+                                                                    style="width: 41%; word-wrap: break-word">
+                                                                    {{$quantity}} {{$qty_title}} left</span>
                                                             </p>
                                                         </li>
                                                     </ul>
@@ -120,10 +122,14 @@
                                                             <small>{{$qty->title}}</small>
                                                             <p class="mt-0">
                                                                 <span class="float-left text-danger"
-                                                                    style="font-size: larger;">
+                                                                    style="font-size: larger; width: 50%;word-wrap: break-word;">
                                                                     ₦{{$qty->price}}</span>
-                                                                <span class="badge badge-secondary float-right">
-                                                                    {{$qty->quantity}} left</span>
+                                                                <span
+                                                                    class="badge badge-secondary text-wrap float-right"
+                                                                    style="width: 41%; word-wrap: break-word">
+                                                                    {{$qty->quantity}}
+                                                                    {{strtolower($qty->qty_title)}}
+                                                                    left</span>
                                                             </p>
                                                         </li>
                                                         @endforeach
@@ -163,9 +169,11 @@
                                                             <small>{{$qty->title}} Litres</small>
                                                             <p class="mt-0">
                                                                 <span class="float-left text-danger"
-                                                                    style="font-size: larger;">
+                                                                    style="font-size: larger; width: 50%;word-wrap: break-word;">
                                                                     ₦{{$qty->price}}</span>
-                                                                <span class="badge badge-secondary float-right">
+                                                                <span
+                                                                    class="badge badge-secondary text-wrap float-right"
+                                                                    style="width: 41%; word-wrap: break-word">
                                                                     {{$qty->quantity}} left</span>
                                                             </p>
                                                         </li>

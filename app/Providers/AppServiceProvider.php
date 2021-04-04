@@ -42,5 +42,23 @@ class AppServiceProvider extends ServiceProvider
                 }
             }
         });
+
+        // Validate item quantity
+        Validator::extend('quantity', function ($attribute, $value, $parameters, $validator) {
+            if (substr_count($value, " ") == 1) {
+                $qty_arr = explode(" ", $value);
+
+                if (is_numeric($qty_arr[0]) && ctype_alpha($qty_arr[1])) {
+                    // dd("Okay", $value);
+                    return true;
+                } else {
+                    // dd("Not Okay", $value);
+                    return false;
+                }
+            } else {
+                // dd("Not Okay", $value);
+                return false;
+            }
+        });
     }
 }
