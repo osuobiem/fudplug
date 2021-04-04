@@ -9,6 +9,7 @@ use App\Post;
 use App\SocketData;
 use App\User;
 use App\Vendor;
+use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -99,7 +100,7 @@ class PostController extends Controller
             }
 
             // Send Notification
-            Http::post(env('SOCKET_SERVER') . '/send-new-post', [
+            Http::post(env('NODE_SERVER') . '/send-new-post', [
                 "post_markup" => view('components.post.single-post', ['post' => $post])->render(),
                 "area" => $post->vendor->area_id
             ]);
@@ -178,18 +179,25 @@ class PostController extends Controller
     {
         $resp = false;
 
+        $video = Cloudinary::uploadVideo($request->file('video')->getRealPath());
+        $video_url = $video->getSecurePath();
+        $url_parts = explode('/', $video_url);
+        $url_parts[8] = $url_parts[7];
+        $url_parts[7] = $url_parts[6];
+        $url_parts[6] = 'q_45';
+
         // Upload video
-        $stored = Storage::put('/public/posts/videos/', $request['video']);
+        copy(implode('/', $url_parts), 'storage/posts/videos/'.$url_parts[8]);
         
         // Save video thumbnail
-        $name = '/public/posts/videos/thumbnails/' . explode('.', basename($stored))[0] . '.png';
+        $name = '/public/posts/videos/thumbnails/' . explode('.', $url_parts[8])[0] . '.png';
         $image_parts = explode(";base64,", $request['thumbnail']);
         $image_base64 = base64_decode($image_parts[1]);
 
         $th = Storage::put($name, $image_base64);
 
-        if ($stored && $th) {
-            $resp = basename($stored);
+        if ($video_url && $th) {
+            $resp = $url_parts[8];
         }
 
         return $resp;
@@ -306,10 +314,12 @@ class PostController extends Controller
                 $notification->photo = Storage::url($initiator_data[0] . '/profile/' . $initiator->profile_image);
 
                 // Send Notification
-                Http::post(env('SOCKET_SERVER') . '/notify', [
+                $data = [
                     "owner_socket" => SocketData::where('username', $post->vendor->username)->first()->socket_id,
-                    "content" => view('components.notification-s', ['notification' => $notification])->render()
-                ]);
+                    "content" => view('components.notification-s', ['notification' => $notification])->render(),
+                    "content_nmu" => $name . ' ' . $content_data[1] . ': "' . substr($notification->post->content, 0, 40) . '..."'
+                ];
+                (new NotificationController())->send_notification($data, $post->vendor_id, 'vendor');
 
                 // Update nviewed
                 $other_details = json_decode($post->vendor->other_details, true);
@@ -323,7 +333,7 @@ class PostController extends Controller
             }
 
             // Send Notification
-            Http::post(env('SOCKET_SERVER') . '/send-likes-count', [
+            Http::post(env('NODE_SERVER') . '/send-likes-count', [
                 "post_id" => $post->id,
                 "likes_count" => $post->likes,
                 "area" => $post->vendor->area_id
@@ -380,7 +390,7 @@ class PostController extends Controller
             $post->save();
 
             // Send Notification
-            Http::post(env('SOCKET_SERVER') . '/send-likes-count', [
+            Http::post(env('NODE_SERVER') . '/send-likes-count', [
                 "post_id" => $post->id,
                 "likes_count" => $post->likes,
                 "area" => $post->vendor->area_id
@@ -389,6 +399,69 @@ class PostController extends Controller
             return response()->json([
                 'success' => true,
                 'message' => 'Unlike Successful'
+            ]);
+        } catch (\Throwable $th) {
+            Log::error($th);
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Internal Server Error'
+            ], 500);
+        }
+    }
+
+    /**
+     * Delete Post
+     * @param int $post_id Post ID
+     * @return json
+     */
+    public function delete(Request $request, $post_id) {
+        // Check Login
+        if (Auth::guard('vendor')->guest()) {
+            return response()->json([
+                "success" => false,
+                "message" => "You're not logged in"
+            ]);
+        }
+
+        $post = Post::findOrFail($post_id);
+
+        $vendor = $request->user();
+
+        // Check post owner
+        if($post->vendor_id != $vendor->id) {
+            return response()->json([
+                "success" => false,
+                "message" => "You cannot delete this post"
+            ]);
+        }
+
+        // Get post media
+        $media = $post->media;
+
+        if(!empty($media)) {
+            foreach($media as $m) {
+                if($m->type == 'image') {
+                    Storage::delete('/public/posts/photos/' . $m->name);
+                }
+                else {
+                    Storage::delete('/public/posts/videos/' . $m->name);
+                    Storage::delete('/public/posts/videos/thumbnails/' . explode('.', $m->name)[0].'.png');
+                }
+            }
+        }
+
+        try {
+            $post->forceDelete();
+
+            // Send Notification
+            Http::post(env('NODE_SERVER') . '/delete-post', [
+                "post_id" => $post->id
+            ]);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Post Deleted'
             ]);
         } catch (\Throwable $th) {
             Log::error($th);

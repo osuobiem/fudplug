@@ -27,7 +27,7 @@ class CreateUsersTable extends Migration
             $table->integer('email_verified')->default(0);
             $table->string('email_verification_token');
             $table->timestamp('password_token_time')->nullable();
-            $table->string('password_reset_token');
+            $table->string('password_reset_token')->nullable();
             $table->string('password');
             $table->string('google_id')->nullable();
             $table->json('other_details')->nullable();

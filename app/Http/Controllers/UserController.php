@@ -11,6 +11,7 @@ use App\Order;
 use App\OrderItems;
 use App\Rating;
 use App\Rules\MatchOldPassword;
+use App\SocketData;
 use App\State;
 use App\User;
 use App\Vendor;
@@ -333,6 +334,8 @@ class UserController extends Controller
         // New User object
         $user = User::find(Auth::guard('user')->user()->id);
 
+        $username = $user->username;
+
         // Assign user object properties
         $user->name = $request->name;
         $user->username = $request->username;
@@ -341,9 +344,14 @@ class UserController extends Controller
         $user->area_id = $request->area;
         $user->address = $request->address;
 
+        $socket = SocketData::where('username', $username)->first();
+        $socket->username = $user->username;
+
         // Try user save or catch error if any
         try {
             $user->save();
+            $socket->save();
+            
             return ['success' => true, 'status' => 200, 'message' => 'Update Successful'];
         } catch (\Throwable $th) {
             Log::error($th);

@@ -38,8 +38,11 @@
 </head>
 
 <body>
-    {{-- Format Time/Date --}}
     @php
+    // Node Server
+    $node_server = env('NODE_SERVER');
+
+    // Format Time/Date
     function format_time($time) {
     $time = strtotime($time);
     $t_diff = time() - $time;
@@ -262,7 +265,7 @@
 
                     {{-- Check for session availablity --}}
                     @if(!Auth::guard('vendor')->guest() || !Auth::guard('user')->guest())
-                    <script src="{{ url('assets/js/logged-in.js') }}" server="{{ url('') }}"></script>
+                        @include('scripts.logged-in')
 
                     <!-- Image Compression Script -->
                     <script type="text/javascript"
@@ -275,8 +278,7 @@
                     Auth::user('vendor'); @endphp
                     <script>
                         $(document).ready(function () {
-                            // initIO(`{{ env('SOCKET_SERVER') }}`, `{{ $logged_in->username }}`,
-                            //     `{{ $logged_in->area_id }}`)
+                            initIO(`{{ env('NODE_SERVER') }}`, `{{ $logged_in->username }}`, `{{ $logged_in->area_id }}`)
                         });
 
                     </script>

@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Notification;
+use App\PushSubscription;
 use App\User;
 use App\Vendor;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
@@ -56,7 +58,7 @@ class NotificationController extends Controller
                 $initiator = Vendor::find($initiator_data[1]);
                 $name = $initiator->business_name;
             }
-
+            
             $notification->content = '<strong>' . $name . '</strong> ' . $content_data[1] . ': "' . substr($notification->post->content, 0, 40) . '..."';
             $notification->photo = Storage::url($initiator_data[0] . '/profile/' . $initiator->profile_image);
         }
@@ -175,6 +177,64 @@ class NotificationController extends Controller
                 'success' => false,
                 'message' => 'Internal Server Error'
             ], 500);
+        }
+    }
+
+    /**
+     * Register web push subscription
+     * @return null
+     */
+    public function register_wps(Request $request) {
+        if (!Auth::guard('vendor')->guest()) {
+            $subscriber = $request->user();
+            $type = 'vendor';
+        } elseif (!Auth::guard('user')->guest()) {
+            $subscriber = $request->user('user');
+            $type = 'user';
+        }
+
+        if(empty($request->subscription)) {
+            Log::error("Web Push Subscription not found!");
+        }
+
+        $existing_push = PushSubscription::where('subscriber_id', $subscriber->id)->where('subscriber_type', $type)->first();
+        !empty($existing_push) ? $existing_push->delete() : null;
+
+        $push = new PushSubscription();
+        $push->subscriber_id = $subscriber->id;
+        $push->subscriber_type = $type;
+        $push->subscription = serialize($request->subscription);
+        
+        // Try Save
+        try {
+            $push->save();
+        } catch (\Throwable $th) {
+            Log::error($th);
+        }
+    }
+
+    /**
+     * Send Notification
+     * @param array $data Notification data 
+     * @param int $subscriber_id Subscriber id
+     * @param string $subscriber_type Subscriber type (user or vendor)
+     * @param string $payload Notification payload
+     */
+    public function send_notification($data, $subscriber_id, $subscriber_type) {
+        $subscription = PushSubscription::where('subscriber_id', $subscriber_id)->where('subscriber_type', $subscriber_type)->first();
+        
+        // Send socket notification
+        Http::post(env('NODE_SERVER') . '/notify', $data);
+
+        if(!empty($subscription)) {
+            // Send push notification
+            $response = Http::post(env('NODE_SERVER') . '/sw/send-notification', [
+                'subscription'  => unserialize($subscription->subscription),
+                'payload'       => $data['content_nmu'],
+                'ttl'           => 86400,
+                'icon'          => url('assets/img/fav.png')
+            ]);
+            $response->throw();
         }
     }
 }

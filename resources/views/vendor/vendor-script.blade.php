@@ -1,5 +1,5 @@
 <script>
-    // Grab server url from script tag
+    // Grab server url
     server = "{{ url('') }}";
 
     // CSRF token
@@ -264,4 +264,19 @@
         $("#contact-btn").removeClass('d-none');
     }
 
+    // Delete Post
+    function deletePost(post_id) {
+        url = `${server}/post/delete/${post_id}`;
+        goGet(url)
+            .then((res) => {
+                if (res.success) {
+                    showAlert(true, res.message);
+                } else {
+                    showAlert(false, res.message);
+                }
+            })
+            .catch((err) => {
+                showAlert(false, "Oops! Something's not right. Try Again");
+            });
+    }
 </script>

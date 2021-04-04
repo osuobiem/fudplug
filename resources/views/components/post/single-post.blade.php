@@ -33,7 +33,7 @@ if(!Auth::guard('vendor')->guest()) {
 @endphp
 
 <!-- Post -->
-<div class="box shadow-sm border rounded bg-white mb-3 osahan-post">
+<div class="box shadow-sm border rounded bg-white mb-3 osahan-post" id="post__{{ $post->id }}">
   <div class="p-3 d-flex align-items-center border-bottom osahan-post-header">
     <div class="dropdown-list-image mr-3 post-profile">
       <img class="rounded-circle" src="{{ Storage::url('vendor/profile/'.$post->vendor->profile_image) }}" alt="">
@@ -49,11 +49,7 @@ if(!Auth::guard('vendor')->guest()) {
       <i class="la la-ellipsis-v la-2x icon-hover bright-ic ml-2 p-0" data-toggle="dropdown">
         <div class="dropdown-menu dropdown-menu-right shadow">
           @if($id == $post->vendor_id)
-            <a class="dropdown-item">
-              <i class="la la-pencil la-lg mr-1"></i>
-              <span style="font-family: 'Ubuntu', sans-serif;">Edit Post</span>
-            </a>
-            <a class="dropdown-item">
+            <a class="dropdown-item" onclick="deletePost(`{{ $post->id }}`)">
               <i class="la la-trash la-lg mr-1"></i>
               <span style="font-family: 'Ubuntu', sans-serif;">Delete Post</span>
             </a>

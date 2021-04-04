@@ -176,6 +176,9 @@ Route::group(['prefix' => 'post'], function () {
     Route::group(['middleware' => ['auth']], function () {
         // Create Post
         Route::post('create', 'PostController@create');
+
+        // Delete Post
+        Route::get('delete/{post_id}', 'PostController@delete');
     });
 });
 // -------------
@@ -210,5 +213,8 @@ Route::group(['prefix' => 'notification'], function () {
 
     // Clear nviewed
     Route::get('clear-nviewed', 'NotificationController@clear_nviewed');
+
+    // Register Web Push Subscription
+    Route::post('register-wps', 'NotificationController@register_wps');
 });
 // -------------

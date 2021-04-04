@@ -1,5 +1,5 @@
 // Initialize Socket Client
-function initIO(server, username, area) {
+function initIO(server, username, area = '') {
     const socket = io(server);
 
     // Listen for connection event
@@ -95,6 +95,13 @@ function initIO(server, username, area) {
 
             notiSound.play()
             $('#m-a-a-r').removeClass('d-none')
+
+            sendPush(data.content_nmu)
         }
+    })
+
+    // Listen for post deletion
+    socket.on("delete-post", (data) => {
+        popPost(data.postId)
     })
 }
