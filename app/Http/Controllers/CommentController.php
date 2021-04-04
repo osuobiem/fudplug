@@ -123,14 +123,14 @@ class CommentController extends Controller
                     $name = $initiator->business_name;
                 }
 
-                $notification->content = '<strong>' . $name . '</strong> ' . $content_data[1] . ': "' . substr($notification->post->content, 0, 40) . '..."';
+                $notification->content = '<strong>' . $name . '</strong> ' . $content_data[1] . ': "' . $notification->post->content;
                 $notification->photo = Storage::url($initiator_data[0] . '/profile/' . $initiator->profile_image);
 
                 // Send Notification
                 $data = [
                     "owner_socket" => SocketData::where('username', $post->vendor->username)->first()->socket_id,
                     "content" => view('components.notification-s', ['notification' => $notification])->render(),
-                    "content_nmu" => $name . ' ' . $content_data[1] . ': "' . substr($notification->post->content, 0, 40) . '..."'
+                    "content_nmu" => $name . ' ' . $content_data[1] . ': "' . $notification->post->content
                 ];
                 (new NotificationController())->send_notification($data, $post->vendor_id, 'vendor');
 
@@ -176,7 +176,7 @@ class CommentController extends Controller
 
     /**
      * Create Comment validation Rules
-     * @return array
+     * @return object
      */
     public function comment_rules(Request $request)
     {
