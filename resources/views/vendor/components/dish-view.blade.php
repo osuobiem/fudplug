@@ -263,8 +263,8 @@
                                         value="{{$price}}" required />
                                 </div>
                                 <div class="col-sm-6 col-xs-6 mb-2">
-                                    <input class="form-control" name="quantity" type="number" placeholder="Quantity"
-                                        value="{{$quantity}}" required />
+                                    <input class="form-control" name="quantity" type="text" placeholder="Quantity"
+                                        value="{{$quantity}} {{$qty_title}}" required />
                                 </div>
 
                                 <div class="input-group-btn col-sm-12 my-2">
@@ -300,20 +300,34 @@
                                     </div>
                                 </div>
 
-                                <div class="col-sm-6 border text-center pt-3 pb-3">
-                                    <label class="text-center"> Regular Quantity </label>
+                                <div class="col-sm-6 border pt-2 pb-3">
+                                    <div class="text-center mb-3 border-bottom">
+                                        <label> Regular Quantity </label>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-4">
+                                            <span> Title </span>
+                                        </div>
+                                        <div class="col-4">
+                                            <span> Price </span>
+                                        </div>
+                                        <div class="col-4">
+                                            <span> Quantity </span>
+                                        </div>
+                                    </div>
                                     <div>
                                         @if(!empty($regular_qty))
                                         @foreach($regular_qty as $qty)
                                         <div class="mb-2 form-inline">
                                             <input class="form-control rounded-right-0 col-sm-4 one"
                                                 name="regular_title[]" type="text" value="{{$qty->title}}"
-                                                placeholder="Title" required />
+                                                placeholder="Max-pack" required />
                                             <input class="form-control col-sm-4 rounded-0 one" name="regular_price[]"
-                                                type="number" value="{{$qty->price}}" placeholder="Price" required />
+                                                type="number" value="{{$qty->price}}" placeholder="1000" required />
                                             <input class="form-control rounded-left-0 col-sm-4 one"
-                                                name="regular_quantity[]" type="number" value="{{$qty->quantity}}"
-                                                placeholder="Quantity Available" required />
+                                                name="regular_quantity[]" type="text"
+                                                value="{{$qty->quantity}} {{$qty->qty_title}}" placeholder="20 Plates"
+                                                required />
                                         </div>
                                         @endforeach
                                         @else
@@ -324,22 +338,35 @@
                                         @endif
                                     </div>
                                 </div>
-                                <div class="col-sm-6 border text-center pt-3 pb-3">
-                                    <label class="text-center"> Bulk Quantity </label>
+                                <div class="col-sm-6 border pt-2 pb-3">
+                                    <div class="text-center mb-3 border-bottom">
+                                        <label> Bulk Quantity </label>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-4">
+                                            <span> Litres </span>
+                                        </div>
+                                        <div class="col-4">
+                                            <span> Price </span>
+                                        </div>
+                                        <div class="col-4">
+                                            <span> Quantity </span>
+                                        </div>
+                                    </div>
                                     <div>
 
                                         @if(!empty($bulk_qty))
                                         @foreach($bulk_qty as $qty)
                                         <div class="bulk-entry-1 mb-2 form-inline">
                                             <input class="form-control col-sm-4 rounded-right-0" name="bulk_title[]"
-                                                value="{{$qty->title}}" step="0.01" type="number" placeholder="Litres"
+                                                value="{{$qty->title}}" step="0.01" type="number" placeholder="2.5"
                                                 required />
                                             <input class="form-control col-sm-4 rounded-left-0 rounded-right-0"
                                                 name="bulk_price[]" type="number" value="{{$qty->price}}"
-                                                placeholder="Price" required />
+                                                placeholder="1000" required />
                                             <input class="form-control col-sm-4 rounded-left-0 init"
                                                 name="bulk_quantity[]" value="{{$qty->quantity}}" type="number"
-                                                placeholder="Quantity Available" required />
+                                                placeholder="10" required />
                                             <!-- <input class="form-control col-sm-4" name="fields[]" type="text"
                                             placeholder="Quantity Available" /> -->
                                         </div>
@@ -420,13 +447,15 @@
         /***************   Compress image **********/
         let image = data.get('image');
 
-        // Delete old image from form data
-        data.delete('image');
+        if (image.size != 0 && image.name != "") {
+            // Delete old image from form data
+            data.delete('image');
 
-        // Add new (compressed) set of images to form data
-        compressedimage = await compressImg(image);
+            // Add new (compressed) set of images to form data
+            compressedimage = await compressImg(image);
 
-        data.append('image', blobToFile(compressedimage, image.name), image.name);
+            data.append('image', blobToFile(compressedimage, image.name), image.name);
+        }
         /***************   Compress images **********/
 
         goPost(url, data)

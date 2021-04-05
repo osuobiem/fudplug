@@ -1649,7 +1649,7 @@
 
     $('.nav-tab a:last').click(function () {
         $("#form-type").val("advanced")
-        $("#advanced").children('div').eq(0).find('.one').removeAttr('disabled', '');
+        $("#advanced").children('div').find('.one').removeAttr('disabled', '');
         //$("#advanced").children('div').eq(0).find('.input-group-btn').removeClass('d-none');
         $("#advanced").children().not(':eq(0)').addClass('d-none').find('input').val("")
         $("#simple").find('input').attr('disabled', '');
@@ -1692,15 +1692,18 @@
         /***************   Compress images **********/
         let images = data.getAll('image[]');
 
-        // Delete old images from form data
-        data.delete('image[]');
+        if (images[0]['size'] != 0 && images[0]['name'] != "") {
+            // Delete old images from form data
+            data.delete('image[]');
 
-        // Add new (compressed) set of images to form data
-        for (let image of images) {
-            compressedimage = await compressImg(image);
+            // Add new (compressed) set of images to form data
+            for (let image of images) {
+                compressedimage = await compressImg(image);
 
-            data.append('image[]', blobToFile(compressedimage, image.name), image.name);
+                data.append('image[]', blobToFile(compressedimage, image.name), image.name);
+            }
         }
+
         /***************   Compress images **********/
 
         goPost(url, data)
