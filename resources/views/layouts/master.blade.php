@@ -127,6 +127,12 @@
                                 </div>
                                 <!-- Menu Update Modal Holder -->
 
+                                <!-- Order Detail Modal Holder -->
+                                <div id="order-detail-modal-holder">
+
+                                </div>
+                                <!-- Order Detail Modal Holder -->
+
                                 <!-- ********************* VENDOR COMPONENTS *********************** -->
 
 

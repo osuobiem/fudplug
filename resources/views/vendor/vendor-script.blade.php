@@ -22,7 +22,9 @@
         getOrder(type = "");
 
         // Show rating on page load
+        @if(isset($rating_data))
         handleRating("", rating, 'stars');
+        @endif
     });
 
     // Load Right Side (Vendor Dish & Menu)
