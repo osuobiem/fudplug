@@ -12,6 +12,7 @@
         getNotifications();
 
         pushPermission();
+        updateSW();
     });
 
     // Like/Unlike a post
@@ -348,17 +349,42 @@
     }
 
     // Send push notification
-    function sendPush(body) {
-        new Notification("Fudplug", { body,  icon: `{{ url('assets/img/fav.png') }}`});
+    // function sendPush(data) {
+    //     new Notification("Fudplug", { 
+    //         body: data.content,
+    //         icon: data.icon,
+    //         vibrate: [100, 50, 100],
+    //         data: {
+    //             url: data.url,
+    //         }
+    //     });
+    // }
+
+    // Update SW
+    function updateSW() {
+        if( Notification.permission == 'granted') {
+            next_update = localStorage.getItem('sw_nu');
+            
+            if(!next_update) {
+                initializeSW(true)
+            }
+            else {
+                if(next_update <= `{{ time() }}`) {
+                    initializeSW(true)
+                }
+            }
+        }
     }
 
     // Initialize Service Worker
-    function initializeSW() {
+    function initializeSW(update = false) {
         navigator.serviceWorker.register("{{ url('assets/js/sw.js') }}")
         .then((reg) => {
                 return reg.pushManager.getSubscription().then(async (subscription) => {
                     if (subscription) {
-                        return subscription;
+                        if(!update) {
+                            return subscription;
+                        }
                     }
 
                     // Get the server's public key
@@ -383,6 +409,8 @@
                         subscription: subscription
                     }),
                 });
+
+                localStorage.setItem('sw_nu', `{{ time() + 259200 }}`);
             })
     }
 
