@@ -45,7 +45,12 @@ class AppServiceProvider extends ServiceProvider
 
         // Validate item quantity
         Validator::extend('quantity', function ($attribute, $value, $parameters, $validator) {
+            if (empty($value)) {
+                return true;
+            }
+
             if (substr_count($value, " ") == 1) {
+
                 $qty_arr = explode(" ", $value);
 
                 if (is_numeric($qty_arr[0]) && ctype_alpha($qty_arr[1])) {
@@ -60,5 +65,19 @@ class AppServiceProvider extends ServiceProvider
                 return false;
             }
         });
+
+        // Validate item price
+        Validator::extend('plug_numeric', function ($attribute, $value, $parameters, $validator) {
+            if (empty($value)) {
+                return true;
+            }
+
+            if (is_numeric($value)) {
+                return true;
+            } else {
+                return false;
+            }
+        });
     }
+
 }

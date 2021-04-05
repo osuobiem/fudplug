@@ -45,14 +45,14 @@
                                 </div>
                             </div>
                             <div class="p-3 job-item-footer">
-                                <a class="font-weight-bold d-block"
-                                    href="{{url('user/vendor-profile/'.enc($vendor->vendor_id))}}">
+                                <a class="font-weight-bold d-block" href="{{ url($vendor->username) }}">
                                     View
                                 </a>
                             </div>
                         </div>
                     </div>
-                    @php $i++; @endphp
+                    @php $i++;
+                    @endphp
                     @endforeach
                 </div>
                 <a class="carousel-control-prev" href="#featured-properties" role="button" data-slide="prev">

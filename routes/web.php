@@ -57,7 +57,7 @@ Route::post('update-password', 'ForgotPasswordController@update_password')->name
 Route::get('auth/google', 'Socialite\GoogleController@redirect_to_google');
 Route::get('auth/google/callback', 'Socialite\GoogleController@handle_google_callback');
 
-// Socialite Auth Routes(GOOGLE)
+// Socialite Auth Routes(FACEBOOK)
 Route::get('auth/facebook', 'Socialite\FacebookController@redirect_to_facebook');
 Route::get('auth/facebook/callback', 'Socialite\FacebookController@handle_facebook_callback');
 
@@ -73,8 +73,6 @@ Route::group(['prefix' => 'vendor'], function () {
     Route::group(['middleware' => ['auth']], function () {
         // Vendor Logout
         Route::get('logout', 'VendorController@logout');
-        // Vendor Profile
-        Route::get('profile', 'VendorController@profile');
         // Update Vendor Profile
         Route::post('profile_update', 'VendorController@update');
         // Change Profile Image
@@ -218,3 +216,6 @@ Route::group(['prefix' => 'notification'], function () {
     Route::post('register-wps', 'NotificationController@register_wps');
 });
 // -------------
+
+// Vendor Profile
+Route::get('{username}', 'ViewController@profile');

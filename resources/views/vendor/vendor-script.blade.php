@@ -5,6 +5,11 @@
     // CSRF token
     token = "{{ csrf_token()}}";
 
+    // Rating state variable
+    @if(isset($rating_data))
+    let rating = "{{round($rating_data['total_rating']) }}";
+    @endif
+
 
     $(document).ready(function () {
         // Variable to Hold Right Side Bar Active Tab
@@ -15,6 +20,11 @@
 
         // Load left side with vendor's orders
         getOrder(type = "");
+
+        // Show rating on page load
+        @if(isset($rating_data))
+        handleRating("", rating, 'stars');
+        @endif
     });
 
     // Load Right Side (Vendor Dish & Menu)
@@ -278,5 +288,30 @@
             .catch((err) => {
                 showAlert(false, "Oops! Something's not right. Try Again");
             });
+    }
+
+    // Handle displaying of vendor rating
+    function handleRating(e, dataValue = "", starId = "") {
+        let targetEl = e != "" ? $(e.target).parent() : null;
+        let onStar = dataValue == "" ? parseInt(targetEl.data('value'), 10) : parseInt(dataValue,
+            10); // The star currently selected
+
+        let stars = starId == "" ? targetEl.parent().children('li.star') : $("#" + starId).children('li.star');
+
+        // Update star colour for stars outside rating modal
+        for (i = 0; i < stars.length; i++) {
+            $(stars[i]).removeClass('selected');
+        }
+
+        for (i = 0; i < onStar; i++) {
+            $(stars[i]).addClass('selected');
+        }
+    }
+
+    function blobToFile(theBlob, fileName) {
+        //A Blob() is almost a File() - it's just missing the two properties below which we will add
+        theBlob.lastModifiedDate = new Date();
+        theBlob.name = fileName;
+        return theBlob;
     }
 </script>
