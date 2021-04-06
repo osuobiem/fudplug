@@ -8,7 +8,7 @@ use App\Item;
 use App\Jobs\EmailJob;
 use App\Menu;
 use App\Order;
-use App\OrderItems;
+use App\OrderItem;
 use App\Rating;
 use App\Rules\MatchOldPassword;
 use App\SocketData;
@@ -1235,7 +1235,7 @@ class UserController extends Controller
 
                 // Update order-item quantity
                 $user_id = Auth::guard('user')->user()->id;
-                OrderItems::query()
+                OrderItem::query()
                     ->where([['user_id', '=', $user_id], ['order_id', '=', $order_id]])
                     ->each(function ($record) {
                         // Update item quantity
@@ -1251,7 +1251,7 @@ class UserController extends Controller
                 // Update order-item quantity
                 foreach ($orders->get() as $order) {
                     // Update order-item quantity
-                    OrderItems::query()
+                    OrderItem::query()
                         ->where([['user_id', '=', $user_id], ['order_id', '=', $order->id]])
                         ->each(function ($record) {
                             // Update item quantity

@@ -7,7 +7,7 @@ use App\Item;
 use App\Jobs\EmailJob;
 use App\Menu;
 use App\Order;
-use App\OrderItems;
+use App\OrderItem;
 use App\Rating;
 use App\SocketData;
 use App\State;
@@ -1194,7 +1194,7 @@ class VendorController extends Controller
 
                 // Update order-item quantity
                 $vendor_id = Auth::user()->id;
-                OrderItems::query()
+                OrderItem::query()
                     ->where([['vendor_id', '=', $vendor_id], ['order_id', '=', $order_id]])
                     ->each(function ($record) {
                         // Update item quantity
@@ -1210,7 +1210,7 @@ class VendorController extends Controller
                 // Update order-item quantity
                 foreach ($orders->get() as $order) {
                     // Update order-item quantity
-                    OrderItems::query()
+                    OrderItem::query()
                         ->where([['vendor_id', '=', $vendor_id], ['order_id', '=', $order->id]])
                         ->each(function ($record) {
                             // Update item quantity
