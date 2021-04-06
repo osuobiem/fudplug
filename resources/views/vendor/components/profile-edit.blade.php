@@ -1,5 +1,5 @@
 <div class="modal fade" id="profile-edit-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-    aria-hidden="true">
+    aria-hidden="true" style="z-index: 2010;">
     <div class="modal-dialog mt-1 modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -66,7 +66,7 @@
                     </div>
                     <div class="row">
                         <!-- Input -->
-                        <div class="col-sm-6 mb-2">
+                        <div class="col-6 mb-2">
                             <div class="js-form-message">
                                 <label id="usernameLabel" class="form-label">
                                     Username
@@ -84,7 +84,7 @@
                         </div>
                         <!-- End Input -->
                         <!-- Input -->
-                        <div class="col-sm-6 mb-2">
+                        <div class="col-6 mb-2">
                             <div class="js-form-message">
                                 <label id="phoneNumberLabel" class="form-label">
                                     Phone number
@@ -105,7 +105,7 @@
                     </div>
                     <div class="row">
                         <!-- Input -->
-                        <div class="col-sm-6 mb-2">
+                        <div class="col-6 mb-2">
                             <div class="js-form-message">
                                 <label id="locationLabel" class="form-label">
                                     State
@@ -126,7 +126,7 @@
                         </div>
                         <!-- End Input -->
                         <!-- Input -->
-                        <div class="col-sm-6 mb-2">
+                        <div class="col-6 mb-2">
                             <div class="js-form-message">
                                 <label id="locationLabel" class="form-label">
                                     Area

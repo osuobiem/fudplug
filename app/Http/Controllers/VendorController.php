@@ -706,7 +706,7 @@ class VendorController extends Controller
         $message = [
             'required' => 'Dish/Item name is required.',
             'alpha_dash' => 'Title fields only allow alphabets, hyphens and underscores.',
-            'mimes' => 'Images must be of type jpg or jpeg.',
+            'mimes' => 'Images must be of type jpg or jpeg or png.',
             'numeric' => 'Quantity and price fields must be numeric characters.',
             'max' => 'The :attribute may not be greater than 25mb.',
             'required_without' => 'Please add items to Regular or Bulk or Both.',
@@ -719,7 +719,7 @@ class VendorController extends Controller
         // Make and return validation rules
         return Validator::make($request->all(), [
             'title.*' => 'required',
-            'image.*' => 'mimes:jpeg,jpg|max:25000',
+            'image.*' => 'mimes:jpeg,jpg,png|max:25000',
             'quantity.*' => 'quantity',
             'price.*' => 'numeric',
             'regular_title_one.*' => 'bail|required_without:bulk_title_one.*|bulk_required|required_with:regular_price_one.*,regular_quantity_one.*',
@@ -882,7 +882,7 @@ class VendorController extends Controller
         $message = [
             'required' => 'All fields are required.',
             'alpha_dash' => 'Title fields only allow alphabets, hyphens and underscores.',
-            'mimes' => 'Images must be of type jpg or jpeg.',
+            'mimes' => 'Images must be of type jpg or jpeg or png.',
             'numeric' => 'Quantity and price fields must be numeric characters.',
             'max' => 'The :attribute may not be greater than 25mb.',
             'quantity' => 'Quantity field for regular requires a valid quantity like (50 plates or One cup).',
@@ -892,7 +892,7 @@ class VendorController extends Controller
         if ($request->form_type == "simple") {
             return Validator::make($request->all(), [
                 'title' => 'required',
-                'image' => 'image|mimes:jpeg,jpg|max:25000',
+                'image' => 'image|mimes:jpeg,jpg,png|max:25000',
                 'price' => 'required|numeric',
                 'quantity' => 'required|quantity',
             ], $message);

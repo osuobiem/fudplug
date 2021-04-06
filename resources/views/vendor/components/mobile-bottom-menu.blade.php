@@ -26,7 +26,7 @@
                 </div>
                 <div class="col-3">
                     <i class="la la-user la-2x p-2 mbm-item {{ Request::is('vendor/profile') ? 'mbm-active' : '' }}"
-                        onclick="gotoP(`{{ url('vendor/profile') }}`)"></i>
+                        onclick="gotoP(`{{ url(Auth::user()->username) }}`)"></i>
                 </div>
             </div>
         </nav>
