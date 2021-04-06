@@ -105,7 +105,12 @@
                 if (res.message == "unverified") {
                     location.replace("{{route('verify-email')}}");
                 } else {
-                    handleFormRes(res, 'login-error', 'l') ? location.reload() : null
+                    if(handleFormRes(res, 'login-error', 'l')){
+                       location.reload()
+                    }
+                    else {
+                        spin('login')
+                    }
                 }
             })
             .catch(err => {

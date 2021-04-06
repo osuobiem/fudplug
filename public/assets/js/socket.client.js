@@ -96,12 +96,12 @@ function initIO(server, username, area = '') {
             notiSound.play()
             $('#m-a-a-r').removeClass('d-none')
 
-            let pushData = {
-                content: data.content_nmu,
-                url: data.url,
-                icon: data.icon
-            };
-            sendPush(pushData)
+            // let pushData = {
+            //     content: data.content_nmu,
+            //     url: data.url,
+            //     icon: data.icon
+            // };
+            // sendPush(pushData)
         }
     })
 

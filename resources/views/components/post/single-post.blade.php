@@ -36,11 +36,13 @@ if(!Auth::guard('vendor')->guest()) {
 <div class="box shadow-sm border rounded bg-white mb-3 osahan-post" id="post__{{ $post->id }}">
   <div class="p-3 d-flex align-items-center border-bottom osahan-post-header">
     <div class="dropdown-list-image mr-3 post-profile">
-      <img class="rounded-circle" src="{{ Storage::url('vendor/profile/'.$post->vendor->profile_image) }}" alt="">
+      <a href="{{ url($post->vendor->username) }}">
+        <img class="rounded-circle" src="{{ Storage::url('vendor/profile/'.$post->vendor->profile_image) }}" alt="">
+      </a>
     </div>
     <div class="font-weight-bold">
-      <div class="text-truncate post-profile">{{ $post->vendor->business_name }}</div>
-      <div class="small post-profile">{{ '@'.$post->vendor->username }}</div>
+      <div class="text-truncate post-profile"><a class="text-dark" href="{{ url($post->vendor->username) }}">{{ $post->vendor->business_name }}</a></div>
+      <div><a class="small post-profile" href="{{ url($post->vendor->username) }}">{{ '@'.$post->vendor->username }}</a></div>
     </div>
     <span class="ml-auto small">{{ format_time($post->created_at) }}</span>
 
@@ -48,13 +50,15 @@ if(!Auth::guard('vendor')->guest()) {
     @if(!Auth::guard('vendor')->guest() || !Auth::guard('user')->guest())
       <i class="la la-ellipsis-v la-2x icon-hover bright-ic ml-2 p-0" data-toggle="dropdown">
         <div class="dropdown-menu dropdown-menu-right shadow">
-          @if($id == $post->vendor_id)
-            <a class="dropdown-item" onclick="deletePost(`{{ $post->id }}`)">
-              <i class="la la-trash la-lg mr-1"></i>
-              <span style="font-family: 'Ubuntu', sans-serif;">Delete Post</span>
-            </a>
+          @if(!Auth::guard('vendor')->guest())
+            @if($id == $post->vendor_id)
+              <a class="dropdown-item" onclick="deletePost(`{{ $post->id }}`)">
+                <i class="la la-trash la-lg mr-1"></i>
+                <span style="font-family: 'Ubuntu', sans-serif;">Delete Post</span>
+              </a>
+            @endif
           @else
-          <a class="dropdown-item">
+            <a class="dropdown-item">
               <i class="la la-flag la-lg mr-1"></i>
               <span style="font-family: 'Ubuntu', sans-serif;">Report Post</span>
             </a>
