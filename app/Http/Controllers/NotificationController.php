@@ -225,12 +225,15 @@ class NotificationController extends Controller
         
         // Send socket notification
         Http::post(env('NODE_SERVER') . '/notify', $data);
-        Log::info($data['content_nmu']);
+
+        $icon = url('assets/img/fav.png');
+        $url = url('?type='.$data['type'].'&id='.$data['id']);
+        
         if(!empty($subscription)) {
             // Send push notification
             $response = Http::post(env('NODE_SERVER') . '/sw/send-notification', [
                 'subscription'  => unserialize($subscription->subscription),
-                'payload'       => $data['content_nmu'],
+                'payload'       => ['content' => $data['content_nmu'], 'url' => $url, 'icon' => $icon],
                 'ttl'           => 86400,
                 'icon'          => url('assets/img/fav.png')
             ]);
