@@ -293,6 +293,7 @@ a:visited {
 
 .modal {
     overflow-y: auto;
+    z-index: 2010 !important;
 }
 
 .fud-alert {
@@ -1573,3 +1574,5 @@ a:visited {
   .socialite-btn:visited {
     color: white;
   }
+
+

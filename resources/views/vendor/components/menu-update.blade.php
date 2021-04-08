@@ -91,10 +91,10 @@
                             </ul>
                         </form>
                     </div>
-                    <div class="form-group text-center col-sm-12 m-0">
+                    <div class="form-group text-center col-sm-12 mb-3 m-0">
                         <button id="menu-update-btn" class="btn btn-primary px-5">
-                            <span id="vendor-txt">Update</span>
-                            <div class="spinner-border spinner-border-sm btn-pr" id="vendor-spinner"
+                            <span id="menu-update-txt">Update</span>
+                            <div class="spinner-border spinner-border-sm btn-pr" id="menu-update-spinner"
                                 style="display: none;" role="status">
                                 <span class="sr-only">Loading...</span>
                             </div>
@@ -131,9 +131,9 @@
 
     // Update Menu
     function updateMenu(el) {
-        el.preventDefault()
+        spin('menu-update');
 
-        spin('vendor')
+        el.preventDefault()
         //offError('v-dish-error')
 
         let url = `{{ url('vendor/update-menu') }}`;
@@ -141,7 +141,7 @@
 
         goPost(url, data)
             .then(res => {
-                spin('vendor')
+                spin('menu-update');
 
                 if (handleFormRes(res, false, false, 'modal-body')) {
                     showAlert(true, res.message);
@@ -151,7 +151,7 @@
                 }
             })
             .catch(err => {
-                spin('vendor')
+                spin('menu-update')
                 handleFormRes(err, 'v-dish-error');
             })
     }

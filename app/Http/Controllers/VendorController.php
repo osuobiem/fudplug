@@ -416,8 +416,6 @@ class VendorController extends Controller
      */
     public function add_dish(Request $request)
     {
-        // dd($request->all());
-
         try {
             //Validate Input
             $validator = $this->dish_add_rules($request);
@@ -477,7 +475,6 @@ class VendorController extends Controller
                 'image' => $this->dish_img_upload($request, $key) ? $this->dish_img_upload($request, $key) : null,
                 'type' => "advanced",
             ];
-            dd($data);
 
             $item = new Item($data);
             $vendor = Vendor::find(Auth::user('vendor')->id);
@@ -950,7 +947,7 @@ class VendorController extends Controller
 
                 // Fetch the Menu Item
                 $menu = Menu::where('vendor_id', Auth::user('vendor')->id)->first();
-                // dd($menu);
+
                 if (!empty($menu)) {
                     $menu = json_decode($menu->items);
 
@@ -1020,7 +1017,24 @@ class VendorController extends Controller
     public function delete_dish(Request $request, $dish_id)
     {
         try {
+            // Get dish
             $dish = Item::find($dish_id);
+
+            // Get user menu
+            $menu = Menu::where('vendor_id', Auth::guard('vendor')->user()->id)->first();
+            $menu_items = json_decode($menu->items)->item;
+
+            // Delete item from menu first
+            if (($key = array_search($dish->id, $menu_items)) !== false) {
+                unset($menu_items[$key]);
+                $menu_items = array_values($menu_items);
+            }
+            $menu->items = json_encode(['item' => $menu_items]);
+
+            // Update menu
+            $menu->save();
+
+            // Delete dish
             $dish->forceDelete();
 
             return response()->json(['success' => true, 'message' => "Dish Deleted Successfully"], 200);

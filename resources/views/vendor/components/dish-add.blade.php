@@ -1582,9 +1582,9 @@
                 </form>
                 <div class="form-group text-center col-sm-12 mt-3">
                     <button id="submit-btn" class="btn btn-primary px-5">
-                        <span id="vendor-txt">Add</span>
-                        <div class="spinner-border spinner-border-sm btn-pr" id="vendor-spinner" style="display: none;"
-                            role="status">
+                        <span id="dish-add-txt">Add</span>
+                        <div class="spinner-border spinner-border-sm btn-pr" id="dish-add-spinner"
+                            style="display: none;" role="status">
                             <span class="sr-only">Loading...</span>
                         </div>
                     </button>
@@ -1681,9 +1681,10 @@
 
     // Add dish
     async function addDish(el) {
+        spin('dish-add');
+
         el.preventDefault()
 
-        spin('vendor')
         offError('v-dish-error')
 
         let url = `{{ url('vendor/add-dish') }}`;
@@ -1708,7 +1709,7 @@
 
         goPost(url, data)
             .then(res => {
-                spin('vendor');
+                spin('dish-add');
 
                 // Check if response carries file validation
                 if (res.file_val) {
@@ -1728,7 +1729,7 @@
                 }
             })
             .catch(err => {
-                spin('vendor')
+                spin('dish-add')
                 handleFormRes(err, 'v-dish-error');
             })
     }

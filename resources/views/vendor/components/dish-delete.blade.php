@@ -10,8 +10,16 @@
                     </h6>
                     <div class="pb-3">
                         <button type="button" class="btn btn-md btn-secondary" data-dismiss="modal">No</button>
+                        <!-- <button type="button" onclick="deleteDish('{{$dish->id}}')" class="btn btn-md btn-primary"
+                            id="crop">Yes</button> -->
                         <button type="button" onclick="deleteDish('{{$dish->id}}')" class="btn btn-md btn-primary"
-                            id="crop">Yes</button>
+                            id="dish-delete-btn">
+                            <span id="dish-delete-txt">Yes</span>
+                            <div class="spinner-border spinner-border-sm btn-pr" id="dish-delete-spinner"
+                                style="display: none;" role="status">
+                                <span class="sr-only">Loading...</span>
+                            </div>
+                        </button>
                     </div>
                 </div>
             </div>
@@ -22,13 +30,19 @@
 <script>
     // Function Deletes Dish
     function deleteDish(dishId) {
+        spin('dish-delete');
+
         let getUrl = "{{url('vendor/delete-dish/')}}";
         getUrl += '/' + dishId;
         goGet(getUrl).then((res) => {
+            spin('dish-delete-update');
+
             showAlert(true, res.message);
             $("#dish-delete-modal").modal('hide');
             loadRight(activeTab);
         }).catch((err) => {
+            spin('dish-delete-update');
+
             console.error(err);
         });
     }

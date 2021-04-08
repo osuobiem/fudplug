@@ -231,9 +231,23 @@
                                     <button type="submit" id="bulk-order-btn"
                                         class="btn btn-sm btn-primary btn-block font-weight-bold"
                                         data-attach-loading="true" disabled>
-                                        Add to basket <span id="bulk-final-price" class="float-right"
+                                        <span id="bulk-order-txt">Add to basket</span>
+                                        <div class="spinner-border spinner-border-sm btn-pr" id="bulk-order-spinner"
+                                            style="display: none;" role="status">
+                                            <span class="sr-only">Loading...</span>
+                                        </div>
+                                        <span id="bulk-final-price" class="float-right"
                                             data-item-subtotal="">₦0.00</span>
                                     </button>
+
+                                    <!-- <button type="button" onclick="deleteDish('{{$dish->id}}')"
+                                        class="btn btn-md btn-primary" id="dish-delete-btn">
+                                        <span id="dish-delete-txt">Yes</span>
+                                        <div class="spinner-border spinner-border-sm btn-pr" id="dish-delete-spinner"
+                                            style="display: none;" role="status">
+                                            <span class="sr-only">Loading...</span>
+                                        </div>
+                                    </button> -->
                                 </div>
                             </div>
                         </form>
@@ -255,10 +269,10 @@
 
     // Place order
     function addToBasket(el, vendorId) {
-        el.preventDefault()
+        spin('bulk-order');
+        $("#bulk-order-btn").attr('disabled', 'disabled');
 
-        // spin('profile')
-        offError('pr-update-error')
+        el.preventDefault()
 
         let url = `{{url('user/add-to-basket')}}`;
         let data = new FormData(el.target);
@@ -269,7 +283,8 @@
 
         goPost(url, data)
             .then(res => {
-                // spin('profile')
+                spin('bulk-order');
+                $("#bulk-order-btn").removeAttr('disabled');
 
                 if (handleFormRes(res)) {
                     if (res.type == "error") {
@@ -284,7 +299,9 @@
                 }
             })
             .catch(err => {
-                // spin('profile');
+                spin('bulk-order');
+                $("#bulk-order-btn").removeAttr('disabled');
+
                 handleFormRes(err, 'pr-update-error');
             })
     }
