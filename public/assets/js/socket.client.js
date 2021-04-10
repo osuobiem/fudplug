@@ -85,7 +85,7 @@ function initIO(server, username, area = '') {
     socket.on("notify", (data) => {
         if (data.owner == socket.id) {
             ncounter = parseInt($('#noti-dot').text())
-            $('#notification-container').prepend(data.content)
+            $('.notification-cont-gen').prepend(data.content)
             $('#noti-dot').text(ncounter+1)
             $('#noti-dot').removeClass('d-none')
 
@@ -94,7 +94,7 @@ function initIO(server, username, area = '') {
             $('#mob-noti-dot').removeClass('d-none')
 
             notiSound.play()
-            $('#m-a-a-r').removeClass('d-none')
+            $('.m-a-a-r').removeClass('d-none')
 
             // let pushData = {
             //     content: data.content_nmu,

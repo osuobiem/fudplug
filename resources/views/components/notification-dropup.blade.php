@@ -12,10 +12,17 @@
         </li>
       </ul>
   
-      <div class="pb-2 pt-3">
-  
-  
+      <div class="text-center m-a-a-r mt-3 d-none" title="Mark all as read">
+        <small onclick="markAllAsRead()">Mark all as read</small>
       </div>
-  
+      <div class="dropdown-divider mb-0"></div>
+      
+      <div class="notification-cont-gen pb-2" id="mob-notification-holder" onscroll="getMoreNotifications()">
+        <div class="justify-content-center text-center w-100 p-2">
+          <div class="spinner-border spinner-border-sm btn-pr p-2" role="status">
+            <span class="sr-only">Loading...</span>
+          </div>
+        </div>
+      </div>
     </div>
   </div>

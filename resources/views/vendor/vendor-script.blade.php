@@ -27,6 +27,22 @@
         @endif
     });
 
+
+    function popPostModal() {
+        $(".post-modal").removeClass("d-none");
+        $(".post-modal").removeClass("animate__fadeOut");
+        $(".post-modal").addClass("animate__fadeIn");
+        $("#post-textarea")[0].emojioneArea.setFocus()
+    }
+
+    function closePostModal() {
+        $(".post-modal").removeClass("animate__fadeIn");
+        $(".post-modal").addClass("animate__fadeOut");
+        setTimeout(() => {
+            $(".post-modal").addClass("d-none");
+        }, 1000);
+    }
+
     // Load Right Side (Vendor Dish & Menu)
     function loadRight(activeTab) {
         spin('right-side')

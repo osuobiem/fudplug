@@ -216,21 +216,6 @@ $("#close-post").click(() => {
     modalActive = false;
 });
 
-function popPostModal() {
-    $(".post-modal").removeClass("d-none");
-    $(".post-modal").removeClass("animate__fadeOut");
-    $(".post-modal").addClass("animate__fadeIn");
-    $("#post-textarea")[0].emojioneArea.setFocus()
-}
-
-function closePostModal() {
-    $(".post-modal").removeClass("animate__fadeIn");
-    $(".post-modal").addClass("animate__fadeOut");
-    setTimeout(() => {
-        $(".post-modal").addClass("d-none");
-    }, 1000);
-}
-
 // Block that displays file names on input fields when selected
 // Add the following code if you want the name of the file appear on select
 $(".custom-file-input").on("change", function () {
@@ -267,7 +252,10 @@ function scrollToNewComments() {
 }
 
 // Bottom Scroll Spy
-function spyBottom(elId, diff) {
-    el = document.getElementById(elId)
-    return (el.scrollHeight - el.scrollTop == diff);
+function spyBottom(elId) {
+    elem = $('#'+elId);
+    if (parseInt(elem[0].scrollHeight) - parseInt(elem.scrollTop()) == parseInt(elem.outerHeight())) {
+        return true
+    }
+    return false
 }

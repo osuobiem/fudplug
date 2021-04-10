@@ -31,7 +31,7 @@
         <div>
             <div class="py-1 text-center">
                 <div class="box-body generic-scrollbar p-2 text-center job-item-2 mob-order-container"
-                    style="max-height: 450px; overflow: auto;" id="h-noti-cont">
+                    style="max-height: 450px; overflow: auto;">
                     <p>No Orders yet!</p>
                 </div>
                 @if(!Auth::guard('user')->guest())

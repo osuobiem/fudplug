@@ -314,6 +314,19 @@ body::-webkit-scrollbar-thumb {
     border-radius: 6px;
 }
 
+#mob-notification-holder::-webkit-scrollbar {
+    width: 5px;
+}
+
+#mob-notification-holder::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+#mob-notification-holder::-webkit-scrollbar-thumb {
+    background-color: rgba(0, 0, 0, 0.219);
+    border-radius: 6px;
+}
+
 
 #notification-container::-webkit-scrollbar {
     width: 5px;
