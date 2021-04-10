@@ -30,7 +30,7 @@
                             <p class="text-muted m-1">@<b></b>{{ Auth::guard('user')->user()->username }}</b></p>
                         </div>
                     </div>
-                    <div class="d-flex">
+                    <div class="d-flex border-bottom">
                         <div class="col-6 border-right p-3">
                             <h6 class="font-weight-bold text-dark mb-1">Joined</h6>
                             <p class="mb-0 text-black-50 small">
@@ -44,6 +44,21 @@
                             <p class="mb-0 text-black-50 small"><i
                                     class="las la-map-marker-alt"></i>{{ $user_location->area }},
                                 {{ $user_location->state }}</p>
+                        </div>
+                    </div>
+                    <div class="d-flex">
+                        <div class="col-6 border-right p-3">
+                            <h6 class="font-weight-bold text-dark mb-1">Phone</h6>
+                            <p class="mb-0 text-black-50 small">
+                                {{ Auth::guard('user')->user()->phone_number }}
+                            </p>
+                        </div>
+                        <div class="col-6 p-3">
+                            <!-- <h6 class="font-weight-bold text-dark mb-1">85</h6>
+                                            <p class="mb-0 text-black-50 small">Views</p> -->
+                            <h6 class="font-weight-bold text-dark mb-1">Address</h6>
+                            <p class="mb-0 text-black-50 small"><i
+                                    class="las la-map-marker-alt"></i>{{ Auth::guard('user')->user()->address }}</p>
                         </div>
                     </div>
                     <div class="overflow-hidden border-top">

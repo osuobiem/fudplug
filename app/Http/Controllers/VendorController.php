@@ -7,7 +7,7 @@ use App\Item;
 use App\Jobs\EmailJob;
 use App\Menu;
 use App\Order;
-use App\OrderItems;
+use App\OrderItem;
 use App\Rating;
 use App\SocketData;
 use App\State;
@@ -416,8 +416,6 @@ class VendorController extends Controller
      */
     public function add_dish(Request $request)
     {
-        // dd($request->all());
-
         try {
             //Validate Input
             $validator = $this->dish_add_rules($request);
@@ -477,7 +475,6 @@ class VendorController extends Controller
                 'image' => $this->dish_img_upload($request, $key) ? $this->dish_img_upload($request, $key) : null,
                 'type' => "advanced",
             ];
-            dd($data);
 
             $item = new Item($data);
             $vendor = Vendor::find(Auth::user('vendor')->id);
@@ -706,7 +703,7 @@ class VendorController extends Controller
         $message = [
             'required' => 'Dish/Item name is required.',
             'alpha_dash' => 'Title fields only allow alphabets, hyphens and underscores.',
-            'mimes' => 'Images must be of type jpg or jpeg.',
+            'mimes' => 'Images must be of type jpg or jpeg or png.',
             'numeric' => 'Quantity and price fields must be numeric characters.',
             'max' => 'The :attribute may not be greater than 25mb.',
             'required_without' => 'Please add items to Regular or Bulk or Both.',
@@ -719,7 +716,7 @@ class VendorController extends Controller
         // Make and return validation rules
         return Validator::make($request->all(), [
             'title.*' => 'required',
-            'image.*' => 'mimes:jpeg,jpg|max:25000',
+            'image.*' => 'mimes:jpeg,jpg,png|max:25000',
             'quantity.*' => 'quantity',
             'price.*' => 'numeric',
             'regular_title_one.*' => 'bail|required_without:bulk_title_one.*|bulk_required|required_with:regular_price_one.*,regular_quantity_one.*',
@@ -882,7 +879,7 @@ class VendorController extends Controller
         $message = [
             'required' => 'All fields are required.',
             'alpha_dash' => 'Title fields only allow alphabets, hyphens and underscores.',
-            'mimes' => 'Images must be of type jpg or jpeg.',
+            'mimes' => 'Images must be of type jpg or jpeg or png.',
             'numeric' => 'Quantity and price fields must be numeric characters.',
             'max' => 'The :attribute may not be greater than 25mb.',
             'quantity' => 'Quantity field for regular requires a valid quantity like (50 plates or One cup).',
@@ -892,7 +889,7 @@ class VendorController extends Controller
         if ($request->form_type == "simple") {
             return Validator::make($request->all(), [
                 'title' => 'required',
-                'image' => 'image|mimes:jpeg,jpg|max:25000',
+                'image' => 'image|mimes:jpeg,jpg,png|max:25000',
                 'price' => 'required|numeric',
                 'quantity' => 'required|quantity',
             ], $message);
@@ -950,7 +947,7 @@ class VendorController extends Controller
 
                 // Fetch the Menu Item
                 $menu = Menu::where('vendor_id', Auth::user('vendor')->id)->first();
-                // dd($menu);
+
                 if (!empty($menu)) {
                     $menu = json_decode($menu->items);
 
@@ -1020,7 +1017,24 @@ class VendorController extends Controller
     public function delete_dish(Request $request, $dish_id)
     {
         try {
+            // Get dish
             $dish = Item::find($dish_id);
+
+            // Get user menu
+            $menu = Menu::where('vendor_id', Auth::guard('vendor')->user()->id)->first();
+            $menu_items = json_decode($menu->items)->item;
+
+            // Delete item from menu first
+            if (($key = array_search($dish->id, $menu_items)) !== false) {
+                unset($menu_items[$key]);
+                $menu_items = array_values($menu_items);
+            }
+            $menu->items = json_encode(['item' => $menu_items]);
+
+            // Update menu
+            $menu->save();
+
+            // Delete dish
             $dish->forceDelete();
 
             return response()->json(['success' => true, 'message' => "Dish Deleted Successfully"], 200);
@@ -1194,7 +1208,7 @@ class VendorController extends Controller
 
                 // Update order-item quantity
                 $vendor_id = Auth::user()->id;
-                OrderItems::query()
+                OrderItem::query()
                     ->where([['vendor_id', '=', $vendor_id], ['order_id', '=', $order_id]])
                     ->each(function ($record) {
                         // Update item quantity
@@ -1210,7 +1224,7 @@ class VendorController extends Controller
                 // Update order-item quantity
                 foreach ($orders->get() as $order) {
                     // Update order-item quantity
-                    OrderItems::query()
+                    OrderItem::query()
                         ->where([['vendor_id', '=', $vendor_id], ['order_id', '=', $order->id]])
                         ->each(function ($record) {
                             // Update item quantity

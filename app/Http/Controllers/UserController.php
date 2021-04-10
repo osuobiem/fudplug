@@ -8,7 +8,7 @@ use App\Item;
 use App\Jobs\EmailJob;
 use App\Menu;
 use App\Order;
-use App\OrderItems;
+use App\OrderItem;
 use App\Rating;
 use App\Rules\MatchOldPassword;
 use App\SocketData;
@@ -611,6 +611,12 @@ class UserController extends Controller
     public function order_details(Request $request, $dish_id, $dish_type = null)
     {
         try {
+            // Check if user's address is set
+            $address = User::where('id', Auth::guard('user')->user()->id)->first()->address;
+            if (empty($address)) {
+                return response()->json(['success' => false, 'message' => 'Please add an address to your profile in order to continue.'], 200);
+            }
+
             $dish = Item::where(['id' => $dish_id])->first();
 
             $view = "";
@@ -666,7 +672,8 @@ class UserController extends Controller
                     $view = view('user.components.bulk-order', $data);
                 }
             }
-            return $view;
+
+            return response()->json(['success' => true, 'data' => $view->render()], 200);
         } catch (\Throwable $th) {
             Log::error($th);
         }
@@ -1235,7 +1242,7 @@ class UserController extends Controller
 
                 // Update order-item quantity
                 $user_id = Auth::guard('user')->user()->id;
-                OrderItems::query()
+                OrderItem::query()
                     ->where([['user_id', '=', $user_id], ['order_id', '=', $order_id]])
                     ->each(function ($record) {
                         // Update item quantity
@@ -1251,7 +1258,7 @@ class UserController extends Controller
                 // Update order-item quantity
                 foreach ($orders->get() as $order) {
                     // Update order-item quantity
-                    OrderItems::query()
+                    OrderItem::query()
                         ->where([['user_id', '=', $user_id], ['order_id', '=', $order->id]])
                         ->each(function ($record) {
                             // Update item quantity

@@ -91,14 +91,16 @@
 
     // Load Regular Order Modal
     function loadRegOrderModal(dishId) {
-        // spin('user-right-side');
-        // Populate regular-order modalcontainer
         let getUrl = `${server}/user/order-details`;
         getUrl += '/' + dishId;
 
         goGet(getUrl).then((res) => {
-            $("#regular-order-container").html(res);
-            $("#regular-order-modal").modal('show');
+            if (res.success) {
+                $("#regular-order-container").html(res.data);
+                $("#regular-order-modal").modal('show');
+            } else {
+                showAlert(false, res.message);
+            }
         }).catch((err) => {
             //spin('user-right-side');
         });
@@ -106,15 +108,17 @@
 
     // Load Bulk Order Modal
     function loadBulkOrderModal(dishId) {
-        // spin('user-right-side');
-        // Populate regular-order modalcontainer
         let dishType = "bulk"
         let getUrl = `${server}/user/order-details`;
         getUrl += '/' + dishId + '/' + dishType;
 
         goGet(getUrl).then((res) => {
-            $("#bulk-order-container").html(res);
-            $("#bulk-order-modal").modal('show');
+            if (res.success) {
+                $("#bulk-order-container").html(res.data);
+                $("#bulk-order-modal").modal('show');
+            } else {
+                showAlert(false, res.message);
+            }
         }).catch((err) => {
             //spin('user-right-side');
         });
@@ -576,7 +580,7 @@
     function getBasketQtyPrice() {
         $("#basket-order-btn").attr('disabled', '');
         // Wait for three seconds before computing total
-        setTimeout(getBasketQtyPriceInit, 500);
+        setTimeout(getBasketQtyPriceInit, 700);
     }
 
     function getBasketQtyPriceInit() {

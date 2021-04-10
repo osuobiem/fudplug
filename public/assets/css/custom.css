@@ -293,6 +293,7 @@ a:visited {
 
 .modal {
     overflow-y: auto;
+    z-index: 2010 !important;
 }
 
 .fud-alert {
@@ -1577,11 +1578,4 @@ a:visited {
   /* Remove red colour from sociaalite link btn on visited */
   .socialite-btn:visited {
     color: white;
-  }
-
-  .truncate {
-    width: 250px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
   }

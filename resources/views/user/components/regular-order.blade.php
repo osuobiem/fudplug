@@ -62,9 +62,11 @@
                                                                 style="font-size: 11px;">
                                                                 {{$quantity}} {{$qty_title}} left</span>
                                                             @if(in_array($dish->id, $basket_items))
-                                                            <span class="font-weight-bold font-italic"><small>Item
-                                                                    already in
-                                                                    basket.</small></span>
+                                                            <p class="text-right">
+                                                                <span class="font-weight-bold font-italic"><small>Item
+                                                                        already in
+                                                                        basket.</small></span>
+                                                            </p>
                                                             @else
                                                             <div class="input-group qty-field">
                                                                 <span class="input-group-btn">
@@ -160,9 +162,11 @@
                                                             array_key_exists('item'.$dish->id, $basket_items))
                                                             @if(in_array($key,
                                                             $basket_items['item'.$dish->id]['regular_items']))
-                                                            <span class="font-weight-bold font-italic"><small>Item
-                                                                    already in
-                                                                    basket.</small></span>
+                                                            <p class="text-right">
+                                                                <span class="font-weight-bold font-italic"><small>Item
+                                                                        already in
+                                                                        basket.</small></span>
+                                                            </p>
                                                             @else
                                                             <div class="input-group qty-field">
                                                                 <span class="input-group-btn">
