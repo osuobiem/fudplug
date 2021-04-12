@@ -55,7 +55,14 @@
                                     <div class="float-right col-2">
                                         <a href="javascript:void(0)" title="delete"
                                             onclick="deleteCartItem('{{$dish->id}}', '{{$dish->order_type}}')">
-                                            <i class="las la-trash-alt mt-4 bskt-del-btn"></i>
+
+                                            <i class="las la-trash-alt mt-4 bskt-del-btn"
+                                                id="basket-delete-{{$dish->id}}-txt"></i>
+                                            <div class="spinner-border spinner-border-sm mt-4 btn-pr"
+                                                id="basket-delete-{{$dish->id}}-spinner" style="display: none;"
+                                                role="status">
+                                                <span class="sr-only">Loading...</span>
+                                            </div>
                                         </a>
                                     </div>
                                     <div class="float-right col-5 mt-4">
@@ -160,7 +167,14 @@
                                     <div class="float-right col-2">
                                         <a href="javascript:void(0)"
                                             onclick="deleteCartItem('{{$dish->id}}', '{{$dish->order_type}}', '{{$key}}')">
-                                            <i class="las la-trash-alt mt-4 bskt-del-btn"></i>
+
+                                            <i class="las la-trash-alt mt-4 bskt-del-btn"
+                                                id="basket-delete-{{$dish->id}}-{{$key}}-txt"></i>
+                                            <div class="spinner-border spinner-border-sm mt-4 btn-pr"
+                                                id="basket-delete-{{$dish->id}}-{{$key}}-spinner" style="display: none;"
+                                                role="status">
+                                                <span class="sr-only">Loading...</span>
+                                            </div>
                                         </a>
                                     </div>
                                     <div class="float-right col-5 mt-4">
@@ -215,7 +229,14 @@
                                     <div class="float-right col-2">
                                         <a href="javascript:void(0)"
                                             onclick="deleteCartItem('{{$dish->id}}', '{{$dish->order_type}}', '{{$key}}')">
-                                            <i class="las la-trash-alt mt-4 bskt-del-btn"></i>
+
+                                            <i class="las la-trash-alt mt-4 bskt-del-btn"
+                                                id="basket-delete-{{$dish->id}}-{{$key}}-txt"></i>
+                                            <div class="spinner-border spinner-border-sm mt-4 btn-pr"
+                                                id="basket-delete-{{$dish->id}}-{{$key}}-spinner" style="display: none;"
+                                                role="status">
+                                                <span class="sr-only">Loading...</span>
+                                            </div>
                                         </a>
                                     </div>
                                     <div class="float-right col-5 mt-4">
@@ -260,7 +281,13 @@
             <div class="col-md-12 mt-xs-2">
                 <button type="button" id="basket-order-btn" onclick="placeOrder()"
                     class="btn btn-sm btn-primary btn-block font-weight-bold" data-attach-loading="true" disabled>
-                    Place order <span id="basket-final-price" class="float-right" data-item-subtotal="">₦0.00</span>
+
+                    <span id="basket-txt">Place order</span>
+                    <div class="spinner-border spinner-border-sm btn-pr" id="basket-spinner" style="display: none;"
+                        role="status">
+                        <span class="sr-only">Loading...</span>
+                    </div>
+                    <span id="basket-final-price" class="float-right" data-item-subtotal="">₦0.00</span>
                 </button>
             </div>
         </div>

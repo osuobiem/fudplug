@@ -709,7 +709,7 @@ class VendorController extends Controller
             'required_without' => 'Please add items to Regular or Bulk or Both.',
             'bulk_required' => 'Sibling fields can not be left empty.',
             'required_with' => 'Fields can not be empty when adjacent fields have been entered.',
-            'quantity' => 'Quantity field for regular requires a valid quantity like (50 plates or One cup).',
+            'quantity' => 'Quantity field for regular requires a valid quantity like (50 plates or 1 cup).',
             'plug_numeric' => 'Price field requires a number.',
         ];
 

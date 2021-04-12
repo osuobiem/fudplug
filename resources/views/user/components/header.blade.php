@@ -61,9 +61,9 @@
 					</li> -->
 
                     <li class="nav-item dropdown no-arrow ml-1 osahan-profile-dropdown pr-3 d-none d-lg-flex"
-                        title="Notifications">
-                        <a class="nav-link dropdown-toggle pr-0 h-link" href="#" id="basket-btn" role="button"
-                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        title="Notifications" id="basket-dropdown">
+                        <a class="nav-link dropdown-toggle pr-0 h-link" href="#" role="button" data-toggle="dropdown"
+                            aria-haspopup="true" aria-expanded="false">
                             <span class="basket-noti-pin d-none"></span>
                             <i class="las la-shopping-basket la-2x icon-hover bright-ic"></i>
                             <small id="basket-noti-dot" class="d-none">0</small>
@@ -126,9 +126,15 @@
                                 <div class="col-md-12 mt-xs-2">
                                     <button type="button" id="order-cancel-btn"
                                         class="btn btn-sm btn-primary btn-block font-weight-bold"
-                                        data-attach-loading="true"><i class="las la-times"></i>&nbsp;
-                                        Cancel All <span id="order-price" class="float-right"
-                                            data-item-subtotal="">₦0.00</span>
+                                        data-attach-loading="true">
+                                        <span id="order-cancel-txt">
+                                            <i class="las la-times"></i>&nbsp;Cancel All
+                                        </span>
+                                        <div class="spinner-border spinner-border-sm btn-pr" id="order-cancel-spinner"
+                                            style="display: none;" role="status">
+                                            <span class="sr-only">Loading...</span>
+                                        </div>
+                                        <span id="order-price" class="float-right" data-item-subtotal="">₦0.00</span>
                                     </button>
                                 </div>
                             </div>

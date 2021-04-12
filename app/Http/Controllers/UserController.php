@@ -856,7 +856,7 @@ class UserController extends Controller
     {
         try {
             if ($request->order_type == "simple") {
-                Basket::where([['id', '=', $request->basket_id], ['user_id', '=', Auth::guard('user')->user()->id]])->delete();
+                Basket::where([['id', '=', $request->basket_id], ['user_id', '=', Auth::guard('user')->user()->id]])->forceDelete();
             } else {
                 $basket_item = Basket::find($request->basket_id);
                 $order_detail = json_decode($basket_item->order_detail);
@@ -865,7 +865,7 @@ class UserController extends Controller
                     $basket_item->order_detail = json_encode(array_values($order_detail));
                     $basket_item->save();
                 } else {
-                    Basket::where([['id', '=', $request->basket_id], ['user_id', '=', Auth::guard('user')->user()->id]])->delete();
+                    Basket::where([['id', '=', $request->basket_id], ['user_id', '=', Auth::guard('user')->user()->id]])->forceDelete();
                 }
             }
             return response()->json(['success' => true, 'message' => 'Item removed from basket'], 200);
@@ -939,7 +939,7 @@ class UserController extends Controller
                         $new_record->save();
 
                         // Delete old basket record
-                        $old_record->delete();
+                        $old_record->forceDelete();
 
                         // Update item quantity
                         $this->update_quantity($new_record);

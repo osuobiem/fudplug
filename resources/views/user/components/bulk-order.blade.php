@@ -291,10 +291,15 @@
                         handleValidateErr(res);
                     } else {
                         showAlert(true, res.message);
+
                         // Load user basket details
                         getBasket();
+
                         // Close modal
                         $("#bulk-order-modal").modal('hide');
+
+                        // Reset bulk price (to be reflected on "add to basket button")
+                        bulkPrices = resetOrderPrice("bulk");
                     }
                 }
             })

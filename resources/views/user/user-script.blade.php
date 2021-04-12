@@ -11,6 +11,20 @@
     let ratingState = "{{json_encode($rating_data['user_rating'])}}";
     @endif
 
+    // Initiate regular order-specific price input field state
+    packCount = $("#price-type li").length;
+    var prices = [];
+    for (let i = 0; i < packCount; i++) {
+        prices[i] = 0;
+    }
+
+    // Initiate bulk order-specific price input field state
+    bulkPackCount = $("#bulk-price-type li").length;
+    var bulkPrices = [];
+    for (let i = 0; i < bulkPackCount; i++) {
+        bulkPrices[i] = 0;
+    }
+
     $(document).ready(function () {
         // Load The Right Side when Document is Ready
         loadUserRight();
@@ -175,6 +189,66 @@
         });
     }
 
+    /********************** Scroll spy ********************/
+
+    // Function to load more data on scrolling to bottom
+    function load_more(page, searchData = "", stateData = "", areaData = "", fetchStatus = "all", refresh = false) {
+        url = "{{ url('/user/all-vendors') }}";
+        url += fixUrl(page, searchData, stateData, areaData, fetchStatus);
+        $.ajax({
+                url: url,
+                type: "get",
+                datatype: "html",
+                beforeSend: function () {
+                    // let ajaxLoading = $('.ajax-loading').html();
+                    // $('#results').append(ajaxLoading);
+                    $('.ajax-loading').show();
+                }
+            })
+            .done(function (data) {
+                if (data.length == 0) {
+                    // console.log(data.length);
+
+                    //notify user if nothing to load
+                    if (refresh) {
+                        $(".vend").remove();
+                        $('.ajax-loading').html("No records!");
+                    } else {
+                        $('.ajax-loading').html("No more records!");
+                    }
+                    return;
+                }
+                $('.ajax-loading').hide(); //hide loading animation once data is received
+
+                // Check if action requires refreshing the contents
+                if (refresh) {
+                    // console.log(data);
+                    // $("#results").empty();
+                    // $('.ajax-loading').appendTo($('#results'));
+                    // //load data into #results element
+                    $(".vend").remove();
+                    $(".ajax-loading").before(data);
+                } else {
+                    // console.log(data);
+                    // $("#results").append(data); //append data into #results element
+                    $(".ajax-loading").before(data);
+                }
+
+            })
+            .fail(function (jqXHR, ajaxOptions, thrownError) {
+                alert('No response from server');
+            });
+    }
+
+    // Function to fix fetch url
+    function fixUrl(page, searchData = "", stateData = "", areaData = "", fetchStatus = "all") {
+        fixed_url =
+            `?page=${page}&search_data=${searchData}&state_data=${stateData}&area_data=${areaData}&fetch_status=${fetchStatus}`;
+        return fixed_url;
+    }
+
+    /********************** Scroll spy ********************/
+
     function toggleAccordion(e, element) {
         $(element).parent().parent().next().collapse('toggle');
         $('.collapse').collapse('hide');
@@ -188,11 +262,16 @@
         let url = `${server}/user/delete-basket`;
         let formData = new FormData();
 
+
         if (orderType == "simple") {
+            spin('basket-delete-' + basketId);
+
             formData.append('_token', _token);
             formData.append('basket_id', basketId);
             formData.append('order_type', orderType);
         } else {
+            spin('basket-delete-' + basketId + '-' + itemPosition);
+
             formData.append('_token', _token);
             formData.append('basket_id', basketId);
             formData.append('order_type', orderType);
@@ -201,6 +280,11 @@
 
         goPost(url, formData)
             .then(res => {
+                if (orderType == "simple") {
+                    spin('basket-delete-' + basketId);
+                } else {
+                    spin('basket-delete-' + basketId + '-' + itemPosition);
+                }
 
                 if (handleFormRes(res)) {
                     showAlert(true, res.message);
@@ -213,6 +297,12 @@
                 }
             })
             .catch(err => {
+                if (orderType == "simple") {
+                    spin('basket-delete-' + basketId);
+                } else {
+                    spin('basket-delete-' + basketId + '-' + itemPosition);
+                }
+
                 console.error(err);
             })
     }
@@ -250,12 +340,17 @@
     }
 
     function placeOrder() {
+        spin('basket');
+        $("#basket-order-btn").removeAttr('onclick');
+
         let url = `${server}/user/place-order`;
         let formData = new FormData();
         formData.append('_token', _token);
 
         goPost(url, formData)
             .then(res => {
+                spin('basket');
+
                 if (handleFormRes(res)) {
                     if (res.type == "error") {
                         handleOrderValidateErr(res);
@@ -271,6 +366,9 @@
                 }
             })
             .catch(err => {
+                spin('basket');
+                $("#basket-order-btn").attr('onclick', 'placeOrder()');
+
                 console.log(err);
             })
     }
@@ -334,11 +432,29 @@
 
     // Cancel all orders if parameter is empty
     function cancelOrder(orderId = "") {
+        if (orderId == "") {
+            spin('order-cancel');
+        } else {
+            spin('order-cancel-' + orderId);
+        }
+
         let getUrl = (orderId == "") ? `${server}/user/cancel-order` : `${server}/user/cancel-order/${orderId}`;
 
         goGet(getUrl).then((res) => {
+            if (orderId == "") {
+                spin('order-cancel');
+            } else {
+                spin('order-cancel-' + orderId);
+            }
+
             getOrder();
         }).catch((err) => {
+            if (orderId == "") {
+                spin('order-cancel');
+            } else {
+                spin('order-cancel-' + orderId);
+            }
+
             console.log(err);
         });
     }
@@ -461,7 +577,7 @@
                 $("#" + elemId).removeClass('d-none');
                 setTimeout(function () {
                     $("#basket-order-btn").attr('disabled', 'disabled');
-                }, 600);
+                }, 2000);
             }
         });
     }
@@ -569,18 +685,28 @@
 
 
     /****** Basket specific quantity input script ***************/
-    $("#basket-btn, #mob-basket-btn").click(function () {
-        getBasketQtyPrice();
+    $("#mob-basket-btn").click(function () { // For mobile
+        if (!$(".bas-container").hasClass('d-none')) {
+            // Load user basket details
+            getBasket();
 
+            setInterval(getBasketQtyPrice, 1000);
+        }
+    });
+
+    $('#basket-dropdown').on('show.bs.dropdown', function () { // For desktop
         // Load user basket details
         getBasket();
+
+        setInterval(getBasketQtyPrice, 1000);
     });
 
     // Function to get the prices and quantities to be computed
     function getBasketQtyPrice() {
         $("#basket-order-btn").attr('disabled', '');
+
         // Wait for three seconds before computing total
-        setTimeout(getBasketQtyPriceInit, 700);
+        getBasketQtyPriceInit();
     }
 
     function getBasketQtyPriceInit() {
@@ -635,12 +761,6 @@
 
 
     /******************************* Regular order-specific quantity input script */
-    // Initiate price input field state
-    packCount = $("#price-type li").length;
-    prices = [];
-    for (let i = 0; i < packCount; i++) {
-        prices[i] = 0;
-    }
 
     // Function to compute total amount and bind to order button. Also disable and enable order button
     function bindQtyPrice(element) {
@@ -675,12 +795,6 @@
 
 
     /******************************* Bulk order-specific quantity input script */
-    // Initiate price input field state
-    bulkPackCount = $("#bulk-price-type li").length;
-    bulkPrices = [];
-    for (let i = 0; i < bulkPackCount; i++) {
-        bulkPrices[i] = 0;
-    }
 
     // Function to compute total amount and bind to order button. Also disable and enable order button
     function bindBulkQtyPrice(element) {
@@ -712,6 +826,26 @@
         }
     }
     /******************************* Bulk order-specific quantity input script */
+
+    // Function to reset order price for bulk and regular
+    function resetOrderPrice(orderType) {
+        let prices = [];
+
+        if (orderType == "regular") {
+            // Initiate regular order-specific price input field state
+            packCount = $("#price-type li").length;
+            for (let i = 0; i < packCount; i++) {
+                prices[i] = 0;
+            }
+        } else {
+            // Initiate bulk order-specific price input field state
+            bulkPackCount = $("#bulk-price-type li").length;
+            for (let i = 0; i < bulkPackCount; i++) {
+                prices[i] = 0;
+            }
+        }
+        return prices;
+    }
 
     $(document).ready(function () {
         // Show rating on page load

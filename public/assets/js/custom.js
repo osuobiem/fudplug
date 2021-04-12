@@ -5,7 +5,7 @@ $(document).ready(function () {
 
 
     $('#comments-holder').scroll(() => {
-        if(comments_holder.scrollHeight - comments_holder.scrollTop <= 420) {
+        if (comments_holder.scrollHeight - comments_holder.scrollTop <= 420) {
             $('#see-n-comms-btn').addClass('d-none');
         }
     })
@@ -121,6 +121,7 @@ function handleFormRes(res, form = false, prefix = false, modalAlert = false) {
     if (res.success === undefined) {
         return true;
     }
+
     if (res.status === 200) {
         if (!res.success) {
             errors = res.message;
