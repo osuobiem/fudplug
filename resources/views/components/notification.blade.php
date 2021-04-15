@@ -42,7 +42,7 @@ return $res;
                 </i>
             </div>
             <script>
-                $('#m-a-a-r').removeClass('d-none')
+                $('.m-a-a-r').removeClass('d-none')
             </script>
             @endif
             <div class="col-12 p-0 text-right">
@@ -55,7 +55,7 @@ return $res;
         $('#noti-from').text('{{ $from }}')
     </script>
 @else
-    <div id="h-noti-cont" class="p-2 text-center">
+    <div class="h-noti-cont p-2 text-center">
         <p>No Notifications yet!</p>
     </div>
 @endif

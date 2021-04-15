@@ -179,15 +179,15 @@
         goGet(url).then((res) => {
             if (res.length > 0) {
                 from == 0
-                    ? $("#notification-container").html(res)
-                    : $("#notification-container").append(res);
+                    ? $(".notification-cont-gen").html(res)
+                    : $(".notification-cont-gen").append(res);
             }
         });
     }
 
     // Get more notifications
     function getMoreNotifications() {
-        if (spyBottom("notification-container", 300)) {
+        if (spyBottom("notification-container") || spyBottom("mob-notification-holder")) {
             from = $("#noti-from").text();
             getNotifications(from);
         }
@@ -219,7 +219,7 @@
 
                 $($(el).children()[2]).remove();
             });
-            $("#m-a-a-r").addClass("d-none");
+            $(".m-a-a-r").addClass("d-none");
         });
     }
 
@@ -231,7 +231,9 @@
             setTimeout(() => {
                 $("#noti-dot").text(0);
                 $("#noti-dot").addClass("d-none");
-            }, 1500);
+                $("#mob-noti-dot").text(0);
+                $("#mob-noti-dot").addClass("d-none");
+            }, 1000);
         });
     }
 
@@ -245,6 +247,8 @@
 
         $(".mnd-inner").removeClass("animate__fadeOut");
         $(".mnd-container").removeClass("animate__fadeOut");
+
+        clearNViewed();
 
         mndModalOpen = true;
     }
@@ -428,4 +432,5 @@
         }
         return outputArray;
     }
+    
 </script>

@@ -22,7 +22,7 @@
 </div>
 
 <!-- Post Modal -->
-<div class="post-modal post-modal animate__animated d-none">
+<div class="post-modal animate__animated d-none">
   <div class="box shadow-sm border rounded bg-white mb-3 osahan-share-post">
     <ul class="nav nav-justified border-bottom osahan-line-tab" id="myTab" role="tablist">
       <li class="nav-item text-left">

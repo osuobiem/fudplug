@@ -51,12 +51,12 @@
 							<h6 class="dropdown-header text-center">
 								Notifications
 							</h6>
-							<div id="m-a-a-r" class="text-center d-none" title="Mark all as read">
+							<div class="text-center m-a-a-r d-none" title="Mark all as read">
 								<small onclick="markAllAsRead()">Mark all as read</small>
 							</div>
 							<div class="dropdown-divider"></div>
 
-							<div id="notification-container" onscroll="getMoreNotifications()">
+							<div id="notification-container" class="notification-cont-gen" onscroll="getMoreNotifications()">
 								<div class="justify-content-center text-center w-100 p-2">
 									<div class="spinner-border spinner-border-sm btn-pr p-2" role="status">
 									  <span class="sr-only">Loading...</span>

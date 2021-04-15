@@ -30,6 +30,7 @@ if (!function_exists('format_time')) {
 @if(count($posts))
 
 @foreach ($posts as $post)
+
 @php
 $id = '';
 if(!Auth::guard('vendor')->guest()) {
@@ -73,7 +74,7 @@ if(!Auth::guard('vendor')->guest()) {
     @endif
   </div>
   <div class="p-3 border-bottom osahan-post-body post-inner">
-    <p class="mb-0 f-post" onclick="openComments('{{ $post->id }}')">{{ $post->content }}</p>
+    <p class="mb-0 f-post" data-toggle="modal" data-target="#single-post-modal">{{ $post->content }}</p>
 
     <div class="post-media-container justify-content-center">
       @if($post->media)

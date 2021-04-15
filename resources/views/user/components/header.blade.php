@@ -111,7 +111,7 @@
                                 Notifications
                             </h6>
                             <div class="dropdown-divider"></div>
-                            <div id="h-noti-cont" class="p-2 text-center">
+                            <div class="h-noti-cont p-2 text-center">
                                 <p>No Notifications yet!</p>
                             </div>
                         </div>

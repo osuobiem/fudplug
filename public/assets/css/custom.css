@@ -1259,6 +1259,11 @@ a:visited {
     overflow: auto;
 }
 
+#mob-notification-holder {
+    max-height: 86%;
+    overflow: auto;
+}
+
 .comment-post-ico {
     background: var(--i-primary);
     padding: 9px 6px;
@@ -1430,12 +1435,12 @@ a:visited {
     color: #fff;
 }
 
-#m-a-a-r>small {
+.m-a-a-r>small {
     font-weight: 500;
     color: var(--i-primary) !important;
 }
 
-#m-a-a-r>small:hover {
+.m-a-a-r>small:hover {
     cursor: pointer;
 }
 
@@ -1574,5 +1579,3 @@ a:visited {
   .socialite-btn:visited {
     color: white;
   }
-
-

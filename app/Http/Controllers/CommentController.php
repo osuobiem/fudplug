@@ -123,14 +123,16 @@ class CommentController extends Controller
                     $name = $initiator->business_name;
                 }
 
-                $notification->content = '<strong>' . $name . '</strong> ' . $content_data[1] . ': "' . $notification->post->content;
+                $ncount = grapheme_strlen($notification->post->content);
+                $trunc_content = $ncount > 40 ? grapheme_substr($notification->post->content, 0, 40).'...' : $notification->post->content;
+                $notification->content = '<strong>' . $name . '</strong> ' . $content_data[1] . ': "' . $trunc_content . '"';
                 $notification->photo = Storage::url($initiator_data[0] . '/profile/' . $initiator->profile_image);
 
                 // Send Notification
                 $data = [
                     "owner_socket" => SocketData::where('username', $post->vendor->username)->first()->socket_id,
                     "content" => view('components.notification-s', ['notification' => $notification])->render(),
-                    "content_nmu" => $name . ' ' . $content_data[1] . ': "' . $notification->post->content,
+                    "content_nmu" => $name . ' ' . $content_data[1] . ': "' . $trunc_content . '"',
                     "type" => "comment",
                     "id" => $comment->id
                 ];

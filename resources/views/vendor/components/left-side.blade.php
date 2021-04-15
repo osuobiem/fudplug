@@ -23,7 +23,7 @@
             </div>
         </div> -->
         <div class="box-body generic-scrollbar p-2 text-center job-item-2 desktop-order-container"
-            style="max-height: 450px; overflow: auto;" id="h-noti-cont">
+            style="max-height: 450px; overflow: auto;">
             <div class="justify-content-center text-center w-100 pb-2 box shadow-sm border rounded bg-white p-2">
                 <p><strong>Loading...</strong></p>
                 <div class="spinner-border spinner-border-sm" role="status">
