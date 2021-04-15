@@ -16,13 +16,29 @@
         <div class="pb-2 pt-3">
 
             <div class="text-center">
-                <div class="box-body generic-scrollbar p-2 text-center job-item-2" id="mob-basket-container"
-                    style="max-height: 450px; overflow: auto;">
-                    <p>Your Basket is empty!</p>
+                <div class="box-body p-0 text-center job-item-2">
+                    <div class="col-12 generic-scrollbar basket-container" style="max-height: 64px; overflow: auto;">
+
+                        <div class="spinner-border spinner-border-sm btn-pr" role="status" style="display: none;"
+                            id="basket-container-spinner-mob">
+                            <span class="sr-only">Loading...</span>
+                        </div>
+                    </div>
+                    <div class="col-12 pt-2">
+                        <button type="button" onclick="placeOrder()"
+                            class="btn btn-sm btn-primary btn-block font-weight-bold basket-order-btn"
+                            data-attach-loading="true" disabled>
+
+                            <span id="basket-txt">Place order</span>
+                            <div class="spinner-border spinner-border-sm btn-pr" id="basket-spinner"
+                                style="display: none;" role="status">
+                                <span class="sr-only">Loading...</span>
+                            </div>
+                            <span class="float-right basket-final-price" data-item-subtotal="">₦0.00</span>
+                        </button>
+                    </div>
                 </div>
             </div>
-
-
         </div>
 
     </div>

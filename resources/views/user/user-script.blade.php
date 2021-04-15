@@ -5,6 +5,12 @@
     // CSRF Token
     _token = "{{csrf_token()}}";
 
+    // Object to hold pagination state for basket and orders
+    var paginate = {
+        basketPage: 1,
+        orderPage: 1
+    }
+
     // Rating state variable
     @if(isset($rating_data))
     let rating = "{{round($rating_data['total_rating']) }}";
@@ -33,7 +39,7 @@
         loadUserLeft();
 
         // Load user basket details
-        getBasket();
+        getBasket(1);
 
         // Hide accordions on init
         hideAccordion();
@@ -152,102 +158,96 @@
     }
 
     /*********************************** Basket/Order script */
+    // Scrollspy for basket
+    $('.basket-container').on('scroll', function (e) {
+        var elem = $(e.currentTarget);
+        if (elem[0].scrollHeight - elem.scrollTop() == elem.outerHeight()) {
+            getBasket(paginate.basketPage); //load content
+        }
+    });
+
     // Load user basket
-    function getBasket() {
+    function getBasket(page) {
         let getUrl = `${server}/user/get-basket`;
+        getUrl += fixPaginateUrl(page);
+
+        // Add preloader on using scrollspy
+        $(".basket-container-spinner").removeAttr('style');
 
         goGet(getUrl).then((res) => {
-            if (res.basket_count == 0) {
-                $("#basket-noti-dot, #mob-basket-noti-dot").addClass('d-none');
-                if (window.matchMedia("(max-width: 767px)")
-                    .matches) { // The viewport is less than 768 pixels wide (mobile device)
-                    $("#mob-basket-container").html("<p>Your Basket is empty!</p>");
-                    $("#mob-head-count").html("");
-                } else {
-                    $("#basket-container").html("<p>Your Basket is empty!</p>");
-                    $("#head-count").html("");
+            // Clear list if loading on first page
+            if (page == 1) {
+                $("#basket-container-spinner-mob").prevAll().remove();
+                $("#basket-container-spinner").prevAll().remove();
+            }
+
+            // Remove preloader
+            $("#basket-container-spinner-mob").attr('style', 'display:none');
+            $("#basket-container-spinner").attr('style', 'display:none');
+
+            // Set new page
+            paginate.basketPage = res.next_page;
+
+            if (res.paginate_count == 0) {
+                if (page == 1) {
+                    $("#basket-noti-dot, #mob-basket-noti-dot").addClass('d-none');
+                    if (window.matchMedia("(max-width: 767px)")
+                        .matches) { // The viewport is less than 768 pixels wide (mobile device)
+                        $(".basket-container-spinner-mob").before("<p>Your Basket is empty!</p>");
+                        $("#mob-head-count").html("");
+                    } else {
+                        $(".basket-container-spinner").before("<p>Your Basket is empty!</p>");
+                        $("#head-count").html("");
+                    }
                 }
             } else {
-                $("#basket-noti-dot, #mob-basket-noti-dot").html(res.basket_count);
-                $("#basket-noti-dot, #mob-basket-noti-dot").removeClass('d-none');
-                // Check viewport
-                if (window.matchMedia("(max-width: 767px)")
-                    .matches) { // The viewport is less than 768 pixels wide (mobile device)
-                    $("#mob-basket-container").html(res.basket_view);
-                    $("#mob-head-count").html("(" + res.basket_count + " Items)");
+                // Add total amount to button
+                bindBasketQtyPrice(res.total_price);
+
+                if (page == 1) {
+                    $("#basket-noti-dot, #mob-basket-noti-dot").html(res.basket_count);
+                    $("#basket-noti-dot, #mob-basket-noti-dot").removeClass('d-none');
+
+                    // Check viewport
+                    if (window.matchMedia("(max-width: 767px)")
+                        .matches) { // The viewport is less than 768 pixels wide (mobile device)
+                        $("#basket-container-spinner-mob").before(res.basket_view);
+                        $("#mob-head-count").html("(" + res.basket_count + " Items)");
+                    } else {
+                        $("#basket-container-spinner").before(res.basket_view);
+                        $("#head-count").html("(" + res.basket_count + " Items)");
+                    }
                 } else {
-                    $("#basket-container").html(res.basket_view);
-                    $("#head-count").html("(" + res.basket_count + " Items)");
+                    $("#basket-noti-dot, #mob-basket-noti-dot").html(res.basket_count);
+
+                    // Check viewport
+                    if (window.matchMedia("(max-width: 767px)")
+                        .matches) { // The viewport is less than 768 pixels wide (mobile device)
+                        $("#basket-container-spinner-mob").before(res.basket_view);
+                        $("#mob-head-count").html("(" + res.basket_count + " Items)");
+                    } else {
+                        $("#basket-container-spinner").before(res.basket_view);
+                        $("#head-count").html("(" + res.basket_count + " Items)");
+                    }
                 }
+
                 // Validate basket data on page load
                 if (res.validate_status == true) {
                     setTimeout(handleOrderValidateErr(res), 600);
                 }
             }
         }).catch((err) => {
-            // spin('user-left-side');
+            console.log(err);
         });
     }
 
-    /********************** Scroll spy ********************/
 
-    // Function to load more data on scrolling to bottom
-    function load_more(page, searchData = "", stateData = "", areaData = "", fetchStatus = "all", refresh = false) {
-        url = "{{ url('/user/all-vendors') }}";
-        url += fixUrl(page, searchData, stateData, areaData, fetchStatus);
-        $.ajax({
-                url: url,
-                type: "get",
-                datatype: "html",
-                beforeSend: function () {
-                    // let ajaxLoading = $('.ajax-loading').html();
-                    // $('#results').append(ajaxLoading);
-                    $('.ajax-loading').show();
-                }
-            })
-            .done(function (data) {
-                if (data.length == 0) {
-                    // console.log(data.length);
-
-                    //notify user if nothing to load
-                    if (refresh) {
-                        $(".vend").remove();
-                        $('.ajax-loading').html("No records!");
-                    } else {
-                        $('.ajax-loading').html("No more records!");
-                    }
-                    return;
-                }
-                $('.ajax-loading').hide(); //hide loading animation once data is received
-
-                // Check if action requires refreshing the contents
-                if (refresh) {
-                    // console.log(data);
-                    // $("#results").empty();
-                    // $('.ajax-loading').appendTo($('#results'));
-                    // //load data into #results element
-                    $(".vend").remove();
-                    $(".ajax-loading").before(data);
-                } else {
-                    // console.log(data);
-                    // $("#results").append(data); //append data into #results element
-                    $(".ajax-loading").before(data);
-                }
-
-            })
-            .fail(function (jqXHR, ajaxOptions, thrownError) {
-                alert('No response from server');
-            });
-    }
-
-    // Function to fix fetch url
-    function fixUrl(page, searchData = "", stateData = "", areaData = "", fetchStatus = "all") {
+    // Function to fix url for pagination
+    function fixPaginateUrl(page) {
         fixed_url =
-            `?page=${page}&search_data=${searchData}&state_data=${stateData}&area_data=${areaData}&fetch_status=${fetchStatus}`;
+            `?page=${page}`;
         return fixed_url;
     }
-
-    /********************** Scroll spy ********************/
 
     function toggleAccordion(e, element) {
         $(element).parent().parent().next().collapse('toggle');
@@ -290,10 +290,10 @@
                     showAlert(true, res.message);
 
                     // Update total price on order button
-                    getBasketQtyPrice();
+                    bindBasketQtyPrice(res.total_price);
 
                     // Load user basket details
-                    getBasket();
+                    getBasket(paginate.basketPage);
                 }
             })
             .catch(err => {
@@ -329,7 +329,7 @@
 
                 if (handleFormRes(res)) {
                     // Update total price on order button
-                    getBasketQtyPrice();
+                    bindBasketQtyPrice(res.total_price);;
 
                     showAlert(true, res.message);
                 }
@@ -688,57 +688,25 @@
     $("#mob-basket-btn").click(function () { // For mobile
         if (!$(".bas-container").hasClass('d-none')) {
             // Load user basket details
-            getBasket();
-
-            setInterval(getBasketQtyPrice, 1000);
+            getBasket(1);
         }
     });
 
     $('#basket-dropdown').on('show.bs.dropdown', function () { // For desktop
         // Load user basket details
-        getBasket();
-
-        setInterval(getBasketQtyPrice, 1000);
+        getBasket(1);
     });
 
-    // Function to get the prices and quantities to be computed
-    function getBasketQtyPrice() {
-        $("#basket-order-btn").attr('disabled', '');
-
-        // Wait for three seconds before computing total
-        getBasketQtyPriceInit();
-    }
-
-    function getBasketQtyPriceInit() {
-        let arr = [];
-        // Get all prices from basket
-        let price = $("input[name='basket_price[]']")
-            .map(function () {
-                return $(this).val();
-            }).get();
-        let quantity = $("input[name='order_quantity[]']")
-            .map(function () {
-                return $(this).val();
-            }).get();
-        if (price.length > 0 && quantity.length > 0) {
-            bindBasketQtyPrice(price, quantity)
-        }
-    }
-
     // Function to compute total amount and bind to order button. Also disable and enable order button
-    function bindBasketQtyPrice(price, quantity) {
-        let productArr = [];
-        price.forEach(function (p, index) {
-            productArr[index] = (p * quantity[index]);
-        });
-        finalTotal = productArr.reduce((a, b) => a + b);
+    function bindBasketQtyPrice(price) {
+        let finalTotal = price;
 
         if (finalTotal < 1) {
-            $("#basket-final-price").text('₦' + String(finalTotal.toFixed(2)));
-            $("#basket-order-btn").attr('disabled', '');
+            $(".basket-final-price").text('₦' + String(finalTotal.toFixed(2)));
+            $(".basket-order-btn").attr('disabled', '');
         } else {
-            $("#basket-final-price").text('₦' + String(finalTotal.toFixed(2)));
-            $("#basket-order-btn").removeAttr('disabled');
+            $(".basket-final-price").text('₦' + String(finalTotal.toFixed(2)));
+            $(".basket-order-btn").removeAttr('disabled');
         }
     }
 

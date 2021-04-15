@@ -3,13 +3,6 @@
         @foreach($basket_items as $dish_key=>$dish)
         @if($dish->order_type == "simple")
         <div>
-            <!-- <div class="mb-5 pt-3 text-lg-left text-center">
-                <div class="float-left">
-                    <h4 class="font-weight-semi-bold">
-                    </h4>
-                </div>
-            </div> -->
-
             <div id="basicsAccordion">
                 <div class="box shadow border rounded bg-white mb-2">
                     <div id="basicsHeadingOne">
@@ -277,19 +270,6 @@
         </div>
         @endif
         @endforeach
-        <div class="row">
-            <div class="col-md-12 mt-xs-2">
-                <button type="button" id="basket-order-btn" onclick="placeOrder()"
-                    class="btn btn-sm btn-primary btn-block font-weight-bold" data-attach-loading="true" disabled>
 
-                    <span id="basket-txt">Place order</span>
-                    <div class="spinner-border spinner-border-sm btn-pr" id="basket-spinner" style="display: none;"
-                        role="status">
-                        <span class="sr-only">Loading...</span>
-                    </div>
-                    <span id="basket-final-price" class="float-right" data-item-subtotal="">₦0.00</span>
-                </button>
-            </div>
-        </div>
     </div>
 </div>

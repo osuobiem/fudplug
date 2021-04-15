@@ -476,15 +476,10 @@ class UserController extends Controller
      */
     public function fetch_search($area_id, $search_data, $state_data, $area_data)
     {
-        try {
-            $vendors = Vendor::join('areas', 'areas.id', '=', 'vendors.area_id')
-                ->join('states', 'areas.state_id', '=', 'states.id')->select(['vendors.business_name as business_name', 'vendors.username as username', 'vendors.id as vendor_id', 'vendors.cover_image as cover_image', 'vendors.profile_image as profile_image', 'areas.name AS area', 'areas.id AS area_id', 'states.name AS state', 'states.id AS state_id'])
-                ->where([['vendors.business_name', 'like', '%' . $search_data . '%'], $this->fix_condition('states.id', $state_data), $this->fix_condition('areas.id', $area_data)])->paginate($this->vendor_paginate);
-            return $vendors;
-        } catch (\Throwable $th) {
-            Log::error($th);
-            return response()->json(['success' => false, 'status' => 500, 'message' => "Oops! Something went wrong. Try Again!"]);
-        }
+        $vendors = Vendor::join('areas', 'areas.id', '=', 'vendors.area_id')
+            ->join('states', 'areas.state_id', '=', 'states.id')->select(['vendors.business_name as business_name', 'vendors.username as username', 'vendors.id as vendor_id', 'vendors.cover_image as cover_image', 'vendors.profile_image as profile_image', 'areas.name AS area', 'areas.id AS area_id', 'states.name AS state', 'states.id AS state_id'])
+            ->where([['vendors.business_name', 'like', '%' . $search_data . '%'], $this->fix_condition('states.id', $state_data), $this->fix_condition('areas.id', $area_data)])->orWhere([['vendors.username', 'like', '%' . $search_data . '%']])->paginate($this->vendor_paginate);
+        return $vendors;
     }
 
     /**
@@ -493,21 +488,16 @@ class UserController extends Controller
      */
     public function fetch_filter($area_id, $search_data, $state_data, $area_data)
     {
-        try {
-            if (empty($search_data)) {
-                $vendors = Vendor::join('areas', 'areas.id', '=', 'vendors.area_id')
-                    ->join('states', 'areas.state_id', '=', 'states.id')->select(['vendors.business_name as business_name', 'vendors.username as username', 'vendors.id as vendor_id', 'vendors.cover_image as cover_image', 'vendors.profile_image as profile_image', 'areas.name AS area', 'areas.id AS area_id', 'states.name AS state', 'states.id AS state_id'])
-                    ->where([$this->fix_condition('states.id', $state_data), $this->fix_condition('areas.id', $area_data)])->paginate($this->vendor_paginate);
-            } else {
-                $vendors = Vendor::join('areas', 'areas.id', '=', 'vendors.area_id')
-                    ->join('states', 'areas.state_id', '=', 'states.id')->select(['vendors.business_name as business_name', 'vendors.username as username', 'vendors.id as vendor_id', 'vendors.cover_image as cover_image', 'vendors.profile_image as profile_image', 'areas.name AS area', 'areas.id AS area_id', 'states.name AS state', 'states.id AS state_id'])
-                    ->where([['vendors.business_name', 'like', '%' . $search_data . '%'], $this->fix_condition('states.id', $state_data), $this->fix_condition('areas.id', $area_data)])->paginate($this->vendor_paginate);
-            }
-            return $vendors;
-        } catch (\Throwable $th) {
-            Log::error($th);
-            return response()->json(['success' => false, 'status' => 500, 'message' => "Oops! Something went wrong. Try Again!"]);
+        if (empty($search_data)) {
+            $vendors = Vendor::join('areas', 'areas.id', '=', 'vendors.area_id')
+                ->join('states', 'areas.state_id', '=', 'states.id')->select(['vendors.business_name as business_name', 'vendors.username as username', 'vendors.id as vendor_id', 'vendors.cover_image as cover_image', 'vendors.profile_image as profile_image', 'areas.name AS area', 'areas.id AS area_id', 'states.name AS state', 'states.id AS state_id'])
+                ->where([$this->fix_condition('states.id', $state_data), $this->fix_condition('areas.id', $area_data)])->paginate($this->vendor_paginate);
+        } else {
+            $vendors = Vendor::join('areas', 'areas.id', '=', 'vendors.area_id')
+                ->join('states', 'areas.state_id', '=', 'states.id')->select(['vendors.business_name as business_name', 'vendors.username as username', 'vendors.id as vendor_id', 'vendors.cover_image as cover_image', 'vendors.profile_image as profile_image', 'areas.name AS area', 'areas.id AS area_id', 'states.name AS state', 'states.id AS state_id'])
+                ->where([['vendors.business_name', 'like', '%' . $search_data . '%'], $this->fix_condition('states.id', $state_data), $this->fix_condition('areas.id', $area_data)])->paginate($this->vendor_paginate);
         }
+        return $vendors;
     }
 
     /**
@@ -793,26 +783,79 @@ class UserController extends Controller
                 ->where('baskets.user_id', Auth::guard('user')->user()->id);
 
             $basket_count = $basket->count();
-            $basket_items = $basket->get();
 
-            $basket_view = view('user.components.basket', compact('basket_items'))->render();
+            // Early return for when basket is empty
+            if ($basket_count < 1) {
+                return response()->json(['success' => true, 'basket_count' => $basket_count, 'paginate_count' => 0, 'total_price' => 0, 'next_page' => 1], 200);
+            }
 
-            if ($basket_count > 0) {
+            $total_price = $this->get_basket_total($basket->get());
+            $basket_items = $basket->paginate(1);
+            $paginate_count = $basket_items->count();
+            $curr_page = $request->page;
+
+            // Prepare next page
+            $next_page = $paginate_count > 0 ? ($curr_page + 1) : (int) $curr_page;
+
+            $basket_view = view('user.components.basket', compact('basket_items', 'curr_page'))->render();
+
+            if ($paginate_count > 0) {
                 // Initiate validation of basket
                 $result = $this->validate_order_quantity();
 
                 if ($result['track_err'] > 0) {
-                    return response()->json(['success' => true, 'basket_view' => $basket_view, 'basket_count' => $basket_count, 'validate_status' => true, 'data' => $result['validate_data']], 200);
+                    return response()->json(['success' => true, 'basket_view' => $basket_view, 'basket_count' => $basket_count, 'paginate_count' => $paginate_count, 'total_price' => $total_price, 'next_page' => $next_page, 'validate_status' => true, 'data' => $result['validate_data']], 200);
                 } else {
-                    return response()->json(['success' => true, 'basket_view' => $basket_view, 'basket_count' => $basket_count, 'validate_status' => false], 200);
+                    return response()->json(['success' => true, 'basket_view' => $basket_view, 'basket_count' => $basket_count, 'paginate_count' => $paginate_count, 'total_price' => $total_price, 'next_page' => $next_page, 'validate_status' => false], 200);
                 }
             } else {
-                return response()->json(['success' => true, 'basket_view' => $basket_view, 'basket_count' => $basket_count], 200);
+                return response()->json(['success' => true, 'basket_view' => $basket_view, 'basket_count' => $basket_count, 'paginate_count' => $paginate_count, 'total_price' => $total_price, 'next_page' => $next_page], 200);
             }
         } catch (\Throwable $th) {
             Log::error($th);
             return response()->json(['success' => false, 'message' => "Oops! Something went wrong. Try Again!"], 500);
         }
+    }
+
+    /**
+     * Get total amount for user basket
+     * @param Object $basket
+     * @return Int $sum
+     */
+    public function get_basket_total($basket)
+    {
+        $sum = 0;
+
+        foreach ($basket as $bas) {
+            $inner_sum = 0;
+            $order_detail = json_decode($bas->order_detail, true);
+
+            if ($bas->order_type == "simple") {
+                $price = (Integer) json_decode($bas->quantity, true)['price'];
+                $quantity = (Integer) json_decode($bas->order_detail)[0];
+                $inner_sum += ($price * $quantity);
+            } else {
+                $inner_inner_sum = 0;
+                foreach ($order_detail as $key => $detail) {
+                    $type = $detail[0];
+                    $index = $detail[1];
+                    $qty = (Integer) $detail[2];
+                    $price = 0;
+
+                    if ($type == "regular") {
+                        $price = (Integer) json_decode(json_decode($bas->quantity, true)['regular'], true)[$index]['price'];
+                    } else {
+                        $price = (Integer) json_decode(json_decode($bas->quantity, true)['bulk'], true)[$index]['price'];
+                    }
+
+                    $inner_inner_sum += ($price * $qty);
+                }
+                $inner_sum += $inner_inner_sum;
+            }
+
+            $sum += $inner_sum;
+        }
+        return $sum;
     }
 
     /**
@@ -868,7 +911,15 @@ class UserController extends Controller
                     Basket::where([['id', '=', $request->basket_id], ['user_id', '=', Auth::guard('user')->user()->id]])->forceDelete();
                 }
             }
-            return response()->json(['success' => true, 'message' => 'Item removed from basket'], 200);
+
+            // Get updated basket total
+            $basket = Item::join('baskets', 'baskets.item_id', '=', 'items.id')
+                ->select(['items.title', 'items.quantity', 'items.image', 'baskets.id', 'baskets.order_type', 'baskets.order_detail'])
+                ->where('baskets.user_id', Auth::guard('user')->user()->id);
+
+            $total_price = $this->get_basket_total($basket->get());
+
+            return response()->json(['success' => true, 'total_price' => $total_price, 'message' => 'Item removed from basket'], 200);
         } catch (\Throwable $th) {
             Log::error($th);
             return response()->json(['success' => false, 'message' => "Oops! Something went wrong. Try Again!"], 500);
@@ -898,7 +949,15 @@ class UserController extends Controller
                 $basket_item->order_detail = json_encode($order_detail);
                 $basket_item->save();
             }
-            return response()->json(['success' => true, 'message' => 'Item updated'], 200);
+
+            // Get updated basket total
+            $basket = Item::join('baskets', 'baskets.item_id', '=', 'items.id')
+                ->select(['items.title', 'items.quantity', 'items.image', 'baskets.id', 'baskets.order_type', 'baskets.order_detail'])
+                ->where('baskets.user_id', Auth::guard('user')->user()->id);
+
+            $total_price = $this->get_basket_total($basket->get());
+
+            return response()->json(['success' => true, 'total_price' => $total_price, 'message' => 'Item updated'], 200);
         } catch (\Throwable $th) {
             Log::error($th);
             return response()->json(['success' => false, 'message' => "Oops! Something went wrong. Try Again!"], 500);
