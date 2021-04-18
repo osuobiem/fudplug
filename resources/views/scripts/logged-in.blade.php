@@ -90,7 +90,7 @@
     openCommentsPost = null;
 
     // Open Comments Modal
-    function openComments(post_id) {
+    function openComments(post_id, type = 'comment') {
         $("body").addClass("modal-open");
         $(".comments-container").removeClass("d-none");
 
@@ -103,7 +103,7 @@
         commentModalOpen = true;
         openCommentsPost = post_id;
 
-        fetchComments(post_id);
+        fetchComments(post_id, type);
     }
 
     // Close Comments Modal
@@ -435,9 +435,25 @@
     // Reach when notification is clicked
     function notificationAction(post_id, type, id) {
         if(type == 'comment' || type == 'like') {
-            openComments(post_id);
+            openComments(post_id, type);
             markAsRead(id, '#mar-'+id);
         }
     }
+
+    // Share post
+    async function sharePost(post_id, vendor_name) {
+        title = 'Fudplug Post';
+        text = 'Fudplug post by '.$vendor_name;
+        url = `{{ url('?type=like&id=') }}${post_id}`;
+
+        let shareData = {title, text, url};
+
+        try {
+            await navigator.share(shareData);
+        } catch (error) {
+            console.log(error)
+            showAlert(false, 'Post share failed!')
+        }
+    } 
     
 </script>

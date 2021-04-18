@@ -71,13 +71,13 @@ $id = isset($_GET['id']) ? $_GET['id'] : '';
 
             type = `{{ $type }}`
             id = `{{ $id }}`
-            if (type == 'post') {
-                openComments(id)
+            if (type == 'like' || type == 'comment') {
+                openComments(id, type)
             }
         });
 
         // Fetch Comments
-        function fetchComments(post_id) {
+        function fetchComments(post_id, type = 'comment') {
             post = post_id
 
             url = `{{ url('comment/get') }}/${post_id}`
@@ -85,12 +85,15 @@ $id = isset($_GET['id']) ? $_GET['id'] : '';
                 .then(res => {
                     $('#comments-holder').html($.parseHTML(res))
                     comments_holder = document.getElementById("comments-holder");
+                    comments_holder.scrollTop = 0;
 
-                    setTimeout(() => {
-                        $("#comments-holder").animate({
-                            scrollTop: comments_holder.scrollHeight
-                        }, "slow")
-                    }, 1000)
+                    if(type == 'comment') {
+                        setTimeout(() => {
+                            $("#comments-holder").animate({
+                                scrollTop: comments_holder.scrollHeight
+                            }, "slow")
+                        }, 1000)
+                    }
                 })
         }
 

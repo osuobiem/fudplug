@@ -42,7 +42,7 @@ return $res;
                 </i>
             </div>
             <script>
-                $('.m-a-a-r').removeClass('d-none')
+                $('.m-a-a-r').removeClass('d-none');
             </script>
             @endif
             <div class="col-12 p-0 text-right">

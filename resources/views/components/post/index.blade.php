@@ -74,7 +74,7 @@ if(!Auth::guard('vendor')->guest()) {
     @endif
   </div>
   <div class="p-3 border-bottom osahan-post-body post-inner">
-    <p class="mb-0 f-post" onclick="openComments('{{ $post->id }}')">{{ $post->content }}</p>
+    <p class="mb-0 f-post" onclick="openComments('{{ $post->id }}', 'like')">{{ $post->content }}</p>
 
     <div class="post-media-container justify-content-center">
       @if($post->media)
@@ -118,9 +118,10 @@ if(!Auth::guard('vendor')->guest()) {
   <div class="p-3 border-bottom osahan-post-footer">
     <a class="mr-3 text-secondary" title="Like"><i class="la {{ $is_liker ? 'la-heart' : 'la-heart-o'}} la-2x text-danger" like-count="{{ $post->likes }}" onclick="{{ $is_liker ? 'unlikePost(`'.$post->id.'`, this)' : 'likePost(`'.$post->id.'`, this)' }}" id="post-likes-{{ $post->id }}"></i><span class="post-likes-inner-{{ $post->id }}">&nbsp;{{ $post->likes }}</span></a>
     <a onclick="openComments('{{ $post->id }}')" class="mr-3 text-secondary comments-ico-a" title="Comment"><i class="la la-comment la-2x"></i><span class="post-comm-inner-{{ $post->id }}">&nbsp;{{ $post->comments }}</span></a>
-    <a href="#" class="mr-3 text-secondary" title="Share"><i class="la la-share la-2x"></i></a>
-    <a href="#" class="btn btn-outline-danger btn-sm" style="float: right" title="Save"><i class="la la-bookmark"></i>
-      Save Post</a>
+    <a style=":hover{cursor:pointer}" class="mr-3 text-secondary" title="Share this post" 
+      onclick="sharePost('{{ $post->id }}', '{{ $post->vendor->business_name }}')"><i class="la la-share la-2x"></i></a>
+    {{-- <a href="#" class="btn btn-outline-danger btn-sm" style="float: right" title="Save"><i class="la la-bookmark"></i>
+      Save Post</a> --}}
   </div>
 </div>
 @endforeach
