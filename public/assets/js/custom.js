@@ -120,6 +120,7 @@ function handleFormRes(res, form = false, prefix = false, modalAlert = false) {
     if (res.success === undefined) {
         return true;
     }
+
     if (res.status === 200) {
         if (!res.success) {
             errors = res.message;
@@ -252,14 +253,11 @@ function scrollToNewComments() {
 
 // Bottom Scroll Spy
 function spyBottom(elId) {
-    elem = $("#" + elId);
-    if (
-        parseInt(elem[0].scrollHeight) - parseInt(elem.scrollTop()) ==
-        parseInt(elem.outerHeight())
-    ) {
-        return true;
+    elem = $('#' + elId);
+    if (parseInt(elem[0].scrollHeight) - parseInt(elem.scrollTop()) == parseInt(elem.outerHeight())) {
+        return true
     }
-    return false;
+    return false
 }
 
 // Increase z-index of lightbox

@@ -244,7 +244,12 @@
                                     <button type="submit" id="regular-order-btn"
                                         class="btn btn-sm btn-primary btn-block font-weight-bold"
                                         data-attach-loading="true" disabled>
-                                        Add to basket <span id="regular-final-price" class="float-right"
+                                        <span id="regular-order-txt">Add to basket</span>
+                                        <div class="spinner-border spinner-border-sm btn-pr" id="regular-order-spinner"
+                                            style="display: none;" role="status">
+                                            <span class="sr-only">Loading...</span>
+                                        </div>
+                                        <span id="regular-final-price" class="float-right"
                                             data-item-subtotal="">₦0.00</span>
                                     </button>
                                 </div>
@@ -268,9 +273,11 @@
 
     // Place order
     function addToBasket(el, vendorId) {
+        spin('regular-order');
+        $("#regular-order-btn").attr('disabled', 'disabled');
+
         el.preventDefault()
 
-        // spin('profile')
         offError('pr-update-error')
 
         let url = `{{url('user/add-to-basket')}}`;
@@ -282,7 +289,8 @@
 
         goPost(url, data)
             .then(res => {
-                // spin('profile')
+                spin('regular-order');
+                $("#regular-order-btn").removeAttr('disabled');
 
                 if (handleFormRes(res)) {
                     if (res.type == "error") {
@@ -293,11 +301,16 @@
                         getBasket();
                         // Close modal
                         $("#regular-order-modal").modal('hide');
+
+                        // Reset regular price (to be reflected on "add to basket button")
+                        prices = resetOrderPrice("regular");
                     }
                 }
             })
             .catch(err => {
-                // spin('profile');
+                spin('regular-order');
+                $("#regular-order-btn").removeAttr('disabled');
+
                 handleFormRes(err, 'pr-update-error');
             })
     }

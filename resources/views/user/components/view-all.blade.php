@@ -19,7 +19,12 @@
                                 <div class="input-group-append">
                                     <button type="submit" class="btn btn-primary btn-sm hover-lift" id="search-btn"
                                         title="Search">
-                                        <i class="la la-search la-lg"></i>
+
+                                        <i class="la la-search la-lg" id="search-txt"></i>
+                                        <div class="spinner-border spinner-border-sm btn-pr" id="search-spinner"
+                                            style="display: none;" role="status">
+                                            <span class="sr-only">Loading...</span>
+                                        </div>
                                     </button>
                                 </div>
                             </div>
@@ -109,7 +114,8 @@
                     fetchStatus = "all";
 
                     //initial content load
-                    load_more(page, searchData, stateData, areaData, fetchStatus, true);
+                    load_more(page, searchData, stateData, areaData, fetchStatus, true,
+                        true);
                 }, 500);
 
             });
@@ -126,8 +132,7 @@
                 page = 1;
 
                 //Content load
-                load_more(page, searchData, stateData, areaData, fetchStatus, true);
-
+                load_more(page, searchData, stateData, areaData, fetchStatus, true, true);
             });
 
             $("#filter-form").on('submit', function (e) {
@@ -142,7 +147,7 @@
                 page = 1;
 
                 //Content load
-                load_more(page, searchData, stateData, areaData, fetchStatus, true);
+                load_more(page, searchData, stateData, areaData, fetchStatus, true, true);
 
             });
 
@@ -162,7 +167,9 @@
 
 
     // Function to load more data on scrolling to bottom
-    function load_more(page, searchData = "", stateData = "", areaData = "", fetchStatus = "all", refresh = false) {
+    function load_more(page, searchData = "", stateData = "", areaData = "", fetchStatus = "all", refresh = false,
+        loader = false) {
+
         url = "{{ url('/user/all-vendors') }}";
         url += fixUrl(page, searchData, stateData, areaData, fetchStatus);
         $.ajax({
@@ -170,8 +177,16 @@
                 type: "get",
                 datatype: "html",
                 beforeSend: function () {
-                    // let ajaxLoading = $('.ajax-loading').html();
-                    // $('#results').append(ajaxLoading);
+                    // Remove old content on search/filter
+                    if (loader) {
+                        $('.ajax-loading').html(`
+                            <div class="spinner-border spinner-border-sm btn-pr" role="status">
+                                <span class="sr-only">Loading...</span>
+                            </div>
+                        `);
+                        $(".ajax-loading").prev().remove();
+                    }
+
                     $('.ajax-loading').show();
                 }
             })
@@ -203,10 +218,9 @@
                     // $("#results").append(data); //append data into #results element
                     $(".ajax-loading").before(data);
                 }
-
             })
             .fail(function (jqXHR, ajaxOptions, thrownError) {
-                alert('No response from server');
+                showAlert(false, 'No response from server');
             });
     }
 

@@ -205,8 +205,8 @@
                                 <div class="media-body">
                                     <div class="mb-3">
                                         <h6 class="font-weight-bold mb-0"><a class="text-dark"
-                                                href="job-profile.html">{{$menu_dish->title}}</a></h6>
-                                        <!-- <a class="d-inline-block small pt-1" href="job-profile.html">
+                                                href="javascript:void(0)">{{$menu_dish->title}}</a></h6>
+                                        <!-- <a class="d-inline-block small pt-1" href="javascript:void(0)">
                                             <span class="text-warning">
                                                 <span class="feather-star"></span>
                                                 <span class="feather-star"></span>

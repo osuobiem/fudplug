@@ -5,11 +5,31 @@
     // CSRF Token
     _token = "{{csrf_token()}}";
 
+    // Object to hold pagination state for basket and orders
+    var paginate = {
+        basketPage: 1,
+        orderPage: 1
+    }
+
     // Rating state variable
     @if(isset($rating_data))
     let rating = "{{round($rating_data['total_rating']) }}";
     let ratingState = "{{json_encode($rating_data['user_rating'])}}";
     @endif
+
+    // Initiate regular order-specific price input field state
+    packCount = $("#price-type li").length;
+    var prices = [];
+    for (let i = 0; i < packCount; i++) {
+        prices[i] = 0;
+    }
+
+    // Initiate bulk order-specific price input field state
+    bulkPackCount = $("#bulk-price-type li").length;
+    var bulkPrices = [];
+    for (let i = 0; i < bulkPackCount; i++) {
+        bulkPrices[i] = 0;
+    }
 
     $(document).ready(function () {
         // Load The Right Side when Document is Ready
@@ -19,7 +39,7 @@
         loadUserLeft();
 
         // Load user basket details
-        getBasket();
+        getBasket(1);
 
         // Hide accordions on init
         hideAccordion();
@@ -138,41 +158,95 @@
     }
 
     /*********************************** Basket/Order script */
+    // Scrollspy for basket
+    $('.basket-container').on('scroll', function (e) {
+        var elem = $(e.currentTarget);
+        if (elem[0].scrollHeight - elem.scrollTop() == elem.outerHeight()) {
+            getBasket(paginate.basketPage); //load content
+        }
+    });
+
     // Load user basket
-    function getBasket() {
+    function getBasket(page) {
         let getUrl = `${server}/user/get-basket`;
+        getUrl += fixPaginateUrl(page);
+
+        // Add preloader on using scrollspy
+        $(".basket-container-spinner").removeAttr('style');
 
         goGet(getUrl).then((res) => {
-            if (res.basket_count == 0) {
-                $("#basket-noti-dot, #mob-basket-noti-dot").addClass('d-none');
-                if (window.matchMedia("(max-width: 767px)")
-                    .matches) { // The viewport is less than 768 pixels wide (mobile device)
-                    $("#mob-basket-container").html("<p>Your Basket is empty!</p>");
-                    $("#mob-head-count").html("");
-                } else {
-                    $("#basket-container").html("<p>Your Basket is empty!</p>");
-                    $("#head-count").html("");
+            // Clear list if loading on first page
+            if (page == 1) {
+                $("#basket-container-spinner-mob").prevAll().remove();
+                $("#basket-container-spinner").prevAll().remove();
+            }
+
+            // Remove preloader
+            $("#basket-container-spinner-mob").attr('style', 'display:none');
+            $("#basket-container-spinner").attr('style', 'display:none');
+
+            // Set new page
+            paginate.basketPage = res.next_page;
+
+            if (res.paginate_count == 0) {
+                if (page == 1) {
+                    $("#basket-noti-dot, #mob-basket-noti-dot").addClass('d-none');
+                    if (window.matchMedia("(max-width: 767px)")
+                        .matches) { // The viewport is less than 768 pixels wide (mobile device)
+                        $(".basket-container-spinner-mob").before("<p>Your Basket is empty!</p>");
+                        $("#mob-head-count").html("");
+                    } else {
+                        $(".basket-container-spinner").before("<p>Your Basket is empty!</p>");
+                        $("#head-count").html("");
+                    }
                 }
             } else {
-                $("#basket-noti-dot, #mob-basket-noti-dot").html(res.basket_count);
-                $("#basket-noti-dot, #mob-basket-noti-dot").removeClass('d-none');
-                // Check viewport
-                if (window.matchMedia("(max-width: 767px)")
-                    .matches) { // The viewport is less than 768 pixels wide (mobile device)
-                    $("#mob-basket-container").html(res.basket_view);
-                    $("#mob-head-count").html("(" + res.basket_count + " Items)");
+                // Add total amount to button
+                bindBasketQtyPrice(res.total_price);
+
+                if (page == 1) {
+                    $("#basket-noti-dot, #mob-basket-noti-dot").html(res.basket_count);
+                    $("#basket-noti-dot, #mob-basket-noti-dot").removeClass('d-none');
+
+                    // Check viewport
+                    if (window.matchMedia("(max-width: 767px)")
+                        .matches) { // The viewport is less than 768 pixels wide (mobile device)
+                        $("#basket-container-spinner-mob").before(res.basket_view);
+                        $("#mob-head-count").html("(" + res.basket_count + " Items)");
+                    } else {
+                        $("#basket-container-spinner").before(res.basket_view);
+                        $("#head-count").html("(" + res.basket_count + " Items)");
+                    }
                 } else {
-                    $("#basket-container").html(res.basket_view);
-                    $("#head-count").html("(" + res.basket_count + " Items)");
+                    $("#basket-noti-dot, #mob-basket-noti-dot").html(res.basket_count);
+
+                    // Check viewport
+                    if (window.matchMedia("(max-width: 767px)")
+                        .matches) { // The viewport is less than 768 pixels wide (mobile device)
+                        $("#basket-container-spinner-mob").before(res.basket_view);
+                        $("#mob-head-count").html("(" + res.basket_count + " Items)");
+                    } else {
+                        $("#basket-container-spinner").before(res.basket_view);
+                        $("#head-count").html("(" + res.basket_count + " Items)");
+                    }
                 }
+
                 // Validate basket data on page load
                 if (res.validate_status == true) {
                     setTimeout(handleOrderValidateErr(res), 600);
                 }
             }
         }).catch((err) => {
-            // spin('user-left-side');
+            console.log(err);
         });
+    }
+
+
+    // Function to fix url for pagination
+    function fixPaginateUrl(page) {
+        fixed_url =
+            `?page=${page}`;
+        return fixed_url;
     }
 
     function toggleAccordion(e, element) {
@@ -188,11 +262,16 @@
         let url = `${server}/user/delete-basket`;
         let formData = new FormData();
 
+
         if (orderType == "simple") {
+            spin('basket-delete-' + basketId);
+
             formData.append('_token', _token);
             formData.append('basket_id', basketId);
             formData.append('order_type', orderType);
         } else {
+            spin('basket-delete-' + basketId + '-' + itemPosition);
+
             formData.append('_token', _token);
             formData.append('basket_id', basketId);
             formData.append('order_type', orderType);
@@ -201,18 +280,29 @@
 
         goPost(url, formData)
             .then(res => {
+                if (orderType == "simple") {
+                    spin('basket-delete-' + basketId);
+                } else {
+                    spin('basket-delete-' + basketId + '-' + itemPosition);
+                }
 
                 if (handleFormRes(res)) {
                     showAlert(true, res.message);
 
                     // Update total price on order button
-                    getBasketQtyPrice();
+                    bindBasketQtyPrice(res.total_price);
 
                     // Load user basket details
-                    getBasket();
+                    getBasket(paginate.basketPage);
                 }
             })
             .catch(err => {
+                if (orderType == "simple") {
+                    spin('basket-delete-' + basketId);
+                } else {
+                    spin('basket-delete-' + basketId + '-' + itemPosition);
+                }
+
                 console.error(err);
             })
     }
@@ -239,7 +329,7 @@
 
                 if (handleFormRes(res)) {
                     // Update total price on order button
-                    getBasketQtyPrice();
+                    bindBasketQtyPrice(res.total_price);;
 
                     showAlert(true, res.message);
                 }
@@ -250,12 +340,17 @@
     }
 
     function placeOrder() {
+        spin('basket');
+        $("#basket-order-btn").removeAttr('onclick');
+
         let url = `${server}/user/place-order`;
         let formData = new FormData();
         formData.append('_token', _token);
 
         goPost(url, formData)
             .then(res => {
+                spin('basket');
+
                 if (handleFormRes(res)) {
                     if (res.type == "error") {
                         handleOrderValidateErr(res);
@@ -271,6 +366,9 @@
                 }
             })
             .catch(err => {
+                spin('basket');
+                $("#basket-order-btn").attr('onclick', 'placeOrder()');
+
                 console.log(err);
             })
     }
@@ -334,11 +432,29 @@
 
     // Cancel all orders if parameter is empty
     function cancelOrder(orderId = "") {
+        if (orderId == "") {
+            spin('order-cancel');
+        } else {
+            spin('order-cancel-' + orderId);
+        }
+
         let getUrl = (orderId == "") ? `${server}/user/cancel-order` : `${server}/user/cancel-order/${orderId}`;
 
         goGet(getUrl).then((res) => {
+            if (orderId == "") {
+                spin('order-cancel');
+            } else {
+                spin('order-cancel-' + orderId);
+            }
+
             getOrder();
         }).catch((err) => {
+            if (orderId == "") {
+                spin('order-cancel');
+            } else {
+                spin('order-cancel-' + orderId);
+            }
+
             console.log(err);
         });
     }
@@ -461,7 +577,7 @@
                 $("#" + elemId).removeClass('d-none');
                 setTimeout(function () {
                     $("#basket-order-btn").attr('disabled', 'disabled');
-                }, 600);
+                }, 2000);
             }
         });
     }
@@ -569,50 +685,28 @@
 
 
     /****** Basket specific quantity input script ***************/
-    $("#basket-btn, #mob-basket-btn").click(function () {
-        getBasketQtyPrice();
-
-        // Load user basket details
-        getBasket();
+    $("#mob-basket-btn").click(function () { // For mobile
+        if (!$(".bas-container").hasClass('d-none')) {
+            // Load user basket details
+            getBasket(1);
+        }
     });
 
-    // Function to get the prices and quantities to be computed
-    function getBasketQtyPrice() {
-        $("#basket-order-btn").attr('disabled', '');
-        // Wait for three seconds before computing total
-        setTimeout(getBasketQtyPriceInit, 700);
-    }
-
-    function getBasketQtyPriceInit() {
-        let arr = [];
-        // Get all prices from basket
-        let price = $("input[name='basket_price[]']")
-            .map(function () {
-                return $(this).val();
-            }).get();
-        let quantity = $("input[name='order_quantity[]']")
-            .map(function () {
-                return $(this).val();
-            }).get();
-        if (price.length > 0 && quantity.length > 0) {
-            bindBasketQtyPrice(price, quantity)
-        }
-    }
+    $('#basket-dropdown').on('show.bs.dropdown', function () { // For desktop
+        // Load user basket details
+        getBasket(1);
+    });
 
     // Function to compute total amount and bind to order button. Also disable and enable order button
-    function bindBasketQtyPrice(price, quantity) {
-        let productArr = [];
-        price.forEach(function (p, index) {
-            productArr[index] = (p * quantity[index]);
-        });
-        finalTotal = productArr.reduce((a, b) => a + b);
+    function bindBasketQtyPrice(price) {
+        let finalTotal = price;
 
         if (finalTotal < 1) {
-            $("#basket-final-price").text('₦' + String(finalTotal.toFixed(2)));
-            $("#basket-order-btn").attr('disabled', '');
+            $(".basket-final-price").text('₦' + String(finalTotal.toFixed(2)));
+            $(".basket-order-btn").attr('disabled', '');
         } else {
-            $("#basket-final-price").text('₦' + String(finalTotal.toFixed(2)));
-            $("#basket-order-btn").removeAttr('disabled');
+            $(".basket-final-price").text('₦' + String(finalTotal.toFixed(2)));
+            $(".basket-order-btn").removeAttr('disabled');
         }
     }
 
@@ -635,12 +729,6 @@
 
 
     /******************************* Regular order-specific quantity input script */
-    // Initiate price input field state
-    packCount = $("#price-type li").length;
-    prices = [];
-    for (let i = 0; i < packCount; i++) {
-        prices[i] = 0;
-    }
 
     // Function to compute total amount and bind to order button. Also disable and enable order button
     function bindQtyPrice(element) {
@@ -675,12 +763,6 @@
 
 
     /******************************* Bulk order-specific quantity input script */
-    // Initiate price input field state
-    bulkPackCount = $("#bulk-price-type li").length;
-    bulkPrices = [];
-    for (let i = 0; i < bulkPackCount; i++) {
-        bulkPrices[i] = 0;
-    }
 
     // Function to compute total amount and bind to order button. Also disable and enable order button
     function bindBulkQtyPrice(element) {
@@ -712,6 +794,26 @@
         }
     }
     /******************************* Bulk order-specific quantity input script */
+
+    // Function to reset order price for bulk and regular
+    function resetOrderPrice(orderType) {
+        let prices = [];
+
+        if (orderType == "regular") {
+            // Initiate regular order-specific price input field state
+            packCount = $("#price-type li").length;
+            for (let i = 0; i < packCount; i++) {
+                prices[i] = 0;
+            }
+        } else {
+            // Initiate bulk order-specific price input field state
+            bulkPackCount = $("#bulk-price-type li").length;
+            for (let i = 0; i < bulkPackCount; i++) {
+                prices[i] = 0;
+            }
+        }
+        return prices;
+    }
 
     $(document).ready(function () {
         // Show rating on page load

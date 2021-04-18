@@ -106,7 +106,7 @@
             <main class="col col-md-10 col-lg-6" id="main-content">
                 @yield('content')
 
-                <!-- ********************** SHARED COMPONENTS ******************* -->
+                <!-- ******** SHARED COMPONENTS ******* -->
 
                 {{-- Notification Modal --}}
                 @include('components.notification-dropup')
@@ -114,12 +114,13 @@
                 {{-- Orders Modal --}}
                 @include('components.orders-dropup')
 
-                <!-- ********************* SHARED COMPONENTS *********************** -->
-
                 {{-- Comments Modal --}}
                 @include('components.post.comments')
 
-                <!-- ********************** VENDOR COMPONENTS ******************* -->
+                <!-- ******* SHARED COMPONENTS ********* -->
+
+
+                <!-- ******** VENDOR COMPONENTS ******* -->
 
                 {{-- Dish Addition Modal --}}
                 @include('vendor.components.dish-add')
@@ -148,11 +149,11 @@
                 </div>
                 <!-- Order Detail Modal Holder -->
 
-                <!-- ********************* VENDOR COMPONENTS *********************** -->
+                <!-- ******* VENDOR COMPONENTS ********* -->
 
 
 
-                <!-- ********************* USER COMPONENTS ************************* -->
+                <!-- ******* USER COMPONENTS ********* -->
                 <div id="regular-order-container">
 
                 </div>
@@ -163,7 +164,7 @@
                 {{-- Basket Modal --}}
                 @include('user.components.basket-dropup')
 
-                <!-- ********************* USER COMPONENTS ************************* -->
+                <!-- ******* USER COMPONENTS ********* -->
             </main>
 
             {{-- Right Sidebar Vendor --}}
@@ -283,8 +284,7 @@
         @php $logged_in = Auth::guard('vendor')->guest() ? Auth::guard('user')->user() : Auth::user('vendor'); @endphp
         <script>
             $(document).ready(function() {
-                initIO(`{{ env('NODE_SERVER') }}`, `{{ $logged_in->username }}`,
-                    `{{ $logged_in->area_id }}`)
+                // initIO(`{{ env('NODE_SERVER') }}`, `{{ $logged_in->username }}`, `{{ $logged_in->area_id }}`)
             });
 
         </script>
@@ -360,4 +360,4 @@
     <!-- Additional Scripts -->
 </body>
 
-</html
+</html>
