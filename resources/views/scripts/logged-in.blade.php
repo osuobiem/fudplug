@@ -444,7 +444,7 @@
     async function sharePost(post_id, vendor_name) {
         title = 'Fudplug Post';
         text = 'Fudplug post by '+vendor_name;
-        url = `{{ url('?type=like&id=') }}${post_id}`;
+        url = `{{ url('?type=like') }}&id=${post_id}`;
 
         let shareData = {title, text, url};
 
@@ -452,7 +452,6 @@
             await navigator.share(shareData);
         } catch (error) {
             console.log(error)
-            showAlert(false, 'Post share failed!')
         }
     } 
     
