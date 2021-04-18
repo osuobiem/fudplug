@@ -27,7 +27,7 @@ return $res;
 
 @if(count($notifications) > 0)
     @foreach ($notifications as $notification)
-        <div class="notification-card-{{ $notification->status == 0 ? 'u' : 'r' }} row">
+        <div class="notification-card-{{ $notification->status == 0 ? 'u' : 'r' }} row" onclick="notificationAction('{{ $notification->post_id }}', '{{ $notification->notice_type }}', '{{ $notification->id }}')">
             <div class="col-1 p-0 pt-1">
                 <div class="comments-img"
                     style="background-image: url('{{ $notification->photo }}')">
@@ -38,7 +38,7 @@ return $res;
             </div>
             @if($notification->status == 0)
             <div class="col-1">
-                <i class="la la-check icon-hover bright-ic ml-2 p-0 m-a-r" onclick="markAsRead('{{ $notification->id }}', this)" title="Mark as read">
+                <i class="la la-check icon-hover bright-ic ml-2 p-0 m-a-r" id="mar-{{ $notification->id }}" onclick="markAsRead('{{ $notification->id }}', this)" title="Mark as read">
                 </i>
             </div>
             <script>

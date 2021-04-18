@@ -193,6 +193,7 @@
 
     // Mark notification as read
     function markAsRead(id, el) {
+        event.stopPropagation();
         let url = `${server}/notification/mark-as-read/${id}`;
 
         goGet(url).then((res) => {
@@ -429,6 +430,14 @@
             outputArray[i] = rawData.charCodeAt(i);
         }
         return outputArray;
+    }
+
+    // Reach when notification is clicked
+    function notificationAction(post_id, type, id) {
+        if(type == 'comment' || type == 'like') {
+            openComments(post_id);
+            markAsRead(id, '#mar-'+id);
+        }
     }
     
 </script>
