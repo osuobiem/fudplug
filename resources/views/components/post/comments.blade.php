@@ -71,18 +71,16 @@ $id = isset($_GET['id']) ? $_GET['id'] : '';
 
             type = `{{ $type }}`
             id = `{{ $id }}`
-            if (type == 'comment') {
-                openComments(id, true)
-            } else if (type == 'post') {
-                openComments(id, false)
+            if (type == 'post') {
+                openComments(id)
             }
         });
 
         // Fetch Comments
-        function fetchComments(post_id, id_is_comment = false) {
+        function fetchComments(post_id) {
             post = post_id
 
-            url = `{{ url('comment/get') }}/${post_id}/0/${id_is_comment}`
+            url = `{{ url('comment/get') }}/${post_id}`
             goGet(url)
                 .then(res => {
                     $('#comments-holder').html($.parseHTML(res))

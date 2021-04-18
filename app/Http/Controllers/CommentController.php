@@ -23,16 +23,9 @@ class CommentController extends Controller
      * @param int $from Previous comment ID.
      * @return view
      */
-    function get($post_id, $from = 0, $id_is_comment = false)
+    function get($post_id, $from = 0)
     {
-        if($id_is_comment) {
-            $comment = Comment::findOrFail($post_id);
-            $post = $comment->post;
-            $post_id = $post->id;
-        }
-        else {
-            $post = $from == 0 ? Post::findOrfail($post_id) : [];
-        }
+        $post = $from == 0 ? Post::findOrfail($post_id) : [];
         
         // Check if this is the first fetch
         $comments = $from == 0
@@ -143,8 +136,8 @@ class CommentController extends Controller
                     "owner_socket" => SocketData::where('username', $post->vendor->username)->first()->socket_id,
                     "content" => view('components.notification-s', ['notification' => $notification])->render(),
                     "content_nmu" => $name . ' ' . $content_data[1] . ': "' . $trunc_content . '"',
-                    "type" => "comment",
-                    "id" => $comment->id
+                    "type" => "post",
+                    "id" => $post->id
                 ];
                 (new NotificationController())->send_notification($data, $post->vendor_id, 'vendor');
 
