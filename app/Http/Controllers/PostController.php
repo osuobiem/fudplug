@@ -320,7 +320,7 @@ class PostController extends Controller
                     "owner_socket" => SocketData::where('username', $post->vendor->username)->first()->socket_id,
                     "content" => view('components.notification-s', ['notification' => $notification])->render(),
                     "content_nmu" => $name . ' ' . $content_data[1] . ': "' . $notification->post->content,
-                    "type" => "post",
+                    "type" => "like",
                     "id" => $post->id
                 ];
 

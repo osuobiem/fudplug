@@ -90,7 +90,7 @@
     openCommentsPost = null;
 
     // Open Comments Modal
-    function openComments(post_id) {
+    function openComments(post_id, type = 'comment') {
         $("body").addClass("modal-open");
         $(".comments-container").removeClass("d-none");
 
@@ -100,12 +100,10 @@
         $(".comments-inner").removeClass("animate__fadeOut");
         $(".comments-container").removeClass("animate__fadeOut");
 
-        $("#comment-textarea")[0].emojioneArea.setFocus();
-
         commentModalOpen = true;
         openCommentsPost = post_id;
 
-        fetchComments(post_id);
+        fetchComments(post_id, type);
     }
 
     // Close Comments Modal
@@ -195,6 +193,7 @@
 
     // Mark notification as read
     function markAsRead(id, el) {
+        event.stopPropagation();
         let url = `${server}/notification/mark-as-read/${id}`;
 
         goGet(url).then((res) => {
@@ -432,5 +431,28 @@
         }
         return outputArray;
     }
+
+    // Reach when notification is clicked
+    function notificationAction(post_id, type, id) {
+        if(type == 'comment' || type == 'like') {
+            openComments(post_id, type);
+            markAsRead(id, '#mar-'+id);
+        }
+    }
+
+    // Share post
+    async function sharePost(post_id, vendor_name) {
+        title = 'Fudplug Post';
+        text = 'Fudplug post by '+vendor_name;
+        url = `{{ url('?type=like') }}&id=${post_id}`;
+
+        let shareData = {title, text, url};
+
+        try {
+            await navigator.share(shareData);
+        } catch (error) {
+            console.log(error)
+        }
+    } 
     
 </script>
