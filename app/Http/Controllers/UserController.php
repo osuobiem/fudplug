@@ -533,9 +533,6 @@ class UserController extends Controller
             // Get States Data
             $states = State::get();
 
-            // Get Vendor Menu
-            $vendor_menu = $this->vendor_menu($vendor_id)['menu_dishes'];
-
             // Vendor Details
             $vendor = Vendor::where('id', $vendor_id)->first();
 
@@ -554,44 +551,107 @@ class UserController extends Controller
             // Rating Data
             $rating_data = Auth::guard('user')->guest() ? $this->get_rating($vendor_id, 0) : $this->get_rating($vendor_id, Auth::guard('user')->user()->id);
 
-            return ['status' => true, 'data' => compact('vendor', 'vendor_location', 'states', 'areas', 'social_handles', 'vendor_menu', 'rating_data')];
+            return ['status' => true, 'data' => compact('vendor', 'vendor_location', 'states', 'areas', 'social_handles', 'rating_data')];
         } catch (\Throwable $th) {
             Log::error($th);
         }
     }
 
+    // public function get_basket(Request $request)
+    // {
+    //     try {
+    //         $basket = Item::join('baskets', 'baskets.item_id', '=', 'items.id')
+    //             ->select(['items.title', 'items.quantity', 'items.image', 'baskets.id', 'baskets.order_type', 'baskets.order_detail'])
+    //             ->where('baskets.user_id', Auth::guard('user')->user()->id);
+
+    //         $basket_count = $basket->count();
+
+    //         // Early return for when basket is empty
+    //         if ($basket_count < 1) {
+    //             return response()->json(['success' => true, 'basket_count' => $basket_count, 'paginate_count' => 0, 'total_price' => 0, 'next_page' => 1], 200);
+    //         }
+
+    //         $total_price = $this->get_basket_total($basket->get());
+    //         $basket_items = $basket->paginate(7);
+    //         $paginate_count = $basket_items->count();
+    //         $curr_page = $request->page;
+
+    //         // Prepare next page
+    //         $next_page = $paginate_count > 0 ? ($curr_page + 1) : (int) $curr_page;
+
+    //         $basket_view = view('user.components.basket', compact('basket_items', 'curr_page'))->render();
+
+    //         if ($paginate_count > 0) {
+    //             // Initiate validation of basket
+    //             $result = $this->validate_order_quantity();
+
+    //             if ($result['track_err'] > 0) {
+    //                 return response()->json(['success' => true, 'basket_view' => $basket_view, 'basket_count' => $basket_count, 'paginate_count' => $paginate_count, 'total_price' => $total_price, 'next_page' => $next_page, 'validate_status' => true, 'data' => $result['validate_data']], 200);
+    //             } else {
+    //                 return response()->json(['success' => true, 'basket_view' => $basket_view, 'basket_count' => $basket_count, 'paginate_count' => $paginate_count, 'total_price' => $total_price, 'next_page' => $next_page, 'validate_status' => false], 200);
+    //             }
+    //         } else {
+    //             return response()->json(['success' => true, 'basket_view' => $basket_view, 'basket_count' => $basket_count, 'paginate_count' => $paginate_count, 'total_price' => $total_price, 'next_page' => $next_page], 200);
+    //         }
+    //     } catch (\Throwable $th) {
+    //         Log::error($th);
+    //         return response()->json(['success' => false, 'message' => "Oops! Something went wrong. Try Again!"], 500);
+    //     }
+    // }
+
     /**
      * Fetch Vendor Menu
+     *
+     * @param Request $request
+     * @param int $vendor
      * @return Array
      */
-    public function vendor_menu($vendor)
+    public function vendor_menu(Request $request, $vendor)
     {
+        try {
+            $curr_page = $request->page;
 
-        // Fetch the Menu Item
-        $menu = Menu::where('vendor_id', $vendor)->first();
+            // Fetch the Menu Item
+            $menu = Menu::where('vendor_id', $vendor)->first();
 
-        if (!empty($menu)) {
-            $menu = json_decode($menu->items);
+            if (!empty($menu)) {
+                $menu = json_decode($menu->items);
 
-            // Get the Array of Dish IDs
-            $menu_items = $menu->item;
+                // Get the Array of Dish IDs
+                $menu_items = $menu->item;
 
-            if (!empty($menu_items)) {
-                // Fetch Dishes for Menu
-                $menu_data = Item::select("*")
-                    ->whereIn('id', $menu_items);
-                $menu_count = $menu_data->count();
-                $menu_dishes = $menu_data->get();
+                if (!empty($menu_items)) {
+                    // Fetch Dishes for Menu
+                    $menu_data = Item::select("*")
+                        ->whereIn('id', $menu_items);
+                    $menu_count = $menu_data->count();
+                    $menu_dishes = $menu_data->paginate(6);
+                    $paginate_count = $menu_dishes->count();
+                } else {
+                    $menu_count = 0;
+                    $menu_dishes = null;
+                    $paginate_count = 0;
+                }
             } else {
                 $menu_count = 0;
                 $menu_dishes = null;
+                $paginate_count = 0;
             }
-        } else {
-            $menu_count = 0;
-            $menu_dishes = null;
-        }
 
-        return compact('menu_count', 'menu_dishes');
+            // Prepare next page
+            $next_page = $paginate_count > 0 ? ($curr_page + 1) : (int) $curr_page;
+
+            // Get view data
+            $menu_view = view('user.components.vendor-menu', compact('curr_page', 'menu_dishes'));
+
+            // dd($menu_view->render());
+
+            // return compact('menu_count', 'menu_dishes');
+            return response()->json(['success' => true, 'next_page' => $next_page, 'menu_view' => $menu_view->render()], 200);
+        } catch (\Throwable $th) {
+            Log::error($th);
+            return response()->json(['success' => false, 'message' => "Oops! Something went wrong. Try Again!"], 500);
+        }
     }
 
     /**
@@ -1234,6 +1294,9 @@ class UserController extends Controller
             $curr_page = $request->page;
 
             if (!empty($orders->get()->toArray())) {
+                // Total amount for orders
+                $total_amount = $this->get_order_total($this->fix_order($orders->get()));
+
                 // Paginated order data
                 $order_pag = $this->fix_order($orders->paginate(3));
 
@@ -1247,10 +1310,10 @@ class UserController extends Controller
 
                 // Prepare next page
                 $next_page = (int) $curr_page;
-            }
 
-            // Total amount for orders
-            $total_amount = ($orders == null) ? 0 : $this->get_order_total($orders);
+                // Total amount for orders
+                $total_amount = 0;
+            }
 
             $order_view = view('user.components.order', compact('order_pag', 'curr_page'))->render();
 

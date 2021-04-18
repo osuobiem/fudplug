@@ -145,7 +145,7 @@
                 @if($order->order_status['status'] == "Pending")
                 <div class="card-footer border-top p-0 text-muted">
                     <a href="javascript:void(0);" id="order-cancel-{{$order->order_id}}-btn"
-                        onclick="cancelOrder('{{$order->order_id}}')" class="btn btn-sm">
+                        onclick="cancelOrder(this, '{{$order->order_id}}')" class="btn btn-sm">
                         <span id="order-cancel-{{$order->order_id}}-txt">
                             <i class="las la-times"></i>&nbsp;Cancel
                             order

@@ -137,7 +137,7 @@
                                 </span>
                             </h6>
                             <div class="dropdown-divider"></div>
-                            <div class="box-body generic-scrollbar p-2 text-center job-item-2 desktop-order-container"
+                            <div class="box-body generic-scrollbar p-2 text-center job-item-2 order-container"
                                 style="max-height: 100px; overflow: auto;" id="h-noti-cont">
 
                                 <div class="spinner-border spinner-border-sm btn-pr" role="status"

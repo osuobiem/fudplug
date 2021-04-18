@@ -403,7 +403,7 @@
     }
 
     // Scrollspy for order list
-    $('.desktop-order-container').on('scroll', function (e) {
+    $('.order-container').on('scroll', function (e) {
         var elem = $(e.currentTarget);
         if (elem[0].scrollHeight - elem.scrollTop() == elem.outerHeight()) {
             getOrder(paginate.orderPage, paginate.orderType); //load content
@@ -514,6 +514,7 @@
 
         let getUrl = (orderId == "") ? `${server}/user/cancel-order` : `${server}/user/cancel-order/${orderId}`;
 
+
         goGet(getUrl).then((res) => {
             if (orderId == "") {
                 spin('order-cancel');
@@ -522,8 +523,6 @@
             }
 
             updateOrderOnDelete(element);
-
-            getOrder();
         }).catch((err) => {
             if (orderId == "") {
                 spin('order-cancel');
@@ -538,6 +537,14 @@
     // Function removes deleted item from basket UI
     function updateOrderOnDelete(e) {
         $(e).parent().parent().parent().parent().parent().remove();
+
+        let numberElements = $(e).parent().parent().parent().parent().parent().parent().children('div').length;
+
+        if (numberElements < 2) {
+            getOrder(1);
+        } else {
+            getOrder(1, "", true);
+        }
     }
 
     // Load order dropdown on click of order button

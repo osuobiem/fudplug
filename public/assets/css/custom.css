@@ -1571,9 +1571,19 @@ a:visited {
     color:#FF912C;
   }
 
-  /* Give red border color to bottom of modal header */
+  /* Give red border color to bottom border */
   .red-bottom{
     border-bottom-color: var(--i-primary) !important;
+  }
+
+  /* Give red border color to right border */
+  .red-right{
+    border-right-color: var(--i-primary) !important;
+  }
+
+  /* Give red border color to top border */
+  .red-top{
+    border-top-color: var(--i-primary) !important;
   }
 
   /* Remove red colour from sociaalite link btn on visited */
