@@ -8,7 +8,8 @@
     // Object to hold pagination state for basket and orders
     var paginate = {
         basketPage: 1,
-        orderPage: 1
+        orderPage: 1,
+        orderType: "",
     }
 
     // Rating state variable
@@ -45,7 +46,7 @@
         hideAccordion();
 
         // Fetch user orders
-        getOrder();
+        getOrder(1);
     });
 
     // Open user profile modal
@@ -167,43 +168,48 @@
     });
 
     // Load user basket
-    function getBasket(page) {
+    function getBasket(page, toDelete = false) {
         let getUrl = `${server}/user/get-basket`;
         getUrl += fixPaginateUrl(page);
 
-        // Add preloader on using scrollspy
-        $(".basket-container-spinner").removeAttr('style');
+        if (toDelete == false) {
+            // Add preloader on using scrollspy
+            $("#basket-container-spinner-mob").removeAttr('style');
+            $("#basket-container-spinner").removeAttr('style');
+        }
 
         goGet(getUrl).then((res) => {
-            // Clear list if loading on first page
-            if (page == 1) {
-                $("#basket-container-spinner-mob").prevAll().remove();
-                $("#basket-container-spinner").prevAll().remove();
+            // Add total amount to button
+            bindBasketQtyPrice(res.total_price);
+
+            if (toDelete == false) {
+                // Clear list if loading on first page
+                if (page == 1) {
+                    $("#basket-container-spinner-mob").prevAll().remove();
+                    $("#basket-container-spinner").prevAll().remove();
+                }
+
+                // Remove preloader
+                $("#basket-container-spinner-mob").attr('style', 'display:none');
+                $("#basket-container-spinner").attr('style', 'display:none');
+
+                // Set new page
+                paginate.basketPage = res.next_page;
             }
-
-            // Remove preloader
-            $("#basket-container-spinner-mob").attr('style', 'display:none');
-            $("#basket-container-spinner").attr('style', 'display:none');
-
-            // Set new page
-            paginate.basketPage = res.next_page;
 
             if (res.paginate_count == 0) {
                 if (page == 1) {
                     $("#basket-noti-dot, #mob-basket-noti-dot").addClass('d-none');
                     if (window.matchMedia("(max-width: 767px)")
                         .matches) { // The viewport is less than 768 pixels wide (mobile device)
-                        $(".basket-container-spinner-mob").before("<p>Your Basket is empty!</p>");
+                        $("#basket-container-spinner-mob").before(`<p class="mt-3">Your Basket is empty!</p>`);
                         $("#mob-head-count").html("");
                     } else {
-                        $(".basket-container-spinner").before("<p>Your Basket is empty!</p>");
+                        $("#basket-container-spinner").before(`<p class="mt-3">Your Basket is empty!</p>`);
                         $("#head-count").html("");
                     }
                 }
             } else {
-                // Add total amount to button
-                bindBasketQtyPrice(res.total_price);
-
                 if (page == 1) {
                     $("#basket-noti-dot, #mob-basket-noti-dot").html(res.basket_count);
                     $("#basket-noti-dot, #mob-basket-noti-dot").removeClass('d-none');
@@ -211,10 +217,16 @@
                     // Check viewport
                     if (window.matchMedia("(max-width: 767px)")
                         .matches) { // The viewport is less than 768 pixels wide (mobile device)
-                        $("#basket-container-spinner-mob").before(res.basket_view);
+                        if (toDelete == false) {
+                            $("#basket-container-spinner-mob").before(res.basket_view);
+                        }
+
                         $("#mob-head-count").html("(" + res.basket_count + " Items)");
                     } else {
-                        $("#basket-container-spinner").before(res.basket_view);
+                        if (toDelete == false) {
+                            $("#basket-container-spinner").before(res.basket_view);
+                        }
+
                         $("#head-count").html("(" + res.basket_count + " Items)");
                     }
                 } else {
@@ -223,10 +235,16 @@
                     // Check viewport
                     if (window.matchMedia("(max-width: 767px)")
                         .matches) { // The viewport is less than 768 pixels wide (mobile device)
-                        $("#basket-container-spinner-mob").before(res.basket_view);
+                        if (toDelete == false) {
+                            $("#basket-container-spinner-mob").before(res.basket_view);
+                        }
+
                         $("#mob-head-count").html("(" + res.basket_count + " Items)");
                     } else {
-                        $("#basket-container-spinner").before(res.basket_view);
+                        if (toDelete == false) {
+                            $("#basket-container-spinner").before(res.basket_view);
+                        }
+
                         $("#head-count").html("(" + res.basket_count + " Items)");
                     }
                 }
@@ -258,7 +276,7 @@
         $('.collapse-hide').collapse('hide');
     }
 
-    function deleteCartItem(basketId, orderType, itemPosition = null) {
+    function deleteCartItem(e, basketId, orderType, itemPosition = null) {
         let url = `${server}/user/delete-basket`;
         let formData = new FormData();
 
@@ -289,11 +307,11 @@
                 if (handleFormRes(res)) {
                     showAlert(true, res.message);
 
-                    // Update total price on order button
-                    bindBasketQtyPrice(res.total_price);
+                    // Update Basket UI
+                    updateBasketOnDelete(e);
 
-                    // Load user basket details
-                    getBasket(paginate.basketPage);
+                    // Update basket total-price and number of items
+                    getBasket(1, true);
                 }
             })
             .catch(err => {
@@ -305,6 +323,17 @@
 
                 console.error(err);
             })
+    }
+
+    // Function removes deleted item from basket UI
+    function updateBasketOnDelete(e) {
+        let listItem = $(e).parent().parent();
+
+        if (listItem.parent().children().length > 1) {
+            listItem.remove();
+        } else {
+            listItem.parent().parent().parent().parent().parent().remove();
+        }
     }
 
     function updateCartItem(basketId, orderType, quantity, itemPosition = null) {
@@ -356,7 +385,7 @@
                         handleOrderValidateErr(res);
                     } else {
                         // Load user basket details
-                        getBasket();
+                        getBasket(1);
 
                         // Close basket
                         $("#basket-btn").next().removeClass("show");
@@ -373,14 +402,51 @@
             })
     }
 
-    function getOrder(type = "") {
+    // Scrollspy for order list
+    $('.desktop-order-container').on('scroll', function (e) {
+        var elem = $(e.currentTarget);
+        if (elem[0].scrollHeight - elem.scrollTop() == elem.outerHeight()) {
+            getOrder(paginate.orderPage, paginate.orderType); //load content
+        }
+    });
+
+    function getOrder(page, type = "", toCancel = false) {
         let getUrl = (type == "") ? `${server}/user/get-order` : `${server}/user/get-order/${type}`;
+        getUrl += fixPaginateUrl(page);
+
+        if (toCancel == false) {
+            // Add preloader on using scrollspy
+            $("#order-container-spinner-mob").removeAttr('style');
+            $("#order-container-spinner").removeAttr('style');
+
+            // Set orderType state
+            paginate.orderType = type;
+        }
 
         goGet(getUrl).then((res) => {
+            if (toCancel == false) {
+                // Clear list if loading on first page
+                if (page == 1) {
+                    $("#order-container-spinner-mob").prevAll().remove();
+                    $("#order-container-spinner").prevAll().remove();
+                }
+
+                // Remove preloader
+                $("#order-container-spinner-mob").attr('style', 'display:none');
+                $("#order-container-spinner").attr('style', 'display:none');
+
+                // Set new page
+                paginate.orderPage = res.next_page;
+            }
+
+
             if (window.matchMedia("(max-width: 767px)")
                 .matches) { // The viewport is less than 768 pixels wide (mobile device)
-                $(".mob-order-container").html(res.order_view);
+                if (toCancel == false) {
+                    $("#order-container-spinner-mob").before(res.order_view);
+                }
                 $("#mob-order-price").html(`₦${res.total_amount}.00`);
+
                 if (type == "history") {
                     // Hide cancel button on displaying history
                     $("#mob-order-cancel-btn").addClass('d-none');
@@ -402,8 +468,11 @@
                     }
                 }
             } else {
-                $(".desktop-order-container").html(res.order_view);
+                if (toCancel == false) {
+                    $("#order-container-spinner").before(res.order_view);
+                }
                 $("#order-price").html(`₦${res.total_amount}.00`);
+
                 if (type == "history") {
                     // Hide cancel button on displaying history
                     $("#order-cancel-btn").addClass('d-none');
@@ -425,13 +494,18 @@
                     }
                 }
             }
+
+
         }).catch((err) => {
             spin('user-right-side');
         });
     }
 
+
+
+
     // Cancel all orders if parameter is empty
-    function cancelOrder(orderId = "") {
+    function cancelOrder(element, orderId = "") {
         if (orderId == "") {
             spin('order-cancel');
         } else {
@@ -447,6 +521,8 @@
                 spin('order-cancel-' + orderId);
             }
 
+            updateOrderOnDelete(element);
+
             getOrder();
         }).catch((err) => {
             if (orderId == "") {
@@ -459,6 +535,11 @@
         });
     }
 
+    // Function removes deleted item from basket UI
+    function updateOrderOnDelete(e) {
+        $(e).parent().parent().parent().parent().parent().remove();
+    }
+
     // Load order dropdown on click of order button
     $("#order-btn, #mob-order-btn").click(function () {
         // Always make history button show on toggling orders on mobile
@@ -466,7 +547,7 @@
         $("#mob-order-history-btn, #order-history-btn").removeClass('d-none')
         // Always make history button show on toggling orders on mobile
 
-        getOrder();
+        getOrder(1);
     });
 
     // Cancel all user order
@@ -484,7 +565,7 @@
             $("#today-order-btn").removeClass('d-none');
         }
 
-        getOrder("history");
+        getOrder(1, "history");
     });
 
     // Toggle Today's Order
@@ -497,7 +578,7 @@
             $("#order-history-btn").removeClass('d-none');
         }
 
-        getOrder();
+        getOrder(1);
     });
 
     // Validate quantity (on adding to basket)

@@ -298,7 +298,8 @@
                     } else {
                         showAlert(true, res.message);
                         // Load user basket details
-                        getBasket();
+                        getBasket(1);
+
                         // Close modal
                         $("#regular-order-modal").modal('hide');
 
