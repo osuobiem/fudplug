@@ -59,7 +59,9 @@ class NotificationController extends Controller
                 $name = $initiator->business_name;
             }
             
-            $notification->content = '<strong>' . $name . '</strong> ' . $content_data[1] . ': "' . substr($notification->post->content, 0, 40) . '..."';
+            $ncount = grapheme_strlen($notification->post->content);
+            $trunc_content = $ncount > 40 ? grapheme_substr($notification->post->content, 0, 40).'...' : $notification->post->content;
+            $notification->content = '<strong>' . $name . '</strong> ' . $content_data[1] . ': "' . $trunc_content . '"';
             $notification->photo = Storage::url($initiator_data[0] . '/profile/' . $initiator->profile_image);
         }
 
@@ -98,7 +100,9 @@ class NotificationController extends Controller
                     $name = $initiator->business_name;
                 }
 
-                $notification->content = '<strong>' . $name . '</strong> ' . $content_data[1] . ': "' . substr($notification->post->content, 0, 40) . '..."';
+                $ncount = grapheme_strlen($notification->post->content);
+                $trunc_content = $ncount > 40 ? grapheme_substr($notification->post->content, 0, 40).'...' : $notification->post->content;
+                $notification->content = '<strong>' . $name . '</strong> ' . $content_data[1] . ': "' . $trunc_content . '"';
                 $notification->photo = Storage::url($initiator_data[0] . '/profile/' . $initiator->profile_image);
 
                 return view('components.notification-i', [

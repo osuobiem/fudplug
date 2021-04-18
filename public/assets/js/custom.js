@@ -1,14 +1,13 @@
 $(document).ready(function () {
-    $('.dropdown-menu').click(e => {
-        e.stopPropagation()
-    })
+    $(".dropdown-menu").click((e) => {
+        e.stopPropagation();
+    });
 
-
-    $('#comments-holder').scroll(() => {
+    $("#comments-holder").scroll(() => {
         if (comments_holder.scrollHeight - comments_holder.scrollTop <= 420) {
-            $('#see-n-comms-btn').addClass('d-none');
+            $("#see-n-comms-btn").addClass("d-none");
         }
-    })
+    });
 });
 
 // Fill Picked Image in Div
@@ -73,9 +72,9 @@ function showAlert(status, message) {
 function goGet(url) {
     return new Promise((resolve, reject) => {
         $.ajax({
-                type: "GET",
-                url,
-            })
+            type: "GET",
+            url,
+        })
             .then((res) => {
                 resolve(res);
             })
@@ -151,9 +150,9 @@ function handleFormRes(res, form = false, prefix = false, modalAlert = false) {
                         .modal("show");
                 } else {
                     for (const [key, value] of Object.entries(errors)) {
-                        e = prefix ?
-                            document.getElementById(prefix + "-" + key) :
-                            document.getElementById(key);
+                        e = prefix
+                            ? document.getElementById(prefix + "-" + key)
+                            : document.getElementById(key);
                         e.innerHTML = "";
                         [...value].forEach((m) => {
                             e.innerHTML += `<p>${m}</p>`;
@@ -193,9 +192,8 @@ function spin(id) {
     $(`#${id}-spinner`).toggle();
 
     btnDis
-        ?
-        $(`#${id}-btn`).attr("disabled", true) :
-        $(`#${id}-btn`).removeAttr("disabled");
+        ? $(`#${id}-btn`).attr("disabled", true)
+        : $(`#${id}-btn`).removeAttr("disabled");
 }
 
 // Turn off Form Errors
@@ -239,6 +237,7 @@ function launchLight(a) {
     event.stopPropagation();
 
     document.getElementById("light-" + a).click();
+    raiseZindex();
 }
 
 // Stop Comments Inner Event Propagation
@@ -249,7 +248,7 @@ $(".comments-inner").click(() => {
 // Scroll To Comments Bottom
 function scrollToNewComments() {
     comments_holder.scrollTop = comments_holder.scrollHeight;
-    $('#see-n-comms-btn').addClass('d-none')
+    $("#see-n-comms-btn").addClass("d-none");
 }
 
 // Bottom Scroll Spy
@@ -259,4 +258,19 @@ function spyBottom(elId) {
         return true
     }
     return false
+}
+
+// Increase z-index of lightbox
+function raiseZindex() {
+    raise = function () {
+        if ($(".uk-open").length > 0) {
+            if ($(".uk-open").attr("style") == "z-index: 3010") {
+                clearInterval(interval);
+            } else {
+                $(".uk-open").attr("style", "z-index: 3010");
+            }
+        }
+    };
+
+    interval = setInterval(raise, 5);
 }

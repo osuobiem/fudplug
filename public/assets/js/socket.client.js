@@ -49,8 +49,8 @@ function initIO(server, username, area = '') {
         if (data.area == area && commentModalOpen && data.commentor != socket.id && data.postId == openCommentsPost) {
             // Append new comment
             $("#no-comment").html() === undefined
-                ? $("#comments-holder").append($.parseHTML(data.newComment))
-                : $("#comments-holder").html(data.newComment);
+                ? $("#comments-below-post").append($.parseHTML(data.newComment))
+                : $("#comments-below-post").html(data.newComment);
 
             // Scroll to bottom
             comments_holder = document.getElementById("comments-holder");

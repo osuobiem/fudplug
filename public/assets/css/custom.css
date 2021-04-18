@@ -1159,7 +1159,7 @@ a:visited {
 
 .dropup-inner {
     background: #fff;
-    max-height: 90%;
+    max-height: 99%;
     height: auto;
     width: 100%;
     position: inherit;
@@ -1250,12 +1250,13 @@ a:visited {
 }
 
 .more-comments {
-    margin-bottom: 10px;
+    margin-top: 10px;
+    margin-bottom: 5px;
     text-align: center;
 }
 
 #comments-holder {
-    max-height: 71.5%;
+    max-height: 80%;
     overflow: auto;
 }
 
@@ -1578,4 +1579,13 @@ a:visited {
   /* Remove red colour from sociaalite link btn on visited */
   .socialite-btn:visited {
     color: white;
+  }
+
+  .emojionearea .emojionearea-button {
+    opacity: 1 !important;
+    background-color: #fff;
+  }
+
+  .emojionearea .emojionearea-editor {
+      min-height: 2em !important;
   }

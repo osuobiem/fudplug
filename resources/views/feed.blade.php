@@ -19,9 +19,6 @@
   </div>
 </div>
 
-{{-- Comments Modal --}}
-@include('components.post.comments')
-
 @endsection
 
 @push('scripts')
