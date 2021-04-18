@@ -443,7 +443,7 @@
     // Share post
     async function sharePost(post_id, vendor_name) {
         title = 'Fudplug Post';
-        text = 'Fudplug post by '.$vendor_name;
+        text = 'Fudplug post by '+$vendor_name;
         url = `{{ url('?type=like&id=') }}${post_id}`;
 
         let shareData = {title, text, url};
