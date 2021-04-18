@@ -247,7 +247,9 @@ $(".comments-inner").click(() => {
 
 // Scroll To Comments Bottom
 function scrollToNewComments() {
-    comments_holder.scrollTop = comments_holder.scrollHeight;
+    $("#comments-holder").animate({
+        scrollTop: comments_holder.scrollHeight
+    }, "slow")
     $("#see-n-comms-btn").addClass("d-none");
 }
 

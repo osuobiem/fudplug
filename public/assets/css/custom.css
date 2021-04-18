@@ -1322,7 +1322,9 @@ a:visited {
 #see-l-posts-btn {
     position: fixed;
     top: 60px;
-    left: 33%;
+    left: 0;
+    right: 0;
+    margin: auto;
     z-index: 2000;
     border-radius: 20px;
     font-weight: 500;
@@ -1330,46 +1332,25 @@ a:visited {
 
 #see-n-comms-btn {
     position: fixed;
-    bottom: 25%;
-    left: 30%;
+    bottom: 18%;
     z-index: 2000;
     border-radius: 20px;
     font-weight: 500;
+    margin: 0 auto -7% auto;
+    left: 0;
+    right: 0;
 }
 
 @media (min-width: 768px) {
-    #see-new-posts-btn {
-        left: 43%;
-    }
-
-    #see-n-comms-btn {
-        left: 38%;
-    }
-
     .order-img {
         height: 410px;
     }
-}
-
-@media (min-width: 992px) {
-    #see-new-posts-btn {
-        left: 45%;
-    }
 
     #see-n-comms-btn {
-        left: 34%;
+        bottom: 25%;
     }
 }
 
-@media (min-width: 1440px) {
-    #see-new-posts-btn {
-        left: 46.5%;
-    }
-
-    #see-n-comms-btn {
-        left: 38%;
-    }
-}
 
 .notification-card-u {
     padding: 5px 10px;

@@ -11,7 +11,7 @@ function initIO(server, username, area = '') {
     socket.on("like-count", (data) => {
         if (data.area == area) {
             $(`#post-likes-${data.postId}`).attr("like-count", data.likesCount);
-            $(`#post-likes-inner-${data.postId}`).html(
+            $(`.post-likes-inner-${data.postId}`).html(
                 `&nbsp;${data.likesCount}`
             );
         }
@@ -38,7 +38,7 @@ function initIO(server, username, area = '') {
     // Listen for comment count event
     socket.on("comment-count", (data) => {
         if (data.area == area) {
-            $(`#post-comm-inner-${data.postId}`).html(
+            $(`.post-comm-inner-${data.postId}`).html(
                 `&nbsp;${data.commentsCount}`
             );
         }
@@ -60,6 +60,10 @@ function initIO(server, username, area = '') {
             }
             else if(comments_holder.scrollHeight - comments_holder.clientHeight > 75) {
                 $('#see-n-comms-btn').removeClass('d-none');
+
+                setTimeout(() => {
+                    $('#see-n-comms-btn').addClass('d-none')
+                }, 5000)
             }
         }
 

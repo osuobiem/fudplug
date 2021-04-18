@@ -100,8 +100,6 @@
         $(".comments-inner").removeClass("animate__fadeOut");
         $(".comments-container").removeClass("animate__fadeOut");
 
-        $("#comment-textarea")[0].emojioneArea.setFocus();
-
         commentModalOpen = true;
         openCommentsPost = post_id;
 

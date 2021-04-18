@@ -284,7 +284,7 @@
         @php $logged_in = Auth::guard('vendor')->guest() ? Auth::guard('user')->user() : Auth::user('vendor'); @endphp
         <script>
             $(document).ready(function() {
-                // initIO(`{{ env('NODE_SERVER') }}`, `{{ $logged_in->username }}`, `{{ $logged_in->area_id }}`)
+                initIO(`{{ env('NODE_SERVER') }}`, `{{ $logged_in->username }}`, `{{ $logged_in->area_id }}`)
             });
 
         </script>

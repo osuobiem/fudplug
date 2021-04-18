@@ -127,12 +127,14 @@ $id = isset($_GET['id']) ? $_GET['id'] : '';
                         spin('comment')
                         // Append new comment
                         $('#no-comment').html() === undefined ?
-                            $('#comments-holder').append($.parseHTML(res)) :
-                            $('#comments-holder').html(res)
+                            $('#comments-below-post').append($.parseHTML(res)) :
+                            $('#comments-below-post').html(res)
 
                         // Scroll to bottom
                         comments_holder = document.getElementById("comments-holder");
-                        comments_holder.scrollTop = comments_holder.scrollHeight;
+                        $("#comments-holder").animate({
+                            scrollTop: comments_holder.scrollHeight
+                        }, "slow");
 
                         // Clear Textarea
                         [...$('.emojionearea-editor')].forEach(el => {
