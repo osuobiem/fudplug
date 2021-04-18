@@ -1,5 +1,5 @@
 <div class="dropup-container comments-container animate__animated d-none" onclick="closeComments()">
-  <div class="dropup-inner comments-inner animate__animated" style="height: 90%">
+  <div class="dropup-inner comments-inner animate__animated" style="height: 99%">
 
     <ul class="nav nav-justified osahan-line-tab" style="box-shadow: 0 5px 10px 0 #00000061">
       <li class="nav-item text-left">
@@ -28,7 +28,7 @@
         <div class="post-textarea-cont w-100" id="comment-form">
           @csrf
           <textarea placeholder="What do you think?..." class="form-control border-0 p-0 shadow-none post-input"
-            required rows="3" id="comment-textarea" name="comment_content"></textarea>
+            required id="comment-textarea" name="comment_content"></textarea>
 
           <i class="la la-paper-plane la-lg comment-post-ico" id="comment-txt" onclick="submitComment()"></i>
           <button class="btn btn-primary btn-sm" id="comment-spinner" style="display: none;">
@@ -72,7 +72,10 @@
       .then(res => {
         $('#comments-holder').html($.parseHTML(res))
         comments_holder = document.getElementById("comments-holder");
-        comments_holder.scrollTop = comments_holder.scrollHeight;
+        
+        setTimeout(() => {
+          $("#comments-holder").animate({ scrollTop: comments_holder.scrollHeight }, "slow")
+        }, 1000)
       })
   }
 
@@ -86,7 +89,7 @@
 
         $('.more-comments').remove()
 
-        $('#comments-holder').prepend(res)
+        $('#comments-below-post').prepend(res)
         comments_holder.scrollTop = comments_holder.scrollHeight - h;
       })
   }
