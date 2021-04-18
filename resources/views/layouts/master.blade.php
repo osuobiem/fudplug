@@ -37,313 +37,327 @@
 
 <body>
     @php
-    // Node Server
-    $node_server = env('NODE_SERVER');
+        // Node Server
+        $node_server = env('NODE_SERVER');
+        
+        // Format Time/Date
+        function format_time($time)
+        {
+            $time = strtotime($time);
+            $t_diff = time() - $time;
+            $res = '';
+        
+            if ($t_diff < 60) {
+                $res = $t_diff < 1 ? 'now' : $t_diff . 's ago';
+            } elseif ($t_diff >= 60 && $t_diff < 3600) {
+                $res = (int) ($t_diff / 60) . 'm ago';
+            } elseif ($t_diff >= 3600 && $t_diff < 86399) {
+                $res =
+                    (int) ($t_diff / 3600) .
+                    "h
+                        ago";
+            } elseif ($t_diff >= 86400 && $t_diff < 604799) {
+                $res = (int) ($t_diff / 86400) . 'd ago';
+            } else {
+                $res = date('y') == date('y', $time) ? date('d M', $time) : date('d M y', $time);
+            }
+            return $res;
+        }
+    @endphp {{-- Check for session availablity --}} @if (!Auth::guard('vendor')->guest())
+        @include('vendor.components.header')
 
-    // Format Time/Date
-    function format_time($time) {
-    $time = strtotime($time);
-    $t_diff = time() - $time;
-    $res = "";
+    @elseif(!Auth::guard('user')->guest())
+        @include('user.components.header')
 
-    if($t_diff < 60) { $res=$t_diff < 1 ? 'now' : $t_diff."s ago"; } elseif($t_diff>= 60 && $t_diff < 3600) {
-            $res=(int)($t_diff/60)."m ago"; } elseif($t_diff>= 3600 && $t_diff < 86399) { $res=(int)($t_diff/3600)."h
-                ago"; } elseif($t_diff>= 86400 && $t_diff < 604799) { $res=(int)($t_diff/86400)."d ago"; } else {
-                    $res=date("y")==date("y", $time) ? date("d M", $time) : date("d M y", $time); } return $res; }
-                    @endphp {{-- Check for session availablity --}} @if(!Auth::guard('vendor')->guest())
-                    @include('vendor.components.header')
+    @else
+        @include('components.header')
+        @include('components.login')
+        @include('components.signup')
+    @endif
 
-                    @elseif(!Auth::guard('user')->guest())
-                    @include('user.components.header')
+    <div class="container-fluid">
+        <div class="row main-section">
 
-                    @else
-                    @include('components.header')
-                    @include('components.login')
-                    @include('components.signup')
-                    @endif
+            <!-- Left Sidebar -->
+            @if (!Auth::guard('vendor')->guest())
+                @include('vendor.components.left-side')
 
-                    <div class="container-fluid">
-                        <div class="row main-section">
+            @elseif(!Auth::guard('user')->guest())
 
-                            <!-- Left Sidebar -->
-                            @if(!Auth::guard('vendor')->guest())
-                            @include('vendor.components.left-side')
+                {{-- Large Modal To View All Vendors --}}
+                @include('user.components.view-all')
 
-                            @elseif(!Auth::guard('user')->guest())
-
-                            {{--Large Modal To View All Vendors--}}
-                            @include('user.components.view-all')
-
-                            {{--Left Sidebar User--}}
-                            <!-- Hold User Left Sidebar For Desktop -->
-                            <aside class="col-lg-3 col-md-10 side-section side-section-l" id="user-left-side">
-                                <div class="justify-content-center text-center w-100 pb-2 box shadow-sm border rounded bg-white p-2"
-                                    id="user-left-side-spinner" style="display: none;">
-                                    <p><strong>Loading...</strong></p>
-                                    <div class="spinner-border spinner-border-sm" role="status">
-                                        <span class="sr-only">Loading...</span>
-                                    </div>
-                                </div>
-
-                            </aside>
-                            @else
-                            @endif
-
-                            <!-- Main Content -->
-                            <main class="col col-md-10 col-lg-6" id="main-content">
-                                @yield('content')
-
-                                <!-- ********************** SHARED COMPONENTS ******************* -->
-
-                                {{-- Notification Modal --}}
-                                @include('components.notification-dropup')
-
-                                {{-- Orders Modal --}}
-                                @include('components.orders-dropup')
-
-                                <!-- ********************* SHARED COMPONENTS *********************** -->
-
-
-                                <!-- ********************** VENDOR COMPONENTS ******************* -->
-
-                                {{-- Dish Addition Modal--}}
-                                @include('vendor.components.dish-add')
-
-                                <!-- Dish View Modal Holder -->
-                                <div id="dish-modal-holder">
-
-                                </div>
-                                <!-- Dish View Modal Holder -->
-
-                                <!-- Dish Delete Modal Holder -->
-                                <div id="dish-delete-modal-holder">
-
-                                </div>
-                                <!-- Dish Delete Modal Holder -->
-
-                                <!-- Menu Update Modal Holder -->
-                                <div id="menu-modal-holder">
-
-                                </div>
-                                <!-- Menu Update Modal Holder -->
-
-                                <!-- Order Detail Modal Holder -->
-                                <div id="order-detail-modal-holder">
-
-                                </div>
-                                <!-- Order Detail Modal Holder -->
-
-                                <!-- ********************* VENDOR COMPONENTS *********************** -->
-
-
-
-                                <!-- ********************* USER COMPONENTS ************************* -->
-                                <div id="regular-order-container">
-
-                                </div>
-                                <div id="bulk-order-container">
-
-                                </div>
-
-                                {{-- Basket Modal --}}
-                                @include('user.components.basket-dropup')
-
-                                <!-- ********************* USER COMPONENTS ************************* -->
-                            </main>
-
-                            {{--Right Sidebar Vendor--}}
-                            @if(!Auth::guard('vendor')->guest())
-                            <aside
-                                class="col col-lg-3 d-none d-lg-block side-section side-section-r right-side-large text-center">
-                                <div class="justify-content-center text-center w-100 pb-2 box shadow-sm border rounded bg-white p-2"
-                                    id="right-side-spinner" style="display: none;">
-                                    <p><strong>Loading...</strong></p>
-                                    <div class="spinner-border spinner-border-sm" role="status">
-                                        <span class="sr-only">Loading...</span>
-                                    </div>
-                                </div>
-
-                            </aside>
-
-                            {{--Right Sidebar User--}}
-                            @elseif(!Auth::guard('user')->guest())
-                            <!-- Hold User Right Sidebar For Desktop -->
-                            <aside class="col col-lg-3 d-none d-lg-block side-section side-section-r text-center"
-                                id="user-right-side-large">
-                                <div class="justify-content-center text-center w-100 pb-2 box shadow-sm border rounded bg-white p-2"
-                                    id="user-right-side-spinner" style="display: none;">
-                                    <p><strong>Loading...</strong></p>
-                                    <div class="spinner-border spinner-border-sm" role="status">
-                                        <span class="sr-only">Loading...</span>
-                                    </div>
-                                </div>
-
-                            </aside>
-
-                            <!-- Hold User Right Sidebar For Mobile -->
-                            <div id="user-right-side-small">
-
-                            </div>
-
-                            {{--Profile Image Edit Modal--}}
-                            @include('user.components.profile-image-edit')
-
-                            <!-- Hold Profile Edit Modal For User -->
-                            <div id="edit-modal-container">
-
-                            </div>
-
-                            @else
-                            @endif
-
+                {{-- Left Sidebar User --}}
+                <!-- Hold User Left Sidebar For Desktop -->
+                <aside class="col-lg-3 col-md-10 side-section side-section-l" id="user-left-side">
+                    <div class="justify-content-center text-center w-100 pb-2 box shadow-sm border rounded bg-white p-2"
+                        id="user-left-side-spinner" style="display: none;">
+                        <p><strong>Loading...</strong></p>
+                        <div class="spinner-border spinner-border-sm" role="status">
+                            <span class="sr-only">Loading...</span>
                         </div>
                     </div>
 
-                    {{-- Location onboading --}}
-                    <button class="d-none" id="launchOnboarding" data-toggle="modal" data-target="#boardModal"></button>
-                    @if(!Auth::guard('vendor')->guest())
+                </aside>
+            @else
+            @endif
 
-                    {{-- Floating Post Buttons --}}
-                    <button class="btn btn-primary floating-post-btn d-none post-modal-init animate__animated">
-                        <i class="la la-utensil-spoon la-lg"></i>
-                        Post
-                    </button>
+            <!-- Main Content -->
+            <main class="col col-md-10 col-lg-6" id="main-content">
+                @yield('content')
 
-                    <button
-                        class="btn btn-primary floating-post-btn-sm d-none d-lg-none post-modal-init animate__animated">
-                        <i class="la la-utensil-spoon la-2x"></i>
-                    </button>
+                <!-- ********************** SHARED COMPONENTS ******************* -->
 
-                    {{-- Check if vendor area is set --}}
-                    @if(!Auth::user('vendor')->area)
-                    @include('components.onboarding')
-                    <script>
-                        $(document).ready(function () {
-                            $("#launchOnboarding").click();
-                        });
+                {{-- Notification Modal --}}
+                @include('components.notification-dropup')
 
-                    </script>
-                    @endif
+                {{-- Orders Modal --}}
+                @include('components.orders-dropup')
 
-                    @elseif(!Auth::guard('user')->guest())
-                    {{-- Check if user area is set --}}
-                    @if(!Auth::guard('user')->user()->area)
-                    @include('components.onboarding')
-                    <script>
-                        $(document).ready(function () {
-                            $("#launchOnboarding").click();
-                        });
+                <!-- ********************* SHARED COMPONENTS *********************** -->
 
-                    </script>
-                    @endif
-                    @endif
+                {{-- Comments Modal --}}
+                @include('components.post.comments')
 
-                    <!-- Bootstrap core JavaScript -->
-                    <script src="{{ url('assets/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
-                    <!-- slick Slider JS -->
-                    <script type="text/javascript" src="{{ url('assets/vendor/slick/slick.min.js') }}"></script>
-                    <!-- Sweetalert -->
-                    <script type="text/javascript" src="{{ url('assets/vendor/sweetalert/sweetalert.min.js') }}">
-                    </script>
-                    <!-- Cropper.js -->
-                    <script src="{{ url('assets/js/cropper.js') }}"></script>
+                <!-- ********************** VENDOR COMPONENTS ******************* -->
 
+                {{-- Dish Addition Modal --}}
+                @include('vendor.components.dish-add')
 
-                    <!-- Custom scripts for all pages-->
-                    <script src="{{ url('assets/js/osahan.js') }}"></script>
-                    <script src="{{ url('assets/js/custom.js') }}"></script>
+                <!-- Dish View Modal Holder -->
+                <div id="dish-modal-holder">
 
-                    {{-- Additional Scripts--}}
-                    @stack('scripts')
-                    <!-- jQuery Steps Plugin -->
-                    <script src="{{ url('assets/js/jquery-steps-master/build/jquery.steps.js') }}"></script>
-                    <script src="{{ url('assets/js/uikit.min.js') }}"></script>
-                    <script src="{{ url('assets/js/uikit-icons.min.js') }}"></script>
+                </div>
+                <!-- Dish View Modal Holder -->
 
-                    {{-- Check for session availablity --}}
-                    @if(!Auth::guard('vendor')->guest() || !Auth::guard('user')->guest())
-                        @include('scripts.logged-in')
+                <!-- Dish Delete Modal Holder -->
+                <div id="dish-delete-modal-holder">
 
-                    <!-- Socket.IO -->
-                    <script src="{{ url('assets/js/socket.io/socket.io.min.js') }}"></script>
-                    <script src="{{ url('assets/js/socket.client.js') }}"></script>
-                    @php $logged_in = Auth::guard('vendor')->guest() ? Auth::guard('user')->user() :
-                    Auth::user('vendor'); @endphp
-                    <script>
-                        $(document).ready(function () {
-                            initIO(`{{ env('NODE_SERVER') }}`, `{{ $logged_in->username }}`, `{{ $logged_in->area_id }}`)
-                        });
+                </div>
+                <!-- Dish Delete Modal Holder -->
 
-                    </script>
-                    @else
-                    <script src="{{ url('assets/js/not-logged-in.js') }}"></script>
-                    @endif
+                <!-- Menu Update Modal Holder -->
+                <div id="menu-modal-holder">
+
+                </div>
+                <!-- Menu Update Modal Holder -->
+
+                <!-- Order Detail Modal Holder -->
+                <div id="order-detail-modal-holder">
+
+                </div>
+                <!-- Order Detail Modal Holder -->
+
+                <!-- ********************* VENDOR COMPONENTS *********************** -->
 
 
-                    {{-- Execute for Different Users --}}
-                    @if(!Auth::guard('vendor')->guest())
-                    <!-- Vendor Scipts -->
-                    @include('vendor.vendor-script')
-                    <script type="text/javascript" src="{{ url('assets/vendor/browser-image-compression/bic.min.js') }}"></script>
-                    <!-- Vendor Scipts -->
-                    @elseif(!Auth::guard('user')->guest())
-                    <!-- USER SCRIPTS -->
-                    @include('user.user-script')
-                    <!-- USER SCRIPTS -->
-                    @endif
-                     <!-- Additional Scripts -->
-                     <script>
-                        $(document).ready(function () {
-                            // Add CSRF Token to Headers for Ajax Requests
-                            $.ajaxSetup({
-                                headers: {
-                                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                                }
-                            });
-                        });
 
-                    </script>
+                <!-- ********************* USER COMPONENTS ************************* -->
+                <div id="regular-order-container">
 
-                    <!-- Handle alert for email activation -->
-                    @if(session()->has('verify_status'))
-                    @if(session()->get('verify_status') == true)
-                    <script>
-                        showAlert(true, "Your account is activated, you can log in now.");
+                </div>
+                <div id="bulk-order-container">
 
-                    </script>
-                    @else
-                    <script>
-                        showAlert(false, "Invalid token.");
+                </div>
 
-                    </script>
-                    @endif
-                    @endif
-                    <!-- Handle alert for email activation -->
+                {{-- Basket Modal --}}
+                @include('user.components.basket-dropup')
 
-                    <!-- Handle alert for socialite login -->
-                    @if(session()->has('soclogin_status'))
-                    @if(session()->get('soclogin_status') == true)
-                    <script>
-                        showAlert(true, "Logged in successfully.");
+                <!-- ********************* USER COMPONENTS ************************* -->
+            </main>
 
-                    </script>
-                    @else
-                    <script>
-                        showAlert(false, "This account doesn't exist.");
+            {{-- Right Sidebar Vendor --}}
+            @if (!Auth::guard('vendor')->guest())
+                <aside class="col col-lg-3 d-none d-lg-block side-section side-section-r right-side-large text-center">
+                    <div class="justify-content-center text-center w-100 pb-2 box shadow-sm border rounded bg-white p-2"
+                        id="right-side-spinner" style="display: none;">
+                        <p><strong>Loading...</strong></p>
+                        <div class="spinner-border spinner-border-sm" role="status">
+                            <span class="sr-only">Loading...</span>
+                        </div>
+                    </div>
 
-                    </script>
-                    @endif
-                    @endif
+                </aside>
 
-                    @if(session()->has('soclogin_error'))
-                    <script>
-                        showAlert(false, "{{session()->get('soclogin_error')}}");
+                {{-- Right Sidebar User --}}
+            @elseif(!Auth::guard('user')->guest())
+                <!-- Hold User Right Sidebar For Desktop -->
+                <aside class="col col-lg-3 d-none d-lg-block side-section side-section-r text-center"
+                    id="user-right-side-large">
+                    <div class="justify-content-center text-center w-100 pb-2 box shadow-sm border rounded bg-white p-2"
+                        id="user-right-side-spinner" style="display: none;">
+                        <p><strong>Loading...</strong></p>
+                        <div class="spinner-border spinner-border-sm" role="status">
+                            <span class="sr-only">Loading...</span>
+                        </div>
+                    </div>
 
-                    </script>
-                    @endif
-                    <!-- Handle alert for socialite login -->
+                </aside>
 
-                    <!-- Additional Scripts -->
+                <!-- Hold User Right Sidebar For Mobile -->
+                <div id="user-right-side-small">
+
+                </div>
+
+                {{-- Profile Image Edit Modal --}}
+                @include('user.components.profile-image-edit')
+
+                <!-- Hold Profile Edit Modal For User -->
+                <div id="edit-modal-container">
+
+                </div>
+
+            @else
+            @endif
+
+        </div>
+    </div>
+
+    {{-- Location onboading --}}
+    <button class="d-none" id="launchOnboarding" data-toggle="modal" data-target="#boardModal"></button>
+    @if (!Auth::guard('vendor')->guest())
+
+        {{-- Floating Post Buttons --}}
+        <button class="btn btn-primary floating-post-btn d-none post-modal-init animate__animated">
+            <i class="la la-utensil-spoon la-lg"></i>
+            Post
+        </button>
+
+        <button class="btn btn-primary floating-post-btn-sm d-none d-lg-none post-modal-init animate__animated">
+            <i class="la la-utensil-spoon la-2x"></i>
+        </button>
+
+        {{-- Check if vendor area is set --}}
+        @if (!Auth::user('vendor')->area)
+            @include('components.onboarding')
+            <script>
+                $(document).ready(function() {
+                    $("#launchOnboarding").click();
+                });
+
+            </script>
+        @endif
+
+    @elseif(!Auth::guard('user')->guest())
+        {{-- Check if user area is set --}}
+        @if (!Auth::guard('user')->user()->area)
+            @include('components.onboarding')
+            <script>
+                $(document).ready(function() {
+                    $("#launchOnboarding").click();
+                });
+
+            </script>
+        @endif
+    @endif
+
+    <!-- Bootstrap core JavaScript -->
+    <script src="{{ url('assets/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+    <!-- slick Slider JS -->
+    <script type="text/javascript" src="{{ url('assets/vendor/slick/slick.min.js') }}"></script>
+    <!-- Sweetalert -->
+    <script type="text/javascript" src="{{ url('assets/vendor/sweetalert/sweetalert.min.js') }}">
+    </script>
+    <!-- Cropper.js -->
+    <script src="{{ url('assets/js/cropper.js') }}"></script>
+
+
+    <!-- Custom scripts for all pages-->
+    <script src="{{ url('assets/js/osahan.js') }}"></script>
+    <script src="{{ url('assets/js/custom.js') }}"></script>
+
+    {{-- Additional Scripts --}}
+    @stack('scripts')
+    <!-- jQuery Steps Plugin -->
+    <script src="{{ url('assets/js/jquery-steps-master/build/jquery.steps.js') }}"></script>
+    <script src="{{ url('assets/js/uikit.min.js') }}"></script>
+    <script src="{{ url('assets/js/uikit-icons.min.js') }}"></script>
+
+    {{-- Check for session availablity --}}
+    @if (!Auth::guard('vendor')->guest() || !Auth::guard('user')->guest())
+        @include('scripts.logged-in')
+
+        <!-- Socket.IO -->
+        <script src="{{ url('assets/js/socket.io/socket.io.min.js') }}"></script>
+        <script src="{{ url('assets/js/socket.client.js') }}"></script>
+        @php $logged_in = Auth::guard('vendor')->guest() ? Auth::guard('user')->user() : Auth::user('vendor'); @endphp
+        <script>
+            $(document).ready(function() {
+                initIO(`{{ env('NODE_SERVER') }}`, `{{ $logged_in->username }}`,
+                    `{{ $logged_in->area_id }}`)
+            });
+
+        </script>
+    @else
+        <script src="{{ url('assets/js/not-logged-in.js') }}"></script>
+    @endif
+
+
+    {{-- Execute for Different Users --}}
+    @if (!Auth::guard('vendor')->guest())
+        <!-- Vendor Scipts -->
+        @include('vendor.vendor-script')
+        <script type="text/javascript" src="{{ url('assets/vendor/browser-image-compression/bic.min.js') }}">
+        </script>
+        <!-- Vendor Scipts -->
+    @elseif(!Auth::guard('user')->guest())
+        <!-- USER SCRIPTS -->
+        @include('user.user-script')
+        <!-- USER SCRIPTS -->
+    @endif
+    <!-- Additional Scripts -->
+    <script>
+        $(document).ready(function() {
+            // Add CSRF Token to Headers for Ajax Requests
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+        });
+
+    </script>
+
+    <!-- Handle alert for email activation -->
+    @if (session()->has('verify_status'))
+        @if (session()->get('verify_status') == true)
+            <script>
+                showAlert(true, "Your account is activated, you can log in now.");
+
+            </script>
+        @else
+            <script>
+                showAlert(false, "Invalid token.");
+
+            </script>
+        @endif
+    @endif
+    <!-- Handle alert for email activation -->
+
+    <!-- Handle alert for socialite login -->
+    @if (session()->has('soclogin_status'))
+        @if (session()->get('soclogin_status') == true)
+            <script>
+                showAlert(true, "Logged in successfully.");
+
+            </script>
+        @else
+            <script>
+                showAlert(false, "This account doesn't exist.");
+
+            </script>
+        @endif
+    @endif
+
+    @if (session()->has('soclogin_error'))
+        <script>
+            showAlert(false, "{{ session()->get('soclogin_error') }}");
+
+        </script>
+    @endif
+    <!-- Handle alert for socialite login -->
+
+    <!-- Additional Scripts -->
 </body>
 
 </html

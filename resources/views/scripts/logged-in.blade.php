@@ -90,7 +90,7 @@
     openCommentsPost = null;
 
     // Open Comments Modal
-    function openComments(post_id) {
+    function openComments(post_id, id_is_comment = false) {
         $("body").addClass("modal-open");
         $(".comments-container").removeClass("d-none");
 

@@ -25,7 +25,7 @@ if (!function_exists('format_time')) {
 
 {{-- POST --}}
 @if (!empty($post))
-    @include('components.post.single-post')
+    @include('components.post.single-post', ['from_comms' => true])
 @endif
 
 <div id="comments-below-post">

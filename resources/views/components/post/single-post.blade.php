@@ -30,6 +30,9 @@ $id = '';
 if(!Auth::guard('vendor')->guest()) {
   $id = Auth::user('vendor')->id;
 }
+
+  $comment_clickable = isset($from_comms) && $from_comms;
+  $from_comms = false;
 @endphp
 
 <!-- Post -->
@@ -68,7 +71,7 @@ if(!Auth::guard('vendor')->guest()) {
     @endif
   </div>
   <div class="p-3 border-bottom osahan-post-body post-inner">
-    <p class="mb-0 f-post" onclick="openComments('{{ $post->id }}')">{{ $post->content }}</p>
+    <p class="mb-0 f-post" {{ $comment_clickable ? 'onclick="openComments(`'.$post->id.'`)"' : null }}>{{ $post->content }}</p>
 
     <div class="post-media-container justify-content-center">
       @if($post->media)
@@ -106,8 +109,6 @@ if(!Auth::guard('vendor')->guest()) {
 
     $is_liker = $is_liker > 0 ? true : false;
   }
-
-  $comment_clickable = isset($from_comment) && $from_comment;
   @endphp
 
   {{-- Actions --}}

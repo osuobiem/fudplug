@@ -23,9 +23,16 @@ class CommentController extends Controller
      * @param int $from Previous comment ID.
      * @return view
      */
-    function get($post_id, $from = 0)
+    function get($post_id, $from = 0, $id_is_comment = false)
     {
-        $post = $from == 0 ? Post::findOrfail($post_id) : [];
+        if($id_is_comment) {
+            $comment = Comment::findOrFail($post_id);
+            $post = $comment->post;
+            $post_id = $post->id;
+        }
+        else {
+            $post = $from == 0 ? Post::findOrfail($post_id) : [];
+        }
         
         // Check if this is the first fetch
         $comments = $from == 0
@@ -43,8 +50,7 @@ class CommentController extends Controller
             'slm' => $show_load_more,
             'post_id' => $post_id,
             'from' => $fr,
-            'post' => $post,
-            'from_comment' => true
+            'post' => $post
         ]);
     }
 

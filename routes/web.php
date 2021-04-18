@@ -184,7 +184,7 @@ Route::group(['prefix' => 'post'], function () {
 // COMMENT ROUTES
 Route::group(['prefix' => 'comment'], function () {
     // Get Comments
-    Route::get('get/{post_id}/{from?}', 'CommentController@get');
+    Route::get('get/{post_id}/{from?}/{id_is_comment?}', 'CommentController@get');
 
     // Create Comment
     Route::post('create/{post_id}', 'CommentController@create');
