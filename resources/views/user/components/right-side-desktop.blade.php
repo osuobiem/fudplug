@@ -54,7 +54,7 @@
 <script>
     // Initialize crop for profile image
     crop("avatar", "image", "input", "progress", "progress-bar", "alert", "user-image-modal", "change",
-        "crop", "{{url('user/profile-image-update')}}");
+        "user-crop", "{{url('user/profile-image-update')}}");
 
     function crop(...params) {
         var avatar = document.getElementById(params[0]);
@@ -130,6 +130,10 @@
         });
 
         document.getElementById(params[8]).addEventListener("click", function () {
+            spin('user-crop');
+            $("#user-crop").attr('disabled', true);
+
+
             var initialAvatarURL;
             var canvas;
 
@@ -195,6 +199,9 @@
                         },
 
                         success: function (res) {
+                            spin('user-crop');
+                            $("#user-crop").removeAttr('disabled');
+
                             if (res.success == false) {
                                 let message = res.message.image[0];
                                 $alert.show().addClass("alert-danger").text(message);
@@ -213,6 +220,9 @@
                         },
 
                         error: function (res) {
+                            spin('user-crop');
+                            $("#user-crop").removeAttr('disabled');
+
                             avatar.src = initialAvatarURL;
                             console.log(res.responseJSON);
                         }

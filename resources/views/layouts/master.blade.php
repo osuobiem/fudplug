@@ -39,14 +39,14 @@
     @php
         // Node Server
         $node_server = env('NODE_SERVER');
-        
+
         // Format Time/Date
         function format_time($time)
         {
             $time = strtotime($time);
             $t_diff = time() - $time;
             $res = '';
-        
+
             if ($t_diff < 60) {
                 $res = $t_diff < 1 ? 'now' : $t_diff . 's ago';
             } elseif ($t_diff >= 60 && $t_diff < 3600) {
@@ -154,12 +154,7 @@
 
 
                 <!-- ******* USER COMPONENTS ********* -->
-                <div id="regular-order-container">
-
-                </div>
-                <div id="bulk-order-container">
-
-                </div>
+                @include('user.components.order-modal')
 
                 {{-- Basket Modal --}}
                 @include('user.components.basket-dropup')
@@ -276,6 +271,8 @@
 
     {{-- Check for session availablity --}}
     @if (!Auth::guard('vendor')->guest() || !Auth::guard('user')->guest())
+        <script type="text/javascript" src="{{ url('assets/vendor/browser-image-compression/bic.min.js') }}">
+        </script>
         @include('scripts.logged-in')
 
         <!-- Socket.IO -->
@@ -297,8 +294,6 @@
     @if (!Auth::guard('vendor')->guest())
         <!-- Vendor Scipts -->
         @include('vendor.vendor-script')
-        <script type="text/javascript" src="{{ url('assets/vendor/browser-image-compression/bic.min.js') }}">
-        </script>
         <!-- Vendor Scipts -->
     @elseif(!Auth::guard('user')->guest())
         <!-- USER SCRIPTS -->

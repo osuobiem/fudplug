@@ -1,7 +1,6 @@
 @extends('layouts.master')
 
 @section('content')
-
 <style>
     #cover-holder {
         background-image: url("{{ Storage::url('vendor/cover/'.$vendor->cover_image) }}");

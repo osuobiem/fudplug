@@ -115,15 +115,21 @@
         let getUrl = `${server}/user/order-details`;
         getUrl += '/' + dishId;
 
+        // Handle modal before showing content
+        $("#order-container").empty();
+        $("#order-modal-spinner").removeClass('d-none');
+        $("#order-modal").modal('show');
+
+
         goGet(getUrl).then((res) => {
             if (res.success) {
-                $("#regular-order-container").html(res.data);
-                $("#regular-order-modal").modal('show');
+                $("#order-modal-spinner").addClass('d-none');
+                $("#order-container").html(res.data);
             } else {
                 showAlert(false, res.message);
             }
         }).catch((err) => {
-            //spin('user-right-side');
+            showAlert(false, res.message);
         });
     }
 
@@ -133,15 +139,20 @@
         let getUrl = `${server}/user/order-details`;
         getUrl += '/' + dishId + '/' + dishType;
 
+        // Handle modal before showing content
+        $("#order-container").empty();
+        $("#order-modal-spinner").removeClass('d-none');
+        $("#order-modal").modal('show');
+
         goGet(getUrl).then((res) => {
             if (res.success) {
-                $("#bulk-order-container").html(res.data);
-                $("#bulk-order-modal").modal('show');
+                $("#order-modal-spinner").addClass('d-none');
+                $("#order-container").html(res.data);
             } else {
                 showAlert(false, res.message);
             }
         }).catch((err) => {
-            //spin('user-right-side');
+            showAlert(false, res.message);
         });
     }
 
