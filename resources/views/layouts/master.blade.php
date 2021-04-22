@@ -33,6 +33,9 @@
     <link href="{{ url('assets/vendor/emojionearea/emojionearea.min.css') }}" rel="stylesheet">
     <script src="{{ url('assets/vendor/emojionearea/emojionearea.min.js') }}"></script>
 
+    <!-- Toastr -->
+    <link href="{{ asset('css/toastr.css') }}" rel="stylesheet">
+
 </head>
 
 <body>
@@ -256,6 +259,8 @@
     </script>
     <!-- Cropper.js -->
     <script src="{{ url('assets/js/cropper.js') }}"></script>
+    <!-- Toastr -->
+    <script src="{{ asset('js/app.js') }}"></script>
 
 
     <!-- Custom scripts for all pages-->

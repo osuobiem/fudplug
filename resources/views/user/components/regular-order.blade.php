@@ -62,8 +62,8 @@
                                             <input type="text" name="order_quantity[]" onkeydown="keydown(event)"
                                                 onchange="change(event, this)" onfocus="focusin(event, this)"
                                                 class="form-control rounded-left-0 rounded-right-0 form-control-sm qty-input"
-                                                value="0" min="0" max="{{$quantity}}" style="margin-top: 3px;"
-                                                id="item-{{$dish->id}}" disabled>
+                                                value="0" min="0" data-order-type="regular" max="{{$quantity}}"
+                                                style="margin-top: 3px;" id="item-{{$dish->id}}" disabled>
                                             <span class="input-group-btn">
                                                 <button onclick="clicked(event, this);" type="button"
                                                     class="btn btn-sm btn-secondary btn-number rounded-left-0 qty-btn"
@@ -156,7 +156,7 @@
                                             </span>
                                             <input type="text" onkeydown="keydown(event)" onchange="change(event, this)"
                                                 onfocus="focusin(event, this)" name="order_quantity[]"
-                                                id="item-{{$dish->id}}-{{$key}}"
+                                                id="item-{{$dish->id}}-{{$key}}" data-order-type="regular"
                                                 class="form-control rounded-left-0 rounded-right-0 form-control-sm qty-input"
                                                 value="0" min="0" max="{{$qty->quantity}}" style="margin-top: 3px;"
                                                 disabled>
@@ -180,7 +180,7 @@
                                             </span>
                                             <input type="text" onkeydown="keydown(event)" onchange="change(event, this)"
                                                 onfocus="focusin(event, this)" name="order_quantity[]"
-                                                id="item-{{$dish->id}}-{{$key}}"
+                                                id="item-{{$dish->id}}-{{$key}}" data-order-type="regular"
                                                 class="form-control rounded-left-0 rounded-right-0 form-control-sm qty-input"
                                                 value="0" min="0" max="{{$qty->quantity}}" style="margin-top: 3px;"
                                                 disabled>
@@ -275,6 +275,7 @@
                 $("#regular-order-btn").removeAttr('disabled');
 
                 handleFormRes(err, 'pr-update-error');
+                showAlert(false, "Oops! Something's not right. Try again");
             })
     }
 

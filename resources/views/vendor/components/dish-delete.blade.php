@@ -43,7 +43,7 @@
         }).catch((err) => {
             spin('dish-delete-update');
 
-            console.error(err);
+            showAlert(false, "Oops! Something's not right. Try again");
         });
     }
 

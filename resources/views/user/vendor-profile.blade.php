@@ -246,6 +246,7 @@
             $("#vendor-menu-spinner").before(res.menu_view);
         }).catch((err) => {
             spin('user-right-side');
+            showAlert(false, "Oops! Something's not right. Try again");
         });
     }
 

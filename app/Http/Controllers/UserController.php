@@ -89,7 +89,7 @@ class UserController extends Controller
             return ['success' => true, 'status' => 200, 'message' => 'Signup Successful.'];
         } catch (\Throwable $th) {
             Log::error($th);
-            return ['success' => false, 'status' => 500, 'message' => 'Oops! Something went wrong. Try Again!'];
+            return ['success' => false, 'status' => 500, 'message' => 'Oops! Something went wrong. Try again!'];
         }
     }
 
@@ -245,7 +245,7 @@ class UserController extends Controller
                 // }
             } catch (\Throwable $th) {
                 Log::error($th);
-                return response()->json(['success' => false, 'message' => 'Oops! Something went wrong. Try Again!'], 500);
+                return response()->json(['success' => false, 'message' => 'Oops! Something went wrong. Try again!'], 500);
             }
         }
     }
@@ -280,33 +280,39 @@ class UserController extends Controller
      */
     public function update_profile(Request $request)
     {
-        // Get validation rules
-        $validate = $this->profile_update_rules($request);
+        try {
+            // Get validation rules
+            $validate = $this->profile_update_rules($request);
 
-        // Run validation
-        if ($validate->fails()) {
-            return response()->json([
-                "success" => false,
-                "message" => $validate->errors(),
-            ]);
-        }
-
-        if ($request['username']) {
-            // Check for dashes and other chars
-            if (!preg_match('/^[a-z_0-9A-Z]+$/', $request['username'])) {
+            // Run validation
+            if ($validate->fails()) {
                 return response()->json([
                     "success" => false,
-                    "message" => [
-                        'username' => [
-                            'Username must contain only letters, numbers and underscores',
-                        ],
-                    ],
+                    "message" => $validate->errors(),
                 ]);
             }
-        }
 
-        // Update User Info
-        return response()->json($this->update_store($request));
+            if ($request['username']) {
+                // Check for dashes and other chars
+                if (!preg_match('/^[a-z_0-9A-Z]+$/', $request['username'])) {
+                    return response()->json([
+                        "success" => false,
+                        "message" => [
+                            'username' => [
+                                'Username must contain only letters, numbers and underscores',
+                            ],
+                        ],
+                    ]);
+                }
+            }
+
+            $this->update_store($request);
+
+            return response()->json(['success' => true, 'status' => 200, 'message' => 'Update Successful'], 200);
+        } catch (\Throwable $th) {
+            Log::error($th);
+            return response()->json(['success' => false, 'message' => 'Oops! Something went wrong. Try again!'], 500);
+        }
     }
 
     /**
@@ -347,16 +353,8 @@ class UserController extends Controller
         $socket = SocketData::where('username', $username)->first();
         $socket->username = $user->username;
 
-        // Try user save or catch error if any
-        try {
-            $user->save();
-            $socket->save();
-
-            return ['success' => true, 'status' => 200, 'message' => 'Update Successful'];
-        } catch (\Throwable $th) {
-            Log::error($th);
-            return ['success' => false, 'status' => 500, 'message' => 'Oops! Something went wrong. Try Again!'];
-        }
+        $user->save();
+        $socket->save();
     }
 
     /**
@@ -383,7 +381,7 @@ class UserController extends Controller
             return response()->json(['success' => true, 'status' => 200, 'message' => 'Update Successful']);
         } catch (\Throwable $th) {
             Log::error($th);
-            return response()->json(['success' => false, 'status' => 500, 'message' => 'Oops! Something went wrong. Try Again!']);
+            return response()->json(['success' => false, 'status' => 500, 'message' => 'Oops! Something went wrong. Try again!']);
         }
     }
 
@@ -400,7 +398,7 @@ class UserController extends Controller
             return view('user.components.left-side', compact('vendors'));
         } catch (\Throwable $th) {
             Log::error($th);
-            return response()->json(['success' => false, 'status' => 500, 'message' => "Oops! Something went wrong. Try Again!"]);
+            return response()->json(['success' => false, 'status' => 500, 'message' => "Oops! Something went wrong. Try again!"]);
         }
     }
 
@@ -453,7 +451,7 @@ class UserController extends Controller
             }
         } catch (\Throwable $th) {
             Log::error($th);
-            return response()->json(['success' => false, 'status' => 500, 'message' => "Oops! Something went wrong. Try Again!"]);
+            return response()->json(['success' => false, 'status' => 500, 'message' => "Oops! Something went wrong. Try again!"]);
         }
     }
 
@@ -595,7 +593,7 @@ class UserController extends Controller
     //         }
     //     } catch (\Throwable $th) {
     //         Log::error($th);
-    //         return response()->json(['success' => false, 'message' => "Oops! Something went wrong. Try Again!"], 500);
+    //         return response()->json(['success' => false, 'message' => "Oops! Something went wrong. Try again!"], 500);
     //     }
     // }
 
@@ -650,7 +648,7 @@ class UserController extends Controller
             return response()->json(['success' => true, 'next_page' => $next_page, 'menu_view' => $menu_view->render()], 200);
         } catch (\Throwable $th) {
             Log::error($th);
-            return response()->json(['success' => false, 'message' => "Oops! Something went wrong. Try Again!"], 500);
+            return response()->json(['success' => false, 'message' => "Oops! Something went wrong. Try again!"], 500);
         }
     }
 
@@ -765,7 +763,7 @@ class UserController extends Controller
             return response()->json(['success' => true, 'type' => 'success', 'message' => 'Item added to basket', 'output' => $request->order_type], 200);
         } catch (\Throwable $th) {
             Log::error($th);
-            return response()->json(['success' => false, 'message' => "Oops! Something went wrong. Try Again!"], 500);
+            return response()->json(['success' => false, 'message' => "Oops! Something went wrong. Try again!"], 500);
         }
     }
 
@@ -873,7 +871,7 @@ class UserController extends Controller
             }
         } catch (\Throwable $th) {
             Log::error($th);
-            return response()->json(['success' => false, 'message' => "Oops! Something went wrong. Try Again!"], 500);
+            return response()->json(['success' => false, 'message' => "Oops! Something went wrong. Try again!"], 500);
         }
     }
 
@@ -982,7 +980,7 @@ class UserController extends Controller
             return response()->json(['success' => true, 'total_price' => $total_price, 'message' => 'Item removed from basket'], 200);
         } catch (\Throwable $th) {
             Log::error($th);
-            return response()->json(['success' => false, 'message' => "Oops! Something went wrong. Try Again!"], 500);
+            return response()->json(['success' => false, 'message' => "Oops! Something went wrong. Try again!"], 500);
         }
     }
 
@@ -1020,7 +1018,7 @@ class UserController extends Controller
             return response()->json(['success' => true, 'total_price' => $total_price, 'message' => 'Item updated'], 200);
         } catch (\Throwable $th) {
             Log::error($th);
-            return response()->json(['success' => false, 'message' => "Oops! Something went wrong. Try Again!"], 500);
+            return response()->json(['success' => false, 'message' => "Oops! Something went wrong. Try again!"], 500);
         }
     }
 
@@ -1071,7 +1069,7 @@ class UserController extends Controller
             return response()->json(['success' => true, 'message' => 'Your order was placed successfully.'], 200);
         } catch (\Throwable $th) {
             Log::error($th);
-            return response()->json(['success' => false, 'message' => "Oops! Something went wrong. Try Again!"], 500);
+            return response()->json(['success' => false, 'message' => "Oops! Something went wrong. Try again!"], 500);
         }
     }
 
@@ -1273,7 +1271,7 @@ class UserController extends Controller
     //         }
     //     } catch (\Throwable $th) {
     //         Log::error($th);
-    //         return response()->json(['success' => false, 'message' => "Oops! Something went wrong. Try Again!"], 500);
+    //         return response()->json(['success' => false, 'message' => "Oops! Something went wrong. Try again!"], 500);
     //     }
     // }
 
@@ -1320,7 +1318,7 @@ class UserController extends Controller
             return response()->json(['success' => true, 'order_view' => $order_view, 'total_amount' => $total_amount, 'pending_count' => $pending_count, 'next_page' => $next_page], 200);
         } catch (\Throwable $th) {
             Log::error($th);
-            return response()->json(['success' => false, 'message' => "Oops! Something went wrong. Try Again!"], 500);
+            return response()->json(['success' => false, 'message' => "Oops! Something went wrong. Try again!"], 500);
         }
     }
 
@@ -1459,7 +1457,7 @@ class UserController extends Controller
             return response()->json(['success' => true, 'message' => 'Order cancelled successfully.'], 200);
         } catch (\Throwable $th) {
             Log::error($th);
-            return response()->json(['success' => false, 'message' => "Oops! Something went wrong. Try Again!"], 500);
+            return response()->json(['success' => false, 'message' => "Oops! Something went wrong. Try again!"], 500);
         }
     }
 
@@ -1576,7 +1574,7 @@ class UserController extends Controller
             return response()->json(['success' => true, 'data' => $this->get_rating($vendor_id, $user_id)], 200);
         } catch (\Throwable $th) {
             Log::error($th);
-            return response()->json(['success' => false, 'message' => "Oops! Something went wrong. Try Again!"], 500);
+            return response()->json(['success' => false, 'message' => "Oops! Something went wrong. Try again!"], 500);
         }
     }
 

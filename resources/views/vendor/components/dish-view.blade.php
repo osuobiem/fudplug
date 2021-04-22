@@ -473,6 +473,7 @@
             .catch(err => {
                 spin('vendor')
                 handleFormRes(err, 'v-dish-error');
+                showAlert(false, "Oops! Something's not right. Try again");
             })
     }
 

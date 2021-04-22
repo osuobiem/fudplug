@@ -65,7 +65,8 @@
                 $(`#rightTab li:nth-child(${activeTab}) a`).tab('show');
             }
         }).catch((err) => {
-            spin('right-side')
+            spin('right-side');
+            showAlert(false, "Oops! Something's not right. Please reload page.");
         });
     }
 
@@ -77,7 +78,7 @@
             $("#menu-modal-holder").html(res);
             $("#menu-update-modal").modal('show');
         }).catch((err) => {
-            console.error(err);
+            showAlert(false, "Oops! Something's not right. Try again");
         });
     }
 
@@ -141,6 +142,7 @@
             }
         }).catch((err) => {
             spin('user-right-side');
+            showAlert(false, "Oops! Something's not right. Try again");
         });
     }
 
@@ -156,7 +158,7 @@
                                 Rejected
                             </span>`);
         }).catch((err) => {
-            console.log(err);
+            showAlert(false, "Oops! Something's not right. Try again");
         });
     }
 
@@ -177,7 +179,7 @@
                                 Accepted
                             </span>`);
         }).catch((err) => {
-            console.log(err);
+            showAlert(false, "Oops! Something's not right. Try again");
         });
     }
 
@@ -230,57 +232,9 @@
             $("#order-detail-modal-holder").html(res.order_detail_view);
             closeOrders();
             $("#order-detail-modal").modal('toggle');
-
-            // if (window.matchMedia("(max-width: 767px)")
-            //     .matches) { // The viewport is less than 768 pixels wide (mobile device)
-            //     $(".mob-order-container").html(res.order_view);
-            //     $("#mob-order-price").html(`₦${res.total_amount}.00`);
-            //     if (type == "history") {
-            //         // Hide cancel button on displaying history
-            //         $("#mob-order-cancel-btn").addClass('d-none');
-
-            //         // Change display status
-            //         $("#mob-state-display").text('(History)');
-            //     } else {
-            //         // Hide cancel button on displaying history
-            //         $("#mob-order-cancel-btn").removeClass('d-none');
-
-            //         // Change display status
-            //         $("#mob-state-display").text('(Today)');
-
-            //         // Disable "Cancel all" button when there is no pending order
-            //         if (res.pending_count == 0) {
-            //             $("#mob-order-cancel-btn").attr('disabled', '');
-            //         } else {
-            //             $("#mob-order-cancel-btn").removeAttr('disabled')
-            //         }
-            //     }
-            // } else {
-            //     $(".desktop-order-container").html(res.order_view);
-            //     $("#order-price").html(`₦${res.total_amount}.00`);
-            //     if (type == "history") {
-            //         // Hide cancel button on displaying history
-            //         $("#order-cancel-btn").addClass('d-none');
-
-            //         // Change display status
-            //         $("#state-display").text('(History)');
-            //     } else {
-            //         // Hide cancel button on displaying history
-            //         $("#order-cancel-btn").removeClass('d-none');
-
-            //         // Change display status
-            //         $("#state-display").text('(Today)');
-
-            //         // Disable "Cancel all" button when there is no pending order
-            //         if (res.pending_count == 0) {
-            //             $("#order-cancel-btn").attr('disabled', '');
-            //         } else {
-            //             $("#order-cancel-btn").removeAttr('disabled')
-            //         }
-            //     }
-            // }
         }).catch((err) => {
             spin('user-right-side');
+            showAlert(false, "Oops! Something's not right. Try again");
         });
     }
 
@@ -302,7 +256,7 @@
                 }
             })
             .catch((err) => {
-                showAlert(false, "Oops! Something's not right. Try Again");
+                showAlert(false, "Oops! Something's not right. Try again");
             });
     }
 

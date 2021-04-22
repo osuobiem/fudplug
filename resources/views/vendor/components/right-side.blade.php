@@ -110,7 +110,7 @@
             $("#dish-delete-modal-holder").html(res);
             $("#dish-delete-modal").modal('show');
         }).catch((err) => {
-            console.error(err);
+            showAlert(false, "Oops! Something's not right. Try again");
         });
     }
 

@@ -78,6 +78,7 @@
                 }
             }).catch((err) => {
                 spin('user-right-side');
+                showAlert(false, "Oops! Something's not right. Try again");
             });
         } else { // The viewport is at least 768 pixels wide (Desktop or tablet)
             let getUrl = `${server}/user/profile/desktop`;
@@ -92,6 +93,7 @@
                 }
             }).catch((err) => {
                 spin('user-right-side');
+                showAlert(false, "Oops! Something's not right. Try again");
             });
         }
     }
@@ -107,6 +109,7 @@
             $("#edit-modal-container").html(res);
         }).catch((err) => {
             //spin('user-right-side');
+            showAlert(false, "Oops! Something's not right. Try again");
         });
     }
 
@@ -126,10 +129,10 @@
                 $("#order-modal-spinner").addClass('d-none');
                 $("#order-container").html(res.data);
             } else {
-                showAlert(false, res.message);
+                showAlert(false, "Oops! Something's not right. Try again");
             }
         }).catch((err) => {
-            showAlert(false, res.message);
+            showAlert(false, "Oops! Something's not right. Try again");
         });
     }
 
@@ -152,7 +155,7 @@
                 showAlert(false, res.message);
             }
         }).catch((err) => {
-            showAlert(false, res.message);
+            showAlert(false, "Oops! Something's not right. Try again");
         });
     }
 
@@ -166,6 +169,7 @@
             $("#user-left-side").html(res);
         }).catch((err) => {
             spin('user-left-side');
+            showAlert(false, "Oops! Something's not right. Try again");
         });
     }
 
@@ -266,7 +270,7 @@
                 }
             }
         }).catch((err) => {
-            console.log(err);
+            showAlert(false, "Oops! Something's not right. Try again");
         });
     }
 
@@ -332,7 +336,7 @@
                     spin('basket-delete-' + basketId + '-' + itemPosition);
                 }
 
-                console.error(err);
+                showAlert(false, "Oops! Something's not right. Try again");
             })
     }
 
@@ -375,7 +379,7 @@
                 }
             })
             .catch(err => {
-                console.error(err);
+                showAlert(false, "Oops! Something's not right. Try again");
             })
     }
 
@@ -409,7 +413,7 @@
                 spin('basket');
                 $("#basket-order-btn").attr('onclick', 'placeOrder()');
 
-                console.log(err);
+                showAlert(false, "Oops! Something's not right. Try again");
             })
     }
 
@@ -509,6 +513,7 @@
 
         }).catch((err) => {
             spin('user-right-side');
+            showAlert(false, "Oops! Something's not right. Try again");
         });
     }
 
@@ -541,7 +546,7 @@
                 spin('order-cancel-' + orderId);
             }
 
-            console.log(err);
+            showAlert(false, "Oops! Something's not right. Try again");
         });
     }
 
@@ -744,14 +749,15 @@
             $(element).val($(this).data('oldValue'));
         }
 
+
         // Check if regular order modal is open and execute these lines
-        if ($('#regular-order-modal').hasClass('show')) {
+        if ($(element).data("orderType") == "regular") {
             // Compute total amount and bind to order button. Also disable and enable order button
             bindQtyPrice(element);
 
             // Disable and enable details input field
             handleDetailInput(element);
-        } else if ($('#bulk-order-modal').hasClass('show')) {
+        } else if ($(element).data("orderType") == "bulk") {
             // Compute total amount and bind to order button. Also disable and enable order button
             bindBulkQtyPrice(element);
 
@@ -1019,7 +1025,7 @@
                 }
             })
             .catch(err => {
-                console.log(err);
+                showAlert(false, "Oops! Something's not right. Try again");
             })
     }
 

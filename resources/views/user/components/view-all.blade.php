@@ -270,7 +270,7 @@
                 $('#proceed-btn').removeClass('d-none')
             })
             .catch(err => {
-                showAlert(false, "Oops! Something's not right. Please Reload Page")
+                showAlert(false, "Oops! Something's not right. Please reload page")
             })
     }
 
@@ -317,7 +317,7 @@
                 $('#proceed-btn').removeClass('d-none')
             })
             .catch(err => {
-                showAlert(false, "Oops! Something's not right. Please Reload Page")
+                showAlert(false, "Oops! Something's not right. Please reload page")
             })
     }
 
@@ -335,7 +335,7 @@
                 getAreas(res.user_state.state_id, $area_id);
             })
             .catch(err => {
-                showAlert(false, "Oops! Something's not right. Please Reload Page")
+                showAlert(false, "Oops! Something's not right. Please reload page")
             })
     }
 

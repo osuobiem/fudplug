@@ -8,6 +8,10 @@ $(document).ready(function () {
             $("#see-n-comms-btn").addClass("d-none");
         }
     });
+
+    // Toastr settings
+    toastr.options.progressBar = true;
+    toastr.options.positionClass = "toast-bottom-left";
 });
 
 // Fill Picked Image in Div
@@ -50,21 +54,24 @@ function pickImage(inputId) {
 // Show Alert
 function showAlert(status, message) {
     if (!status) {
-        $("#alert-error").html(message);
-        $("#alert-error").removeClass("d-none");
+        // $("#alert-error").html(message);
+        // $("#alert-error").removeClass("d-none");
 
-        setTimeout(() => {
-            $("#alert-error").addClass("d-none");
-            $("#alert-error").html("");
-        }, 4000);
+        // setTimeout(() => {
+        //     $("#alert-error").addClass("d-none");
+        //     $("#alert-error").html("");
+        // }, 4000);
+        // Display a warning toast, with no title
+        toastr.error(message);
     } else {
-        $("#alert-success").html(message);
-        $("#alert-success").removeClass("d-none");
+        // $("#alert-success").html(message);
+        // $("#alert-success").removeClass("d-none");
 
-        setTimeout(() => {
-            $("#alert-success").addClass("d-none");
-            $("#alert-success").html("");
-        }, 4000);
+        // setTimeout(() => {
+        //     $("#alert-success").addClass("d-none");
+        //     $("#alert-success").html("");
+        // }, 4000);
+        toastr.success(message);
     }
 }
 
@@ -72,9 +79,9 @@ function showAlert(status, message) {
 function goGet(url) {
     return new Promise((resolve, reject) => {
         $.ajax({
-            type: "GET",
-            url,
-        })
+                type: "GET",
+                url,
+            })
             .then((res) => {
                 resolve(res);
             })
@@ -150,9 +157,9 @@ function handleFormRes(res, form = false, prefix = false, modalAlert = false) {
                         .modal("show");
                 } else {
                     for (const [key, value] of Object.entries(errors)) {
-                        e = prefix
-                            ? document.getElementById(prefix + "-" + key)
-                            : document.getElementById(key);
+                        e = prefix ?
+                            document.getElementById(prefix + "-" + key) :
+                            document.getElementById(key);
                         e.innerHTML = "";
                         [...value].forEach((m) => {
                             e.innerHTML += `<p>${m}</p>`;
@@ -177,7 +184,7 @@ function handleFormRes(res, form = false, prefix = false, modalAlert = false) {
             $("#" + form).html("Oops! Something's not right. Try Again");
             $("#" + form).removeClass("d-none");
         } else {
-            showAlert(false, "Oops! Something's not right. Try Again");
+            showAlert(false, "Oops! Something's not right. Try again");
         }
         return false;
     }
@@ -192,8 +199,9 @@ function spin(id) {
     $(`#${id}-spinner`).toggle();
 
     btnDis
-        ? $(`#${id}-btn`).attr("disabled", true)
-        : $(`#${id}-btn`).removeAttr("disabled");
+        ?
+        $(`#${id}-btn`).attr("disabled", true) :
+        $(`#${id}-btn`).removeAttr("disabled");
 }
 
 // Turn off Form Errors

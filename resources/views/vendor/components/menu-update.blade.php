@@ -153,6 +153,7 @@
             .catch(err => {
                 spin('menu-update')
                 handleFormRes(err, 'v-dish-error');
+                showAlert(false, "Oops! Something's not right. Try again");
             })
     }
 
