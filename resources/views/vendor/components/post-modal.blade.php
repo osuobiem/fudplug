@@ -97,24 +97,32 @@
             </div>
 
             <div class="m-2 d-none animate__animated animate__fadeIn" id="tag-menu">
-                <div class="d-flex p-2">
-                    <div><strong class="text-dark">Tag Menu Items to this post</strong></div>
-                </div>
+                @if (!empty($tag_items))
+                    <div class="d-flex p-2">
+                        <div><strong class="text-dark">Tag Menu Items to this post</strong></div>
+                    </div>
 
-                <div id="tag-menu-items">
-                    @foreach ($tag_items as $item)
-                    @php $tag_list_item = str_replace(' ', '_', strtolower($item->title)); $photo = Storage::url('vendor/dish/'.$item->image); @endphp
-                        <div class="p-2 d-flex align-items-center" onclick="addTag(this, '{{ $item->id }}', '{{ $tag_list_item }}')"
-                            title="Tag {{ $item->title }}">
-                            <div class="mr-2">
-                                <div class="item-photo-sm" style="background: url('{{ $photo }}')"></div>
+                    <div id="tag-menu-items">
+                        @foreach ($tag_items as $item)
+                            @php
+                                $tag_list_item = str_replace(' ', '_', strtolower($item->title));
+                                $photo = Storage::url('vendor/dish/' . $item->image);
+                            @endphp
+                            <div class="p-2 d-flex align-items-center"
+                                onclick="addTag(this, '{{ $item->id }}', '{{ $tag_list_item }}')"
+                                title="Tag {{ $item->title }}">
+                                <div class="mr-2">
+                                    <div class="item-photo-sm" style="background: url('{{ $photo }}')"></div>
+                                </div>
+
+                                <div><span class="text-dark">{{ $item->title }}</span></div>
+                                <div class="ml-auto"><i class="la la-tag la-lg tag-icon"></i></div>
                             </div>
-
-                            <div><span class="text-dark">{{ $item->title }}</span></div>
-                            <div class="ml-auto"><i class="la la-tag la-lg tag-icon"></i></div>
-                        </div>
-                    @endforeach
-                </div>
+                        @endforeach
+                    </div>
+                @else
+                    <div class="text-center py-3"><span>Your menu is empty!</span></div>
+                @endif
             </div>
 
         </form>
@@ -241,8 +249,10 @@
 
             tags = [];
             $('#tag-list').html('');
-            $('tag-icon-active').addClass('tag-icon');
-            $('tag-icon-active').renoveClass('tag-icon-active');
+            $('.tag-icon-active').addClass('tag-icon');
+            $('.tag-icon-active').removeClass('tag-icon-active');
+
+            $('#tag-to-post').attr('onclick') == 'showTags(false)' ? $('#tag-to-post').click() : null
         }
 
         // Fill Picked Image in Div
@@ -447,8 +457,8 @@
             $(el).attr('onclick', `removeTag(this, '${item_id}', '${tag_list_item}')`)
 
             $('#tag-list').append(`
-                <span class="tag-list-item" id="tli-${item_id}">${tag_list_item}</span>
-            `);
+                        <span class="tag-list-item" id="tli-${item_id}">${tag_list_item}</span>
+                    `);
 
             tags.push(item_id)
         }
@@ -461,7 +471,7 @@
 
             $(el).attr('onclick', `addTag(this, '${item_id}', '${tag_list_item}')`)
 
-            $('#tli-'+item_id).remove()
+            $('#tli-' + item_id).remove()
 
             tags.splice(tags.indexOf(item_id), 1)
         }

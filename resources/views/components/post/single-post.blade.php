@@ -86,6 +86,14 @@ if(!Auth::guard('vendor')->guest()) {
         @endforeach
       @endif
     </div>
+
+    {{-- Tag list --}}
+    <div class="pt-1">
+        @foreach ($post->tags as $tag)
+            @php $tag_list_item = str_replace(' ', '_', strtolower($tag->item->title)); @endphp
+            <span class="tag-list-item">{{ $tag_list_item }}</span>
+        @endforeach
+    </div>
   </div>
 
   {{-- Lightbox --}}
