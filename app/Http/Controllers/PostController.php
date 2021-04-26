@@ -6,6 +6,7 @@ use App\Like;
 use App\Media;
 use App\Notification;
 use App\Post;
+use App\PostTag;
 use App\SocketData;
 use App\User;
 use App\Vendor;
@@ -99,6 +100,19 @@ class PostController extends Controller
                 }
             }
 
+            // Check for post tags
+            if (!empty($request['tags'])) {
+                $tags = [];
+                foreach ($request['tags'] as $tag) {
+                    $tags[] = [
+                        'item_id' => $tag,
+                        'post_id' => $post->id
+                    ];
+                }
+
+                PostTag::insert($tags);
+            }
+
             // Send Notification
             Http::post(env('NODE_SERVER') . '/send-new-post', [
                 "post_markup" => view('components.post.single-post', ['post' => $post])->render(),
@@ -187,8 +201,8 @@ class PostController extends Controller
         $url_parts[6] = 'q_45';
 
         // Upload video
-        copy(implode('/', $url_parts), 'storage/posts/videos/'.$url_parts[8]);
-        
+        copy(implode('/', $url_parts), 'storage/posts/videos/' . $url_parts[8]);
+
         // Save video thumbnail
         $name = '/public/posts/videos/thumbnails/' . explode('.', $url_parts[8])[0] . '.png';
         $image_parts = explode(";base64,", $request['thumbnail']);
@@ -311,7 +325,7 @@ class PostController extends Controller
                 }
 
                 $ncount = grapheme_strlen($notification->post->content);
-                $trunc_content = $ncount > 40 ? grapheme_substr($notification->post->content, 0, 40).'...' : $notification->post->content;
+                $trunc_content = $ncount > 40 ? grapheme_substr($notification->post->content, 0, 40) . '...' : $notification->post->content;
                 $notification->content = '<strong>' . $name . '</strong> ' . $content_data[1] . ': "' . $trunc_content . '"';
                 $notification->photo = Storage::url($initiator_data[0] . '/profile/' . $initiator->profile_image);
 
@@ -420,7 +434,8 @@ class PostController extends Controller
      * @param int $post_id Post ID
      * @return json
      */
-    public function delete(Request $request, $post_id) {
+    public function delete(Request $request, $post_id)
+    {
         // Check Login
         if (Auth::guard('vendor')->guest()) {
             return response()->json([
@@ -434,7 +449,7 @@ class PostController extends Controller
         $vendor = $request->user();
 
         // Check post owner
-        if($post->vendor_id != $vendor->id) {
+        if ($post->vendor_id != $vendor->id) {
             return response()->json([
                 "success" => false,
                 "message" => "You cannot delete this post"
@@ -444,14 +459,13 @@ class PostController extends Controller
         // Get post media
         $media = $post->media;
 
-        if(!empty($media)) {
-            foreach($media as $m) {
-                if($m->type == 'image') {
+        if (!empty($media)) {
+            foreach ($media as $m) {
+                if ($m->type == 'image') {
                     Storage::delete('/public/posts/photos/' . $m->name);
-                }
-                else {
+                } else {
                     Storage::delete('/public/posts/videos/' . $m->name);
-                    Storage::delete('/public/posts/videos/thumbnails/' . explode('.', $m->name)[0].'.png');
+                    Storage::delete('/public/posts/videos/thumbnails/' . explode('.', $m->name)[0] . '.png');
                 }
             }
         }

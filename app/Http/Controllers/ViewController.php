@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\VendorController;
+use App\Item;
 use App\State;
 use Illuminate\Support\Facades\Auth;
 
@@ -15,8 +16,18 @@ class ViewController extends Controller
     public function feed()
     {
         $states = State::orderBy('name')->get();
+        $tag_items = [];
 
-        return view('feed', ['states' => $states]);
+        if(!Auth::guard('vendor')->guest()) {
+            $menu = Auth::guard('vendor')->user()->menu;
+            $tag_items = [];
+
+            foreach(json_decode($menu->items)->item as $item_id) {
+                $tag_items[] = Item::findOrFail($item_id);
+            }
+        }
+
+        return view('feed', ['states' => $states, 'tag_items' => $tag_items]);
     }
 
     /**
@@ -57,13 +68,26 @@ class ViewController extends Controller
      */
     public function profile($username)
     {
+        $tag_items = [];
+
         // Check Login
         if (!Auth::guard('vendor')->guest()) {
             $vendor_controller = new VendorController();
             $data = $vendor_controller->profile($username);
 
+            $tag_items = [];
+            $data['data']['tag_items'] = $tag_items;
+
             // Display pages appropriately if user data is found or not
             if ($data['status'] == true) {
+                
+                // Get vendor menu
+                $menu = Auth::guard('vendor')->user()->menu;
+                foreach(json_decode($menu->items)->item as $item_id) {
+                    $tag_items[] = Item::findOrFail($item_id);
+                }
+                $data['data']['tag_items'] = $tag_items;
+
                 return view('vendor.profile', $data['data']);
             } else {
                 $user_controller = new UserController();

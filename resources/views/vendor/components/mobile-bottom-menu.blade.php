@@ -25,7 +25,7 @@
                     <i class="la la-list la-2x p-2 mbm-item" onclick="openOrders()"></i>
                 </div>
                 <div class="col-3">
-                    <i class="la la-user la-2x p-2 mbm-item {{ Request::is('vendor/profile') ? 'mbm-active' : '' }}"
+                    <i class="la la-user la-2x p-2 mbm-item {{ Request::is(Auth::user()->username) ? 'mbm-active' : '' }}"
                         onclick="gotoP(`{{ url(Auth::user()->username) }}`)"></i>
                 </div>
             </div>

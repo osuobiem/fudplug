@@ -569,14 +569,11 @@ a:visited {
 }
 
 #post-btn {
-    border: solid .5px #e44d3a66;
-    box-shadow: 0 0 8px 2px rgb(194, 191, 191);
+    border: solid 1px var(--i-primary);
 }
 
 #post-btn:hover {
-    background-color: unset;
-    box-shadow: 0 0 8px 2px #e44e3a8a;
-    color: var(--i-primary);
+    background: var(--i-primary);
 }
 
 .post-modal {
@@ -652,9 +649,8 @@ a:visited {
 }
 
 .post-textarea-cont {
-    border: solid 1px #00000060;
     border-radius: 5px;
-    padding: 2px 5px;
+    padding: 3px 6px;
 }
 
 .post-textarea-cont-2 {
@@ -1576,4 +1572,57 @@ a:visited {
 
   .emojionearea .emojionearea-editor {
       min-height: 2em !important;
+  }
+
+  #tag-menu {
+    border: solid 1px #dadcde;
+    border-top-color: var(--i-primary);
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+  }
+
+  #tag-menu-items {
+    border-top: solid 1px #dadcde;
+  }
+
+  #tag-menu-items>div {
+    display: flex;
+  }
+
+  #tag-menu-items>div:hover {
+      background-color: #d9dcde4f;
+      cursor: pointer;
+  }
+
+  .tag-icon {
+      padding: 5px 3px;
+      border-radius: 15px;
+  }
+
+  .tag-icon:hover {
+      background: var(--i-primary-h);;
+  }
+
+  .tag-icon-active {
+      background: var(--i-primary-h);
+      padding: 5px 3px;
+      border-radius: 15px;
+  }
+
+  .item-photo-sm {
+    width: 30px;
+    height: 30px;
+    border-radius: 50px;
+    background-size: cover !important;
+    background-position: center !important;
+  }
+
+  .tag-list-item {
+    padding: 1px 3px 3px 3px;
+    border: dashed 1px var(--i-primary);
+    border-radius: 15px;
+    background: #e44d3a0d;
+    color: var(--i-primary);
+    font-weight: 500;
+    font-size: 10px;
   }
