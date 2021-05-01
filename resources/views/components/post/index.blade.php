@@ -100,7 +100,8 @@ if (!function_exists('format_time')) {
 
                 {{-- Tag list --}}
                 <div class="pt-1">
-                    @foreach ($post->tags as $tag)
+                    @foreach ($post->tags()->orderBy('id', 'desc')->get()
+    as $tag)
                         @php $tag_list_item = str_replace(' ', '_', strtolower($tag->item->title)); @endphp
                         <span class="tag-list-item">{{ $tag_list_item }}</span>
                     @endforeach
@@ -149,9 +150,67 @@ if (!function_exists('format_time')) {
                 <a style=":hover{cursor:pointer}" class="mr-3 text-secondary" title="Share this post"
                     onclick="sharePost(`{{ $post->id }}`, `{{ $post->vendor->business_name }}`)"><i
                         class="la la-share la-2x"></i></a>
-                {{-- <a href="#" class="btn btn-outline-danger btn-sm" style="float: right" title="Save"><i class="la la-bookmark"></i>
-      Save Post</a> --}}
+
+                @php
+                    $menu = $post->vendor->menu;
+                    $items = $menu ? json_decode($menu->items)->item : [];
+                    $show_add_to_b = false;
+                    
+                    foreach ($post->tags as $tag) {
+                        if (in_array($tag->item_id, $items)) {
+                            $show_add_to_b = true;
+                            break;
+                        }
+                    }
+                @endphp
+                @if (!Auth::guard('user')->guest() && $post->tags()->count() > 0 && $show_add_to_b)
+                    <a href="#atb-from-post-m-{{ $post->id }}" data-toggle="modal" class="btn btn-sm text-light"
+                        style="float: right; background: var(--i-primary)" title="Add to Basket">
+                        <i class="la la-shopping-basket la-lg"></i> Add to Basket</a>
+
+                    <div class="modal" id="atb-from-post-m-{{ $post->id }}" tabindex="-1" role="dialog">
+                        <div class="modal-dialog modal-dialog-centered modal-md" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title text-light">Select items you wish to add</h5>
+                                    <button type="button" class="close text-light" data-dismiss="modal"
+                                        aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    @foreach ($post->tags()->orderBy('id', 'desc')->get() as $tag)
+                                        @php 
+                                            $photo = Storage::url('vendor/dish/' . $tag->item->image);
+                                            $bulk = json_decode($tag->item->quantity)->bulk ?? false;
+                                            $regular = $tag->item->type == 'simple' ? true : json_decode($tag->item->quantity)->regular ?? false;
+                                        @endphp
+                                        <div class="p-2 d-flex align-items-center">
+                                            <div class="mr-2">
+                                                <div class="item-photo-sm" style="background: url('{{ $photo }}')"></div>
+                                            </div>
+
+                                            <div><span class="text-dark">{{ $tag->item->title }}</span></div>
+                                            <div class="ml-auto pl-2">
+                                                @if($regular)
+                                                    <a href="#" onclick="loadRegOrderModal('{{$tag->item->id}}')">Regular Order</a>
+                                                @endif
+
+                                                @if($bulk)
+                                                    | 
+                                                    <a href="#" onclick="loadBulkOrderModal('{{$tag->item->id}}')">Bulk Order</a>
+                                                @endif
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                @endif
             </div>
+
         </div>
     @endforeach
 @else
