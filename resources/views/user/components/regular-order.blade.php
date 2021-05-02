@@ -7,55 +7,53 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
                 <div class="row">
-                    <div class="img-container pl-md-0 col-md-7">
+                    <div class="img-container px-md-0 col-md-7">
                         @php $photo = Storage::url('vendor/dish/'.$dish->image) @endphp
                         <div class="item-view-image" style="background: url('{{ $photo }}')"></div>
                     </div>
-                    <div class="col-md-5">
+                    <div class="col-md-5 pl-md-0">
                         <form id="order-form">
                             @csrf
                             @if($dish->type == "simple")
                             <div id="basics">
-                                <div class="mb-3 pt-2 text-lg-left text-center">
-                                    <div class="float-left">
-                                        <h4 class="font-weight-semi-bold"> {{ucfirst($dish->title)}} </h4>
-                                    </div>
+                                <div>
+                                    <h3 class="font-weight-semi-bold text-center text-lg-left mb-0 pb-1" style="border-bottom: dashed 1px #d3d3d3;">{{ucfirst($dish->title)}} </h3>
                                 </div>
 
                                 <div id="basicsAccordion">
-                                    <div class="box shadow-sm border rounded bg-white mb-2">
+                                    <div class="box mb-2">
                                         <div id="basicsHeadingOne">
                                             <h5 class="mb-0">
                                                 <button type="button"
-                                                    class="shadow-none btn btn-block d-flex justify-content-between card-btn p-3 collapsed font-weight-bold"
-                                                    data-toggle="" data-target="#basicsCollapseOne"
+                                                    class="shadow-none btn btn-block d-flex justify-content-between card-btn px-1 py-2 collapsed font-weight-bold"
+                                                    data-toggle="collapse" data-target="#basicsCollapseOne"
                                                     aria-expanded="false" aria-controls="basicsCollapseOne">
-                                                    Regular Quantity
+                                                    Regular Order
+                                                    <span class="card-btn-arrow">
+                                                        <span class="la la-chevron-down" style="color: var(--i-primary)"></span>
+                                                    </span>
                                                 </button>
                                             </h5>
                                         </div>
                                         <div id="basicsCollapseOne" class="collapse show"
                                             aria-labelledby="basicsHeadingOne" data-parent="#basicsAccordion" style="">
-                                            <div class="card-body border-top p-2 text-muted" style="font-size: large;">
+                                            <div class="card-body p-0 text-muted" style="font-size: large;">
                                                 <ul id="price-type" id="item"
                                                     class="list-group box-body generic-scrollbar"
                                                     style="max-height: 250px; overflow: auto;">
-                                                    <li class="list-group-item pt-0">
+                                                    <li class="list-group-item pt-0 col">
                                                         <div class="float-left col-4">
                                                             <small>Price</small>
                                                             <p class="mt-0">
-                                                                <span class="float-left text-danger"
-                                                                    style="font-size: larger;">
+                                                                <span class="float-left"
+                                                                    style="font-size: larger; color: var(--i-primary);">
                                                                     ₦{{$price}}</span>
-                                                                <!-- <span class="badge badge-secondary float-right">
-                                                                {{$quantity}} left</span> -->
                                                             </p>
                                                             <input name="order_detail[]" type="hidden" value=""
                                                                 disabled>
                                                         </div>
-                                                        <div class="float-right col-6 offset-2" style="margin-top:13px">
-                                                            <span class="badge badge-secondary text-wrap float-right"
-                                                                style="font-size: 11px;">
+                                                        <div class="float-right col-6 offset-2" style="margin-top: 8px;">
+                                                            <span class="badge item-qty-badge text-wrap float-right">
                                                                 {{$quantity}} {{$qty_title}} left</span>
                                                             @if(in_array($dish->id, $basket_items))
                                                             <p class="text-right">
@@ -64,29 +62,29 @@
                                                                         basket.</small></span>
                                                             </p>
                                                             @else
-                                                            <div class="input-group qty-field">
+                                                            <div class="input-group qty-field" style="justify-content: flex-end;">
                                                                 <span class="input-group-btn">
                                                                     <button onclick="clicked(event, this);"
                                                                         type="button bordered"
-                                                                        class="btn btn-sm btn-secondary btn-number rounded-right-0 qty-btn"
-                                                                        disabled="disabled" data-type="minus">
-                                                                        <span class="la la-minus"></span>
+                                                                        class="btn btn-sm btn-number rounded-right-0 qty-btn item-manip-btn"
+                                                                        disabled="disabled" data-type="minus" style="padding: 0px 8px;">
+                                                                        -
                                                                     </button>
                                                                 </span>
                                                                 <input type="text" name="order_quantity[]"
                                                                     onkeydown="keydown(event)"
                                                                     onchange="change(event, this)"
                                                                     onfocus="focusin(event, this)"
-                                                                    class="form-control rounded-left-0 rounded-right-0 form-control-sm qty-input"
+                                                                    class="form-control rounded-left-0 rounded-right-0 form-control-sm qty-input item-manip-input"
                                                                     value="0" min="0" max="{{$quantity}}"
                                                                     style="margin-top: 3px;" id="item-{{$dish->id}}"
                                                                     disabled>
                                                                 <span class="input-group-btn">
                                                                     <button onclick="clicked(event, this);"
                                                                         type="button"
-                                                                        class="btn btn-sm btn-secondary btn-number rounded-left-0 qty-btn"
+                                                                        class="btn btn-sm btn-number rounded-left-0 qty-btn item-manip-btn"
                                                                         data-type="plus">
-                                                                        <span class="la la-plus"></span>
+                                                                        +
                                                                     </button>
                                                                 </span>
                                                             </div>
@@ -106,7 +104,7 @@
                             <div id="basics">
 
                                 <div>
-                                    <h3 class="font-weight-semi-bold text-center text-lg-left">{{ucfirst($dish->title)}} </h3>
+                                    <h3 class="font-weight-semi-bold text-center text-lg-left mb-0 pb-1" style="border-bottom: dashed 1px #d3d3d3;">{{ucfirst($dish->title)}} </h3>
                                 </div>
                                 <div id="basicsAccordion">
 
@@ -114,10 +112,10 @@
                                         <div id="basicsHeadingOne">
                                             <h5 class="mb-0">
                                                 <button type="button"
-                                                    class="shadow-none btn btn-block d-flex justify-content-between card-btn p-3 collapsed font-weight-bold"
+                                                    class="shadow-none btn btn-block d-flex justify-content-between card-btn px-1 py-2 collapsed font-weight-bold"
                                                     data-toggle="collapse" data-target="#basicsCollapseOne"
                                                     aria-expanded="false" aria-controls="basicsCollapseOne">
-                                                    Regular Quantity
+                                                    Regular Order
                                                     <span class="card-btn-arrow">
                                                         <span class="la la-chevron-down" style="color: var(--i-primary)"></span>
                                                     </span>
@@ -126,7 +124,7 @@
                                         </div>
                                         <div id="basicsCollapseOne" class="collapse show"
                                             aria-labelledby="basicsHeadingOne" data-parent="#basicsAccordion" style="">
-                                            <div class="card-body border-top p-2 text-muted" style="font-size: large;">
+                                            <div class="card-body p-0 text-muted" style="font-size: large;">
 
                                                 <ul id="price-type" class="list-group box-body generic-scrollbar"
                                                     style="max-height: 250px; overflow: auto;">
@@ -136,19 +134,17 @@
                                                     @foreach($regular_qty as $key=>$qty)
                                                     <li class="list-group-item pt-0 col">
                                                         <div class="float-left col-4">
-                                                            <small>{{$qty->title}}</small>
-                                                            <p class="mt-0">
-                                                                <span class="float-left text-danger" style="font-size: larger;width: 156%;
+                                                            <span class="text-dark" style="font-size: 13px;">{{$qty->title}}</span>
+                                                            <p class="m-0">
+                                                                <span class="float-left" style="color: var(--i-primary); font-size: larger;width: 156%;
                                                                     word-wrap: break-word;">
                                                                     ₦{{$qty->price}}</span>
-                                                                <!-- {{$qty->quantity}} left -->
                                                             </p>
                                                             <input name="order_detail[]" type="hidden"
                                                                 value="['regular','{{$key}}']" disabled>
                                                         </div>
-                                                        <div class="float-right col-6 offset-2" style="margin-top:13px">
-                                                            <span class="badge badge-secondary text-wrap float-right"
-                                                                style="font-size: 11px;">
+                                                        <div class="float-right col-6 offset-2" style="margin-top: 8px;">
+                                                            <span class="badge item-qty-badge text-wrap float-right">
                                                                 {{$qty->quantity}} {{$qty->qty_title}} left</span>
 
 
@@ -162,13 +158,13 @@
                                                                         basket.</small></span>
                                                             </p>
                                                             @else
-                                                            <div class="input-group qty-field">
+                                                            <div class="input-group qty-field" style="justify-content: flex-end;">
                                                                 <span class="input-group-btn">
                                                                     <button onclick="clicked(event, this);"
                                                                         type="button bordered"
-                                                                        class="btn btn-sm btn-secondary btn-number rounded-right-0 qty-btn"
-                                                                        disabled="disabled" data-type="minus">
-                                                                        <span class="la la-minus"></span>
+                                                                        class="btn btn-sm btn-number rounded-right-0 qty-btn item-manip-btn"
+                                                                        disabled="disabled" data-type="minus" style="padding: 0px 8px;">
+                                                                        -
                                                                     </button>
                                                                 </span>
                                                                 <input type="text" onkeydown="keydown(event)"
@@ -176,27 +172,27 @@
                                                                     onfocus="focusin(event, this)"
                                                                     name="order_quantity[]"
                                                                     id="item-{{$dish->id}}-{{$key}}"
-                                                                    class="form-control rounded-left-0 rounded-right-0 form-control-sm qty-input"
+                                                                    class="form-control rounded-left-0 rounded-right-0 form-control-sm qty-input item-manip-input"
                                                                     value="0" min="0" max="{{$qty->quantity}}"
                                                                     style="margin-top: 3px;" disabled>
                                                                 <span class="input-group-btn">
                                                                     <button onclick="clicked(event, this);"
                                                                         type="button"
-                                                                        class="btn btn-sm btn-secondary btn-number rounded-left-0 qty-btn"
+                                                                        class="btn btn-sm btn-number rounded-left-0 qty-btn item-manip-btn"
                                                                         data-type="plus">
-                                                                        <span class="la la-plus"></span>
+                                                                        +
                                                                     </button>
                                                                 </span>
                                                             </div>
                                                             @endif
                                                             @else
-                                                            <div class="input-group qty-field">
+                                                            <div class="input-group qty-field" style="justify-content: flex-end;">
                                                                 <span class="input-group-btn">
                                                                     <button onclick="clicked(event, this);"
                                                                         type="button bordered"
-                                                                        class="btn btn-sm btn-secondary btn-number rounded-right-0 qty-btn"
-                                                                        disabled="disabled" data-type="minus">
-                                                                        <span class="la la-minus"></span>
+                                                                        class="btn btn-sm btn-number rounded-right-0 qty-btn item-manip-btn"
+                                                                        disabled="disabled" data-type="minus" style="padding: 0px 8px;">
+                                                                        -
                                                                     </button>
                                                                 </span>
                                                                 <input type="text" onkeydown="keydown(event)"
@@ -204,15 +200,15 @@
                                                                     onfocus="focusin(event, this)"
                                                                     name="order_quantity[]"
                                                                     id="item-{{$dish->id}}-{{$key}}"
-                                                                    class="form-control rounded-left-0 rounded-right-0 form-control-sm qty-input"
+                                                                    class="form-control rounded-left-0 rounded-right-0 form-control-sm qty-input item-manip-input"
                                                                     value="0" min="0" max="{{$qty->quantity}}"
                                                                     style="margin-top: 3px;" disabled>
                                                                 <span class="input-group-btn">
                                                                     <button onclick="clicked(event, this);"
                                                                         type="button"
-                                                                        class="btn btn-sm btn-secondary btn-number rounded-left-0 qty-btn"
+                                                                        class="btn btn-sm btn-number rounded-left-0 qty-btn item-manip-btn"
                                                                         data-type="plus">
-                                                                        <span class="la la-plus"></span>
+                                                                        +
                                                                     </button>
                                                                 </span>
                                                             </div>
@@ -234,17 +230,17 @@
                             </div>
                             @endif
                             <div class="row">
-                                <div class="col-md-12 mt-xs-2">
+                                <div class="col-md-12">
                                     <button type="submit" id="regular-order-btn"
-                                        class="btn btn-primary btn-block font-weight-bold"
-                                        data-attach-loading="true" disabled style="border-radius: unset">
+                                        class="btn btn-primary btn-lg btn-block font-weight-bold"
+                                        data-attach-loading="true" disabled style="border-radius: unset; font-size: 15px;">
                                         <span id="regular-order-txt">Add to basket</span>
                                         <div class="spinner-border spinner-border-sm btn-pr" id="regular-order-spinner"
                                             style="display: none;" role="status">
                                             <span class="sr-only">Loading...</span>
                                         </div>
                                         <span id="regular-final-price" class="float-right"
-                                            data-item-subtotal="">₦0.00</span>
+                                            data-item-subtotal="" style="position: absolute;right: 15px;">₦0.00</span>
                                     </button>
                                 </div>
                             </div>

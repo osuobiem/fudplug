@@ -139,7 +139,7 @@ if(!Auth::guard('vendor')->guest()) {
           }
       @endphp
       @if (!Auth::guard('user')->guest() && $post->tags()->count() > 0 && $show_add_to_b)
-          <a href="#atb-from-post-m-{{ $post->id }}" data-toggle="modal" class="btn btn-sm text-light"
+      <a href="" data-target="#atb-from-post-m-{{ $post->id }}"ß data-toggle="modal" class="btn btn-sm text-light"
               style="float: right; background: var(--i-primary)" title="Add to Basket">
               <i class="la la-shopping-basket la-lg"></i> Add to Basket</a>
 
