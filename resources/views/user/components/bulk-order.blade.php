@@ -1,15 +1,11 @@
 <div class="modal fade" id="bulk-order-modal" tabindex="-1" data-backdrop="static" role="dialog"
     aria-labelledby="modalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg modal-dialog-scrollable" role="document">
+    <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable" role="document">
         <div class="modal-content">
             <div class="modal-body">
-                <div class="row">
-                    <div class="col-md-12 pb-3">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                </div>
+                <button type="button" class="close custom-modal-close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
                 <div class="row">
                     <div class="img-container pl-md-0 col-md-7">
                         <img id="image" class="img-edit rounded order-img"

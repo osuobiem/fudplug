@@ -193,12 +193,12 @@ if (!function_exists('format_time')) {
                                             <div><span class="text-dark">{{ $tag->item->title }}</span></div>
                                             <div class="ml-auto pl-2">
                                                 @if($regular)
-                                                    <a href="#" onclick="loadRegOrderModal('{{$tag->item->id}}')">Regular Order</a>
+                                                    <a style="hover: {cursor: pointer}; color: var(--i-primary)" onclick="loadRegOrderModal('{{$tag->item->id}}')">Regular Order</a>
                                                 @endif
 
                                                 @if($bulk)
                                                     | 
-                                                    <a href="#" onclick="loadBulkOrderModal('{{$tag->item->id}}')">Bulk Order</a>
+                                                    <a style="hover: {cursor: pointer}; color: var(--i-primary)" onclick="loadBulkOrderModal('{{$tag->item->id}}')">Bulk Order</a>
                                                 @endif
                                             </div>
                                         </div>

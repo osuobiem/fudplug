@@ -1,26 +1,22 @@
 <div class="modal fade" id="regular-order-modal" tabindex="-1" data-backdrop="static" role="dialog"
     aria-labelledby="modalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg modal-dialog-scrollable" role="document">
+    <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable" role="document">
         <div class="modal-content">
-            <div class="modal-body">
-                <div class="row">
-                    <div class="col-md-12 pb-3">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                </div>
+            <div class="modal-body p-0">
+                <button type="button" class="close custom-modal-close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
                 <div class="row">
                     <div class="img-container pl-md-0 col-md-7">
-                        <img id="image" class="img-edit rounded order-img"
-                            src="{{Storage::url('vendor/dish/'.$dish->image)}}">
+                        @php $photo = Storage::url('vendor/dish/'.$dish->image) @endphp
+                        <div class="item-view-image" style="background: url('{{ $photo }}')"></div>
                     </div>
                     <div class="col-md-5">
                         <form id="order-form">
                             @csrf
                             @if($dish->type == "simple")
                             <div id="basics">
-                                <div class="mb-5 pt-3 text-lg-left text-center">
+                                <div class="mb-3 pt-2 text-lg-left text-center">
                                     <div class="float-left">
                                         <h4 class="font-weight-semi-bold"> {{ucfirst($dish->title)}} </h4>
                                     </div>
@@ -109,14 +105,12 @@
                             @else
                             <div id="basics">
 
-                                <div class="mb-5 pt-3 text-lg-left text-center">
-                                    <div class="float-left">
-                                        <h4 class="font-weight-semi-bold">{{ucfirst($dish->title)}} </h4>
-                                    </div>
+                                <div>
+                                    <h3 class="font-weight-semi-bold text-center text-lg-left">{{ucfirst($dish->title)}} </h3>
                                 </div>
                                 <div id="basicsAccordion">
 
-                                    <div class="box shadow-sm border rounded bg-white mb-2">
+                                    <div class="box mb-2">
                                         <div id="basicsHeadingOne">
                                             <h5 class="mb-0">
                                                 <button type="button"
@@ -125,7 +119,7 @@
                                                     aria-expanded="false" aria-controls="basicsCollapseOne">
                                                     Regular Quantity
                                                     <span class="card-btn-arrow">
-                                                        <span class="la la-chevron-down"></span>
+                                                        <span class="la la-chevron-down" style="color: var(--i-primary)"></span>
                                                     </span>
                                                 </button>
                                             </h5>
@@ -242,8 +236,8 @@
                             <div class="row">
                                 <div class="col-md-12 mt-xs-2">
                                     <button type="submit" id="regular-order-btn"
-                                        class="btn btn-sm btn-primary btn-block font-weight-bold"
-                                        data-attach-loading="true" disabled>
+                                        class="btn btn-primary btn-block font-weight-bold"
+                                        data-attach-loading="true" disabled style="border-radius: unset">
                                         <span id="regular-order-txt">Add to basket</span>
                                         <div class="spinner-border spinner-border-sm btn-pr" id="regular-order-spinner"
                                             style="display: none;" role="status">
