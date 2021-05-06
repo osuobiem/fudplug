@@ -76,7 +76,7 @@
 <script>
     // Initialize crop for profile image
     crop("avatar", "image", "input", "progress", "progress-bar", "alert", "user-image-modal", "change",
-        "crop", "{{url('user/profile-image-update')}}");
+        "user-crop", "{{url('user/profile-image-update')}}");
 
     // Display User Profile Edit Form For Mobile
     function showMobileEdit() {
@@ -158,6 +158,9 @@
         });
 
         document.getElementById(params[8]).addEventListener("click", function () {
+            spin('user-crop');
+            $("#user-crop").attr('disabled', true);
+
             var initialAvatarURL;
             var canvas;
 
@@ -225,15 +228,24 @@
                                 cropper.destroy();
                                 cropper = null;
                                 // Reset cropper on error
+
+                                spin('user-crop');
+                                $("#user-crop").removeAttr('disabled');
                             } else {
                                 setTimeout(function () {
                                     $progress.hide();
                                     $modal.modal("hide");
+                                    spin('user-crop');
+                                    $("#user-crop").removeAttr('disabled');
                                 }, 2000);
                             }
                         },
 
                         error: function (res) {
+                            spin('user-crop');
+                            $("#user-crop").removeAttr('disabled');
+                            showAlert(false, "Oops! Something's not right. Try again");
+
                             avatar.src = initialAvatarURL;
                         }
 

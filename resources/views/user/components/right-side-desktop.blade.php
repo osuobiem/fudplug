@@ -199,9 +199,6 @@
                         },
 
                         success: function (res) {
-                            spin('user-crop');
-                            $("#user-crop").removeAttr('disabled');
-
                             if (res.success == false) {
                                 let message = res.message.image[0];
                                 $alert.show().addClass("alert-danger").text(message);
@@ -211,10 +208,14 @@
                                 cropper.destroy();
                                 cropper = null;
                                 // Reset cropper on error
+                                spin('user-crop');
+                                $("#user-crop").removeAttr('disabled');
                             } else {
                                 setTimeout(function () {
                                     $progress.hide();
                                     $modal.modal("hide");
+                                    spin('user-crop');
+                                    $("#user-crop").removeAttr('disabled');
                                 }, 2000);
                             }
                         },
@@ -222,9 +223,9 @@
                         error: function (res) {
                             spin('user-crop');
                             $("#user-crop").removeAttr('disabled');
+                            showAlert(false, "Oops! Something's not right. Try again");
 
                             avatar.src = initialAvatarURL;
-                            console.log(res.responseJSON);
                         }
 
                         // complete: function () {

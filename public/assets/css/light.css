@@ -892,7 +892,7 @@ small {
 }
 
 #menu-item-data > .small,
-small {
+#menu-item-data > small {
     font-size: 12px;
     color: white !important;
 }

@@ -555,48 +555,6 @@ class UserController extends Controller
         }
     }
 
-    // public function get_basket(Request $request)
-    // {
-    //     try {
-    //         $basket = Item::join('baskets', 'baskets.item_id', '=', 'items.id')
-    //             ->select(['items.title', 'items.quantity', 'items.image', 'baskets.id', 'baskets.order_type', 'baskets.order_detail'])
-    //             ->where('baskets.user_id', Auth::guard('user')->user()->id);
-
-    //         $basket_count = $basket->count();
-
-    //         // Early return for when basket is empty
-    //         if ($basket_count < 1) {
-    //             return response()->json(['success' => true, 'basket_count' => $basket_count, 'paginate_count' => 0, 'total_price' => 0, 'next_page' => 1], 200);
-    //         }
-
-    //         $total_price = $this->get_basket_total($basket->get());
-    //         $basket_items = $basket->paginate(7);
-    //         $paginate_count = $basket_items->count();
-    //         $curr_page = $request->page;
-
-    //         // Prepare next page
-    //         $next_page = $paginate_count > 0 ? ($curr_page + 1) : (int) $curr_page;
-
-    //         $basket_view = view('user.components.basket', compact('basket_items', 'curr_page'))->render();
-
-    //         if ($paginate_count > 0) {
-    //             // Initiate validation of basket
-    //             $result = $this->validate_order_quantity();
-
-    //             if ($result['track_err'] > 0) {
-    //                 return response()->json(['success' => true, 'basket_view' => $basket_view, 'basket_count' => $basket_count, 'paginate_count' => $paginate_count, 'total_price' => $total_price, 'next_page' => $next_page, 'validate_status' => true, 'data' => $result['validate_data']], 200);
-    //             } else {
-    //                 return response()->json(['success' => true, 'basket_view' => $basket_view, 'basket_count' => $basket_count, 'paginate_count' => $paginate_count, 'total_price' => $total_price, 'next_page' => $next_page, 'validate_status' => false], 200);
-    //             }
-    //         } else {
-    //             return response()->json(['success' => true, 'basket_view' => $basket_view, 'basket_count' => $basket_count, 'paginate_count' => $paginate_count, 'total_price' => $total_price, 'next_page' => $next_page], 200);
-    //         }
-    //     } catch (\Throwable $th) {
-    //         Log::error($th);
-    //         return response()->json(['success' => false, 'message' => "Oops! Something went wrong. Try again!"], 500);
-    //     }
-    // }
-
     /**
      * Fetch Vendor Menu
      *
@@ -1233,48 +1191,6 @@ class UserController extends Controller
         return compact('validate_data', 'track_err');
     }
 
-    // public function get_basket(Request $request)
-    // {
-    //     try {
-    //         $basket = Item::join('baskets', 'baskets.item_id', '=', 'items.id')
-    //             ->select(['items.title', 'items.quantity', 'items.image', 'baskets.id', 'baskets.order_type', 'baskets.order_detail'])
-    //             ->where('baskets.user_id', Auth::guard('user')->user()->id);
-
-    //         $basket_count = $basket->count();
-
-    //         // Early return for when basket is empty
-    //         if ($basket_count < 1) {
-    //             return response()->json(['success' => true, 'basket_count' => $basket_count, 'paginate_count' => 0, 'total_price' => 0, 'next_page' => 1], 200);
-    //         }
-
-    //         $total_price = $this->get_basket_total($basket->get());
-    //         $basket_items = $basket->paginate(7);
-    //         $paginate_count = $basket_items->count();
-    //         $curr_page = $request->page;
-
-    //         // Prepare next page
-    //         $next_page = $paginate_count > 0 ? ($curr_page + 1) : (int) $curr_page;
-
-    //         $basket_view = view('user.components.basket', compact('basket_items', 'curr_page'))->render();
-
-    //         if ($paginate_count > 0) {
-    //             // Initiate validation of basket
-    //             $result = $this->validate_order_quantity();
-
-    //             if ($result['track_err'] > 0) {
-    //                 return response()->json(['success' => true, 'basket_view' => $basket_view, 'basket_count' => $basket_count, 'paginate_count' => $paginate_count, 'total_price' => $total_price, 'next_page' => $next_page, 'validate_status' => true, 'data' => $result['validate_data']], 200);
-    //             } else {
-    //                 return response()->json(['success' => true, 'basket_view' => $basket_view, 'basket_count' => $basket_count, 'paginate_count' => $paginate_count, 'total_price' => $total_price, 'next_page' => $next_page, 'validate_status' => false], 200);
-    //             }
-    //         } else {
-    //             return response()->json(['success' => true, 'basket_view' => $basket_view, 'basket_count' => $basket_count, 'paginate_count' => $paginate_count, 'total_price' => $total_price, 'next_page' => $next_page], 200);
-    //         }
-    //     } catch (\Throwable $th) {
-    //         Log::error($th);
-    //         return response()->json(['success' => false, 'message' => "Oops! Something went wrong. Try again!"], 500);
-    //     }
-    // }
-
     /**
      * Get user orders
      * @param Request $request
@@ -1296,7 +1212,7 @@ class UserController extends Controller
                 $total_amount = $this->get_order_total($this->fix_order($orders->get()));
 
                 // Paginated order data
-                $order_pag = $this->fix_order($orders->paginate(3));
+                $order_pag = $this->fix_order($orders->paginate(7));
 
                 $orders = $this->fix_order($orders->get());
 

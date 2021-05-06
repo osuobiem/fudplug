@@ -190,12 +190,14 @@
 
         <div class="tab-pane fade" id="menu-dish" role="tabpanel" aria-labelledby="menu-dish-tab">
             <div class="box shadow-sm border rounded bg-white mb-3 p-3">
-                <div class="box-body row p-3 overflow-auto generic-scrollbar" style="height: 300px;"
+                <div class="box-body row p-3 generic-scrollbar" style="height: 300px;overflow-y: scroll;"
                     id="menu-container">
 
-                    <div class="col-12 text-center" style="display:none;" id="vendor-menu-spinner">
-                        <div class="spinner-border spinner-border-sm btn-pr" role="status">
-                            <span class="sr-only">Loading...</span>
+                    <div class="col-12" id="vendor-menu-spinner-container" style="height: 5%;">
+                        <div class="mb-2 text-center" style="display:none;" id="vendor-menu-spinner">
+                            <div class="spinner-border spinner-border-sm btn-pr" role="status">
+                                <span class="sr-only">Loading...</span>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -233,7 +235,7 @@
         goGet(getUrl).then((res) => {
             // Clear list if loading on first page
             if (page == 1) {
-                $("#vendor-menu-spinner").prevAll().remove();
+                $("#vendor-menu-spinner-container").prevAll().remove();
             }
 
             // Remove preloader
@@ -243,7 +245,7 @@
             vendorMenuPage = res.next_page;
 
 
-            $("#vendor-menu-spinner").before(res.menu_view);
+            $("#vendor-menu-spinner-container").before(res.menu_view);
         }).catch((err) => {
             spin('user-right-side');
             showAlert(false, "Oops! Something's not right. Try again");

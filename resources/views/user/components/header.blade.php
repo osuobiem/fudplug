@@ -140,9 +140,11 @@
                             <div class="box-body generic-scrollbar p-2 text-center job-item-2 order-container"
                                 style="max-height: 450px; overflow: auto;" id="h-noti-cont">
 
-                                <div class="spinner-border spinner-border-sm btn-pr" role="status"
-                                    style="display: none;" id="order-container-spinner">
-                                    <span class="sr-only">Loading...</span>
+                                <div class="col-12" id="order-container-spinner-container" style="height: 13px;">
+                                    <div class="spinner-border spinner-border-sm btn-pr" role="status"
+                                        style="display: none;" id="order-container-spinner">
+                                        <span class="sr-only">Loading...</span>
+                                    </div>
                                 </div>
                             </div>
                             <div class="box-body">

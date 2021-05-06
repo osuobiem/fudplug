@@ -247,7 +247,7 @@
                         getBasket(1);
 
                         // Close modal
-                        $("#bulk-order-modal").modal('hide');
+                        $("#order-modal").modal('hide');
 
                         // Reset bulk price (to be reflected on "add to basket button")
                         bulkPrices = resetOrderPrice("bulk");

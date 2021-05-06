@@ -418,7 +418,7 @@
     }
 
     // Scrollspy for order list
-    $('.order-container').on('scroll', function (e) {
+    $('.order-container').bind('scroll', function (e) {
         var elem = $(e.currentTarget);
         if (elem[0].scrollHeight - elem.scrollTop() == elem.outerHeight()) {
             getOrder(paginate.orderPage, paginate.orderType); //load content
@@ -442,8 +442,8 @@
             if (toCancel == false) {
                 // Clear list if loading on first page
                 if (page == 1) {
-                    $("#order-container-spinner-mob").prevAll().remove();
-                    $("#order-container-spinner").prevAll().remove();
+                    $("#order-container-spinner-container-mob").prevAll().remove();
+                    $("#order-container-spinner-container").prevAll().remove();
                 }
 
                 // Remove preloader
@@ -458,7 +458,7 @@
             if (window.matchMedia("(max-width: 767px)")
                 .matches) { // The viewport is less than 768 pixels wide (mobile device)
                 if (toCancel == false) {
-                    $("#order-container-spinner-mob").before(res.order_view);
+                    $("#order-container-spinner-container-mob").before(res.order_view);
                 }
                 $("#mob-order-price").html(`₦${res.total_amount}.00`);
 
@@ -484,7 +484,7 @@
                 }
             } else {
                 if (toCancel == false) {
-                    $("#order-container-spinner").before(res.order_view);
+                    $("#order-container-spinner-container").before(res.order_view);
                 }
                 $("#order-price").html(`₦${res.total_amount}.00`);
 
