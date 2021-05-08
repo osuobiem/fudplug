@@ -17,8 +17,10 @@
                     <i class="la la-list la-2x p-2" onclick="openOrders()"></i>
                 </div>
                 <div class="col-3" id="mob-basket-btn">
-                    <i class="la la-shopping-basket la-2x p-2"  onclick="openBasket()"></i>
-                    <small id="mob-basket-noti-dot" class="d-none">0</small>
+                    <span onclick="openBasket()">
+                        <i class="la la-shopping-basket la-2x p-2"></i>
+                        <small id="mob-basket-noti-dot" class="d-none">0</small>
+                    </span>
                 </div>
             </div>
         </nav>

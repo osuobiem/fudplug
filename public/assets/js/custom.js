@@ -22,7 +22,6 @@ function fillImage(input, fillId) {
         if (input.files[0].size > 5120000) {
             showAlert(false, "Image size must not be more than 5MB");
         } else if (input.files[0].type.split("/")[0] != "image") {
-            console.log("red");
             showAlert(false, "The file is not an image");
         } else {
             var reader = new FileReader();

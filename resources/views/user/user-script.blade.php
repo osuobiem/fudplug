@@ -183,7 +183,7 @@
     });
 
     // Load user basket
-    function getBasket(page, toDelete = false) {
+    function getBasket(page = 1, toDelete = false) {
         let getUrl = `${server}/user/get-basket`;
         getUrl += fixPaginateUrl(page);
 
