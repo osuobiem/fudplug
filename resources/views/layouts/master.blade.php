@@ -129,16 +129,12 @@
                 @include('vendor.components.dish-add')
 
                 <!-- Dish View Modal Holder -->
-                <div id="dish-modal-holder">
-
-                </div>
+                @include('vendor.components.dish-view-modal')
                 <!-- Dish View Modal Holder -->
 
-                <!-- Dish Delete Modal Holder -->
-                <div id="dish-delete-modal-holder">
-
-                </div>
-                <!-- Dish Delete Modal Holder -->
+                <!-- Dish Delete Modal -->
+                @include('vendor.components.dish-delete')
+                <!-- Dish Delete Modal -->
 
                 <!-- Menu Update Modal Holder -->
                 <div id="menu-modal-holder">

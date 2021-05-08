@@ -243,13 +243,16 @@
                                 // Reset cropper on error
                                 cropper.destroy();
                                 cropper = null;
-                                // Reset cropper on error
+
+                                // Off button preloader
                                 spin('user-crop');
                                 $("#user-crop").removeAttr('disabled');
                             } else {
                                 setTimeout(function () {
                                     $progress.hide();
                                     $modal.modal("hide");
+
+                                    // Off button preloader
                                     spin('user-crop');
                                     $("#user-crop").removeAttr('disabled');
                                 }, 2000);

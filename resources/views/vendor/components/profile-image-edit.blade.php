@@ -1,6 +1,6 @@
 <div class="modal fade" id="modal" tabindex="-1" data-backdrop="static" role="dialog" aria-labelledby="modalLabel"
     aria-hidden="true">
-    <div class="modal-dialog modal-sm" role="document">
+    <div class="modal-dialog modal-md" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="modalLabel">Crop image</h5>
@@ -21,11 +21,15 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-primary" id="crop">Crop & Save</button>
+                <button type="button" class="btn btn-primary" id="vendor-crop">
+                    <span id="vendor-crop-txt">Crop & Save</span>
+                    <div class="spinner-border spinner-border-sm btn-pr mx-4" id="vendor-crop-spinner"
+                        style="display:none;" role="status">
+                        <span class="sr-only">Loading...</span>
+                    </div>
+                </button>
                 <label type="button" class="btn btn-primary d-none" for="input" id="change">Change</label>
             </div>
         </div>
     </div>
 </div>
-
-<span class="d-none" data-toggle="modal" href="#loginModal" id="login-pop"></span>

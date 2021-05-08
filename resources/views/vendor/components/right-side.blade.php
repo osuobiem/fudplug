@@ -65,7 +65,7 @@
                             onclick="viewDish('{{$dish->id}}')">
                             <i class="las la-eye la-2x"></i></button>
                         <button type="button" class="btn btn-outline-danger border-0 btn-sm text-nowrap"
-                            onclick="dishDelete('{{$dish->id}}')">
+                            onclick="dishDelete('{{$dish->id}}', '{{$dish->title}}')">
                             <i class="las la-trash-alt la-2x"></i></button>
                         <!-- <div class="custom-control custom-switch pull-left">
                             <input type="checkbox" class="custom-control-input" id="customSwitch1">
@@ -92,24 +92,56 @@
 <script>
     // Function that displays dish view modal with its contents
     function viewDish(dishId) {
+        $("#dish-view-container").empty();
+        $("#dish-view-modal-spinner").removeClass('d-none');
+        $("#dish-view-modal").modal('show');
+
         let getUrl = "{{url('vendor/dish/')}}";
         getUrl += '/' + dishId;
         goGet(getUrl).then((res) => {
-            $("#dish-modal-holder").html(res);
-            $("#dish-view-modal").modal('show');
+            $("#dish-view-modal-spinner").addClass('d-none');
+            $("#dish-view-container").html(res);
         }).catch((err) => {
-            console.error(err);
+            showAlert(false, "Oops! Something's not right. Try again");
         });
     }
 
     // Function that displays dish delete modal
-    function dishDelete(dishId) {
-        let getUrl = "{{url('vendor/dish-delete/')}}";
+    function dishDelete(dishId, dishTitle) {
+        // Dish data object
+        let dishData = {
+            dishId,
+            dishTitle
+        }
+
+        // Attach dish ttle to confirmation
+        $("#del-dish-title").html(dishData.dishTitle);
+
+        // Save dish data to sessionStorage
+        sessionStorage.setItem('dishId', dishData.dishId);
+
+        // Pop confirmation
+        $("#dish-delete-modal").modal('show');
+    }
+
+    // Function Deletes Dish
+    function deleteDish() {
+        spin('dish-delete');
+
+        // Get saved data from sessionStorage
+        let dishId = sessionStorage.getItem('dishId');
+
+        let getUrl = "{{url('vendor/delete-dish/')}}";
         getUrl += '/' + dishId;
         goGet(getUrl).then((res) => {
-            $("#dish-delete-modal-holder").html(res);
-            $("#dish-delete-modal").modal('show');
+            spin('dish-delete');
+
+            showAlert(true, res.message);
+            $("#dish-delete-modal").modal('hide');
+            loadRight(activeTab);
         }).catch((err) => {
+            spin('dish-delete');
+
             showAlert(false, "Oops! Something's not right. Try again");
         });
     }

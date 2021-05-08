@@ -72,6 +72,10 @@
 
     // Load Menu Modal Data
     function loadMenuModal() {
+        $("#menu-update-container").empty();
+        $("#menu-update-modal-spinner").removeClass('d-none');
+        $("#menu-update-modal").modal('show');
+
         let getUrl = `${server}/vendor/menu`;
         goGet(getUrl).then((res) => {
             $("#menu-modal-holder").empty();
@@ -81,6 +85,19 @@
             showAlert(false, "Oops! Something's not right. Try again");
         });
     }
+
+    $("#dish-view-container").empty();
+        $("#menu-update-modal-spinner").removeClass('d-none');
+        $("#dish-view-modal").modal('show');
+
+        let getUrl = "{{url('vendor/dish/')}}";
+        getUrl += '/' + dishId;
+        goGet(getUrl).then((res) => {
+            $("#dish-view-modal-spinner").addClass('d-none');
+            $("#dish-view-container").html(res);
+        }).catch((err) => {
+            showAlert(false, "Oops! Something's not right. Try again");
+        });
 
     // Function Keeps Track of Active Tab
     function track(active = '1') {

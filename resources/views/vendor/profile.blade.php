@@ -310,32 +310,35 @@
     // Cropper.JS Initialize any crop by calling the crop function
     window.addEventListener("DOMContentLoaded", function () {
         // Initialize crop for profile image
-        crop("avatar", "image", "input", "progress", "progress-bar", "alert", "modal", "change", "crop",
-            "profile_image_update");
+        crop("avatar", "image", "input", "progress", "progress-bar", "alert", "modal", "change", "vendor-crop",
+            "{{url('vendor/profile_image_update')}}");
 
         // Initialize crop for cover image
         crop("cover", "cover-image", "cover-input", "progress", "progress-bar", "alert", "cover-modal",
-            "cover-change", "cover-crop", "cover_image_update");
+            "cover-change", "cover-crop", "{{url('vendor/cover_image_update')}}");
     });
 
     function crop(...params) {
-        var avatar = document.getElementById(params[0]);
-        var image = document.getElementById(params[1]);
-        var input = document.getElementById(params[2]);
-        var $progress = $("." + params[3]);
-        var $progressBar = $("." + params[4]);
-        var $alert = $("." + params[5]);
-        var $modal = $("#" + params[6]);
-        var $change = $("#" + params[7]);
-        var $crop = $("#" + params[8]);
-        var upload_url = params[9];
-        var cropper;
+        let avatar = document.getElementById(params[0]);
+        let image = document.getElementById(params[1]);
+        let input = document.getElementById(params[2]);
+        let $progress = $("." + params[3]);
+        let $progressBar = $("." + params[4]);
+        let $alert = $("." + params[5]);
+        let $modal = $("#" + params[6]);
+        let $change = $("#" + params[7]);
+        let $crop = $("#" + params[8]);
+        let upload_url = params[9];
+        let cropper;
+        let aspectRatio = params[0] == "avatar" ? 1 : 16 / 4;
+        let minHeight = params[0] == "avatar" ? 400 : 400;
+        let minWidth = params[0] == "avatar" ? 400 : 600;
 
         $('[data-toggle="tooltip"]').tooltip();
 
         input.addEventListener("change", function (e) {
-            var files = e.target.files;
-            var done = function (url) {
+            let files = e.target.files;
+            let done = function (url) {
                 input.value = "";
                 image.src = url;
                 $alert.hide();
@@ -349,16 +352,34 @@
                     $crop.removeClass("d-none");
                     // Reinitialize ccropper when file change button is clicked
                     cropper = new Cropper(image, {
-                        aspectRatio: 1,
-                        viewMode: 3,
+                        aspectRatio,
+                        viewMode: 2,
                         setDragMode: 'none',
-                        aspectRatio: NaN
+                        cropmove: function (event) {
+                            let data = cropper.getData();
+
+                            if (data.width < minWidth) {
+                                event.preventDefault();
+
+                                data.width = minWidth;
+
+                                cropper.setData(data);
+                            }
+
+                            if (data.height < minHeight) {
+                                event.preventDefault();
+
+                                data.height = minHeight;
+
+                                cropper.setData(data);
+                            }
+                        }
                     });
                 }
             };
-            var reader;
-            var file;
-            var url;
+            let reader;
+            let file;
+            let url;
 
             if (files && files.length > 0) {
                 file = files[0];
@@ -378,10 +399,28 @@
         // Initialize cropper on modal popup
         $modal.on("shown.bs.modal", function () {
             cropper = new Cropper(image, {
-                aspectRatio: 1,
-                viewMode: 3,
+                aspectRatio,
+                viewMode: 2,
                 setDragMode: 'none',
-                aspectRatio: NaN
+                cropmove: function (event) {
+                    let data = cropper.getData();
+
+                    if (data.width < minWidth) {
+                        event.preventDefault();
+
+                        data.width = minWidth;
+
+                        cropper.setData(data);
+                    }
+
+                    if (data.height < minHeight) {
+                        event.preventDefault();
+
+                        data.height = minHeight;
+
+                        cropper.setData(data);
+                    }
+                }
             });
         }).on("hidden.bs.modal", function () {
             // destroy cropper on modal close
@@ -392,8 +431,11 @@
         });
 
         document.getElementById(params[8]).addEventListener("click", function () {
-            var initialAvatarURL;
-            var canvas;
+            spin(params[8]);
+            $("#" + params[8]).attr('disabled', true);
+
+            let initialAvatarURL;
+            let canvas;
 
             if (cropper) {
                 canvas = cropper.getCroppedCanvas({
@@ -404,6 +446,7 @@
                 console.log(params[0]);
                 if (params[0] == "avatar") {
                     avatar.src = canvas.toDataURL();
+                    $(".img-profile").attr('src', canvas.toDataURL());
                 } else {
                     document.getElementById("cover-holder").style.backgroundImage = "url(" + canvas
                         .toDataURL() + ")";
@@ -411,8 +454,8 @@
 
                 $alert.removeClass("alert-success alert-warning");
                 canvas.toBlob(async function (blob) {
-                    var formData = new FormData();
-                    var FileSize = blob.size / 1024 / 1024; // Size of uploaded file
+                    let formData = new FormData();
+                    let FileSize = blob.size / 1024 / 1024; // Size of uploaded file
                     if (FileSize <= 1) {
                         // Show progress bar if file has required size
                         $progress.show();
@@ -435,11 +478,11 @@
                         },
 
                         xhr: function () {
-                            var xhr = new XMLHttpRequest();
+                            let xhr = new XMLHttpRequest();
 
                             xhr.upload.onprogress = function (e) {
-                                var percent = "0";
-                                var percentage = "0%";
+                                let percent = "0";
+                                let percentage = "0%";
 
                                 if (e.lengthComputable) {
                                     percent = Math.round((e.loaded / e.total) *
@@ -460,21 +503,32 @@
                                 $alert.show().addClass("alert-danger").text(message);
                                 $crop.addClass("d-none");
                                 $change.removeClass("d-none");
+
                                 // Reset cropper on error
                                 cropper.destroy();
                                 cropper = null;
-                                // Reset cropper on error
+
+                                // Off button preloader
+                                spin(params[8]);
+                                $("#" + params[8]).removeAttr('disabled');
                             } else {
                                 setTimeout(function () {
                                     $progress.hide();
                                     $modal.modal("hide");
+
+                                    // Off button preloader
+                                    spin(params[8]);
+                                    $("#" + params[8]).removeAttr('disabled');
                                 }, 2000);
                             }
                         },
 
                         error: function (res) {
+                            spin(params[8]);
+                            $("#" + params[8]).removeAttr('disabled');
+                            showAlert(false, "Oops! Something's not right. Try again");
+
                             avatar.src = initialAvatarURL;
-                            console.log(res.responseJSON);
                         }
 
                         // complete: function () {

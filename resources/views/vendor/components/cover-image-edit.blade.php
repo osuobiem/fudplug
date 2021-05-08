@@ -13,15 +13,27 @@
                     <img id="cover-image" class="img-edit img-responsive"
                         src="{{ Storage::url('vendor/cover/'.Auth::user('vendor')->cover_image) }}">
                 </div>
-                <div class="progress" style="display: none;">
+                <!-- <div class="progress" style="display: none;">
                     <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar"
                         aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">0%</div>
-                </div>
+                </div> -->
                 <div class="alert img-edit-alert animate__animated animate__headShake" role="alert"></div>
             </div>
-            <div class="modal-footer">
+            <!-- <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
                 <button type="button" class="btn btn-primary" id="cover-crop">Crop & Save</button>
+                <label type="button" class="btn btn-primary d-none" for="cover-input" id="cover-change">Change</label>
+            </div> -->
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" id="cover-crop">
+                    <span id="cover-crop-txt">Crop & Save</span>
+                    <div class="spinner-border spinner-border-sm btn-pr mx-4" id="cover-crop-spinner"
+                        style="display:none;" role="status">
+                        <span class="sr-only">Loading...</span>
+                    </div>
+                </button>
                 <label type="button" class="btn btn-primary d-none" for="cover-input" id="cover-change">Change</label>
             </div>
         </div>
