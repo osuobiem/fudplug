@@ -282,6 +282,7 @@
             .catch(err => {
                 spin('vendor')
                 handleFormRes(err, 'v-sign-error');
+                showAlert(false, "Oops! Something's not right. Try again");
             })
     }
 
@@ -304,7 +305,7 @@
                 $('#proceed-btn').removeClass('d-none')
             })
             .catch(err => {
-                showAlert(false, "Oops! Something's not right. Please Reload Page")
+                showAlert(false, "Oops! Something's not right. Try again");
             })
     }
 

@@ -1532,43 +1532,50 @@ a:visited {
 
 /* Rating Star Widgets Style */
 .rating-stars ul {
-    list-style-type: none;
-    padding: 0;
+    list-style-type:none;
+    padding:0;
 
-    -moz-user-select: none;
-    -webkit-user-select: none;
-}
+    -moz-user-select:none;
+    -webkit-user-select:none;
+  }
+  .rating-stars ul > li.star {
+    display:inline-block;
 
-.rating-stars ul>li.star {
-    display: inline-block;
+  }
 
-}
+  /* Idle State of the stars */
+  .rating-stars ul > li.star > i.lar {
+    font-size:2.5em; /* Change the size of the stars */
+    color:#ccc; /* Color on idle state */
+  }
 
-/* Idle State of the stars */
-.rating-stars ul>li.star>i.lar {
-    font-size: 2.5em;
-    /* Change the size of the stars */
-    color: #ccc;
-    /* Color on idle state */
-}
+  /* Hover state of the stars */
+  .rating-stars ul > li.star.hover > i.lar {
+    color:#FFCC36;
+  }
 
-/* Hover state of the stars */
-.rating-stars ul>li.star.hover>i.lar {
-    color: #FFCC36;
-}
+  /* Selected state of the stars */
+  .rating-stars ul > li.star.selected > i.lar {
+    color:#FF912C;
+  }
 
-/* Selected state of the stars */
-.rating-stars ul>li.star.selected>i.lar {
-    color: #FF912C;
-}
-
-/* Give red border color to bottom of modal header */
-.red-bottom {
+  /* Give red border color to bottom border */
+  .red-bottom{
     border-bottom-color: var(--i-primary) !important;
 }
 
-/* Remove red colour from sociaalite link btn on visited */
-.socialite-btn:visited {
+  /* Give red border color to right border */
+  .red-right{
+    border-right-color: var(--i-primary) !important;
+  }
+
+  /* Give red border color to top border */
+  .red-top{
+    border-top-color: var(--i-primary) !important;
+  }
+
+  /* Remove red colour from sociaalite link btn on visited */
+  .socialite-btn:visited {
     color: white;
 }
 
@@ -1659,6 +1666,7 @@ a:visited {
     margin: 5px 4px;
     border: solid 1px #0000003d;
     padding: 7px 5px;
+    border-radius: 4px;
 }
 
 @media(min-width: 1024px) {
@@ -1670,6 +1678,7 @@ a:visited {
         margin: unset;
         border: unset;
         padding: 7px 9px;
+        border-radius: 4px;
     }
 
     .custom-modal-close {

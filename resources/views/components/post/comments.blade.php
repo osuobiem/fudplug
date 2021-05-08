@@ -150,7 +150,7 @@ $id = isset($_GET['id']) ? $_GET['id'] : '';
                 })
                 .catch(() => {
                     spin('comment')
-                    showAlert(false, "Oops! Something's not right. Try Again");
+                    showAlert(false, "Oops! Something's not right. Try again");
                 })
         }
 

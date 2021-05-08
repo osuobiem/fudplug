@@ -1,7 +1,6 @@
 @extends('layouts.master')
 
 @section('content')
-
 <style>
     #cover-holder {
         background-image: url("{{ Storage::url('vendor/cover/'.$vendor->cover_image) }}");
@@ -191,72 +190,16 @@
 
         <div class="tab-pane fade" id="menu-dish" role="tabpanel" aria-labelledby="menu-dish-tab">
             <div class="box shadow-sm border rounded bg-white mb-3 p-3">
-                <div class="box-body row p-3 overflow-auto generic-scrollbar" style="height: 300px;">
-                    @if(!empty($vendor_menu))
-                    @foreach($vendor_menu as $menu_dish)
-                    <div class="col-md-6">
-                        <div class="border shadow-sm border rounded bg-white job-item-2 pl-3 pt-3 pb-1 pr-0">
-                            <div class="media">
-                                <div class="u-avatar mr-3">
-                                    <img class="img-fluid rounded-circle"
-                                        src="{{Storage::url('vendor/dish/'.$menu_dish->image)}}"
-                                        alt="Image Description">
-                                </div>
-                                <div class="media-body">
-                                    <div class="mb-3">
-                                        <h6 class="font-weight-bold mb-0"><a class="text-dark"
-                                                href="javascript:void(0)">{{$menu_dish->title}}</a></h6>
-                                        <!-- <a class="d-inline-block small pt-1" href="javascript:void(0)">
-                                            <span class="text-warning">
-                                                <span class="feather-star"></span>
-                                                <span class="feather-star"></span>
-                                                <span class="feather-star"></span>
-                                                <span class="feather-star text-gray-500"></span>
-                                                <span class="feather-star text-gray-500"></span>
-                                            </span>
-                                            <span class="text-dark font-weight-bold ml-2">3.74</span>
-                                            <span class="text-muted">(567 reviews)</span>
-                                        </a> -->
-                                    </div>
-                                    <div class="d-flex align-items-center border-top">
-                                        @if($menu_dish->type == "simple")
-                                        <a class="small" onclick="loadRegOrderModal('{{$menu_dish->id}}')">Regular
-                                            Order</a>
-                                        @else
-                                        @php
-                                        $bulk_qty = json_decode($menu_dish->quantity, true)['bulk'];
-                                        $regular_qty = json_decode($menu_dish->quantity, true)['regular'];
-                                        @endphp
-                                        @if($bulk_qty == "null")
-                                        <a class="small" onclick="loadRegOrderModal('{{$menu_dish->id}}')">Regular
-                                            Order</a>
-                                        @elseif($regular_qty == "null")
-                                        <div class="pr-3 mr-3">
-                                            <a class="text-secondary small"
-                                                onclick="loadBulkOrderModal('{{$menu_dish->id}}')">Bulk Order</a>
-                                        </div>
-                                        @else
-                                        <div class="border-right pr-3 mr-3">
-                                            <a class="text-secondary small"
-                                                onclick="loadBulkOrderModal('{{$menu_dish->id}}')">Bulk Order</a>
-                                        </div>
-                                        <a class="small" onclick="loadRegOrderModal('{{$menu_dish->id}}')">Regular
-                                            Order</a>
-                                        @endif
-                                        @endif
-                                    </div>
-                                </div>
+                <div class="box-body row p-3 generic-scrollbar" style="height: 300px;overflow-y: scroll;"
+                    id="menu-container">
+
+                    <div class="col-12" id="vendor-menu-spinner-container" style="height: 5%;">
+                        <div class="mb-2 text-center" style="display:none;" id="vendor-menu-spinner">
+                            <div class="spinner-border spinner-border-sm btn-pr" role="status">
+                                <span class="sr-only">Loading...</span>
                             </div>
                         </div>
                     </div>
-                    @endforeach
-                    @else
-                    <div class="bg-light text-center col-md-12" style="height:inherit; padding-top: 7rem;">
-                        <i class="las la-info" style="font-size:xx-large;"></i><br>
-                        <small>Empty Content</small>
-                    </div>
-                    @endif
-
                 </div>
             </div>
         </div>
@@ -264,3 +207,50 @@
 
 </div>
 @endsection
+
+@push('scripts')
+<script>
+    var vendorMenuPage = 1;
+
+    $(document).ready(function () {
+        getMenu(vendorMenuPage);
+    });
+
+    // Scrollspy for order list
+    $('#menu-container').on('scroll', function (e) {
+        var elem = $(e.currentTarget);
+        if (elem[0].scrollHeight - elem.scrollTop() == elem.outerHeight()) {
+            getMenu(vendorMenuPage); //load content
+        }
+    });
+
+    function getMenu(page) {
+        let getUrl = `{{ url('/user/get-menu/'.$vendor->id) }}`;
+        getUrl += fixPaginateUrl(page);
+
+        // Add preloader on using scrollspy
+        $("#vendor-menu-spinner").removeAttr('style');
+
+
+        goGet(getUrl).then((res) => {
+            // Clear list if loading on first page
+            if (page == 1) {
+                $("#vendor-menu-spinner-container").prevAll().remove();
+            }
+
+            // Remove preloader
+            $("#vendor-menu-spinner").attr('style', 'display:none');
+
+            // Set new page
+            vendorMenuPage = res.next_page;
+
+
+            $("#vendor-menu-spinner-container").before(res.menu_view);
+        }).catch((err) => {
+            spin('user-right-side');
+            showAlert(false, "Oops! Something's not right. Try again");
+        });
+    }
+
+</script>
+@endpush

@@ -75,7 +75,7 @@
                             <div class="dropdown-divider"></div>
                             <div class="box-body text-center job-item-2">
                                 <div class="col-12 generic-scrollbar basket-container"
-                                    style="height: 64px; overflow: auto;">
+                                    style="max-height: 450px; overflow: auto;">
 
                                     <div class="spinner-border spinner-border-sm btn-pr" role="status"
                                         style="display: none;" id="basket-container-spinner">
@@ -137,9 +137,15 @@
                                 </span>
                             </h6>
                             <div class="dropdown-divider"></div>
-                            <div class="box-body generic-scrollbar p-2 text-center job-item-2 desktop-order-container"
+                            <div class="box-body generic-scrollbar p-2 text-center job-item-2 order-container"
                                 style="max-height: 450px; overflow: auto;" id="h-noti-cont">
-                                <p>No Orders yet!</p>
+
+                                <div class="col-12" id="order-container-spinner-container" style="height: 13px;">
+                                    <div class="spinner-border spinner-border-sm btn-pr" role="status"
+                                        style="display: none;" id="order-container-spinner">
+                                        <span class="sr-only">Loading...</span>
+                                    </div>
+                                </div>
                             </div>
                             <div class="box-body">
                                 <div class="col-md-12 mt-xs-2">

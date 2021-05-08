@@ -155,6 +155,8 @@ Route::group(['prefix' => 'user'], function () {
         Route::get('cancel-order/{order_id?}', 'UserController@cancel_order');
         // Rate Vendor
         Route::post('rate', 'UserController@rate');
+        // Get Vendor Menu
+        Route::get('get-menu/{vendor?}', 'UserController@vendor_menu');
     });
 });
 // -------------

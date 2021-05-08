@@ -30,9 +30,21 @@
 
         <div>
             <div class="py-1 text-center">
-                <div class="box-body generic-scrollbar p-2 text-center job-item-2 mob-order-container"
-                    style="max-height: 450px; overflow: auto;">
-                    <p>No Orders yet!</p>
+                <div class="box-body generic-scrollbar p-2 text-center job-item-2 order-container"
+                    style="max-height: 450px; overflow: auto;" id="order-container-mob">
+
+                    <div class="col-12" id="order-container-spinner-container-mob" style="height: 13px;">
+                        <div class="spinner-border spinner-border-sm btn-pr" role="status" style="display: none;"
+                            id="order-container-spinner-mob">
+                            <span class="sr-only">Loading...</span>
+                        </div>
+                    </div>
+                    <!-- <div class="col-12" id="order-container-spinner-container" style="height: 13px;">
+                        <div class="spinner-border spinner-border-sm btn-pr" role="status" style="display: none;"
+                            id="order-container-spinner">
+                            <span class="sr-only">Loading...</span>
+                        </div>
+                    </div> -->
                 </div>
                 @if(!Auth::guard('user')->guest())
                 <div class="box-body">

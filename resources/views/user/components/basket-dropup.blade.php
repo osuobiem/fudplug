@@ -17,7 +17,7 @@
 
             <div class="text-center">
                 <div class="box-body p-0 text-center job-item-2">
-                    <div class="col-12 generic-scrollbar basket-container" style="max-height: 64px; overflow: auto;">
+                    <div class="col-12 generic-scrollbar basket-container" style="max-height: 450px; overflow: auto;">
 
                         <div class="spinner-border spinner-border-sm btn-pr" role="status" style="display: none;"
                             id="basket-container-spinner-mob">

@@ -891,6 +891,12 @@ small {
     color: #656565 !important;
 }
 
+#menu-item-data > .small,
+#menu-item-data > small {
+    font-size: 12px;
+    color: white !important;
+}
+
 .no-arrow .dropdown-toggle::after {
     display: none;
 }

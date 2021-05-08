@@ -149,7 +149,7 @@
                 }
             })
             .catch((err) => {
-                showAlert(false, "Oops! Something's not right. Try Again");
+                showAlert(false, "Oops! Something's not right. Try again");
             });
     }
 
@@ -353,7 +353,7 @@
 
     // Send push notification
     // function sendPush(data) {
-    //     new Notification("Fudplug", { 
+    //     new Notification("Fudplug", {
     //         body: data.content,
     //         icon: data.icon,
     //         vibrate: [100, 50, 100],
@@ -367,7 +367,7 @@
     function updateSW() {
         if( Notification.permission == 'granted') {
             next_update = localStorage.getItem('sw_nu');
-            
+
             if(!next_update) {
                 initializeSW(true)
             }
@@ -453,6 +453,6 @@
         } catch (error) {
             console.log(error)
         }
-    } 
-    
+    }
+
 </script>

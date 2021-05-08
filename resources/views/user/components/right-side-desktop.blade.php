@@ -54,7 +54,7 @@
 <script>
     // Initialize crop for profile image
     crop("avatar", "image", "input", "progress", "progress-bar", "alert", "user-image-modal", "change",
-        "crop", "{{url('user/profile-image-update')}}");
+        "user-crop", "{{url('user/profile-image-update')}}");
 
     function crop(...params) {
         var avatar = document.getElementById(params[0]);
@@ -88,9 +88,27 @@
                     // Reinitialize ccropper when file change button is clicked
                     cropper = new Cropper(image, {
                         aspectRatio: 1,
-                        viewMode: 3,
+                        viewMode: 2,
                         setDragMode: 'none',
-                        aspectRatio: NaN
+                        cropmove: function (event) {
+                            var data = cropper.getData();
+
+                            if (data.width < 400) {
+                                event.preventDefault();
+
+                                data.width = 400;
+
+                                cropper.setData(data);
+                            }
+
+                            if (data.height < 400) {
+                                event.preventDefault();
+
+                                data.height = 400;
+
+                                cropper.setData(data);
+                            }
+                        }
                     });
                 }
             };
@@ -117,9 +135,27 @@
         $modal.on("shown.bs.modal", function () {
             cropper = new Cropper(image, {
                 aspectRatio: 1,
-                viewMode: 3,
+                viewMode: 2,
                 setDragMode: 'none',
-                aspectRatio: NaN
+                cropmove: function (event) {
+                    var data = cropper.getData();
+
+                    if (data.width < 400) {
+                        event.preventDefault();
+
+                        data.width = 400;
+
+                        cropper.setData(data);
+                    }
+
+                    if (data.height < 400) {
+                        event.preventDefault();
+
+                        data.height = 400;
+
+                        cropper.setData(data);
+                    }
+                }
             });
         }).on("hidden.bs.modal", function () {
             // destroy cropper on modal close
@@ -130,6 +166,10 @@
         });
 
         document.getElementById(params[8]).addEventListener("click", function () {
+            spin('user-crop');
+            $("#user-crop").attr('disabled', true);
+
+
             var initialAvatarURL;
             var canvas;
 
@@ -203,18 +243,28 @@
                                 // Reset cropper on error
                                 cropper.destroy();
                                 cropper = null;
-                                // Reset cropper on error
+
+                                // Off button preloader
+                                spin('user-crop');
+                                $("#user-crop").removeAttr('disabled');
                             } else {
                                 setTimeout(function () {
                                     $progress.hide();
                                     $modal.modal("hide");
+
+                                    // Off button preloader
+                                    spin('user-crop');
+                                    $("#user-crop").removeAttr('disabled');
                                 }, 2000);
                             }
                         },
 
                         error: function (res) {
+                            spin('user-crop');
+                            $("#user-crop").removeAttr('disabled');
+                            showAlert(false, "Oops! Something's not right. Try again");
+
                             avatar.src = initialAvatarURL;
-                            console.log(res.responseJSON);
                         }
 
                         // complete: function () {

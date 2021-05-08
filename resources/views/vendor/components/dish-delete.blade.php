@@ -6,13 +6,11 @@
                 <div class="bg-light text-center" style="height:inherit;">
                     <h6 class="pt-3">
                         <i class="las la-info pb-0" style="font-size:xx-large;"></i><br>
-                        <span>Delete {{$dish->title}} ?</span>
+                        <span>Delete <span id="del-dish-title"></span> ?</span>
                     </h6>
                     <div class="pb-3">
                         <button type="button" class="btn btn-md btn-secondary" data-dismiss="modal">No</button>
-                        <!-- <button type="button" onclick="deleteDish('{{$dish->id}}')" class="btn btn-md btn-primary"
-                            id="crop">Yes</button> -->
-                        <button type="button" onclick="deleteDish('{{$dish->id}}')" class="btn btn-md btn-primary"
+                        <button type="button" onclick="deleteDish()" class="btn btn-md btn-primary"
                             id="dish-delete-btn">
                             <span id="dish-delete-txt">Yes</span>
                             <div class="spinner-border spinner-border-sm btn-pr" id="dish-delete-spinner"
@@ -26,25 +24,3 @@
         </div>
     </div>
 </div>
-
-<script>
-    // Function Deletes Dish
-    function deleteDish(dishId) {
-        spin('dish-delete');
-
-        let getUrl = "{{url('vendor/delete-dish/')}}";
-        getUrl += '/' + dishId;
-        goGet(getUrl).then((res) => {
-            spin('dish-delete-update');
-
-            showAlert(true, res.message);
-            $("#dish-delete-modal").modal('hide');
-            loadRight(activeTab);
-        }).catch((err) => {
-            spin('dish-delete-update');
-
-            console.error(err);
-        });
-    }
-
-</script>

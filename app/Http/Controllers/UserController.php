@@ -89,7 +89,7 @@ class UserController extends Controller
             return ['success' => true, 'status' => 200, 'message' => 'Signup Successful.'];
         } catch (\Throwable $th) {
             Log::error($th);
-            return ['success' => false, 'status' => 500, 'message' => 'Oops! Something went wrong. Try Again!'];
+            return ['success' => false, 'status' => 500, 'message' => 'Oops! Something went wrong. Try again!'];
         }
     }
 
@@ -245,7 +245,7 @@ class UserController extends Controller
                 // }
             } catch (\Throwable $th) {
                 Log::error($th);
-                return response()->json(['success' => false, 'message' => 'Oops! Something went wrong. Try Again!'], 500);
+                return response()->json(['success' => false, 'message' => 'Oops! Something went wrong. Try again!'], 500);
             }
         }
     }
@@ -280,33 +280,39 @@ class UserController extends Controller
      */
     public function update_profile(Request $request)
     {
-        // Get validation rules
-        $validate = $this->profile_update_rules($request);
+        try {
+            // Get validation rules
+            $validate = $this->profile_update_rules($request);
 
-        // Run validation
-        if ($validate->fails()) {
-            return response()->json([
-                "success" => false,
-                "message" => $validate->errors(),
-            ]);
-        }
-
-        if ($request['username']) {
-            // Check for dashes and other chars
-            if (!preg_match('/^[a-z_0-9A-Z]+$/', $request['username'])) {
+            // Run validation
+            if ($validate->fails()) {
                 return response()->json([
                     "success" => false,
-                    "message" => [
-                        'username' => [
-                            'Username must contain only letters, numbers and underscores',
-                        ],
-                    ],
+                    "message" => $validate->errors(),
                 ]);
             }
-        }
 
-        // Update User Info
-        return response()->json($this->update_store($request));
+            if ($request['username']) {
+                // Check for dashes and other chars
+                if (!preg_match('/^[a-z_0-9A-Z]+$/', $request['username'])) {
+                    return response()->json([
+                        "success" => false,
+                        "message" => [
+                            'username' => [
+                                'Username must contain only letters, numbers and underscores',
+                            ],
+                        ],
+                    ]);
+                }
+            }
+
+            $this->update_store($request);
+
+            return response()->json(['success' => true, 'status' => 200, 'message' => 'Update Successful'], 200);
+        } catch (\Throwable $th) {
+            Log::error($th);
+            return response()->json(['success' => false, 'message' => 'Oops! Something went wrong. Try again!'], 500);
+        }
     }
 
     /**
@@ -347,16 +353,8 @@ class UserController extends Controller
         $socket = SocketData::where('username', $username)->first();
         $socket->username = $user->username;
 
-        // Try user save or catch error if any
-        try {
-            $user->save();
-            $socket->save();
-
-            return ['success' => true, 'status' => 200, 'message' => 'Update Successful'];
-        } catch (\Throwable $th) {
-            Log::error($th);
-            return ['success' => false, 'status' => 500, 'message' => 'Oops! Something went wrong. Try Again!'];
-        }
+        $user->save();
+        $socket->save();
     }
 
     /**
@@ -383,7 +381,7 @@ class UserController extends Controller
             return response()->json(['success' => true, 'status' => 200, 'message' => 'Update Successful']);
         } catch (\Throwable $th) {
             Log::error($th);
-            return response()->json(['success' => false, 'status' => 500, 'message' => 'Oops! Something went wrong. Try Again!']);
+            return response()->json(['success' => false, 'status' => 500, 'message' => 'Oops! Something went wrong. Try again!']);
         }
     }
 
@@ -400,7 +398,7 @@ class UserController extends Controller
             return view('user.components.left-side', compact('vendors'));
         } catch (\Throwable $th) {
             Log::error($th);
-            return response()->json(['success' => false, 'status' => 500, 'message' => "Oops! Something went wrong. Try Again!"]);
+            return response()->json(['success' => false, 'status' => 500, 'message' => "Oops! Something went wrong. Try again!"]);
         }
     }
 
@@ -453,7 +451,7 @@ class UserController extends Controller
             }
         } catch (\Throwable $th) {
             Log::error($th);
-            return response()->json(['success' => false, 'status' => 500, 'message' => "Oops! Something went wrong. Try Again!"]);
+            return response()->json(['success' => false, 'status' => 500, 'message' => "Oops! Something went wrong. Try again!"]);
         }
     }
 
@@ -533,9 +531,6 @@ class UserController extends Controller
             // Get States Data
             $states = State::get();
 
-            // Get Vendor Menu
-            $vendor_menu = $this->vendor_menu($vendor_id)['menu_dishes'];
-
             // Vendor Details
             $vendor = Vendor::where('id', $vendor_id)->first();
 
@@ -554,7 +549,7 @@ class UserController extends Controller
             // Rating Data
             $rating_data = Auth::guard('user')->guest() ? $this->get_rating($vendor_id, 0) : $this->get_rating($vendor_id, Auth::guard('user')->user()->id);
 
-            return ['status' => true, 'data' => compact('vendor', 'vendor_location', 'states', 'areas', 'social_handles', 'vendor_menu', 'rating_data')];
+            return ['status' => true, 'data' => compact('vendor', 'vendor_location', 'states', 'areas', 'social_handles', 'rating_data')];
         } catch (\Throwable $th) {
             Log::error($th);
         }
@@ -562,36 +557,57 @@ class UserController extends Controller
 
     /**
      * Fetch Vendor Menu
+     *
+     * @param Request $request
+     * @param int $vendor
      * @return Array
      */
-    public function vendor_menu($vendor)
+    public function vendor_menu(Request $request, $vendor)
     {
+        try {
+            $curr_page = $request->page;
 
-        // Fetch the Menu Item
-        $menu = Menu::where('vendor_id', $vendor)->first();
+            // Fetch the Menu Item
+            $menu = Menu::where('vendor_id', $vendor)->first();
 
-        if (!empty($menu)) {
-            $menu = json_decode($menu->items);
+            if (!empty($menu)) {
+                $menu = json_decode($menu->items);
 
-            // Get the Array of Dish IDs
-            $menu_items = $menu->item;
+                // Get the Array of Dish IDs
+                $menu_items = $menu->item;
 
-            if (!empty($menu_items)) {
-                // Fetch Dishes for Menu
-                $menu_data = Item::select("*")
-                    ->whereIn('id', $menu_items);
-                $menu_count = $menu_data->count();
-                $menu_dishes = $menu_data->get();
+                if (!empty($menu_items)) {
+                    // Fetch Dishes for Menu
+                    $menu_data = Item::select("*")
+                        ->whereIn('id', $menu_items);
+                    $menu_count = $menu_data->count();
+                    $menu_dishes = $menu_data->paginate(6);
+                    $paginate_count = $menu_dishes->count();
+                } else {
+                    $menu_count = 0;
+                    $menu_dishes = null;
+                    $paginate_count = 0;
+                }
             } else {
                 $menu_count = 0;
                 $menu_dishes = null;
+                $paginate_count = 0;
             }
-        } else {
-            $menu_count = 0;
-            $menu_dishes = null;
-        }
 
-        return compact('menu_count', 'menu_dishes');
+            // Prepare next page
+            $next_page = $paginate_count > 0 ? ($curr_page + 1) : (int) $curr_page;
+
+            // Get view data
+            $menu_view = view('user.components.vendor-menu', compact('curr_page', 'menu_dishes'));
+
+            // dd($menu_view->render());
+
+            // return compact('menu_count', 'menu_dishes');
+            return response()->json(['success' => true, 'next_page' => $next_page, 'menu_view' => $menu_view->render()], 200);
+        } catch (\Throwable $th) {
+            Log::error($th);
+            return response()->json(['success' => false, 'message' => "Oops! Something went wrong. Try again!"], 500);
+        }
     }
 
     /**
@@ -705,7 +721,7 @@ class UserController extends Controller
             return response()->json(['success' => true, 'type' => 'success', 'message' => 'Item added to basket', 'output' => $request->order_type], 200);
         } catch (\Throwable $th) {
             Log::error($th);
-            return response()->json(['success' => false, 'message' => "Oops! Something went wrong. Try Again!"], 500);
+            return response()->json(['success' => false, 'message' => "Oops! Something went wrong. Try again!"], 500);
         }
     }
 
@@ -790,7 +806,7 @@ class UserController extends Controller
             }
 
             $total_price = $this->get_basket_total($basket->get());
-            $basket_items = $basket->paginate(1);
+            $basket_items = $basket->paginate(7);
             $paginate_count = $basket_items->count();
             $curr_page = $request->page;
 
@@ -813,7 +829,7 @@ class UserController extends Controller
             }
         } catch (\Throwable $th) {
             Log::error($th);
-            return response()->json(['success' => false, 'message' => "Oops! Something went wrong. Try Again!"], 500);
+            return response()->json(['success' => false, 'message' => "Oops! Something went wrong. Try again!"], 500);
         }
     }
 
@@ -922,7 +938,7 @@ class UserController extends Controller
             return response()->json(['success' => true, 'total_price' => $total_price, 'message' => 'Item removed from basket'], 200);
         } catch (\Throwable $th) {
             Log::error($th);
-            return response()->json(['success' => false, 'message' => "Oops! Something went wrong. Try Again!"], 500);
+            return response()->json(['success' => false, 'message' => "Oops! Something went wrong. Try again!"], 500);
         }
     }
 
@@ -960,7 +976,7 @@ class UserController extends Controller
             return response()->json(['success' => true, 'total_price' => $total_price, 'message' => 'Item updated'], 200);
         } catch (\Throwable $th) {
             Log::error($th);
-            return response()->json(['success' => false, 'message' => "Oops! Something went wrong. Try Again!"], 500);
+            return response()->json(['success' => false, 'message' => "Oops! Something went wrong. Try again!"], 500);
         }
     }
 
@@ -1011,7 +1027,7 @@ class UserController extends Controller
             return response()->json(['success' => true, 'message' => 'Your order was placed successfully.'], 200);
         } catch (\Throwable $th) {
             Log::error($th);
-            return response()->json(['success' => false, 'message' => "Oops! Something went wrong. Try Again!"], 500);
+            return response()->json(['success' => false, 'message' => "Oops! Something went wrong. Try again!"], 500);
         }
     }
 
@@ -1184,48 +1200,74 @@ class UserController extends Controller
     {
         try {
             $orders = $this->order_query($type);
-            $to_check = $orders->toArray();
 
             // Get pending orders for user
             $pending_count = Order::where([['user_id', '=', Auth::guard('user')->user()->id], ['status', '=', 0]])->count();
 
-            if (!empty($to_check)) {
-                foreach ($orders as $order) {
-                    $order->title = explode(',', $order->title);
-                    $order->quantity = explode(',', $order->quantity);
-                    $order->order_detail = explode(',', $order->order_detail);
+            // Current page
+            $curr_page = $request->page;
 
-                    // Fix order quantity & order details
-                    $quant_arr = [];
-                    $ord_arr = [];
-                    foreach ($order->quantity as $key => $val) {
-                        $quant_arr[$key] = base64_decode($val);
-                        $ord_arr[$key] = base64_decode($order->order_detail[$key]);
-                    }
-                    $order->quantity = $quant_arr;
-                    $order->order_detail = $ord_arr;
-                    // Fix order quantity & order details
+            if (!empty($orders->get()->toArray())) {
+                // Total amount for orders
+                $total_amount = $this->get_order_total($this->fix_order($orders->get()));
 
-                    // Fix order status
-                    $order->order_status = $this->order_status($order->order_status);
+                // Paginated order data
+                $order_pag = $this->fix_order($orders->paginate(7));
 
-                    $order->image = explode(',', $order->image);
-                    $order->order_type = explode(',', $order->order_type);
-                }
+                $orders = $this->fix_order($orders->get());
+
+                // Prepare next page
+                $next_page = $order_pag->count() > 0 ? ($curr_page + 1) : (int) $curr_page;
             } else {
+                $order_pag = null;
                 $orders = null;
+
+                // Prepare next page
+                $next_page = (int) $curr_page;
+
+                // Total amount for orders
+                $total_amount = 0;
             }
 
-            // Total amount for orders
-            $total_amount = ($orders == null) ? 0 : $this->get_order_total($orders);
+            $order_view = view('user.components.order', compact('order_pag', 'curr_page'))->render();
 
-            $order_view = view('user.components.order', compact('orders'))->render();
-
-            return response()->json(['success' => true, 'order_view' => $order_view, 'total_amount' => $total_amount, 'pending_count' => $pending_count], 200);
+            return response()->json(['success' => true, 'order_view' => $order_view, 'total_amount' => $total_amount, 'pending_count' => $pending_count, 'next_page' => $next_page], 200);
         } catch (\Throwable $th) {
             Log::error($th);
-            return response()->json(['success' => false, 'message' => "Oops! Something went wrong. Try Again!"], 500);
+            return response()->json(['success' => false, 'message' => "Oops! Something went wrong. Try again!"], 500);
         }
+    }
+
+    /**
+     * Fix order attributes
+     * @param object $orders
+     * @return object $orders
+     */
+    public function fix_order($orders)
+    {
+        foreach ($orders as $order) {
+            $order->title = explode(',', $order->title);
+            $order->quantity = explode(',', $order->quantity);
+            $order->order_detail = explode(',', $order->order_detail);
+
+            // Fix order quantity & order details
+            $quant_arr = [];
+            $ord_arr = [];
+            foreach ($order->quantity as $key => $val) {
+                $quant_arr[$key] = base64_decode($val);
+                $ord_arr[$key] = base64_decode($order->order_detail[$key]);
+            }
+            $order->quantity = $quant_arr;
+            $order->order_detail = $ord_arr;
+            // Fix order quantity & order details
+
+            // Fix order status
+            $order->order_status = $this->order_status($order->order_status);
+
+            $order->image = explode(',', $order->image);
+            $order->order_type = explode(',', $order->order_type);
+        }
+        return $orders;
     }
 
     /**
@@ -1238,9 +1280,9 @@ class UserController extends Controller
         $order = "";
         //  $posts = Post::whereDate('created_at', Carbon::today())->get();
         if ($type == "history") {
-            $order = Vendor::join('orders', 'orders.vendor_id', '=', 'vendors.id')->join('order_items', 'order_items.order_id', '=', 'orders.id')->join('items', 'items.id', '=', 'order_items.item_id')->select("orders.id as order_id", "orders.status as order_status", DB::raw("GROUP_CONCAT(items.title) as title, GROUP_CONCAT(TO_BASE64(items.quantity)) AS quantity, GROUP_CONCAT(items.image) AS image,GROUP_CONCAT(order_items.order_type) AS order_type, GROUP_CONCAT(TO_BASE64(order_items.order_detail)) AS order_detail, GROUP_CONCAT(DISTINCT vendors.business_name) AS vendor_name, GROUP_CONCAT(DISTINCT vendors.cover_image) AS vendor_image"))->where('orders.user_id', Auth::guard('user')->user()->id)->whereIn('orders.status', ['1', '-1', '-2'])->groupBy('orders.id')->orderBy('orders.updated_at', 'DESC')->get();
+            $order = Vendor::join('orders', 'orders.vendor_id', '=', 'vendors.id')->join('order_items', 'order_items.order_id', '=', 'orders.id')->join('items', 'items.id', '=', 'order_items.item_id')->select("orders.id as order_id", "orders.status as order_status", DB::raw("GROUP_CONCAT(items.title) as title, GROUP_CONCAT(TO_BASE64(items.quantity)) AS quantity, GROUP_CONCAT(items.image) AS image,GROUP_CONCAT(order_items.order_type) AS order_type, GROUP_CONCAT(TO_BASE64(order_items.order_detail)) AS order_detail, GROUP_CONCAT(DISTINCT vendors.business_name) AS vendor_name, GROUP_CONCAT(DISTINCT vendors.cover_image) AS vendor_image"))->where('orders.user_id', Auth::guard('user')->user()->id)->whereIn('orders.status', ['1', '-1', '-2'])->groupBy('orders.id')->orderBy('orders.updated_at', 'DESC');
         } else {
-            $order = Vendor::join('orders', 'orders.vendor_id', '=', 'vendors.id')->join('order_items', 'order_items.order_id', '=', 'orders.id')->join('items', 'items.id', '=', 'order_items.item_id')->select("orders.id as order_id", "orders.status as order_status", DB::raw("GROUP_CONCAT(items.title) as title, GROUP_CONCAT(TO_BASE64(items.quantity)) AS quantity, GROUP_CONCAT(items.image) AS image,GROUP_CONCAT(order_items.order_type) AS order_type, GROUP_CONCAT(TO_BASE64(order_items.order_detail)) AS order_detail, GROUP_CONCAT(DISTINCT vendors.business_name) AS vendor_name, GROUP_CONCAT(DISTINCT vendors.cover_image) AS vendor_image"))->where([['orders.user_id', '=', Auth::guard('user')->user()->id], ['orders.status', '=', 0]])->groupBy('orders.id')->orderBy('orders.created_at', 'DESC')->get();
+            $order = Vendor::join('orders', 'orders.vendor_id', '=', 'vendors.id')->join('order_items', 'order_items.order_id', '=', 'orders.id')->join('items', 'items.id', '=', 'order_items.item_id')->select("orders.id as order_id", "orders.status as order_status", DB::raw("GROUP_CONCAT(items.title) as title, GROUP_CONCAT(TO_BASE64(items.quantity)) AS quantity, GROUP_CONCAT(items.image) AS image,GROUP_CONCAT(order_items.order_type) AS order_type, GROUP_CONCAT(TO_BASE64(order_items.order_detail)) AS order_detail, GROUP_CONCAT(DISTINCT vendors.business_name) AS vendor_name, GROUP_CONCAT(DISTINCT vendors.cover_image) AS vendor_image"))->where([['orders.user_id', '=', Auth::guard('user')->user()->id], ['orders.status', '=', 0]])->groupBy('orders.id')->orderBy('orders.created_at', 'DESC');
         }
         return $order;
     }
@@ -1331,7 +1373,7 @@ class UserController extends Controller
             return response()->json(['success' => true, 'message' => 'Order cancelled successfully.'], 200);
         } catch (\Throwable $th) {
             Log::error($th);
-            return response()->json(['success' => false, 'message' => "Oops! Something went wrong. Try Again!"], 500);
+            return response()->json(['success' => false, 'message' => "Oops! Something went wrong. Try again!"], 500);
         }
     }
 
@@ -1448,7 +1490,7 @@ class UserController extends Controller
             return response()->json(['success' => true, 'data' => $this->get_rating($vendor_id, $user_id)], 200);
         } catch (\Throwable $th) {
             Log::error($th);
-            return response()->json(['success' => false, 'message' => "Oops! Something went wrong. Try Again!"], 500);
+            return response()->json(['success' => false, 'message' => "Oops! Something went wrong. Try again!"], 500);
         }
     }
 

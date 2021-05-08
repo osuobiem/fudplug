@@ -8,7 +8,8 @@
     // Object to hold pagination state for basket and orders
     var paginate = {
         basketPage: 1,
-        orderPage: 1
+        orderPage: 1,
+        orderType: "",
     }
 
     // Rating state variable
@@ -45,7 +46,7 @@
         hideAccordion();
 
         // Fetch user orders
-        getOrder();
+        getOrder(1);
     });
 
     // Open user profile modal
@@ -77,6 +78,7 @@
                 }
             }).catch((err) => {
                 spin('user-right-side');
+                showAlert(false, "Oops! Something's not right. Try again");
             });
         } else { // The viewport is at least 768 pixels wide (Desktop or tablet)
             let getUrl = `${server}/user/profile/desktop`;
@@ -91,6 +93,7 @@
                 }
             }).catch((err) => {
                 spin('user-right-side');
+                showAlert(false, "Oops! Something's not right. Try again");
             });
         }
     }
@@ -106,6 +109,7 @@
             $("#edit-modal-container").html(res);
         }).catch((err) => {
             //spin('user-right-side');
+            showAlert(false, "Oops! Something's not right. Try again");
         });
     }
 
@@ -114,15 +118,21 @@
         let getUrl = `${server}/user/order-details`;
         getUrl += '/' + dishId;
 
+        // Handle modal before showing content
+        $("#order-container").empty();
+        $("#order-modal-spinner").removeClass('d-none');
+        $("#order-modal").modal('show');
+
+
         goGet(getUrl).then((res) => {
             if (res.success) {
-                $("#regular-order-container").html(res.data);
-                $("#regular-order-modal").modal('show');
+                $("#order-modal-spinner").addClass('d-none');
+                $("#order-container").html(res.data);
             } else {
-                showAlert(false, res.message);
+                showAlert(false, "Oops! Something's not right. Try again");
             }
         }).catch((err) => {
-            //spin('user-right-side');
+            showAlert(false, "Oops! Something's not right. Try again");
         });
     }
 
@@ -132,15 +142,20 @@
         let getUrl = `${server}/user/order-details`;
         getUrl += '/' + dishId + '/' + dishType;
 
+        // Handle modal before showing content
+        $("#order-container").empty();
+        $("#order-modal-spinner").removeClass('d-none');
+        $("#order-modal").modal('show');
+
         goGet(getUrl).then((res) => {
             if (res.success) {
-                $("#bulk-order-container").html(res.data);
-                $("#bulk-order-modal").modal('show');
+                $("#order-modal-spinner").addClass('d-none');
+                $("#order-container").html(res.data);
             } else {
                 showAlert(false, res.message);
             }
         }).catch((err) => {
-            //spin('user-right-side');
+            showAlert(false, "Oops! Something's not right. Try again");
         });
     }
 
@@ -154,6 +169,7 @@
             $("#user-left-side").html(res);
         }).catch((err) => {
             spin('user-left-side');
+            showAlert(false, "Oops! Something's not right. Try again");
         });
     }
 
@@ -167,43 +183,48 @@
     });
 
     // Load user basket
-    function getBasket(page) {
+    function getBasket(page = 1, toDelete = false) {
         let getUrl = `${server}/user/get-basket`;
         getUrl += fixPaginateUrl(page);
 
-        // Add preloader on using scrollspy
-        $(".basket-container-spinner").removeAttr('style');
+        if (toDelete == false) {
+            // Add preloader on using scrollspy
+            $("#basket-container-spinner-mob").removeAttr('style');
+            $("#basket-container-spinner").removeAttr('style');
+        }
 
         goGet(getUrl).then((res) => {
-            // Clear list if loading on first page
-            if (page == 1) {
-                $("#basket-container-spinner-mob").prevAll().remove();
-                $("#basket-container-spinner").prevAll().remove();
+            // Add total amount to button
+            bindBasketQtyPrice(res.total_price);
+
+            if (toDelete == false) {
+                // Clear list if loading on first page
+                if (page == 1) {
+                    $("#basket-container-spinner-mob").prevAll().remove();
+                    $("#basket-container-spinner").prevAll().remove();
+                }
+
+                // Remove preloader
+                $("#basket-container-spinner-mob").attr('style', 'display:none');
+                $("#basket-container-spinner").attr('style', 'display:none');
+
+                // Set new page
+                paginate.basketPage = res.next_page;
             }
-
-            // Remove preloader
-            $("#basket-container-spinner-mob").attr('style', 'display:none');
-            $("#basket-container-spinner").attr('style', 'display:none');
-
-            // Set new page
-            paginate.basketPage = res.next_page;
 
             if (res.paginate_count == 0) {
                 if (page == 1) {
                     $("#basket-noti-dot, #mob-basket-noti-dot").addClass('d-none');
                     if (window.matchMedia("(max-width: 767px)")
                         .matches) { // The viewport is less than 768 pixels wide (mobile device)
-                        $(".basket-container-spinner-mob").before("<p>Your Basket is empty!</p>");
+                        $("#basket-container-spinner-mob").before(`<p class="mt-3">Your Basket is empty!</p>`);
                         $("#mob-head-count").html("");
                     } else {
-                        $(".basket-container-spinner").before("<p>Your Basket is empty!</p>");
+                        $("#basket-container-spinner").before(`<p class="mt-3">Your Basket is empty!</p>`);
                         $("#head-count").html("");
                     }
                 }
             } else {
-                // Add total amount to button
-                bindBasketQtyPrice(res.total_price);
-
                 if (page == 1) {
                     $("#basket-noti-dot, #mob-basket-noti-dot").html(res.basket_count);
                     $("#basket-noti-dot, #mob-basket-noti-dot").removeClass('d-none');
@@ -211,10 +232,16 @@
                     // Check viewport
                     if (window.matchMedia("(max-width: 767px)")
                         .matches) { // The viewport is less than 768 pixels wide (mobile device)
-                        $("#basket-container-spinner-mob").before(res.basket_view);
+                        if (toDelete == false) {
+                            $("#basket-container-spinner-mob").before(res.basket_view);
+                        }
+
                         $("#mob-head-count").html("(" + res.basket_count + " Items)");
                     } else {
-                        $("#basket-container-spinner").before(res.basket_view);
+                        if (toDelete == false) {
+                            $("#basket-container-spinner").before(res.basket_view);
+                        }
+
                         $("#head-count").html("(" + res.basket_count + " Items)");
                     }
                 } else {
@@ -223,10 +250,16 @@
                     // Check viewport
                     if (window.matchMedia("(max-width: 767px)")
                         .matches) { // The viewport is less than 768 pixels wide (mobile device)
-                        $("#basket-container-spinner-mob").before(res.basket_view);
+                        if (toDelete == false) {
+                            $("#basket-container-spinner-mob").before(res.basket_view);
+                        }
+
                         $("#mob-head-count").html("(" + res.basket_count + " Items)");
                     } else {
-                        $("#basket-container-spinner").before(res.basket_view);
+                        if (toDelete == false) {
+                            $("#basket-container-spinner").before(res.basket_view);
+                        }
+
                         $("#head-count").html("(" + res.basket_count + " Items)");
                     }
                 }
@@ -237,7 +270,7 @@
                 }
             }
         }).catch((err) => {
-            console.log(err);
+            showAlert(false, "Oops! Something's not right. Try again");
         });
     }
 
@@ -258,7 +291,7 @@
         $('.collapse-hide').collapse('hide');
     }
 
-    function deleteCartItem(basketId, orderType, itemPosition = null) {
+    function deleteCartItem(e, basketId, orderType, itemPosition = null) {
         let url = `${server}/user/delete-basket`;
         let formData = new FormData();
 
@@ -289,11 +322,11 @@
                 if (handleFormRes(res)) {
                     showAlert(true, res.message);
 
-                    // Update total price on order button
-                    bindBasketQtyPrice(res.total_price);
+                    // Update Basket UI
+                    updateBasketOnDelete(e);
 
-                    // Load user basket details
-                    getBasket(paginate.basketPage);
+                    // Update basket total-price and number of items
+                    getBasket(1, true);
                 }
             })
             .catch(err => {
@@ -303,8 +336,19 @@
                     spin('basket-delete-' + basketId + '-' + itemPosition);
                 }
 
-                console.error(err);
+                showAlert(false, "Oops! Something's not right. Try again");
             })
+    }
+
+    // Function removes deleted item from basket UI
+    function updateBasketOnDelete(e) {
+        let listItem = $(e).parent().parent();
+
+        if (listItem.parent().children().length > 1) {
+            listItem.remove();
+        } else {
+            listItem.parent().parent().parent().parent().parent().remove();
+        }
     }
 
     function updateCartItem(basketId, orderType, quantity, itemPosition = null) {
@@ -335,7 +379,7 @@
                 }
             })
             .catch(err => {
-                console.error(err);
+                showAlert(false, "Oops! Something's not right. Try again");
             })
     }
 
@@ -356,7 +400,7 @@
                         handleOrderValidateErr(res);
                     } else {
                         // Load user basket details
-                        getBasket();
+                        getBasket(1);
 
                         // Close basket
                         $("#basket-btn").next().removeClass("show");
@@ -369,18 +413,55 @@
                 spin('basket');
                 $("#basket-order-btn").attr('onclick', 'placeOrder()');
 
-                console.log(err);
+                showAlert(false, "Oops! Something's not right. Try again");
             })
     }
 
-    function getOrder(type = "") {
+    // Scrollspy for order list
+    $('.order-container').bind('scroll', function (e) {
+        var elem = $(e.currentTarget);
+        if (elem[0].scrollHeight - elem.scrollTop() == elem.outerHeight()) {
+            getOrder(paginate.orderPage, paginate.orderType); //load content
+        }
+    });
+
+    function getOrder(page, type = "", toCancel = false) {
         let getUrl = (type == "") ? `${server}/user/get-order` : `${server}/user/get-order/${type}`;
+        getUrl += fixPaginateUrl(page);
+
+        if (toCancel == false) {
+            // Add preloader on using scrollspy
+            $("#order-container-spinner-mob").removeAttr('style');
+            $("#order-container-spinner").removeAttr('style');
+
+            // Set orderType state
+            paginate.orderType = type;
+        }
 
         goGet(getUrl).then((res) => {
+            if (toCancel == false) {
+                // Clear list if loading on first page
+                if (page == 1) {
+                    $("#order-container-spinner-container-mob").prevAll().remove();
+                    $("#order-container-spinner-container").prevAll().remove();
+                }
+
+                // Remove preloader
+                $("#order-container-spinner-mob").attr('style', 'display:none');
+                $("#order-container-spinner").attr('style', 'display:none');
+
+                // Set new page
+                paginate.orderPage = res.next_page;
+            }
+
+
             if (window.matchMedia("(max-width: 767px)")
                 .matches) { // The viewport is less than 768 pixels wide (mobile device)
-                $(".mob-order-container").html(res.order_view);
+                if (toCancel == false) {
+                    $("#order-container-spinner-container-mob").before(res.order_view);
+                }
                 $("#mob-order-price").html(`₦${res.total_amount}.00`);
+
                 if (type == "history") {
                     // Hide cancel button on displaying history
                     $("#mob-order-cancel-btn").addClass('d-none');
@@ -402,8 +483,11 @@
                     }
                 }
             } else {
-                $(".desktop-order-container").html(res.order_view);
+                if (toCancel == false) {
+                    $("#order-container-spinner-container").before(res.order_view);
+                }
                 $("#order-price").html(`₦${res.total_amount}.00`);
+
                 if (type == "history") {
                     // Hide cancel button on displaying history
                     $("#order-cancel-btn").addClass('d-none');
@@ -425,13 +509,19 @@
                     }
                 }
             }
+
+
         }).catch((err) => {
             spin('user-right-side');
+            showAlert(false, "Oops! Something's not right. Try again");
         });
     }
 
+
+
+
     // Cancel all orders if parameter is empty
-    function cancelOrder(orderId = "") {
+    function cancelOrder(element, orderId = "") {
         if (orderId == "") {
             spin('order-cancel');
         } else {
@@ -440,6 +530,7 @@
 
         let getUrl = (orderId == "") ? `${server}/user/cancel-order` : `${server}/user/cancel-order/${orderId}`;
 
+
         goGet(getUrl).then((res) => {
             if (orderId == "") {
                 spin('order-cancel');
@@ -447,7 +538,7 @@
                 spin('order-cancel-' + orderId);
             }
 
-            getOrder();
+            updateOrderOnDelete(element);
         }).catch((err) => {
             if (orderId == "") {
                 spin('order-cancel');
@@ -455,8 +546,21 @@
                 spin('order-cancel-' + orderId);
             }
 
-            console.log(err);
+            showAlert(false, "Oops! Something's not right. Try again");
         });
+    }
+
+    // Function removes deleted item from basket UI
+    function updateOrderOnDelete(e) {
+        $(e).parent().parent().parent().parent().parent().remove();
+
+        let numberElements = $(e).parent().parent().parent().parent().parent().parent().children('div').length;
+
+        if (numberElements < 2) {
+            getOrder(1);
+        } else {
+            getOrder(1, "", true);
+        }
     }
 
     // Load order dropdown on click of order button
@@ -466,7 +570,7 @@
         $("#mob-order-history-btn, #order-history-btn").removeClass('d-none')
         // Always make history button show on toggling orders on mobile
 
-        getOrder();
+        getOrder(1);
     });
 
     // Cancel all user order
@@ -484,7 +588,7 @@
             $("#today-order-btn").removeClass('d-none');
         }
 
-        getOrder("history");
+        getOrder(1, "history");
     });
 
     // Toggle Today's Order
@@ -497,7 +601,7 @@
             $("#order-history-btn").removeClass('d-none');
         }
 
-        getOrder();
+        getOrder(1);
     });
 
     // Validate quantity (on adding to basket)
@@ -645,14 +749,15 @@
             $(element).val($(this).data('oldValue'));
         }
 
+
         // Check if regular order modal is open and execute these lines
-        if ($('#regular-order-modal').hasClass('show')) {
+        if ($(element).data("orderType") == "regular") {
             // Compute total amount and bind to order button. Also disable and enable order button
             bindQtyPrice(element);
 
             // Disable and enable details input field
             handleDetailInput(element);
-        } else if ($('#bulk-order-modal').hasClass('show')) {
+        } else if ($(element).data("orderType") == "bulk") {
             // Compute total amount and bind to order button. Also disable and enable order button
             bindBulkQtyPrice(element);
 
@@ -920,7 +1025,7 @@
                 }
             })
             .catch(err => {
-                console.log(err);
+                showAlert(false, "Oops! Something's not right. Try again");
             })
     }
 
