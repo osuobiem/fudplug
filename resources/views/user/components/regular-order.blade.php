@@ -25,7 +25,7 @@
                                         <div id="basicsHeadingOne">
                                             <h5 class="mb-0">
                                                 <button type="button"
-                                                    class="shadow-none btn btn-block d-flex justify-content-between card-btn px-1 py-2 collapsed font-weight-bold"
+                                                    class="shadow-none btn btn-block d-flex justify-content-between card-btn px-1 py-2 font-weight-bold"
                                                     data-toggle="collapse" data-target="#basicsCollapseOne"
                                                     aria-expanded="false" aria-controls="basicsCollapseOne">
                                                     Regular Order
@@ -112,7 +112,7 @@
                                         <div id="basicsHeadingOne">
                                             <h5 class="mb-0">
                                                 <button type="button"
-                                                    class="shadow-none btn btn-block d-flex justify-content-between card-btn px-1 py-2 collapsed font-weight-bold"
+                                                    class="shadow-none btn btn-block d-flex justify-content-between card-btn px-1 py-2 font-weight-bold"
                                                     data-toggle="collapse" data-target="#basicsCollapseOne"
                                                     aria-expanded="false" aria-controls="basicsCollapseOne">
                                                     Regular Order
@@ -134,7 +134,7 @@
                                                     @foreach($regular_qty as $key=>$qty)
                                                     <li class="list-group-item pt-0 col">
                                                         <div class="float-left col-4">
-                                                            <span class="text-dark" style="font-size: 13px;">{{$qty->title}}</span>
+                                                            <small class="text-dark" style="font-size: 13px;">{{$qty->title}}</small>
                                                             <p class="m-0">
                                                                 <span class="float-left" style="color: var(--i-primary); font-size: larger;width: 156%;
                                                                     word-wrap: break-word;">
@@ -171,7 +171,7 @@
                                                                     onchange="change(event, this)"
                                                                     onfocus="focusin(event, this)"
                                                                     name="order_quantity[]"
-                                                                    id="item-{{$dish->id}}-{{$key}}"
+                                                                    id="item-{{$dish->id}}-{{$key}}" data-order-type="regular"
                                                                     class="form-control rounded-left-0 rounded-right-0 form-control-sm qty-input item-manip-input"
                                                                     value="0" min="0" max="{{$qty->quantity}}"
                                                                     style="margin-top: 3px;" disabled>
