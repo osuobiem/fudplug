@@ -116,9 +116,27 @@
                     // Reinitialize ccropper when file change button is clicked
                     cropper = new Cropper(image, {
                         aspectRatio: 1,
-                        viewMode: 3,
+                        viewMode: 2,
                         setDragMode: 'none',
-                        aspectRatio: NaN
+                        cropmove: function (event) {
+                            var data = cropper.getData();
+
+                            if (data.width < 400) {
+                                event.preventDefault();
+
+                                data.width = 400;
+
+                                cropper.setData(data);
+                            }
+
+                            if (data.height < 400) {
+                                event.preventDefault();
+
+                                data.height = 400;
+
+                                cropper.setData(data);
+                            }
+                        }
                     });
                 }
             };
@@ -145,9 +163,27 @@
         $modal.on("shown.bs.modal", function () {
             cropper = new Cropper(image, {
                 aspectRatio: 1,
-                viewMode: 3,
+                viewMode: 2,
                 setDragMode: 'none',
-                aspectRatio: NaN
+                cropmove: function (event) {
+                    var data = cropper.getData();
+
+                    if (data.width < 400) {
+                        event.preventDefault();
+
+                        data.width = 400;
+
+                        cropper.setData(data);
+                    }
+
+                    if (data.height < 400) {
+                        event.preventDefault();
+
+                        data.height = 400;
+
+                        cropper.setData(data);
+                    }
+                }
             });
         }).on("hidden.bs.modal", function () {
             // destroy cropper on modal close
