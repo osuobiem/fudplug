@@ -85,10 +85,12 @@ class ViewController extends Controller
                 
                 // Get vendor menu
                 $menu = Auth::guard('vendor')->user()->menu;
-                foreach(json_decode($menu->items)->item as $item_id) {
-                    $tag_items[] = Item::findOrFail($item_id);
+                if($menu) {
+                    foreach(json_decode($menu->items)->item as $item_id) {
+                        $tag_items[] = Item::findOrFail($item_id);
+                    }
+                    $data['data']['tag_items'] = $tag_items;
                 }
-                $data['data']['tag_items'] = $tag_items;
 
                 return view('vendor.profile', $data['data']);
             } else {
