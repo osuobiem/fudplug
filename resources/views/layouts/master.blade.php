@@ -137,15 +137,11 @@
                 <!-- Dish Delete Modal -->
 
                 <!-- Menu Update Modal Holder -->
-                <div id="menu-modal-holder">
-
-                </div>
+                @include('vendor.components.menu-update-modal')
                 <!-- Menu Update Modal Holder -->
 
                 <!-- Order Detail Modal Holder -->
-                <div id="order-detail-modal-holder">
-
-                </div>
+                @include('vendor.components.order-detail-modal')
                 <!-- Order Detail Modal Holder -->
 
                 <!-- ******* VENDOR COMPONENTS ********* -->

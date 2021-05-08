@@ -78,26 +78,13 @@
 
         let getUrl = `${server}/vendor/menu`;
         goGet(getUrl).then((res) => {
-            $("#menu-modal-holder").empty();
-            $("#menu-modal-holder").html(res);
-            $("#menu-update-modal").modal('show');
+            $("#menu-update-modal-spinner").addClass('d-none');
+            $("#menu-update-container").html(res);
+            // $("#menu-update-modal").modal('show');
         }).catch((err) => {
             showAlert(false, "Oops! Something's not right. Try again");
         });
     }
-
-    $("#dish-view-container").empty();
-        $("#menu-update-modal-spinner").removeClass('d-none');
-        $("#dish-view-modal").modal('show');
-
-        let getUrl = "{{url('vendor/dish/')}}";
-        getUrl += '/' + dishId;
-        goGet(getUrl).then((res) => {
-            $("#dish-view-modal-spinner").addClass('d-none');
-            $("#dish-view-container").html(res);
-        }).catch((err) => {
-            showAlert(false, "Oops! Something's not right. Try again");
-        });
 
     // Function Keeps Track of Active Tab
     function track(active = '1') {
@@ -242,18 +229,35 @@
     });
 
     function getDetail(orderId, type = "") {
+        $("#order-detail-container").empty();
+        $("#order-detail-modal-spinner").removeClass('d-none');
+        $("#order-detail-modal").modal('show');
+
         let getUrl = (type == "") ? `${server}/vendor/get-order-detail/${orderId}` :
             `${server}/vendor/get-order-detail/${orderId}/${type}`;
 
         goGet(getUrl).then((res) => {
-            $("#order-detail-modal-holder").html(res.order_detail_view);
+            $("#order-detail-modal-spinner").addClass('d-none');
+            $("#order-detail-container").html(res.order_detail_view);
             closeOrders();
-            $("#order-detail-modal").modal('toggle');
         }).catch((err) => {
             spin('user-right-side');
             showAlert(false, "Oops! Something's not right. Try again");
         });
     }
+
+    // $("#menu-update-container").empty();
+    //     $("#menu-update-modal-spinner").removeClass('d-none');
+    //     $("#menu-update-modal").modal('show');
+
+    //     let getUrl = `${server}/vendor/menu`;
+    //     goGet(getUrl).then((res) => {
+    //         $("#menu-update-modal-spinner").addClass('d-none');
+    //         $("#menu-update-container").html(res);
+    //         // $("#menu-update-modal").modal('show');
+    //     }).catch((err) => {
+    //         showAlert(false, "Oops! Something's not right. Try again");
+    //     });
 
     // Show client phone number
     function showContact(e) {
