@@ -22,8 +22,10 @@ class ViewController extends Controller
             $menu = Auth::guard('vendor')->user()->menu;
             $tag_items = [];
 
-            foreach(json_decode($menu->items)->item as $item_id) {
-                $tag_items[] = Item::findOrFail($item_id);
+            if(!empty(json_decode($menu->items))) {
+                foreach(json_decode($menu->items)->item as $item_id) {
+                    $tag_items[] = Item::findOrFail($item_id);
+                }
             }
         }
 
