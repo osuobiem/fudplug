@@ -129,7 +129,11 @@
                 $("#order-modal-spinner").addClass('d-none');
                 $("#order-container").html(res.data);
             } else {
-                showAlert(false, "Oops! Something's not right. Try again");
+                $("#order-modal-spinner").addClass('d-none');
+                $("#order-container").html(`<div class="bg-light text-center col-md-12 pt-3 pb-3" style="height:inherit;">
+                    <i class="las la-info" style="font-size:xx-large;"></i><br>
+                    <small>${res.message}</small>
+                </div>`);
             }
         }).catch((err) => {
             showAlert(false, "Oops! Something's not right. Try again");
@@ -152,7 +156,11 @@
                 $("#order-modal-spinner").addClass('d-none');
                 $("#order-container").html(res.data);
             } else {
-                showAlert(false, res.message);
+                $("#order-modal-spinner").addClass('d-none');
+                $("#order-container").html(`<div class="bg-light text-center col-md-12 pt-3 pb-3" style="height:inherit;">
+                    <i class="las la-info" style="font-size:xx-large;"></i><br>
+                    <small>${res.message}</small>
+                </div>`);
             }
         }).catch((err) => {
             showAlert(false, "Oops! Something's not right. Try again");

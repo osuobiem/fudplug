@@ -330,7 +330,7 @@
         let $crop = $("#" + params[8]);
         let upload_url = params[9];
         let cropper;
-        let aspectRatio = params[0] == "avatar" ? 1 : 16 / 4;
+        let aspectRatio = params[0] == "avatar" ? 1 : 16 / 9;
         let minHeight = params[0] == "avatar" ? 400 : 400;
         let minWidth = params[0] == "avatar" ? 400 : 600;
 
