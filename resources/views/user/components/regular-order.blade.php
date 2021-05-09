@@ -66,7 +66,7 @@
                                                         onfocus="focusin(event, this)"
                                                         class="form-control rounded-left-0 rounded-right-0 form-control-sm qty-input item-manip-input"
                                                         value="0" min="0" max="{{ $quantity }}"
-                                                        style="margin-top: 3px;" id="item-{{ $dish->id }}" disabled>
+                                                        style="margin-top: 3px;" id="item-{{ $dish->id }}" data-order-type="regular" disabled>
                                                     <span class="input-group-btn">
                                                         <button onclick="clicked(event, this);" type="button"
                                                             class="btn btn-sm btn-number rounded-left-0 qty-btn item-manip-btn"
