@@ -20,7 +20,7 @@
                                     class="shadow-none btn btn-block d-flex justify-content-between card-btn px-1 py-2 font-weight-bold"
                                     data-toggle="collapse" data-target="#basicsCollapseOne" aria-expanded="false"
                                     aria-controls="basicsCollapseOne">
-                                    Regular Quantity
+                                    Regular Order
                                     <span class="card-btn-arrow">
                                         <span class="la la-chevron-down" style="color: var(--i-primary)"></span>
                                     </span>
@@ -99,7 +99,7 @@
                                     class="shadow-none btn btn-block d-flex justify-content-between card-btn px-1 py-2 font-weight-bold"
                                     data-toggle="collapse" data-target="#basicsCollapseOne" aria-expanded="false"
                                     aria-controls="basicsCollapseOne">
-                                    Bulk Quantity
+                                    Bulk Order
                                     <span class="card-btn-arrow">
                                         <span class="la la-chevron-down" style="color: var(--i-primary)"></span>
                                     </span>
