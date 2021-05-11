@@ -102,7 +102,7 @@
                 // Wait for filter values to load completely
                 setTimeout(function () {
                     //track user scroll as page number, right now page number is 1
-                    var page = 1;
+                    page = 1;
 
                     // Reset search form
                     document.getElementById("search-form").reset();
@@ -151,15 +151,27 @@
 
             });
 
-            $('#results').bind('scroll', function (e) {
-                var elem = $(e.currentTarget);
-                if (elem[0].scrollHeight - elem.scrollTop() == elem.outerHeight()) {
+            // $('#results').bind('scroll', function (e) {
+            //     var elem = $(e.currentTarget);
+            //     if (elem[0].scrollHeight - elem.scrollTop() == elem.outerHeight()) {
+            //         // console.log("bottom");
+            //         page++; //page number increment
+            //         //console.log(searchData, stateData, areaData, fetchStatus);
+            //         load_more(page, searchData, stateData, areaData,
+            //             fetchStatus); //load content
+            //     }
+            // });
+
+            $("#results").loadMore({
+                scrollBottom: 15,
+                async: true,
+                error: function () {
                     // console.log("bottom");
                     page++; //page number increment
                     //console.log(searchData, stateData, areaData, fetchStatus);
                     load_more(page, searchData, stateData, areaData,
                         fetchStatus); //load content
-                }
+                },
             });
         }, 1500);
 
@@ -184,7 +196,12 @@
                                 <span class="sr-only">Loading...</span>
                             </div>
                         `);
-                        $(".ajax-loading").prev().remove();
+
+                        // Remove old content
+                        $(".ajax-loading").prevAll().remove();
+
+                        // Reset scrollbar position
+                        $("#results").scrollTop(0);
                     }
 
                     $('.ajax-loading').show();
@@ -197,9 +214,9 @@
                     //notify user if nothing to load
                     if (refresh) {
                         $(".vend").remove();
-                        $('.ajax-loading').html("No records!");
+                        $('.ajax-loading').html("No vendors.");
                     } else {
-                        $('.ajax-loading').html("No more records!");
+                        $('.ajax-loading').html("No more vendors.");
                     }
                     return;
                 }

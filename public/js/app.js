@@ -11494,8 +11494,14 @@ __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 /***/ (function(module, exports, __webpack_require__) {
 
 // window._ = require('lodash');
-// Toastr js
-window.toastr = __webpack_require__(/*! toastr */ "./node_modules/toastr/toastr.js");
+try {
+  // Toastr js
+  window.toastr = __webpack_require__(/*! toastr */ "./node_modules/toastr/toastr.js"); // LoadMore jQuery Plugin
+
+  __webpack_require__(/*! ./jquery.loadMore.min.js */ "./resources/js/jquery.loadMore.min.js");
+} catch (e) {
+  console.error(e);
+}
 /**
  * We'll load jQuery and the Bootstrap jQuery plugin which provides support
  * for JavaScript based Bootstrap features such as modals and tabs. This
@@ -11528,6 +11534,191 @@ window.toastr = __webpack_require__(/*! toastr */ "./node_modules/toastr/toastr.
 //     cluster: process.env.MIX_PUSHER_APP_CLUSTER,
 //     forceTLS: true
 // });
+
+/***/ }),
+
+/***/ "./resources/js/jquery.loadMore.min.js":
+/*!*********************************************!*\
+  !*** ./resources/js/jquery.loadMore.min.js ***!
+  \*********************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+;
+
+(function ($, i, j, k) {
+  'use strict';
+
+  if (typeof jQuery === 'undefined') {
+    throw new Error('Requires jQuery.');
+  }
+
+  var l = getPath();
+
+  $.fn.loadMore = function (d) {
+    var e = $("<div class=\"col-12 text-center _loadMore-imgLoading\"><div class=\"spinner-border spinner-border-sm btn-pr\" role=\"status\">\n<span class=\"sr-only\">Loading...</span>\n</div></div>");
+    var f = $('<div class="_loadMore-click"><span>Load More</span></div>');
+    var g,
+        opts,
+        contentH,
+        viewH,
+        scrollTopH,
+        running = false,
+        DEFAULTS = {
+      loadType: 'auto',
+      ajaxSwitch: true,
+      url: '',
+      data: {},
+      type: 'get',
+      success: function success() {},
+      error: function error() {},
+      callback: function callback() {},
+      async: true,
+      dataType: 'json',
+      conLocation: "",
+      scrollBottom: 100,
+      imgLoading: e,
+      clickLoading: f
+    };
+
+    function Load() {
+      this.init = function (a) {
+        opts = $.extend({}, DEFAULTS, d);
+
+        if (opts.conLocation) {
+          opts.conLocation = $(opts.conLocation);
+        } else if (a[0] === j || a[0] === i) {
+          opts.conLocation = $("body");
+          g = $(j);
+        } else {
+          opts.conLocation = a;
+          g = a;
+        }
+
+        this.startTime = +new Date();
+        var b = this;
+
+        if (!opts.ajaxSwitch) {
+          g.on('scroll', function () {
+            b.throttle(b.noAjax, 50);
+          });
+          return;
+        }
+
+        if (opts.loadType === 'auto') {
+          opts.conLocation.css('padding-bottom', '50px');
+          g.on('scroll', function () {
+            b.throttle(b.autoLoad, 50);
+          });
+        } else {
+          opts.clickLoading.on('click', function () {
+            b.handleClick();
+          });
+          opts.conLocation.append(opts.clickLoading);
+        }
+
+        var c = $('<link href="' + l + 'jquery.loadMore.css" rel="stylesheet">');
+        $('head').append(c);
+      };
+    }
+
+    Load.prototype = {
+      autoLoad: function autoLoad() {
+        if (opts.ajaxSwitch === true && running === false) {
+          this.countHeight();
+          var a = contentH - viewH - scrollTopH;
+
+          if (a <= opts.scrollBottom) {
+            opts.imgLoading && opts.conLocation.append(opts.imgLoading);
+            g.scrollTop(scrollTopH - opts.scrollBottom - 3);
+            this.getData();
+          }
+        }
+      },
+      handleClick: function handleClick() {
+        if (!running) {
+          this.getData();
+          $("._loadMore-click").hide();
+          opts.conLocation.append(opts.imgLoading);
+        }
+      },
+      noAjax: function noAjax() {
+        this.countHeight();
+
+        if (running =  false && false) {
+          running = true;
+          opts.callback();
+          running = false;
+        }
+      },
+      getData: function getData() {
+        running = true;
+        var b = this;
+        $.ajax({
+          url: opts.url,
+          async: opts.async,
+          data: opts.data,
+          type: opts.type,
+          dataType: opts.dataType,
+          success: function success(a) {
+            opts.success(a);
+            b.loadingOperation();
+          },
+          error: function error(a) {
+            b.loadingOperation();
+            opts.error && opts.error(a);
+          }
+        });
+      },
+      countHeight: function countHeight() {
+        if (g[0] === j || g[0] === i) {
+          contentH = $(j).innerHeight();
+          viewH = $(i).innerHeight();
+          scrollTopH = $(j).scrollTop();
+        } else {
+          contentH = g.get(0).scrollHeight;
+          viewH = g.innerHeight();
+          scrollTopH = g.scrollTop();
+        }
+      },
+      loadingOperation: function loadingOperation() {
+        running = false;
+        $('._loadMore-imgLoading').remove();
+
+        if (opts.loadType === 'click') {
+          opts.conLocation.append(opts.clickLoading);
+          opts.clickLoading.show();
+        }
+      },
+      throttle: function throttle(a, b) {
+        var c = +new Date();
+
+        if (c - this.startTime >= b) {
+          this.startTime = c;
+          a.call(this);
+        }
+
+        if (contentH - viewH - scrollTopH < 20 && opts.loadType === 'auto') {
+          g.scrollTop(scrollTopH - opts.scrollBottom - 20);
+        }
+      },
+      updatePram: function updatePram(a, b) {
+        opts[a] = b;
+      }
+    };
+    var h = new Load();
+    h.init(this);
+    return {
+      updatePram: h.updatePram
+    };
+  };
+
+  function getPath() {
+    var a = j.scripts,
+        b = a[a.length - 1].src;
+    return b.substring(0, b.lastIndexOf("/") + 1);
+  }
+})(jQuery, window, document, undefined);
 
 /***/ }),
 

@@ -31,7 +31,7 @@
         <div>
             <div class="py-1 text-center">
                 <div class="box-body generic-scrollbar p-2 text-center job-item-2 order-container"
-                    style="max-height: 450px; overflow: auto;" id="order-container-mob">
+                    style="max-height: 450px; overflow: auto;" id="mob-order-container">
 
                     <div class="col-12" id="order-container-spinner-container-mob" style="height: 13px;">
                         <div class="spinner-border spinner-border-sm btn-pr" role="status" style="display: none;"

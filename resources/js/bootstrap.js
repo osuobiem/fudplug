@@ -1,7 +1,16 @@
 // window._ = require('lodash');
 
-// Toastr js
-window.toastr = require('toastr');
+try {
+    // Toastr js
+    window.toastr = require('toastr');
+
+    // LoadMore jQuery Plugin
+    require('./jquery.loadMore.min.js');
+
+} catch (e) {
+    console.error(e);
+}
+
 
 /**
  * We'll load jQuery and the Bootstrap jQuery plugin which provides support

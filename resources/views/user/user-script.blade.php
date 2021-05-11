@@ -183,11 +183,19 @@
 
     /*********************************** Basket/Order script */
     // Scrollspy for basket
-    $('.basket-container').on('scroll', function (e) {
-        var elem = $(e.currentTarget);
-        if (elem[0].scrollHeight - elem.scrollTop() == elem.outerHeight()) {
+    // $('.basket-container').on('scroll', function (e) {
+    //     var elem = $(e.currentTarget);
+    //     if (elem[0].scrollHeight - elem.scrollTop() == elem.outerHeight()) {
+    //         getBasket(paginate.basketPage); //load content
+    //     }
+    // });
+
+    $(".basket-container").loadMore({
+        scrollBottom: 20,
+        async: true,
+        error: function () {
             getBasket(paginate.basketPage); //load content
-        }
+        },
     });
 
     // Load user basket

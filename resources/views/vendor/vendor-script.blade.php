@@ -98,7 +98,7 @@
         goGet(getUrl).then((res) => {
             if (window.matchMedia("(max-width: 767px)")
                 .matches) { // The viewport is less than 768 pixels wide (mobile device)
-                $(".mob-order-container").html(res.order_view);
+                $("#mob-order-container").html(res.order_view);
                 $("#mob-order-count").html(res.order_count);
                 if (type == "history") {
                     // Hide cancel button on displaying history

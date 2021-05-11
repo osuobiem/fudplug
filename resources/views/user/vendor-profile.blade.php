@@ -190,14 +190,15 @@
 
         <div class="tab-pane fade" id="menu-dish" role="tabpanel" aria-labelledby="menu-dish-tab">
             <div class="box shadow-sm border rounded bg-white mb-3 p-3">
-                <div class="box-body row p-3 generic-scrollbar" style="height: 300px;overflow-y: scroll;"
-                    id="menu-container">
+                <div class="box-body p-3">
+                    <div class="row generic-scrollbar" id="menu-container" style="height: 400px; overflow-y: scroll;">
 
-                    <div class="col-12" id="vendor-menu-spinner-container" style="height: 5%;">
-                        <div class="mb-2 text-center" style="display:none;" id="vendor-menu-spinner">
-                            <div class="spinner-border spinner-border-sm btn-pr" role="status">
-                                <span class="sr-only">Loading...</span>
-                            </div>
+                        <div class="col-12" id="vendor-menu-spinner-container" style="height: 5%;">
+                            <!-- <div class="mb-2 text-center" style="display:none;" id="vendor-menu-spinner">
+                                <div class="spinner-border spinner-border-sm btn-pr" role="status">
+                                    <span class="sr-only">Loading...</span>
+                                </div>
+                            </div> -->
                         </div>
                     </div>
                 </div>
@@ -217,11 +218,19 @@
     });
 
     // Scrollspy for order list
-    $('#menu-container').on('scroll', function (e) {
-        var elem = $(e.currentTarget);
-        if (elem[0].scrollHeight - elem.scrollTop() == elem.outerHeight()) {
+    // $('#menu-container').on('scroll', function (e) {
+    //     var elem = $(e.currentTarget);
+    //     if (elem[0].scrollHeight - elem.scrollTop() == elem.outerHeight()) {
+    //         getMenu(vendorMenuPage); //load content
+    //     }
+    // });
+
+    $("#menu-container").loadMore({
+        scrollBottom: 20,
+        async: true,
+        error: function () {
             getMenu(vendorMenuPage); //load content
-        }
+        },
     });
 
     function getMenu(page) {
