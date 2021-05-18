@@ -1212,7 +1212,7 @@ class UserController extends Controller
                 $total_amount = $this->get_order_total($this->fix_order($orders->get()));
 
                 // Paginated order data
-                $order_pag = $this->fix_order($orders->paginate(7));
+                $order_pag = $this->fix_order($orders->paginate(6));
 
                 $orders = $this->fix_order($orders->get());
 

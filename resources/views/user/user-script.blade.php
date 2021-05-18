@@ -403,7 +403,8 @@
 
     function placeOrder() {
         spin('basket');
-        $("#basket-order-btn").removeAttr('onclick');
+        spin('basket-mob');
+        $(".basket-order-btn").removeAttr('onclick').css("opacity", 0.65);
 
         let url = `${server}/user/place-order`;
         let formData = new FormData();
@@ -411,7 +412,6 @@
 
         goPost(url, formData)
             .then(res => {
-                spin('basket');
 
                 if (handleFormRes(res)) {
                     if (res.type == "error") {
@@ -426,10 +426,15 @@
                         showAlert(true, res.message);
                     }
                 }
+
+                spin('basket');
+                spin('basket-mob');
+                $(".basket-order-btn").attr('onclick', 'placeOrder()').removeAttr("style");
             })
             .catch(err => {
                 spin('basket');
-                $("#basket-order-btn").attr('onclick', 'placeOrder()');
+                spin('basket-mob');
+                $("#basket-order-btn").attr('onclick', 'placeOrder()').removeAttr("style");
 
                 showAlert(false, "Oops! Something's not right. Try again");
             })
@@ -443,7 +448,7 @@
     //     }
     // });
 
-    // Scrollspy for basket (Mobile)
+    // Scrollspy for order (Mobile)
     $("#order-container-mob").loadMore({
         scrollBottom: 35,
         async: true,
@@ -452,7 +457,7 @@
         },
     });
 
-    // Scrollspy for basket (Larger Screens)
+    // Scrollspy for order (Larger Screens)
     $("#order-container").loadMore({
         scrollBottom: 35,
         async: true,
@@ -560,6 +565,8 @@
     function cancelOrder(element, orderId = "") {
         if (orderId == "") {
             spin('order-cancel');
+            spin('mob-order-cancel');
+            $(".order-cancel-btn").removeAttr('onclick').css("opacity", 0.65);
         } else {
             spin('order-cancel-' + orderId);
         }
@@ -570,6 +577,8 @@
         goGet(getUrl).then((res) => {
             if (orderId == "") {
                 spin('order-cancel');
+                spin('mob-order-cancel');
+                $(".order-cancel-btn").attr('onclick', 'cancelOrder()').removeAttr("style");
             } else {
                 spin('order-cancel-' + orderId);
             }
@@ -578,6 +587,8 @@
         }).catch((err) => {
             if (orderId == "") {
                 spin('order-cancel');
+                spin('mob-order-cancel');
+                $(".order-cancel-btn").attr('onclick', 'cancelOrder()').removeAttr("style");
             } else {
                 spin('order-cancel-' + orderId);
             }
@@ -607,11 +618,6 @@
         // Always make history button show on toggling orders on mobile
 
         getOrder(1);
-    });
-
-    // Cancel all user order
-    $("#order-cancel-btn, #mob-order-cancel-btn").on('click', function () {
-        cancelOrder();
     });
 
     // Toggle Order History

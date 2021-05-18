@@ -27,7 +27,7 @@
                     </a>
                 </h5>
             </div>
-            <div id="basicsCollapseOne" class="collapse @if($order_key < 1): show @endif"
+            <div id="basicsCollapseOne" class="collapse @if($order_key < 1 && $curr_page < 2): show @endif"
                 aria-labelledby="basicsHeadingOne" data-parent="#basicsAccordion" style="">
                 <div class="card-body border-top p-2 text-muted" style="font-size: large;">
                     <ul id="basket-price-type" id="item" class="list-group box-body generic-scrollbar"

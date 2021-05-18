@@ -30,10 +30,10 @@
 
         <div>
             <div class="py-1 text-center">
-                <div class="box-body generic-scrollbar p-2 text-center job-item-2 order-container"
-                    style="max-height: 450px; overflow: auto;" id="mob-order-container">
+                <div class="box-body generic-scrollbar pl-2 pr-2 pt-2 text-center job-item-2 order-container"
+                    style="max-height: 353px; overflow: auto;" id="order-container-mob">
 
-                    <div class="col-12" id="order-container-spinner-container-mob" style="height: 13px;">
+                    <div class="col-12" id="order-container-spinner-container-mob" style="height: 30px;">
                         <div class="spinner-border spinner-border-sm btn-pr" role="status" style="display: none;"
                             id="order-container-spinner-mob">
                             <span class="sr-only">Loading...</span>
@@ -50,9 +50,16 @@
                 <div class="box-body">
                     <div class="col-md-12 mt-xs-2">
                         <button type="button" id="mob-order-cancel-btn"
-                            class="btn btn-sm btn-primary btn-block font-weight-bold" data-attach-loading="true"><i
-                                class="las la-times"></i>&nbsp;
-                            Cancel All <span id="mob-order-price" class="float-right" data-item-subtotal="">₦0.00</span>
+                            class="btn btn-sm btn-primary btn-block font-weight-bold order-cancel-btn"
+                            onclick="cancelOrder()" data-attach-loading="true">
+                            <span id="mob-order-cancel-txt">
+                                <i class="las la-times"></i>&nbsp;Cancel All
+                            </span>
+                            <div class="spinner-border spinner-border-sm btn-pr" id="mob-order-cancel-spinner"
+                                style="display: none;" role="status">
+                                <span class="sr-only">Loading...</span>
+                            </div>
+                            <span id="mob-order-price" class="float-right" data-item-subtotal="">₦0.00</span>
                         </button>
                     </div>
                 </div>

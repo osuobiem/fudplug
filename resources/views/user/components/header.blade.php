@@ -87,7 +87,7 @@
                                 </div>
                                 <div class="col-12 pt-2">
                                     <button type="button" onclick="placeOrder()"
-                                        class="btn btn-sm btn-primary btn-block font-weight-bold basket-order-btn"
+                                        class="btn btn-sm btn-primary btn-block font-weight-bold basket-order-btn" id=""
                                         data-attach-loading="true" disabled>
 
                                         <span id="basket-txt">Place order</span>
@@ -140,8 +140,8 @@
                                 </span>
                             </h6>
                             <div class="dropdown-divider"></div>
-                            <div class="box-body generic-scrollbar p-2 text-center job-item-2"
-                                style="max-height: 323px; overflow: auto;" id="order-container">
+                            <div class="box-body generic-scrollbar pl-2 pr-2 pt-2 text-center job-item-2"
+                                style="max-height: 353px; overflow: auto;" id="order-container">
 
                                 <!-- <div class="col-12" id="order-container-spinner-container" style="height: 13px;">
                                     <div class="spinner-border spinner-border-sm btn-pr" role="status"
@@ -150,15 +150,15 @@
                                     </div>
                                 </div> -->
                                 <div id="order-container-spinner-container" class="text-white"
-                                    style="line-height: 27px;">
+                                    style="line-height: 25px;">
                                     jdjjd
                                 </div>
                             </div>
                             <div class="box-body">
                                 <div class="col-md-12 mt-xs-2">
                                     <button type="button" id="order-cancel-btn"
-                                        class="btn btn-sm btn-primary btn-block font-weight-bold"
-                                        data-attach-loading="true">
+                                        class="btn btn-sm btn-primary btn-block font-weight-bold order-cancel-btn"
+                                        onclick="cancelOrder()" data-attach-loading="true">
                                         <span id="order-cancel-txt">
                                             <i class="las la-times"></i>&nbsp;Cancel All
                                         </span>

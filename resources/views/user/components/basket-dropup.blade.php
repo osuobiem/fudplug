@@ -30,8 +30,8 @@
                             class="btn btn-sm btn-primary btn-block font-weight-bold basket-order-btn"
                             data-attach-loading="true" disabled>
 
-                            <span id="basket-txt">Place order</span>
-                            <div class="spinner-border spinner-border-sm btn-pr" id="basket-spinner"
+                            <span id="basket-mob-txt">Place order</span>
+                            <div class="spinner-border spinner-border-sm btn-pr" id="basket-mob-spinner"
                                 style="display: none;" role="status">
                                 <span class="sr-only">Loading...</span>
                             </div>
