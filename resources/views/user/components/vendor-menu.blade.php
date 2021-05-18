@@ -23,11 +23,11 @@ background-repeat: no-repeat;">
                 $bulk_qty = json_decode($menu_dish->quantity, true)['bulk'];
                 $regular_qty = json_decode($menu_dish->quantity, true)['regular'];
                 @endphp
-                @if($bulk_qty == "null")
+                @if($bulk_qty == null)
                 <a class="small" onclick="loadRegOrderModal('{{$menu_dish->id}}')"><i
                         class="las la-plus-circle"></i>Regular
                     Order</a>
-                @elseif($regular_qty == "null")
+                @elseif($regular_qty == null)
                 <div class="pr-3 mr-3 small">
                     <a class="" onclick="loadBulkOrderModal('{{$menu_dish->id}}')"><i
                             class="las la-plus-circle"></i>Bulk

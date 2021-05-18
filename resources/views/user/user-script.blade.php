@@ -119,7 +119,7 @@
         getUrl += '/' + dishId;
 
         // Handle modal before showing content
-        $("#order-container").empty();
+        $("#order-detail-container").empty();
         $("#order-modal-spinner").removeClass('d-none');
         $("#order-modal").modal('show');
 
@@ -127,10 +127,10 @@
         goGet(getUrl).then((res) => {
             if (res.success) {
                 $("#order-modal-spinner").addClass('d-none');
-                $("#order-container").html(res.data);
+                $("#order-detail-container").html(res.data);
             } else {
                 $("#order-modal-spinner").addClass('d-none');
-                $("#order-container").html(`<div class="bg-light text-center col-md-12 pt-3 pb-3" style="height:inherit;">
+                $("#order-detail-container").html(`<div class="bg-light text-center col-md-12 pt-3 pb-3" style="height:inherit;">
                     <i class="las la-info" style="font-size:xx-large;"></i><br>
                     <small>${res.message}</small>
                 </div>`);
@@ -147,17 +147,17 @@
         getUrl += '/' + dishId + '/' + dishType;
 
         // Handle modal before showing content
-        $("#order-container").empty();
+        $("#order-detail-container").empty();
         $("#order-modal-spinner").removeClass('d-none');
         $("#order-modal").modal('show');
 
         goGet(getUrl).then((res) => {
             if (res.success) {
                 $("#order-modal-spinner").addClass('d-none');
-                $("#order-container").html(res.data);
+                $("#order-detail-container").html(res.data);
             } else {
                 $("#order-modal-spinner").addClass('d-none');
-                $("#order-container").html(`<div class="bg-light text-center col-md-12 pt-3 pb-3" style="height:inherit;">
+                $("#order-detail-container").html(`<div class="bg-light text-center col-md-12 pt-3 pb-3" style="height:inherit;">
                     <i class="las la-info" style="font-size:xx-large;"></i><br>
                     <small>${res.message}</small>
                 </div>`);

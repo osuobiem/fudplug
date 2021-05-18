@@ -19,7 +19,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="row" id="order-container">
+                <div class="row" id="order-detail-container">
 
                 </div>
 

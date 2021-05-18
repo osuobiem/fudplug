@@ -203,11 +203,13 @@
                     </div>
                 </div>
             </div>
+            @include('user.components.order-modal')
         </div>
     </div>
 
 </div>
 @endsection
+
 
 @push('scripts')
 <script>

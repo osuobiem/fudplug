@@ -115,7 +115,7 @@
                                     @php
                                         $i = 1;
                                     @endphp
-                                    {{dd($bulk_qty)}}
+
                                     @foreach ($bulk_qty as $key => $qty)
                                         <li class="list-group-item pt-0 col">
                                             <div class="float-left col-4">
@@ -260,7 +260,7 @@
                         getBasket();
 
                         // Close modal
-                        $("#bulk-order-modal").modal('hide');
+                        $("#order-modal").modal('hide');
 
                         // Reset bulk price (to be reflected on "add to basket button")
                         bulkPrices = resetOrderPrice("bulk");

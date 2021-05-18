@@ -671,7 +671,7 @@ class UserController extends Controller
                 $data['regular_qty'] = json_decode($qty->regular);
                 $data['bulk_qty'] = json_decode($qty->bulk);
                 $data['basket_items'] = $advanced_items;
-                // dd($data['basket_items']);
+
                 if (empty($dish_type)) {
                     $view = view('user.components.regular-order', $data);
                 } else {

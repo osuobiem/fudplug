@@ -269,7 +269,7 @@
                         // Load user basket details
                         getBasket();
                         // Close modal
-                        $("#regular-order-modal").modal('hide');
+                        $("#order-modal").modal('hide');
 
                         // Reset regular price (to be reflected on "add to basket button")
                         prices = resetOrderPrice("regular");
