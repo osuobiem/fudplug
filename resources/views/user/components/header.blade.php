@@ -74,12 +74,15 @@
                             </h6>
                             <div class="dropdown-divider"></div>
                             <div class="box-body text-center job-item-2">
-                                <div class="col-12 generic-scrollbar basket-container"
-                                    style="max-height: 450px; overflow: auto;">
+                                <div class="col-12 generic-scrollbar" id="basket-container"
+                                    style="max-height: 323px; overflow: auto;">
 
-                                    <div class="spinner-border spinner-border-sm btn-pr" role="status"
+                                    <!-- <div class="spinner-border spinner-border-sm btn-pr" role="status"
                                         style="display: none;" id="basket-container-spinner">
                                         <span class="sr-only">Loading...</span>
+                                    </div> -->
+                                    <div id="basket-container-spinner" class="text-white" style="line-height: 27px;">
+                                        jdjjd
                                     </div>
                                 </div>
                                 <div class="col-12 pt-2">
@@ -137,14 +140,18 @@
                                 </span>
                             </h6>
                             <div class="dropdown-divider"></div>
-                            <div class="box-body generic-scrollbar p-2 text-center job-item-2 order-container"
-                                style="max-height: 450px; overflow: auto;" id="h-noti-cont">
+                            <div class="box-body generic-scrollbar p-2 text-center job-item-2"
+                                style="max-height: 323px; overflow: auto;" id="order-container">
 
-                                <div class="col-12" id="order-container-spinner-container" style="height: 13px;">
+                                <!-- <div class="col-12" id="order-container-spinner-container" style="height: 13px;">
                                     <div class="spinner-border spinner-border-sm btn-pr" role="status"
                                         style="display: none;" id="order-container-spinner">
                                         <span class="sr-only">Loading...</span>
                                     </div>
+                                </div> -->
+                                <div id="order-container-spinner-container" class="text-white"
+                                    style="line-height: 27px;">
+                                    jdjjd
                                 </div>
                             </div>
                             <div class="box-body">

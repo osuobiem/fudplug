@@ -11556,7 +11556,7 @@ try {
   var l = getPath();
 
   $.fn.loadMore = function (d) {
-    var e = $("<div class=\"col-12 text-center _loadMore-imgLoading\"><div class=\"spinner-border spinner-border-sm btn-pr\" role=\"status\">\n<span class=\"sr-only\">Loading...</span>\n</div></div>");
+    var e = $("<div class=\"col-12 text-center _loadMore-imgLoading\" style=\"margin-top:-32px;\"><div class=\"spinner-border spinner-border-sm btn-pr\" role=\"status\">\n<span class=\"sr-only\">Loading...</span>\n</div></div>");
     var f = $('<div class="_loadMore-click"><span>Load More</span></div>');
     var g,
         opts,

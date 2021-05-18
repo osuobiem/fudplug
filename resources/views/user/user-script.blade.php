@@ -182,16 +182,18 @@
     }
 
     /*********************************** Basket/Order script */
-    // Scrollspy for basket
-    // $('.basket-container').on('scroll', function (e) {
-    //     var elem = $(e.currentTarget);
-    //     if (elem[0].scrollHeight - elem.scrollTop() == elem.outerHeight()) {
-    //         getBasket(paginate.basketPage); //load content
-    //     }
-    // });
+    // Scrollspy for basket (Mobile)
+    $("#basket-container-mob").loadMore({
+        scrollBottom: 35,
+        async: true,
+        error: function () {
+            getBasket(paginate.basketPage); //load content
+        },
+    });
 
-    $(".basket-container").loadMore({
-        scrollBottom: 20,
+    // Scrollspy for basket (Larger Screens)
+    $("#basket-container").loadMore({
+        scrollBottom: 35,
         async: true,
         error: function () {
             getBasket(paginate.basketPage); //load content
@@ -205,8 +207,8 @@
 
         if (toDelete == false) {
             // Add preloader on using scrollspy
-            $("#basket-container-spinner-mob").removeAttr('style');
-            $("#basket-container-spinner").removeAttr('style');
+            // $("#basket-container-spinner-mob").removeAttr('style');
+            // $("#basket-container-spinner").removeAttr('style');
         }
 
         goGet(getUrl).then((res) => {
@@ -221,8 +223,8 @@
                 }
 
                 // Remove preloader
-                $("#basket-container-spinner-mob").attr('style', 'display:none');
-                $("#basket-container-spinner").attr('style', 'display:none');
+                // $("#basket-container-spinner-mob").attr('style', 'display:none');
+                // $("#basket-container-spinner").attr('style', 'display:none');
 
                 // Set new page
                 paginate.basketPage = res.next_page;
@@ -434,11 +436,29 @@
     }
 
     // Scrollspy for order list
-    $('.order-container').bind('scroll', function (e) {
-        var elem = $(e.currentTarget);
-        if (elem[0].scrollHeight - elem.scrollTop() == elem.outerHeight()) {
+    // $('.order-container').bind('scroll', function (e) {
+    //     var elem = $(e.currentTarget);
+    //     if (elem[0].scrollHeight - elem.scrollTop() == elem.outerHeight()) {
+    //         getOrder(paginate.orderPage, paginate.orderType); //load content
+    //     }
+    // });
+
+    // Scrollspy for basket (Mobile)
+    $("#order-container-mob").loadMore({
+        scrollBottom: 35,
+        async: true,
+        error: function () {
             getOrder(paginate.orderPage, paginate.orderType); //load content
-        }
+        },
+    });
+
+    // Scrollspy for basket (Larger Screens)
+    $("#order-container").loadMore({
+        scrollBottom: 35,
+        async: true,
+        error: function () {
+            getOrder(paginate.orderPage, paginate.orderType); //load content
+        },
     });
 
     function getOrder(page, type = "", toCancel = false) {

@@ -806,7 +806,7 @@ class UserController extends Controller
             }
 
             $total_price = $this->get_basket_total($basket->get());
-            $basket_items = $basket->paginate(7);
+            $basket_items = $basket->paginate(6);
             $paginate_count = $basket_items->count();
             $curr_page = $request->page;
 
@@ -1245,18 +1245,21 @@ class UserController extends Controller
      */
     public function fix_order($orders)
     {
+        $j = 0;
+
         foreach ($orders as $order) {
             $order->title = explode(',', $order->title);
-            $order->quantity = explode(',', $order->quantity);
+            $order->quantity = explode('],', $order->quantity);
             $order->order_detail = explode(',', $order->order_detail);
 
             // Fix order quantity & order details
             $quant_arr = [];
             $ord_arr = [];
             foreach ($order->quantity as $key => $val) {
-                $quant_arr[$key] = base64_decode($val);
+                $quant_arr[$key] = $this->fix_order_qty($val);
                 $ord_arr[$key] = base64_decode($order->order_detail[$key]);
             }
+
             $order->quantity = $quant_arr;
             $order->order_detail = $ord_arr;
             // Fix order quantity & order details
@@ -1266,8 +1269,20 @@ class UserController extends Controller
 
             $order->image = explode(',', $order->image);
             $order->order_type = explode(',', $order->order_type);
+            $j++;
         }
         return $orders;
+    }
+
+    /**
+     * Prepare order quantity fetched from database
+     * @param string $order_quantity
+     * @return string $refined
+     */
+    public function fix_order_qty($order_quantity)
+    {
+        $refined = trim(trim($order_quantity, '['), ']');
+        return $refined;
     }
 
     /**
@@ -1280,9 +1295,9 @@ class UserController extends Controller
         $order = "";
         //  $posts = Post::whereDate('created_at', Carbon::today())->get();
         if ($type == "history") {
-            $order = Vendor::join('orders', 'orders.vendor_id', '=', 'vendors.id')->join('order_items', 'order_items.order_id', '=', 'orders.id')->join('items', 'items.id', '=', 'order_items.item_id')->select("orders.id as order_id", "orders.status as order_status", DB::raw("GROUP_CONCAT(items.title) as title, GROUP_CONCAT(TO_BASE64(items.quantity)) AS quantity, GROUP_CONCAT(items.image) AS image,GROUP_CONCAT(order_items.order_type) AS order_type, GROUP_CONCAT(TO_BASE64(order_items.order_detail)) AS order_detail, GROUP_CONCAT(DISTINCT vendors.business_name) AS vendor_name, GROUP_CONCAT(DISTINCT vendors.cover_image) AS vendor_image"))->where('orders.user_id', Auth::guard('user')->user()->id)->whereIn('orders.status', ['1', '-1', '-2'])->groupBy('orders.id')->orderBy('orders.updated_at', 'DESC');
+            $order = Vendor::join('orders', 'orders.vendor_id', '=', 'vendors.id')->join('order_items', 'order_items.order_id', '=', 'orders.id')->join('items', 'items.id', '=', 'order_items.item_id')->select("orders.id as order_id", "orders.status as order_status", DB::raw("GROUP_CONCAT(items.title) as title, GROUP_CONCAT(CONCAT('[', items.quantity, ']')) AS quantity, GROUP_CONCAT(items.image) AS image,GROUP_CONCAT(order_items.order_type) AS order_type, GROUP_CONCAT(TO_BASE64(order_items.order_detail)) AS order_detail, GROUP_CONCAT(DISTINCT vendors.business_name) AS vendor_name, GROUP_CONCAT(DISTINCT vendors.cover_image) AS vendor_image"))->where('orders.user_id', Auth::guard('user')->user()->id)->whereIn('orders.status', ['1', '-1', '-2'])->groupBy('orders.id')->orderBy('orders.updated_at', 'DESC');
         } else {
-            $order = Vendor::join('orders', 'orders.vendor_id', '=', 'vendors.id')->join('order_items', 'order_items.order_id', '=', 'orders.id')->join('items', 'items.id', '=', 'order_items.item_id')->select("orders.id as order_id", "orders.status as order_status", DB::raw("GROUP_CONCAT(items.title) as title, GROUP_CONCAT(TO_BASE64(items.quantity)) AS quantity, GROUP_CONCAT(items.image) AS image,GROUP_CONCAT(order_items.order_type) AS order_type, GROUP_CONCAT(TO_BASE64(order_items.order_detail)) AS order_detail, GROUP_CONCAT(DISTINCT vendors.business_name) AS vendor_name, GROUP_CONCAT(DISTINCT vendors.cover_image) AS vendor_image"))->where([['orders.user_id', '=', Auth::guard('user')->user()->id], ['orders.status', '=', 0]])->groupBy('orders.id')->orderBy('orders.created_at', 'DESC');
+            $order = Vendor::join('orders', 'orders.vendor_id', '=', 'vendors.id')->join('order_items', 'order_items.order_id', '=', 'orders.id')->join('items', 'items.id', '=', 'order_items.item_id')->select("orders.id as order_id", "orders.status as order_status", DB::raw("GROUP_CONCAT(items.title) as title, GROUP_CONCAT(CONCAT('[', items.quantity, ']')) AS quantity, GROUP_CONCAT(items.image) AS image,GROUP_CONCAT(order_items.order_type) AS order_type, GROUP_CONCAT(TO_BASE64(order_items.order_detail)) AS order_detail, GROUP_CONCAT(DISTINCT vendors.business_name) AS vendor_name, GROUP_CONCAT(DISTINCT vendors.cover_image) AS vendor_image"))->where([['orders.user_id', '=', Auth::guard('user')->user()->id], ['orders.status', '=', 0]])->groupBy('orders.id')->orderBy('orders.created_at', 'DESC');
         }
         return $order;
     }
@@ -1299,29 +1314,34 @@ class UserController extends Controller
         foreach ($orders as $order) {
             $inner_sum = 0;
             foreach ($order->title as $key => $title) {
-                if ($order->order_type[$key] == "simple") {
-                    $price = (Integer) json_decode($order->quantity[$key], true)['price'];
-                    $quantity = (Integer) json_decode($order->order_detail[$key])[0];
-                    $inner_sum += ($price * $quantity);
-                } else {
-                    $inner_details = json_decode($order->order_detail[$key]);
-                    $inner_inner_sum = 0;
-                    foreach ($inner_details as $inner_detail) {
-                        $type = $inner_detail[0];
-                        $index = $inner_detail[1];
-                        $qty = (Integer) $inner_detail[2];
-                        $price = 0;
+                try {
+                    if ($order->order_type[$key] == "simple") {
+                        $price = (Integer) json_decode($order->quantity[$key], true)['price'];
+                        $quantity = (Integer) json_decode($order->order_detail[$key])[0];
+                        $inner_sum += ($price * $quantity);
+                    } else {
+                        $inner_details = json_decode($order->order_detail[$key]);
+                        $inner_inner_sum = 0;
+                        foreach ($inner_details as $inner_detail) {
+                            $type = $inner_detail[0];
+                            $index = $inner_detail[1];
+                            $qty = (Integer) $inner_detail[2];
+                            $price = 0;
 
-                        if ($type == "regular") {
-                            $price = (Integer) json_decode(json_decode($order->quantity[$key], true)['regular'], true)[$index]['price'];
-                        } else {
-                            $price = (Integer) json_decode(json_decode($order->quantity[$key], true)['bulk'], true)[$index]['price'];
+                            if ($type == "regular") {
+                                $price = (Integer) json_decode(json_decode($order->quantity[$key], true)['regular'], true)[$index]['price'];
+                            } else {
+                                $price = (Integer) json_decode(json_decode($order->quantity[$key], true)['bulk'], true)[$index]['price'];
+                            }
+
+                            $inner_inner_sum += ($price * $qty);
                         }
-
-                        $inner_inner_sum += ($price * $qty);
+                        $inner_sum += $inner_inner_sum;
                     }
-                    $inner_sum += $inner_inner_sum;
+                } catch (\Throwable $th) {
+                    logger($order);
                 }
+
             }
             $sum += $inner_sum;
         }
