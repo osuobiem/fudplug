@@ -10,6 +10,12 @@
     let rating = "{{round($rating_data['total_rating']) }}";
     @endif
 
+    // Object to hold pagination state for basket and orders
+    var vendorPaginate = {
+        orderPage: 1,
+        orderType: "",
+    }
+
 
     $(document).ready(function () {
         // Variable to Hold Right Side Bar Active Tab
@@ -19,7 +25,7 @@
         loadRight(activeTab);
 
         // Load left side with vendor's orders
-        getOrder(type = "");
+        getOrder(vendorPaginate.orderPage);
 
         // Show rating on page load
         @if(isset($rating_data))
@@ -46,6 +52,7 @@
     // Load Right Side (Vendor Dish & Menu)
     function loadRight(activeTab) {
         spin('right-side')
+
         // Populate dishes tab on page load
         let getUrl = `${server}/vendor/dish`;
 
@@ -91,14 +98,46 @@
         activeTab = active;
     }
 
+    // Scrollspy for order (Mobile)
+    $("#order-container-mob").loadMore({
+        scrollBottom: 30,
+        async: true,
+        imgLoading: `<div class="col-12 text-center" id="order-preloader"><div class="spinner-border spinner-border-sm btn-pr" role="status">
+<span class="sr-only">Loading...</span>
+</div></div>`,
+        error: function () {
+            getOrder(vendorPaginate.orderPage, vendorPaginate.orderType); //load content
+        },
+    });
 
-    function getOrder(type = "") {
+    // Scrollspy for order (Larger Screens)
+    $(".desktop-order-container").loadMore({
+        scrollBottom: 10,
+        async: true,
+        imgLoading: `<div class="col-12 text-center" id="order-preloader"><div class="spinner-border spinner-border-sm btn-pr" role="status">
+<span class="sr-only">Loading...</span>
+</div></div>`,
+        error: function () {
+            getOrder(vendorPaginate.orderPage, vendorPaginate.orderType); //load content
+        },
+    });
+
+    function getOrder(page, type = "") {
         let getUrl = (type == "") ? `${server}/vendor/get-order` : `${server}/vendor/get-order/${type}`;
+        getUrl += fixPaginateUrl(page);
+
+        // Set orderType state
+        vendorPaginate.orderType = type;
 
         goGet(getUrl).then((res) => {
+            $("#order-preloader").remove();
+
+            // Set new page
+            vendorPaginate.orderPage = res.next_page;
+
             if (window.matchMedia("(max-width: 767px)")
                 .matches) { // The viewport is less than 768 pixels wide (mobile device)
-                $("#mob-order-container").html(res.order_view);
+                    (page == 1)? $("#order-container-mob").html(res.order_view) : $("#order-container-mob").append(res.order_view);
                 $("#mob-order-count").html(res.order_count);
                 if (type == "history") {
                     // Hide cancel button on displaying history
@@ -121,7 +160,7 @@
                     }
                 }
             } else {
-                $(".desktop-order-container").html(res.order_view);
+                (page == 1)? $(".desktop-order-container").html(res.order_view):$(".desktop-order-container").append(res.order_view);
                 $("#order-count").html(res.order_count);
                 if (type == "history") {
                     // Hide cancel button on displaying history
@@ -145,17 +184,26 @@
                 }
             }
         }).catch((err) => {
+            $("#order-preloader").remove();
             spin('user-right-side');
-            showAlert(false, "Oops! Something's not right. Try again");
+            showAlert(false, err);
         });
     }
+
+    // Function to fix url for pagination
+    function fixPaginateUrl(page) {
+        fixed_url =
+            `?page=${page}`;
+        return fixed_url;
+    }
+
 
     // Cancel all orders if parameter is empty
     function rejectOrder(orderId = "") {
         let getUrl = (orderId == "") ? `${server}/vendor/reject-order` : `${server}/vendor/reject-order/${orderId}`;
 
         goGet(getUrl).then((res) => {
-            getOrder();
+            getOrder(1);
             $('.verdict-btn').remove();
             $("#order-status").html(`<span
                                 class="badge badge-warning ml-1">
@@ -199,7 +247,7 @@
         $("#mob-order-history-btn, #order-history-btn").removeClass('d-none')
         // Always make history button show on toggling orders on mobile
 
-        getOrder();
+        getOrder(1);
     });
 
     // Toggle Order History
@@ -212,7 +260,7 @@
             $("#today-order-btn").removeClass('d-none');
         }
 
-        getOrder("history");
+        getOrder(1, "history");
     });
 
     // Toggle Today's Order
@@ -225,7 +273,7 @@
             $("#order-history-btn").removeClass('d-none');
         }
 
-        getOrder();
+        getOrder(1);
     });
 
     function getDetail(orderId, type = "") {

@@ -39,9 +39,6 @@
 </head>
 
 <body>
-    <!-- Order modal -->
-    @include('user.components.order-modal')
-    <!-- Order modal -->
 
     @php
     // Node Server
@@ -134,9 +131,11 @@
                                 @include('vendor.components.menu-update-modal')
                                 <!-- Menu Update Modal Holder -->
 
-                                <!-- Order Detail Modal Holder -->
+                                <!-- Order Detail Modal -->
+                                @if (!Auth::guard('vendor')->guest())
                                 @include('vendor.components.order-detail-modal')
-                                <!-- Order Detail Modal Holder -->
+                                @endif
+                                <!-- Order Detail Modal -->
 
                                 <!-- ******* VENDOR COMPONENTS ********* -->
 
@@ -146,6 +145,12 @@
 
                                 {{-- Basket Modal --}}
                                 @include('user.components.basket-dropup')
+
+                                <!-- Order modal -->
+                                @if(!Auth::guard('user')->guest())
+                                @include('user.components.order-modal')
+                                @endif
+                                <!-- Order modal -->
 
                                 <!-- ******* USER COMPONENTS ********* -->
                             </main>

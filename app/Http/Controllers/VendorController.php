@@ -1053,51 +1053,73 @@ class VendorController extends Controller
     {
         try {
             $orders = $this->order_query($type);
-            $to_check = $orders->toArray();
 
             // Number of orders
-            $order_count = $orders->count();
+            $order_count = $orders->get()->count();
 
             // Get pending orders for user
             $pending_count = Order::where([['user_id', '=', Auth::user()->id], ['status', '=', 0]])->count();
 
-            if (!empty($to_check)) {
-                foreach ($orders as $order) {
-                    $order->title = explode(',', $order->title);
-                    $order->quantity = explode('],', $order->quantity);
-                    $order->order_detail = explode(',', $order->order_detail);
+            // Current page
+            $curr_page = $request->page;
 
-                    // Fix order quantity & order details
-                    $quant_arr = [];
-                    $ord_arr = [];
-                    foreach ($order->quantity as $key => $val) {
-                        $quant_arr[$key] = $this->fix_order_qty($val);
-                        $ord_arr[$key] = base64_decode($order->order_detail[$key]);
-                    }
-                    $order->quantity = $quant_arr;
-                    $order->order_detail = $ord_arr;
-                    // Fix order quantity & order details
+            // dd($orders->get());
 
-                    // Fix order status
-                    $order->order_status = $this->order_status($order->order_status);
+            if (!empty($orders->get()->toArray())) {
+                // Total amount for orders
+                $total_amount = $this->get_order_total($this->fix_order($orders->get()));
 
-                    $order->image = explode(',', $order->image);
-                    $order->order_type = explode(',', $order->order_type);
-                }
+                $order_pag = $this->fix_order($orders->paginate(6));
+
+                // Prepare next page
+                $next_page = $order_pag->count() > 0 ? ($curr_page + 1) : (int) $curr_page;
             } else {
-                $orders = null;
+                $order_pag = null;
+
+                $next_page = (int) $curr_page;
+
+                $total_amount = 0;
             }
 
-            // Total amount for orders
-            $total_amount = ($orders == null) ? 0 : $this->get_order_total($orders);
+            $order_view = view('vendor.components.order', compact('order_pag', 'curr_page'))->render();
 
-            $order_view = view('vendor.components.order', compact('orders'))->render();
-
-            return response()->json(['success' => true, 'order_view' => $order_view, 'total_amount' => $total_amount, 'pending_count' => $pending_count, 'order_count' => $order_count], 200);
+            return response()->json(['success' => true, 'order_view' => $order_view, 'total_amount' => $total_amount, 'pending_count' => $pending_count, 'order_count' => $order_count, 'next_page' => $next_page], 200);
         } catch (\Throwable $th) {
             Log::error($th);
             return response()->json(['success' => false, 'message' => "Oops! Something went wrong. Try Again!"], 500);
         }
+    }
+
+    /**
+     * Fix order attributes
+     * @param object $orders
+     * @return object $orders
+     */
+    public function fix_order($orders)
+    {
+        foreach ($orders as $order) {
+            $order->title = explode(',', $order->title);
+            $order->quantity = explode('],', $order->quantity);
+            $order->order_detail = explode(',', $order->order_detail);
+
+            // Fix order quantity & order details
+            $quant_arr = [];
+            $ord_arr = [];
+            foreach ($order->quantity as $key => $val) {
+                $quant_arr[$key] = $this->fix_order_qty($val);
+                $ord_arr[$key] = base64_decode($order->order_detail[$key]);
+            }
+            $order->quantity = $quant_arr;
+            $order->order_detail = $ord_arr;
+            // Fix order quantity & order details
+
+            // Fix order status
+            $order->order_status = $this->order_status($order->order_status);
+
+            $order->image = explode(',', $order->image);
+            $order->order_type = explode(',', $order->order_type);
+        }
+        return $orders;
     }
 
     /**
@@ -1121,9 +1143,9 @@ class VendorController extends Controller
         $order = "";
         //  $posts = Post::whereDate('created_at', Carbon::today())->get();
         if ($type == "history") {
-            $order = User::join('orders', 'orders.user_id', '=', 'users.id')->join('order_items', 'order_items.order_id', '=', 'orders.id')->join('items', 'items.id', '=', 'order_items.item_id')->select("orders.id as order_id", "orders.status as order_status", "orders.created_at as date_time", DB::raw("GROUP_CONCAT(items.title) as title, GROUP_CONCAT(CONCAT('[', items.quantity, ']')) AS quantity, GROUP_CONCAT(items.image) AS image,GROUP_CONCAT(order_items.order_type) AS order_type, GROUP_CONCAT(TO_BASE64(order_items.order_detail)) AS order_detail, GROUP_CONCAT(DISTINCT users.username) AS username, GROUP_CONCAT(DISTINCT users.profile_image) AS profile_image"))->where('orders.vendor_id', Auth::user()->id)->whereIn('orders.status', ['1', '-1'])->groupBy('orders.id')->orderBy('orders.updated_at', 'DESC')->get();
+            $order = User::join('orders', 'orders.user_id', '=', 'users.id')->join('order_items', 'order_items.order_id', '=', 'orders.id')->join('items', 'items.id', '=', 'order_items.item_id')->select("orders.id as order_id", "orders.status as order_status", "orders.created_at as date_time", DB::raw("GROUP_CONCAT(items.title) as title, GROUP_CONCAT(CONCAT('[', items.quantity, ']')) AS quantity, GROUP_CONCAT(items.image) AS image,GROUP_CONCAT(order_items.order_type) AS order_type, GROUP_CONCAT(TO_BASE64(order_items.order_detail)) AS order_detail, GROUP_CONCAT(DISTINCT users.username) AS username, GROUP_CONCAT(DISTINCT users.profile_image) AS profile_image"))->where('orders.vendor_id', Auth::user()->id)->whereIn('orders.status', ['1', '-1'])->groupBy('orders.id')->orderBy('orders.updated_at', 'DESC');
         } else {
-            $order = User::join('orders', 'orders.user_id', '=', 'users.id')->join('order_items', 'order_items.order_id', '=', 'orders.id')->join('items', 'items.id', '=', 'order_items.item_id')->select("orders.id as order_id", "orders.status as order_status", "orders.created_at as date_time", DB::raw("GROUP_CONCAT(items.title) as title, GROUP_CONCAT(CONCAT('[', items.quantity, ']')) AS quantity, GROUP_CONCAT(items.image) AS image,GROUP_CONCAT(order_items.order_type) AS order_type, GROUP_CONCAT(TO_BASE64(order_items.order_detail)) AS order_detail, GROUP_CONCAT(DISTINCT users.username) AS username, GROUP_CONCAT(DISTINCT users.profile_image) AS profile_image"))->where([['orders.vendor_id', '=', Auth::user()->id], ['orders.status', '=', 0]])->groupBy('orders.id')->orderBy('orders.created_at', 'DESC')->get();
+            $order = User::join('orders', 'orders.user_id', '=', 'users.id')->join('order_items', 'order_items.order_id', '=', 'orders.id')->join('items', 'items.id', '=', 'order_items.item_id')->select("orders.id as order_id", "orders.status as order_status", "orders.created_at as date_time", DB::raw("GROUP_CONCAT(items.title) as title, GROUP_CONCAT(CONCAT('[', items.quantity, ']')) AS quantity, GROUP_CONCAT(items.image) AS image,GROUP_CONCAT(order_items.order_type) AS order_type, GROUP_CONCAT(TO_BASE64(order_items.order_detail)) AS order_detail, GROUP_CONCAT(DISTINCT users.username) AS username, GROUP_CONCAT(DISTINCT users.profile_image) AS profile_image"))->where([['orders.vendor_id', '=', Auth::user()->id], ['orders.status', '=', 0]])->groupBy('orders.id')->orderBy('orders.created_at', 'DESC');
         }
         return $order;
     }
