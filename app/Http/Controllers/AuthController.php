@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Area;
 use App\User;
 use App\Vendor;
 use Illuminate\Http\Request;
@@ -169,12 +170,18 @@ class AuthController extends Controller
      */
     public function update_location($area_id)
     {
+        $area = Area::findOrFail($area_id);
+
         // Check who is sending the request
 
         // Vendor ?
         if (Auth::check()) {
             $vendor = Auth::user('vendor');
-            $vendor->area_id = $area_id;
+            $vendor->state_id = $area->state->id;
+            
+            $areas = $vendor->areas ? unserialize($vendor->areas) : [];
+            array_push($areas, $area_id);
+            $vendor->areas = serialize($areas);
 
             // Try vendor save or catch error if any
             try {

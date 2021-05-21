@@ -106,42 +106,41 @@
                     <div class="row">
                         <!-- Input -->
                         <div class="col-6 mb-2">
-                            <div class="js-form-message">
-                                <label id="locationLabel" class="form-label">
-                                    State
-                                    <span class="text-danger">*</span>
-                                </label>
-                                <div class="form-group">
-                                    <select name="area" onchange="fetchAreas(this.value)" class="form-control">
-                                        @foreach($states as $key=>$val)
-                                        @if($vendor_location->state_id == $val->id)
-                                        <option value="{{$val->id}}" selected>{{$val->name}}</option>
-                                        @else
-                                        <option value="{{$val->id}}">{{$val->name}}</option>
-                                        @endif
-                                        @endforeach
-                                    </select>
+                            <div class="col-12 p-0">
+                                <div class="js-form-message">
+                                    <label id="locationLabel" class="form-label">
+                                        State
+                                        <span class="text-danger">*</span>
+                                    </label>
+                                    <div class="form-group">
+                                        <select name="area" onchange="fetchAreas(this.value)" class="form-control">
+                                            @foreach($states as $key=>$val)
+                                            @if($vendor_location->state_id == $val->id)
+                                            <option value="{{$val->id}}" selected>{{$val->name}}</option>
+                                            @else
+                                            <option value="{{$val->id}}">{{$val->name}}</option>
+                                            @endif
+                                            @endforeach
+                                        </select>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                         <!-- End Input -->
                         <!-- Input -->
-                        <div class="col-6 mb-2">
+                        <div class="col-md-6 mb-2">
                             <div class="js-form-message">
                                 <label id="locationLabel" class="form-label">
-                                    Area
+                                    Areas
                                     <span class="text-danger">*</span>
                                 </label>
-                                <div class="form-group">
-                                    <select name="area" id="area-list" class="form-control">
-                                        @foreach($areas as $key=>$val)
-                                        @if($vendor_location->area_id == $val->id)
-                                        <option value="{{$val->id}}" selected>{{$val->name}}</option>
-                                        @else
-                                        <option value="{{$val->id}}">{{$val->name}}</option>
-                                        @endif
-                                        @endforeach
-                                    </select>
+                                <div class="row m-auto" style="border: solid 1px #cfd1d2; border-radius: 5px; padding: 5px;">
+                                    @foreach($areas as $area)
+                                        <div class="form-group col-6 m-0">
+                                            <label for="area-{{ $area->id }}">{{ $area->name }}</label>
+                                            <input {{ $vendor_location->area_id == $area->id ? 'checked' : '' }} type="checkbox" name="area[]" id="area-{{ $area->id }}" style="float: right">
+                                        </div>
+                                    @endforeach
                                 </div>
                             </div>
                         </div>
