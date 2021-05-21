@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Area;
+use App\AreaVendor;
 use App\User;
 use App\Vendor;
 use Illuminate\Http\Request;
@@ -176,16 +177,13 @@ class AuthController extends Controller
 
         // Vendor ?
         if (Auth::check()) {
-            $vendor = Auth::user('vendor');
-            $vendor->state_id = $area->state->id;
-            
-            $areas = $vendor->areas ? unserialize($vendor->areas) : [];
-            array_push($areas, $area_id);
-            $vendor->areas = serialize($areas);
+            $area_vendor = new AreaVendor();
+            $area_vendor->vendor_id = Auth::user('vendor')->id;
+            $area_vendor->area_id = $area_id;
 
             // Try vendor save or catch error if any
             try {
-                $vendor->save();
+                $area_vendor->save();
                 return response()->json(['success' => true, 'message' => 'Location Saved']);
             } catch (\Throwable $th) {
                 Log::error($th);
