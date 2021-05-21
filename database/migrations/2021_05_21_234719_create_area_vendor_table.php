@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateVendorsAreasTable extends Migration
+class CreateAreaVendorTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateVendorsAreasTable extends Migration
      */
     public function up()
     {
-        Schema::create('vendors_areas', function (Blueprint $table) {
+        Schema::create('area_vendor', function (Blueprint $table) {
             $table->id();
             $table->foreignId('area_id')->nullable()->constrained()->onDelete('cascade')->onUpdate('no action');
             $table->foreignId('vendor_id')->nullable()->constrained()->onDelete('cascade')->onUpdate('no action');
@@ -28,6 +28,6 @@ class CreateVendorsAreasTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('vendors_areas');
+        Schema::dropIfExists('area_vendor');
     }
 }

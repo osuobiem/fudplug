@@ -247,15 +247,22 @@ class PostController extends Controller
             $logged_in = $request->user() ?? $request->user('user');
             $type = $request->user() ? 'vendor' : 'user';
 
-            // Get Posts according to area
-            if($type == 'vendor') {
-                $areas = $logged_in->areas ? unserialize($logged_in->areas) : [];
-                $posts = Post::whereIn('area_id', $areas)->orderBy('created_at', 'desc')->take(15)->get();
-            }
-            else {
-                $posts = Post::whereHas('vendor', function (Builder $query) use ($logged_in) {
-                    $query->where('area_id', $logged_in->area_id);
-                })->orderBy('created_at', 'desc')->take(15)->get();
+            $area = $type == 'vendor' ? count($logged_in->areas) > 0 : $logged_in->area;
+            $posts = [];
+
+            if($area) {
+                // Get Posts according to area
+                if($type == 'vendor') {
+                    $areas = $logged_in->areas ? unserialize($logged_in->areas) : [];
+                    $posts = Post::whereHas('vendor', function (Builder $query) use ($areas) {
+                        $query->whereIn('area_id', $areas);
+                    })->orderBy('created_at', 'desc')->take(15)->get();
+                }
+                else {
+                    $posts = Post::whereHas('vendor', function (Builder $query) use ($logged_in) {
+                        $query->where('area_id', $logged_in->area_id);
+                    })->orderBy('created_at', 'desc')->take(15)->get();
+                }
             }
 
             return view('components.post.index', ['posts' => $posts]);
