@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\AreaVendor;
 use App\Like;
 use App\Media;
 use App\Notification;
@@ -14,6 +15,7 @@ use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
@@ -253,15 +255,13 @@ class PostController extends Controller
             if($area) {
                 // Get Posts according to area
                 if($type == 'vendor') {
-                    $areas = $logged_in->areas ? unserialize($logged_in->areas) : [];
-                    $posts = Post::whereHas('vendor', function (Builder $query) use ($areas) {
-                        $query->whereIn('area_id', $areas);
-                    })->orderBy('created_at', 'desc')->take(15)->get();
+                    $areas = $logged_in->areas->pluck('id');
+                    $vendor_ids = AreaVendor::whereIn('area_id', $areas)->groupBy('vendor_id')->pluck('vendor_id');
+                    $posts = Post::whereIn('vendor_id', $vendor_ids)->orderBy('created_at')->orderBy('created_at', 'desc')->take(15)->get();
                 }
                 else {
-                    $posts = Post::whereHas('vendor', function (Builder $query) use ($logged_in) {
-                        $query->where('area_id', $logged_in->area_id);
-                    })->orderBy('created_at', 'desc')->take(15)->get();
+                    $vendor_ids = $logged_in->area->vendors->pluck('id');
+                    $posts = Post::whereIn('vendor_id', $vendor_ids)->orderBy('created_at')->orderBy('created_at', 'desc')->take(15)->get();
                 }
             }
 

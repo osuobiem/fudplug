@@ -171,7 +171,7 @@ class AuthController extends Controller
      */
     public function update_location($area_id)
     {
-        $area = Area::findOrFail($area_id);
+        Area::findOrFail($area_id);
 
         // Check who is sending the request
 
