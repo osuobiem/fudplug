@@ -114,13 +114,13 @@
                                     </label>
                                     <div class="form-group">
                                         <select name="area" onchange="fetchAreas(this.value)" class="form-control">
-                                            @foreach($states as $key=>$val)
+                                            {{-- @foreach($states as $key=>$val)
                                             @if($vendor_location->state_id == $val->id)
                                             <option value="{{$val->id}}" selected>{{$val->name}}</option>
                                             @else
                                             <option value="{{$val->id}}">{{$val->name}}</option>
                                             @endif
-                                            @endforeach
+                                            @endforeach --}}
                                         </select>
                                     </div>
                                 </div>
@@ -138,7 +138,7 @@
                                     @foreach($areas as $area)
                                         <div class="form-group col-6 m-0">
                                             <label for="area-{{ $area->id }}">{{ $area->name }}</label>
-                                            <input {{ $vendor_location->area_id == $area->id ? 'checked' : '' }} type="checkbox" name="area[]" id="area-{{ $area->id }}" style="float: right">
+                                            {{-- <input {{ $vendor_location->area_id == $area->id ? 'checked' : '' }} type="checkbox" name="area[]" id="area-{{ $area->id }}" style="float: right"> --}}
                                         </div>
                                     @endforeach
                                 </div>

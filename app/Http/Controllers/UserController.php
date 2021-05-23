@@ -519,29 +519,26 @@ class UserController extends Controller
     public function vendor_profile($username)
     {
         try {
-            $vendor = Vendor::where('username', $username)->first();
-
-            if (empty($vendor)) {
-                return ['status' => false, 'message' => "404 Not found"];
-            }
+            $vendor = Vendor::where('username', $username)->firstOrFail();
 
             // Decode $vendor_id
             $vendor_id = $vendor->id;
 
             // Get States Data
-            $states = State::get();
+            // $states = State::get();
 
-            // Vendor Details
-            $vendor = Vendor::where('id', $vendor_id)->first();
+            // // Vendor Details
+            // $vendor = Vendor::where('id', $vendor_id)->first();
 
-            // Fetch Vendor Location Data
-            $area_id = $vendor->area_id;
-            $vendor_location = State::join('areas', 'areas.state_id', '=', 'states.id')
-                ->select(['areas.name AS area', 'areas.id AS area_id', 'states.name AS state', 'states.id AS state_id'])
-                ->where('areas.id', $area_id)->first();
+            // // Fetch Vendor Location Data
+            // $area_id = $vendor->area_id;
+            // $vendor_location = State::join('areas', 'areas.state_id', '=', 'states.id')
+            //     ->select(['areas.name AS area', 'areas.id AS area_id', 'states.name AS state', 'states.id AS state_id'])
+            //     ->where('areas.id', $area_id)->first();
 
-            // Get Areas In User State
-            $areas = Area::where('state_id', $vendor_location->state_id)->get();
+            // // Get Areas In User State
+            // $areas = Area::where('state_id', $vendor_location->state_id)->get();
+            $vendor_location = Auth::user('vendor')->areas;
 
             // Social Media Links
             $social_handles = json_decode($vendor->social_handles);
@@ -549,7 +546,7 @@ class UserController extends Controller
             // Rating Data
             $rating_data = Auth::guard('user')->guest() ? $this->get_rating($vendor_id, 0) : $this->get_rating($vendor_id, Auth::guard('user')->user()->id);
 
-            return ['status' => true, 'data' => compact('vendor', 'vendor_location', 'states', 'areas', 'social_handles', 'rating_data')];
+            return ['status' => true, 'data' => compact('vendor', 'vendor_location', 'social_handles', 'rating_data')];
         } catch (\Throwable $th) {
             Log::error($th);
         }

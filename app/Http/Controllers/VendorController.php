@@ -192,9 +192,9 @@ class VendorController extends Controller
     public function profile($username)
     {
         try {
-            $vendor = Vendor::where('username', $username)->first();
-
-            if (empty($vendor) || Auth::user()->username != $username) {
+            $vendor = Vendor::where('username', $username)->firstOrFail();
+            
+            if (Auth::user()->username != $username) {
                 return ['status' => false, 'message' => "404 Not found"];
             }
 
@@ -202,13 +202,15 @@ class VendorController extends Controller
             $states = State::get();
 
             // Fetch Vendor Location Data
-            $area_id = Auth::user('vendor')->area_id;
-            $vendor_location = State::join('areas', 'areas.state_id', '=', 'states.id')
-                ->select(['areas.name AS area', 'areas.id AS area_id', 'states.name AS state', 'states.id AS state_id'])
-                ->where('areas.id', $area_id)->first();
+            // $area_id = Auth::user('vendor')->area_id;
+            // $vendor_location = State::join('areas', 'areas.state_id', '=', 'states.id')
+            //     ->select(['areas.name AS area', 'areas.id AS area_id', 'states.name AS state', 'states.id AS state_id'])
+            //     ->where('areas.id', $area_id)->first();
 
-            // Get Areas In User State
-            $areas = Area::where('state_id', $vendor_location->state_id)->get();
+            // // Get Areas In User State
+            $areas = $vendor->areas;
+
+            $vendor_location = Auth::user('vendor')->areas;
 
             // Social Media Links
             $social_handles = json_decode(Auth::user('vendor')->social_handles);
