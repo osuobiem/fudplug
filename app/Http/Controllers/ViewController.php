@@ -94,6 +94,7 @@ class ViewController extends Controller
 
                 return view('vendor.profile', $data['data']);
             } else {
+                // Another vendor
                 $user_controller = new UserController();
                 $data = $user_controller->vendor_profile($username);
 

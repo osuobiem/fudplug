@@ -26,10 +26,10 @@
                 <i class="la la-ellipsis-v la-2x icon-hover text-white"></i>
             </a>
             <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
-                <label class="dropdown-item" id="profile-edit-btn" type="button">Edit
+                <label class="dropdown-item m-0" id="profile-edit-btn" type="button">Edit
                     Profile</label>
-                <label type="button" class="dropdown-item" for="input">Change Profile Image</label>
-                <label type="button" class="dropdown-item" for="cover-input">Change Cover Photo</label>
+                <label type="button" class="dropdown-item m-0" for="input">Change Profile Image</label>
+                <label type="button" class="dropdown-item m-0" for="cover-input">Change Cover Photo</label>
             </div>
         </div>
 
@@ -52,9 +52,12 @@
                 </p>
             </div>
             <div class="col-6 p-2">
-                <h6 class="font-weight-bold text-dark mb-1">Location</h6>
-                <p class="mb-0 text-black-50 small"><i class="las la-map-marker-alt"></i>{{ $vendor_location->area }},
-                    {{ $vendor_location->state }}</p>
+                <h6 class="font-weight-bold text-dark mb-1">Locations</h6>
+                <p class="mb-0 text-black-50 small"><i class="las la-map-marker-alt"></i>
+                    @foreach ($vendor_location as $key => $area)
+                        {{ $key == 0 ? $area->name.' - '.$area->state->name : ', '.$area->name.' - '.$area->state->name }}
+                    @endforeach
+                </p>
             </div>
         </div>
         <div class="overflow-hidden border-top">

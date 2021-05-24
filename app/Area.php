@@ -11,9 +11,9 @@ class Area extends Model
         return $this->belongsTo('App\State');
     }
 
-    public function vendor()
+    public function vendors()
     {
-        return $this->hasMany('App\Vendor');
+        return $this->belongsToMany('App\Vendor');
     }
 
     public function user()

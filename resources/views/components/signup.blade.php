@@ -71,7 +71,8 @@
                 <label class="mb-1">Password <small class="text-danger">*</small></label>
                 <div class="position-relative icon-form-control">
                   <i class="la la-key position-absolute"></i>
-                  <input type="password" class="form-control" placeholder="Password" required name="password">
+                  <input type="password" class="form-control" placeholder="Password" id="v-pass" required name="password">
+                  <i class="la la-eye position-absolute" title="Show Password" onclick="showPassword(this, 'v-pass', true)" style="right: 0"></i>
                 </div>
                 <small class="text-danger error-message" id="password"></small>
               </div>
@@ -127,7 +128,8 @@
                 <label class="mb-1">Password <small class="text-danger">*</small></label>
                 <div class="position-relative icon-form-control">
                   <i class="la la-key position-absolute"></i>
-                  <input type="password" class="form-control" placeholder="Password" name="password" required>
+                  <input type="password" class="form-control" placeholder="Password" id="u-pass" name="password" required>
+                  <i class="la la-eye position-absolute" title="Show Password" onclick="showPassword(this, 'u-pass', true)" style="right: 0"></i>
                 </div>
                 <small class="text-danger error-message" id="u-password"></small>
               </div>

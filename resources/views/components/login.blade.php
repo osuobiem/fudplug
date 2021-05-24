@@ -31,7 +31,8 @@
                         <label class="mb-1">Password <small class="text-danger">*</small></label>
                         <div class="position-relative icon-form-control">
                             <i class="la la-key position-absolute"></i>
-                            <input type="password" class="form-control" placeholder="Password" name="password" required>
+                            <input type="password" class="form-control" id="l-log" placeholder="Password" name="password" required>
+                            <i class="la la-eye position-absolute" title="Show Password" onclick="showPassword(this, 'l-log', true)" style="right: 0"></i>
                         </div>
                         <small class="text-danger error-message" id="l-password"></small>
                     </div>

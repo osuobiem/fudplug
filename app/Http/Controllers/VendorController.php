@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Area;
+use App\AreaVendor;
 use App\Item;
 use App\Jobs\EmailJob;
 use App\Menu;
@@ -192,23 +193,19 @@ class VendorController extends Controller
     public function profile($username)
     {
         try {
-            $vendor = Vendor::where('username', $username)->first();
-
-            if (empty($vendor) || Auth::user()->username != $username) {
+            $vendor = Vendor::where('username', $username)->firstOrFail();
+            
+            if (Auth::user()->username != $username) {
                 return ['status' => false, 'message' => "404 Not found"];
             }
 
             // Get States Data
-            $states = State::get();
-
-            // Fetch Vendor Location Data
-            $area_id = Auth::user('vendor')->area_id;
-            $vendor_location = State::join('areas', 'areas.state_id', '=', 'states.id')
-                ->select(['areas.name AS area', 'areas.id AS area_id', 'states.name AS state', 'states.id AS state_id'])
-                ->where('areas.id', $area_id)->first();
+            $states = State::orderBy('name', 'asc')->get();
 
             // Get Areas In User State
-            $areas = Area::where('state_id', $vendor_location->state_id)->get();
+            $areas = Area::all();
+
+            $vendor_location = Auth::user('vendor')->areas;
 
             // Social Media Links
             $social_handles = json_decode(Auth::user('vendor')->social_handles);
@@ -216,7 +213,7 @@ class VendorController extends Controller
             // Rating Data
             $rating_data = $this->get_rating(Auth::guard('vendor')->user()->id, 0);
 
-            return ['status' => true, 'data' => compact('vendor_location', 'states', 'areas', 'social_handles', 'rating_data')];
+            return ['status' => true, 'data' => compact('vendor_location', 'states', 'areas', 'social_handles', 'rating_data', 'vendor')];
         } catch (\Throwable $th) {
             Log::error($th);
             return ['status' => false, 'message' => "500 Server error"];
@@ -253,6 +250,23 @@ class VendorController extends Controller
             }
         }
 
+        // Validate areas
+        $areas = explode(',', $request['areas']);
+        foreach($areas as $area_id) {
+            $area = Area::find($area_id);
+
+            if(empty($area)) {
+                return response()->json([
+                    "success" => false,
+                    "message" => [
+                        'areas' => [
+                            'Some selected areas are not valid'
+                        ]
+                    ],
+                ]);
+            }
+        }
+
         // Update Vendor Info
         return response()->json($this->update_store($request));
     }
@@ -270,10 +284,11 @@ class VendorController extends Controller
             'email' => ['required', 'email', Rule::unique('vendors')->ignore(Auth::user('vendor')->id), 'unique:users'], // email:rfc,dns should be used in production
             'phone_number' => ['required', 'numeric', 'digits_between:5,11', Rule::unique('vendors')->ignore(Auth::user('vendor')->id), 'unique:users,phone_number'],
             'address' => 'required',
-            'about' => 'required|max:1000',
+            'about' => 'max:1000',
             'instagram' => 'nullable|url',
             'facebook' => 'nullable|url',
             'twitter' => 'nullable|url',
+            'areas' => 'required'
         ]);
     }
 
@@ -306,10 +321,12 @@ class VendorController extends Controller
         $vendor->username = $request->username;
         $vendor->email = $request->email;
         $vendor->phone_number = $request->phone_number;
-        $vendor->area_id = $request->area;
         $vendor->address = $request->address;
         $vendor->about_business = $request->about;
         $vendor->social_handles = $this->fix_media($request);
+
+        // Add vendor areas
+        $areas = explode(',', $request['areas']);
 
         $socket = SocketData::where('username', $username)->first();
         $socket->username = $vendor->username;
@@ -318,6 +335,11 @@ class VendorController extends Controller
         try {
             $vendor->save();
             $socket->save();
+            
+            foreach($areas as $area) {
+                AreaVendor::updateOrCreate(['area_id' => $area, 'vendor_id' => $vendor->id]);
+            }
+
             return ['success' => true, 'status' => 200, 'message' => 'Update Successful'];
         } catch (\Throwable $th) {
             Log::error($th);

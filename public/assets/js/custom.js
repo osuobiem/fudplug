@@ -283,3 +283,24 @@ function raiseZindex() {
 
     interval = setInterval(raise, 5);
 }
+
+// Toggle show password
+function showPassword(el, id, show) {
+    field = $('#'+id);
+    el = $(el);
+
+    if (show) {
+        field.attr('type', 'text');
+        el.removeClass('la la-eye');
+        el.addClass('la la-low-vision');
+        el.attr('onclick', `showPassword(this, '${id}', false)`);
+        el.attr('title', `Hide Password`);
+    }
+    else {
+        field.attr('type', 'password');
+        el.removeClass('la la-low-vision');
+        el.addClass('la la-eye');
+        el.attr('onclick', `showPassword(this, '${id}', true)`);
+        el.attr('title', `Show Password`);
+    }
+}

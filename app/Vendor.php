@@ -16,9 +16,9 @@ class Vendor extends Authenticatable
         'password', 'remember_token', 'google_id',
     ];
 
-    public function area()
+    public function areas()
     {
-        return $this->belongsTo('App\Area');
+        return $this->belongsToMany('App\Area');
     }
 
     public function notification()

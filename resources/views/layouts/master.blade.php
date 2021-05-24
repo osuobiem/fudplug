@@ -219,7 +219,7 @@
                     </button>
 
                     {{-- Check if vendor area is set --}}
-                    @if (!Auth::user('vendor')->area)
+                    @if (count(Auth::user('vendor')->areas) == 0)
                     @include('components.onboarding')
                     <script>
                         $(document).ready(function () {
