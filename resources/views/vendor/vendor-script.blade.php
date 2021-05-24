@@ -14,6 +14,8 @@
     var vendorPaginate = {
         orderPage: 1,
         orderType: "",
+        loadRightLastMenuId: 0,
+        loadRightLastDishId: 0,
     }
 
 
@@ -62,17 +64,46 @@
                 // The viewport is less than 768 pixels wide (mobile device)
                 $("#dish-menu").remove();
                 $(".right-side-large").empty();
-                $(".right-side-small").append(res);
+                $(".right-side-small").append(res.view);
                 $(`#rightTab li:nth-child(${activeTab}) a`).tab('show');
             } else {
                 // The viewport is at least 768 pixels wide (Desktop or tablet)
                 $("#dish-menu").remove();
                 $(".right-side-small").empty();
-                $(".right-side-large").append(res);
+                $(".right-side-large").append(res.view);
                 $(`#rightTab li:nth-child(${activeTab}) a`).tab('show');
             }
+
+            // Update last ID pagination attributes
+            vendorPaginate.loadRightLastMenuId = res.menu_last_id;
+            vendorPaginate.loadRightLastDishId = res.dish_last_id;
         }).catch((err) => {
             spin('right-side');
+            showAlert(false, "Oops! Something's not right. Please reload page.");
+        });
+    }
+
+    // Load right side components on pagination (Vendor Dish & Menu)
+    function loadMoreRight(rightSideType = "menu") {
+        let lastId = rightSideType == "menu" ? vendorPaginate.loadRightLastMenuId : vendorPaginate.loadRightLastDishId;
+        let getUrl = `${server}/vendor/dish/0/${rightSideType}/${lastId}`;
+
+        // Determine where the paginated content is to be dumped
+        let container = rightSideType == "menu" ? "#vendor-menu-container" : "#vendor-dish-container";
+
+        goGet(getUrl).then((res) => {
+            if (window.matchMedia("(max-width: 767px)").matches) {
+                // The viewport is less than 768 pixels wide (mobile device)
+                $(`${container}-small`).append(res.view);
+            } else {
+                // The viewport is at least 768 pixels wide (Desktop or tablet)
+                $(`${container}-large`).append(res.view);
+            }
+
+            // Update last ID pagination attributes
+            vendorPaginate.loadRightLastMenuId = res.menu_last_id;
+            vendorPaginate.loadRightLastDishId = res.dish_last_id;
+        }).catch((err) => {
             showAlert(false, "Oops! Something's not right. Please reload page.");
         });
     }
@@ -101,7 +132,7 @@
     // Scrollspy for order (Mobile)
     $("#order-container-mob").loadMore({
         scrollBottom: 30,
-        async: true,
+        async: false,
         imgLoading: `<div class="col-12 text-center" id="order-preloader"><div class="spinner-border spinner-border-sm btn-pr" role="status">
 <span class="sr-only">Loading...</span>
 </div></div>`,
@@ -112,7 +143,7 @@
 
     // Scrollspy for order (Larger Screens)
     $(".desktop-order-container").loadMore({
-        scrollBottom: 10,
+        scrollBottom: 20,
         async: true,
         imgLoading: `<div class="col-12 text-center" id="order-preloader"><div class="spinner-border spinner-border-sm btn-pr" role="status">
 <span class="sr-only">Loading...</span>
@@ -137,7 +168,8 @@
 
             if (window.matchMedia("(max-width: 767px)")
                 .matches) { // The viewport is less than 768 pixels wide (mobile device)
-                    (page == 1)? $("#order-container-mob").html(res.order_view) : $("#order-container-mob").append(res.order_view);
+                (page == 1) ? $("#order-container-mob").html(res.order_view): $("#order-container-mob").append(
+                    res.order_view);
                 $("#mob-order-count").html(res.order_count);
                 if (type == "history") {
                     // Hide cancel button on displaying history
@@ -160,7 +192,8 @@
                     }
                 }
             } else {
-                (page == 1)? $(".desktop-order-container").html(res.order_view):$(".desktop-order-container").append(res.order_view);
+                (page == 1) ? $(".desktop-order-container").html(res.order_view): $(".desktop-order-container")
+                    .append(res.order_view);
                 $("#order-count").html(res.order_count);
                 if (type == "history") {
                     // Hide cancel button on displaying history
@@ -353,4 +386,5 @@
         theBlob.name = fileName;
         return theBlob;
     }
+
 </script>

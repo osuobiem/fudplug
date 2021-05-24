@@ -25,11 +25,11 @@
 <div class="modal-body">
 
     <div class="box border rounded bg-white">
-        <div class="box-body row overflow-auto generic-scrollbar" style="height: 200px;">
+        <div class="box-body row overflow-auto generic-scrollbar" style="max-height: 400px;">
 
             @foreach($order['title'] as $title_key=>$title)
             @if($order['order_type'][$title_key] == "simple")
-            <div class="col-md-6">
+            <div class="col-md-6 mb-2">
                 <div class="border shadow-sm border rounded bg-white job-item-2 pl-1 pt-1 pb-1 pr-0">
                     <div class="media">
                         @php
@@ -99,7 +99,7 @@
                 </div>
             </li> -->
 
-            <div class="col-md-6">
+            <div class="col-md-6 mb-2">
                 <div class="border shadow-sm border rounded bg-white job-item-2 pl-1 pt-1 pb-1 pr-0">
                     <div class="media">
                         <div class="u-avatar">
@@ -151,7 +151,7 @@
                 </div>
             </li> -->
 
-            <div class="col-md-6">
+            <div class="col-md-6 mb-2">
                 <div class="border shadow-sm border rounded bg-white job-item-2 pl-1 pt-1 pb-1 pr-0">
                     <div class="media">
                         <div class="u-avatar">

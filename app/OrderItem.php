@@ -10,5 +10,10 @@ class OrderItem extends Model
     {
         return $this->belongsTo('App\Order');
     }
+
+    public function item()
+    {
+        return $this->hasMany('App\Item');
+    }
     //
 }

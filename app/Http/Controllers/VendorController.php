@@ -759,12 +759,13 @@ class VendorController extends Controller
 
     /**
      * Get Vendor Dishes
+     *
      * @return object Laravel View Instance
      */
-    public function get_dish(Request $request, $dish_id = null)
+    public function get_dish(Request $request, $dish_id = null, $right_side_type = "menu", $last_id = 0)
     {
         try {
-            if (!empty($dish_id)) {
+            if (!empty($dish_id) || $dish_id > 0) {
                 $dish = Item::where(['vendor_id' => Auth::user('vendor')->id, 'id' => $dish_id])->first();
                 $data = [];
                 if ($dish->type == "simple") {
@@ -781,13 +782,15 @@ class VendorController extends Controller
                 }
                 return view('vendor.components.dish-view', $data);
             } else {
+                $res = "";
+
                 // Get All Vendor Dishes
-                $dish_data = Item::where('vendor_id', Auth::user('vendor')->id);
+                $dish_data = Item::where([['vendor_id', '=', Auth::user('vendor')->id], ['id', '>', $last_id]]);
 
                 if ($dish_data->count() > 0) {
                     // Set Dish Parameters
                     $dish_count = $dish_data->count();
-                    $dishes = $dish_data->get();
+                    $dishes = $dish_data->take(6)->get();
 
                     // Fetch the Menu Item
                     $menu_data = Menu::where('vendor_id', Auth::user('vendor')->id)->first("items");
@@ -801,9 +804,9 @@ class VendorController extends Controller
                         if (!empty($menu)) {
                             // Fetch Dishes for Menu
                             $menu_data = Item::select("*")
-                                ->whereIn('id', $menu);
+                                ->whereIn('id', $menu)->where([['id', '>', $last_id]]);
                             $menu_count = $menu_data->count();
-                            $menu_dishes = $menu_data->get();
+                            $menu_dishes = $menu_data->take(6)->get();
                         } else {
                             $menu_count = 0;
                             $menu_dishes = null;
@@ -820,11 +823,43 @@ class VendorController extends Controller
                     $menu_dishes = null;
                 }
 
-                return view('vendor.components.right-side', compact('dishes', 'menu_dishes', 'menu_count', 'dish_count'));
+                $res = $this->right_hand_view(compact('dishes', 'menu_dishes', 'menu_count', 'dish_count', 'right_side_type', 'last_id'));
+
+                return response()->json($res, 200);
             }
         } catch (\Throwable $th) {
             Log::error($th);
         }
+    }
+
+    /**
+     * Return appropriate view based on vendor right side type
+     *
+     * @param array $params
+     * @return strng $view
+     */
+    public function right_hand_view($params = [])
+    {
+        $res = [];
+
+        if ($params['last_id'] == 0) { //Return main view on page load
+            $res['view'] = view('vendor.components.right-side', $params)->render();
+        } else { // Check and return appropriate view on pagination
+            if ($params['right_side_type'] == "menu") {
+                $res['view'] = view('vendor.components.right-side-menu', $params)->render();
+            } else {
+                $res['view'] = view('vendor.components.right-side-item', $params)->render();
+            }
+        }
+
+        // Last IDs to be returned and usde for pagination
+        $menu_last_id = $params['menu_dishes']->pluck('id')->toArray();
+        $dish_last_id = $params['dishes']->pluck('id')->toArray();
+
+        $res['menu_last_id'] = end($menu_last_id);
+        $res['dish_last_id'] = end($dish_last_id);
+
+        return $res;
     }
 
     /**

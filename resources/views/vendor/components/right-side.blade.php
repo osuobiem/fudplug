@@ -14,7 +14,7 @@
     </ul>
     <div class="tab-content" id="myTabContent">
         <div class="tab-pane fade show active" id="menu" role="tabpanel" aria-labelledby="profile-tab">
-            <div class="box-body p-3 overflow-auto generic-scrollbar" style="height: 300px;">
+            <div class="box-body p-3 overflow-auto generic-scrollbar" style="height: 300px;" id="vendor-menu-container">
                 @if(!empty($menu_dishes))
                 @foreach($menu_dishes as $menu_dish)
                 <div class="d-flex align-items-center osahan-post-header mb-3 people-list">
@@ -49,7 +49,7 @@
             </div>
         </div>
         <div class="tab-pane fade" id="dish" role="tabpanel" aria-labelledby="home-tab">
-            <div class="box-body p-3 overflow-auto generic-scrollbar" style="height: 300px;">
+            <div class="box-body p-3 overflow-auto generic-scrollbar" style="height: 300px;" id="vendor-dish-container">
                 @if(!empty($dishes))
                 @foreach($dishes as $dish)
                 <div class="d-flex align-items-center osahan-post-header mb-3 people-list">
@@ -89,7 +89,26 @@
     </div>
 </div>
 
+
 <script>
+    // Scrollspy for right side components (Vendor menu)
+    $("#vendor-menu-container").loadMore({
+        scrollBottom: 35,
+        async: true,
+        error: function () {
+            loadMoreRight("menu"); //load content
+        },
+    });
+
+    // Scrollspy for right side components (Vendor dish)
+    $("#vendor-dish-container").loadMore({
+        scrollBottom: 35,
+        async: true,
+        error: function () {
+            loadMoreRight("dish"); //load content
+        },
+    });
+
     // Function that displays dish view modal with its contents
     function viewDish(dishId) {
         $("#dish-view-container").empty();

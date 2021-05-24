@@ -82,7 +82,7 @@ Route::group(['prefix' => 'vendor'], function () {
         // Add Dishes
         Route::post('add-dish', 'VendorController@add_dish');
         // Get Vendor Dish & Populate RightSidebar
-        Route::get('dish/{id?}', 'VendorController@get_dish');
+        Route::get('dish/{id?}/{right_side_type?}/{last_id?}', 'VendorController@get_dish');
         // Get Dish To Delete
         Route::get('dish-delete/{id}', 'VendorController@dish_delete');
         // Delete Dish
